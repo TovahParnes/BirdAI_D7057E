@@ -1,19 +1,19 @@
 version: "3"
 services:
-  birdAI:
+  bird_ai:
     image: ${REPOSITORY}:latest # Make sure your Docker image has this name.
     build: .
     restart: unless-stopped
     ports:
       - "3000:3000"
-#
-#  mongodb:
-#    image: mongo:6-jammy
-#    restart: unless-stopped
-#    ports:
-#      - '27017:27017'
-#    volumes:
-#      - dbdata:/data/db
-#
-#volumes:
-#  dbdata6:
+
+  mongodb:
+    image: mongo:7.0.1
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    volumes:
+      - dbdata:/data/db
+
+volumes:
+  dbdata:
