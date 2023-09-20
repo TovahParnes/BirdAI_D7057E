@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"birdai/src/internal/handlers"
 	"birdai/src/internal/handlers/users"
 
 	"github.com/gofiber/fiber/v2"
@@ -27,25 +26,9 @@ func New(app *fiber.App) *fiber.App {
 	*/
 
 	usersRoute := app.Group("/users")
-	usersRoute.Get("/set=:set", users.GetAllUsers)
+	usersRoute.Get("/set=:set<int>", users.GetAllUsers)
 	usersRoute.Get("/:id", users.GetUserById)
-
-
-
-
-	api := app.Group("/api")
-	v1 := api.Group("/v1", func(c *fiber.Ctx) error {
-		c.JSON(fiber.Map{
-			"message": "🐣 v1",
-		})
-		return c.Next()
-	})
-
-	v1.Get("/books", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World!")
-	})
-	v1.Get("/books/:id", handlers.GetBookByID)
-	//v1.Get("/users/:id", users.GetUser)
+	usersRoute.Post("/me", users.GetUserMe)
 
 
 	return app

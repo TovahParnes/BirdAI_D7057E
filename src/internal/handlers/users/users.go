@@ -4,9 +4,15 @@ import (
 
 	//"swagger/database"
 	"fmt"
+	"net/http"
 
 	"github.com/gofiber/fiber/v2"
 )
+
+type User struct {
+    Id string `json:"_id" xml:"_id" form:"_id"`
+    Username string `json:"username" xml:"username" form:"username"`
+}
 
 // ResponseHTTP represents response body of this API
 type ResponseHTTP struct {
@@ -22,7 +28,7 @@ type ResponseHTTP struct {
 // @Accept json
 // @Produce json
 // @Param id path int true "Book ID"
-// @Success 200 {object} ResponseHTTP{data=[]models.Book}
+// @Success 200 {object} ResponseHTTP{data=[]models.User}
 // @Failure 404 {object} ResponseHTTP{}
 // @Failure 503 {object} ResponseHTTP{}
 // @Router /users/{id} [get]
@@ -69,7 +75,7 @@ func GetUserById(c *fiber.Ctx) error {
 // @Tags users
 // @Accept json
 // @Produce json
-// @Success 200 {object} ResponseHTTP{data=[]models.Book}
+// @Success 200 {object} ResponseHTTP{data=[]models.User}
 // @Failure 503 {object} ResponseHTTP{}
 // @Router /users/set={set} [get]
 func GetAllUsers(c *fiber.Ctx) error {
@@ -96,5 +102,35 @@ func GetAllUsers(c *fiber.Ctx) error {
 		Success: true,
 		Message: fmt.Sprintf("Users from set %v found.", set),
 		Data:    set,
+	})
+}
+
+// GetUserMe is a function to get the current user from the databse
+// @Summary Get current user
+// @Description Get current user
+// @Tags users
+// @Accept json
+// @Produce json
+// @Success 200 {object} ResponseHTTP{data=[]models.User}
+// @Failure 401 {object} ResponseHTTP{}
+// @Failure 404 {object} ResponseHTTP{}
+// @Failure 503 {object} ResponseHTTP{}
+// @Router /users/me [post]
+func GetUserMe(c *fiber.Ctx) error {
+
+	
+	body := new(User)
+	if err := c.BodyParser(&body); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(ResponseHTTP{
+			Success: false,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	}
+	
+	return c.JSON(ResponseHTTP{
+		Success: true,
+		Message: fmt.Sprintf("I am user %v.", body.Username),
+		Data:    body,
 	})
 }
