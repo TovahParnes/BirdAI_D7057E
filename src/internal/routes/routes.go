@@ -1,7 +1,8 @@
 package routes
 
 import (
-	//"birdai/src/internal/handlers"
+	"birdai/src/internal/handlers"
+	"birdai/src/internal/handlers/users"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -36,6 +37,8 @@ func New() *fiber.App {
 	v1.Get("/books", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World!")
 	})
+	v1.Get("/books/:id", handlers.GetBookByID)
+	v1.Get("/users/:id", users.GetUser)
 
 	/*
 	v1.Get("/books", handlers.GetAllBooks)
