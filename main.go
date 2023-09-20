@@ -4,8 +4,9 @@ import (
 	"birdai/src"
 	"context"
 	"fmt"
-	"github.com/joho/godotenv"
 	"log"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
