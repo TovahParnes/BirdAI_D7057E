@@ -10,8 +10,13 @@ import (
 )
 
 type User struct {
+	Token string `json:"token" xml:"token" form:"token"`
     Id string `json:"_id" xml:"_id" form:"_id"`
     Username string `json:"username" xml:"username" form:"username"`
+}
+
+type Token struct {
+    Token string `json:"token" xml:"token" form:"token"`
 }
 
 // ResponseHTTP represents response body of this API
@@ -105,6 +110,42 @@ func GetAllUsers(c *fiber.Ctx) error {
 	})
 }
 
+// CreateUser is a function to create a new user
+// @Summary Create user
+// @Description Create User
+// @Tags users
+// @Accept json
+// @Produce json
+// @Success 201 {object} ResponseHTTP{}
+// @Failure 401 {object} ResponseHTTP{}
+// @Failure 406 {object} ResponseHTTP{}
+// @Failure 503 {object} ResponseHTTP{}
+// @Router /users/ [post]
+func CreateUser(c *fiber.Ctx) error {
+	user := new(User)
+	if err := c.BodyParser(&user); err != nil {
+		// @Failure 406 {object} ResponseHTTP{}
+		return c.Status(http.StatusNotAcceptable).JSON(ResponseHTTP{
+			Success: false,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	}
+
+	// @Failure 401 {object} ResponseHTTP{}
+	// Authenticate(body.token)
+
+	// @Failure 503 {object} ResponseHTTP{}
+	// if no connection to db was established
+	
+	// @Success 201 {object} ResponseHTTP{}
+	return c.Status(http.StatusCreated).JSON(ResponseHTTP{
+		Success: true,
+		Message: fmt.Sprintf("User %v created sucessfully. (not implementeed) ", user.Username),
+		Data:    user,
+	})
+}
+
 // GetUserMe is a function to get the current user from the databse
 // @Summary Get current user
 // @Description Get current user
@@ -115,22 +156,31 @@ func GetAllUsers(c *fiber.Ctx) error {
 // @Failure 401 {object} ResponseHTTP{}
 // @Failure 404 {object} ResponseHTTP{}
 // @Failure 503 {object} ResponseHTTP{}
-// @Router /users/me [post]
+// @Router /users/ [post]
 func GetUserMe(c *fiber.Ctx) error {
-
-	
-	body := new(User)
-	if err := c.BodyParser(&body); err != nil {
+	token := new(Token)
+	if err := c.BodyParser(&token); err != nil {
+		// @Failure 406 {object} ResponseHTTP{}
 		return c.Status(http.StatusBadRequest).JSON(ResponseHTTP{
 			Success: false,
 			Message: err.Error(),
 			Data:    nil,
 		})
 	}
+
+	// @Failure 401 {object} ResponseHTTP{}
+	// Authenticate(body.token)
+
+	// @Failure 503 {object} ResponseHTTP{}
+	// if no connection to db was established
+
+	// @Failure 404 {object} ResponseHTTP{}
+	// if user not found
 	
+	// @Success 200 {object} ResponseHTTP{data=[]models.User}
 	return c.JSON(ResponseHTTP{
 		Success: true,
-		Message: fmt.Sprintf("I am user %v.", body.Username),
-		Data:    body,
+		Message: fmt.Sprintf("I am user %v.", token.Token),
+		Data:    token,
 	})
 }
