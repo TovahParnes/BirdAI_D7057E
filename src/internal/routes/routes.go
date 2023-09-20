@@ -10,8 +10,7 @@ import (
 )
 
 // New create an instance of Book app routes
-func New() *fiber.App {
-	app := fiber.New()
+func New(app *fiber.App) *fiber.App {
 	app.Use(cors.New())
 	app.Use(logger.New(logger.Config{
 		Format:     "${cyan}[${time}] ${white}${pid} ${red}${status} ${blue}[${method}] ${white}${path}\n",
@@ -28,7 +27,9 @@ func New() *fiber.App {
 	*/
 
 	usersRoute := app.Group("/users")
+	usersRoute.Get("/set=:set", users.GetAllUsers)
 	usersRoute.Get("/:id", users.GetUserById)
+
 
 
 

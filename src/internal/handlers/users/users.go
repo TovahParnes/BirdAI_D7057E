@@ -3,7 +3,7 @@ package users
 import (
 
 	//"swagger/database"
-	//"swagger/models"
+	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -27,8 +27,13 @@ type ResponseHTTP struct {
 // @Failure 503 {object} ResponseHTTP{}
 // @Router /users/{id} [get]
 func GetUserById(c *fiber.Ctx) error {
-/*
 	id := c.Params("id")
+	return c.JSON(ResponseHTTP{
+		Success: true,
+		Message: fmt.Sprintf("User with id %v found.", id),
+		Data:    id,
+	})
+/*
 	db := database.DBConn
 
 	book := new(models.Book)
@@ -56,9 +61,40 @@ func GetUserById(c *fiber.Ctx) error {
 		Data:    *book,
 	})
 	*/
+}
+
+// GetAllUsers is a function to get a set of all users from database
+// @Summary Get set of all users
+// @Description Get set of all users
+// @Tags users
+// @Accept json
+// @Produce json
+// @Success 200 {object} ResponseHTTP{data=[]models.Book}
+// @Failure 503 {object} ResponseHTTP{}
+// @Router /users/set={set} [get]
+func GetAllUsers(c *fiber.Ctx) error {
+	set := c.Params("set")
+	/*
+	db := database.DBConn
+
+	var books []models.Book
+	if res := db.Find(&books); res.Error != nil {
+		return c.Status(http.StatusServiceUnavailable).JSON(ResponseHTTP{
+			Success: false,
+			Message: res.Error.Error(),
+			Data:    nil,
+		})
+	}
+
 	return c.JSON(ResponseHTTP{
 		Success: true,
-		Message: "Success get user.",
-		Data:    "test_User",
+		Message: "Success get all books.",
+		Data:    books,
+	})
+*/
+	return c.JSON(ResponseHTTP{
+		Success: true,
+		Message: fmt.Sprintf("Users from set %v found.", set),
+		Data:    set,
 	})
 }

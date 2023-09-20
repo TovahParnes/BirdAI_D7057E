@@ -5,10 +5,13 @@ import (
 	"birdai/src/internal/storage"
 	"context"
 	"log"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 func Setup(ctx context.Context) error {
-	app := routes.New()
+	fiberApp := fiber.New()
+	app := routes.New(fiberApp)
 	log.Fatal(app.Listen(":3300"))
 	storage.TestGet()
 
