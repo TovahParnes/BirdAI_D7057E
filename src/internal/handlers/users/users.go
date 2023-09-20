@@ -68,6 +68,20 @@ func GetUserById(c *fiber.Ctx) error {
 func GetAllUsers(c *fiber.Ctx) error {
 	set := c.Params("set")
 
+	// @Failure 406 {object} ResponseHTTP{}
+	// if body (searchUser) is not valid
+	/*
+	token := new(Token)
+	if err := c.BodyParser(&token); err != nil {
+		// @Failure 406 {object} ResponseHTTP{}
+		return c.Status(http.StatusBadRequest).JSON(ResponseHTTP{
+			Success: false,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	}
+	*/
+
 	// @Failure 401 {object} ResponseHTTP{}
 	// Authenticate(body.token)
 
