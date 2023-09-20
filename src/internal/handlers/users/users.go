@@ -39,39 +39,19 @@ type ResponseHTTP struct {
 // @Router /users/{id} [get]
 func GetUserById(c *fiber.Ctx) error {
 	id := c.Params("id")
+
+	// @Failure 503 {object} ResponseHTTP{}
+	// if no connection to db was established
+
+	// @Failure 404 {object} ResponseHTTP{}
+	// if user not found
+
+	// @Success 200 {object} ResponseHTTP{data=[]models.User}
 	return c.JSON(ResponseHTTP{
 		Success: true,
-		Message: fmt.Sprintf("User with id %v found.", id),
+		Message: fmt.Sprintf("User with id %v found. (not implemented)", id),
 		Data:    id,
 	})
-/*
-	db := database.DBConn
-
-	book := new(models.Book)
-	if err := db.First(&book, id).Error; err != nil {
-		switch err.Error() {
-		case "record not found":
-			return c.Status(http.StatusNotFound).JSON(ResponseHTTP{
-				Success: false,
-				Message: fmt.Sprintf("Book with ID %v not found.", id),
-				Data:    nil,
-			})
-		default:
-			return c.Status(http.StatusServiceUnavailable).JSON(ResponseHTTP{
-				Success: false,
-				Message: err.Error(),
-				Data:    nil,
-			})
-
-		}
-	}
-
-	return c.JSON(ResponseHTTP{
-		Success: true,
-		Message: "Success get book by ID.",
-		Data:    *book,
-	})
-	*/
 }
 
 // GetAllUsers is a function to get a set of all users from database
@@ -81,28 +61,22 @@ func GetUserById(c *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Success 200 {object} ResponseHTTP{data=[]models.User}
+// @Failure 401 {object} ResponseHTTP{}
+// @Failure 406 {object} ResponseHTTP{}
 // @Failure 503 {object} ResponseHTTP{}
 // @Router /users/set={set} [get]
 func GetAllUsers(c *fiber.Ctx) error {
 	set := c.Params("set")
-	/*
-	db := database.DBConn
 
-	var books []models.Book
-	if res := db.Find(&books); res.Error != nil {
-		return c.Status(http.StatusServiceUnavailable).JSON(ResponseHTTP{
-			Success: false,
-			Message: res.Error.Error(),
-			Data:    nil,
-		})
-	}
+	// @Failure 401 {object} ResponseHTTP{}
+	// Authenticate(body.token)
 
-	return c.JSON(ResponseHTTP{
-		Success: true,
-		Message: "Success get all books.",
-		Data:    books,
-	})
-*/
+	// @Failure 503 {object} ResponseHTTP{}
+	// if no connection to db was established
+
+	// @Failure 404 {object} ResponseHTTP{}
+	// if user not found
+
 	return c.JSON(ResponseHTTP{
 		Success: true,
 		Message: fmt.Sprintf("Users from set %v found.", set),
