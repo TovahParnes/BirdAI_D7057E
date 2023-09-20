@@ -15,34 +15,47 @@ type ResponseHTTP struct {
 	Message string      `json:"message"`
 }
 
-// GetAllBooks is a function to get all books data from database
-// @Summary Get all books
-// @Description Get all books
-// @Tags books
+// GetUser is a function to get a user by ID
+// @Summary Get user by ID
+// @Description Get user by ID
+// @Tags users
 // @Accept json
 // @Produce json
+// @Param id path int true "Book ID"
 // @Success 200 {object} ResponseHTTP{data=[]models.Book}
+// @Failure 404 {object} ResponseHTTP{}
 // @Failure 503 {object} ResponseHTTP{}
-// @Router /v1/books [get]
-func GetUser(c *fiber.Ctx) error {
-	/*
+// @Router /users/{id} [get]
+func GetUserById(c *fiber.Ctx) error {
+/*
+	id := c.Params("id")
 	db := database.DBConn
 
-	var books []models.Book
-	if res := db.Find(&books); res.Error != nil {
-		return c.Status(http.StatusServiceUnavailable).JSON(ResponseHTTP{
-			Success: false,
-			Message: res.Error.Error(),
-			Data:    nil,
-		})
+	book := new(models.Book)
+	if err := db.First(&book, id).Error; err != nil {
+		switch err.Error() {
+		case "record not found":
+			return c.Status(http.StatusNotFound).JSON(ResponseHTTP{
+				Success: false,
+				Message: fmt.Sprintf("Book with ID %v not found.", id),
+				Data:    nil,
+			})
+		default:
+			return c.Status(http.StatusServiceUnavailable).JSON(ResponseHTTP{
+				Success: false,
+				Message: err.Error(),
+				Data:    nil,
+			})
+
+		}
 	}
 
 	return c.JSON(ResponseHTTP{
 		Success: true,
-		Message: "Success get all books.",
-		Data:    books,
+		Message: "Success get book by ID.",
+		Data:    *book,
 	})
-*/
+	*/
 	return c.JSON(ResponseHTTP{
 		Success: true,
 		Message: "Success get user.",

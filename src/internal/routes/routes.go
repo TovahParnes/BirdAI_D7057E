@@ -26,6 +26,12 @@ func New() *fiber.App {
 
 	app.Use(swagger.New(swaggerCfg))
 	*/
+
+	usersRoute := app.Group("/users")
+	usersRoute.Get("/:id", users.GetUserById)
+
+
+
 	api := app.Group("/api")
 	v1 := api.Group("/v1", func(c *fiber.Ctx) error {
 		c.JSON(fiber.Map{
@@ -38,14 +44,8 @@ func New() *fiber.App {
 		return c.SendString("Hello, World!")
 	})
 	v1.Get("/books/:id", handlers.GetBookByID)
-	v1.Get("/users/:id", users.GetUser)
+	//v1.Get("/users/:id", users.GetUser)
 
-	/*
-	v1.Get("/books", handlers.GetAllBooks)
-	v1.Get("/books/:id", handlers.GetBookByID)
-	v1.Post("/books", handlers.RegisterBook)
-	v1.Delete("/books/:id", handlers.DeleteBook)
-	*/
 
 	return app
 }
