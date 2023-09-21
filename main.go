@@ -32,12 +32,10 @@ func main() {
 	// setup global context
 	ctx := context.Background()
 
-	err := src.Setup(ctx)
+	app, err := src.Setup(ctx)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 
-	//for {
-	//
-	//	}
+	log.Fatal(app.Listen(":3000"))
 }

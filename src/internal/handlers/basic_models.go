@@ -1,7 +1,7 @@
-package models
+package handlers
 
 type Token struct {
-    Token string `json:"token" xml:"token" form:"token"`
+	Token string `json:"token" form:"token"`
 }
 
 type ResponseHTTP struct {

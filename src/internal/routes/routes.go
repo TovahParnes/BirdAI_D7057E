@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"birdai/src/internal/handlers/users"
+	"birdai/src/internal/handlers/users_handler"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -16,21 +16,19 @@ func New(app *fiber.App) *fiber.App {
 		TimeZone:   "UTC",
 	}))
 	/*
-	swaggerCfg := swagger.Config{
-		BasePath: "/docs", //swagger ui base path
-		FilePath: "./docs/swagger.json",
-	}
+		swaggerCfg := swagger.Config{
+			BasePath: "/docs", //swagger ui base path
+			FilePath: "./docs/swagger.json",
+		}
 
-	app.Use(swagger.New(swaggerCfg))
+		app.Use(swagger.New(swaggerCfg))
 	*/
 
 	usersRoute := app.Group("/users")
-	usersRoute.Get("/set::set<int>", users.GetAllUsers)
-	usersRoute.Get("/:id", users.GetUserById)
-	usersRoute.Post("/me", users.GetUserMe)
-	usersRoute.Post("/", users.CreateUser)
-	
-
+	usersRoute.Get("/set::set<int>", users_handler.GetAllUsers)
+	usersRoute.Get("/:id", users_handler.GetUserById)
+	usersRoute.Post("/", users_handler.CreateUser)
+	usersRoute.Post("/me", users_handler.GetUserMe)
 
 	return app
 }
