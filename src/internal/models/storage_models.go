@@ -3,87 +3,95 @@ package models
 import (
 	"context"
 	"log"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 // Structs for documents in all collections
 
 type User struct {
-	ID        primitive.ObjectID `bson:"_id" json:"_id" form:"_id"`
-	Username  string             `bson:"username" json:"authId" form:"authId"`
-	AuthID    string             `bson:"auth_id" json:"username" form:"username"`
-	CreatedAt string             `bson:"created_at" json:"createdAt" form:"createdAt"`
+	Id        string `bson:"_id" json:"_id" form:"_id"`
+	Username  string `bson:"username" json:"username" form:"username"`
+	AuthId    string `bson:"auth_id" json:"authId" form:"authId"`
+	CreatedAt string `bson:"created_at" json:"createdAt" form:"createdAt"`
+	Active    bool   `bson:"active"`
 }
 
 type Admin struct {
-	ID     primitive.ObjectID
-	UserID string
-	Access string
+	Id     string `bson:"_id"`
+	UserId string `bson:"user_id"`
+	Access string `bson:"access"`
 }
 
 type Bird struct {
-	ID          primitive.ObjectID
-	Name        string
-	Description string
-	ImageID     string
-	SoundID     string
+	Id          string `bson:"_id"`
+	Name        string `bson:"name"`
+	Description string `bson:"description"`
+	ImageId     string `bson:"image_id"`
+	SoundId     string `bson:"sound_id"`
 }
 
 // Post TODO: Update Location type after testing
-// Probably string
 type Post struct {
-	ID        primitive.ObjectID
-	UserID    string
-	BirdID    string
-	CreatedAt string
-	Location  string
-	ImageID   string
-	SoundID   string
+	Id        string `bson:"_id"`
+	UserId    string `bson:"user_id"`
+	BirdId    string `bson:"bird_id"`
+	CreatedAt string `bson:"created_at"`
+	Location  string `bson:"location"`
+	ImageId   string `bson:"image_id"`
+	SoundId   string `bson:"sound_id"`
 }
 
-// Sound TODO: Update Sound type after testing
-type Sound struct {
-	ID    primitive.ObjectID `bson:"_id"`
-	Sound []byte             `bson:"sound"`
-}
-
-// Image TODO: Update Image type after testing
-type Image struct {
-	ID    primitive.ObjectID `bson:"_id"`
-	Image []byte             `bson:"image"`
+type Media struct {
+	Id       string `bson:"_id"`
+	Data     []byte `bson:"data"`
+	FileType string `bson:"file_type"`
 }
 
 // GetID for all types, to make them HandlerObjects
 
-func (u User) GetID() primitive.ObjectID {
-	return u.ID
+func (u *User) GetId() string {
+	return u.Id
 }
 
-func (a Admin) GetID() primitive.ObjectID {
-	return a.ID
+func (a *Admin) GetId() string {
+	return a.Id
 }
 
-func (b Bird) GetID() primitive.ObjectID {
-	return b.ID
+func (b *Bird) GetId() string {
+	return b.Id
 }
 
-func (p Post) GetID() primitive.ObjectID {
-	return p.ID
+func (p *Post) GetId() string {
+	return p.Id
 }
 
-func (s Sound) GetID() primitive.ObjectID {
-	return s.ID
+func (m *Media) GetId() string {
+	return m.Id
 }
 
-func (i Image) GetID() primitive.ObjectID {
-	return i.ID
+func (u *User) SetCreatedAt() {
+	u.CreatedAt = time.Now().Format(time.RFC3339)
+}
+
+func (a *Admin) SetCreatedAt() {
+}
+
+func (b *Bird) SetCreatedAt() {
+}
+
+func (p *Post) SetCreatedAt() {
+	p.CreatedAt = time.Now().Format(time.RFC3339)
+}
+
+func (m *Media) SetCreatedAt() {
 }
 
 type HandlerObject interface {
-	GetID() primitive.ObjectID
+	GetId() string
+	SetCreatedAt()
 }
 
 type MongoInstance struct {
@@ -118,11 +126,11 @@ type MongoCollection struct {
 	Collection *mongo.Collection
 }
 
-// IMongoCollection TODO: Add choice between ID and Name for find
+// IMongoCollection TODO: Update input when known what is needed
 type IMongoCollection interface {
 	FindOne(id string) (HandlerObject, error)
 	FindAll() ([]HandlerObject, error)
-	UpdateOne(query bson.D) (HandlerObject, error) // Might not be bson.D
+	UpdateOne(query bson.D) (HandlerObject, error)
 	DeleteOne(id string) (HandlerObject, error)
 	CreateOne(object HandlerObject) error
 }
