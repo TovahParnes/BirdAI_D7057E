@@ -3,28 +3,14 @@ package users
 import (
 
 	//"swagger/database"
+	"birdai/src/internal/models"
 	"fmt"
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-type User struct {
-	Token string `json:"token" xml:"token" form:"token"`
-    Id string `json:"_id" xml:"_id" form:"_id"`
-    Username string `json:"username" xml:"username" form:"username"`
-}
-
-type Token struct {
-    Token string `json:"token" xml:"token" form:"token"`
-}
-
 // ResponseHTTP represents response body of this API
-type ResponseHTTP struct {
-	Success bool        `json:"success"`
-	Data    interface{} `json:"data"`
-	Message string      `json:"message"`
-}
 
 // GetUser is a function to get a user by ID
 // @Summary Get user by ID
@@ -47,7 +33,7 @@ func GetUserById(c *fiber.Ctx) error {
 	// if user not found
 
 	// @Success 200 {object} ResponseHTTP{data=[]models.User}
-	return c.JSON(ResponseHTTP{
+	return c.JSON(models.ResponseHTTP{
 		Success: true,
 		Message: fmt.Sprintf("User with id %v found. (not implemented)", id),
 		Data:    id,
@@ -91,7 +77,7 @@ func GetAllUsers(c *fiber.Ctx) error {
 	// @Failure 404 {object} ResponseHTTP{}
 	// if user not found
 
-	return c.JSON(ResponseHTTP{
+	return c.JSON(models.ResponseHTTP{
 		Success: true,
 		Message: fmt.Sprintf("Users from set %v found.", set),
 		Data:    set,
@@ -110,10 +96,10 @@ func GetAllUsers(c *fiber.Ctx) error {
 // @Failure 503 {object} ResponseHTTP{}
 // @Router /users/ [post]
 func CreateUser(c *fiber.Ctx) error {
-	user := new(User)
+	user := new(models.TokenUser)
 	if err := c.BodyParser(&user); err != nil {
 		// @Failure 406 {object} ResponseHTTP{}
-		return c.Status(http.StatusNotAcceptable).JSON(ResponseHTTP{
+		return c.Status(http.StatusNotAcceptable).JSON(models.ResponseHTTP{
 			Success: false,
 			Message: err.Error(),
 			Data:    nil,
@@ -127,9 +113,9 @@ func CreateUser(c *fiber.Ctx) error {
 	// if no connection to db was established
 	
 	// @Success 201 {object} ResponseHTTP{}
-	return c.Status(http.StatusCreated).JSON(ResponseHTTP{
+	return c.Status(http.StatusCreated).JSON(models.ResponseHTTP{
 		Success: true,
-		Message: fmt.Sprintf("User %v created sucessfully. (not implementeed) ", user.Username),
+		Message: fmt.Sprintf("User %v created sucessfully. (not implemented) ", user.User.Username),
 		Data:    user,
 	})
 }
@@ -146,10 +132,10 @@ func CreateUser(c *fiber.Ctx) error {
 // @Failure 503 {object} ResponseHTTP{}
 // @Router /users/ [post]
 func GetUserMe(c *fiber.Ctx) error {
-	token := new(Token)
+	token := new(models.Token)
 	if err := c.BodyParser(&token); err != nil {
 		// @Failure 406 {object} ResponseHTTP{}
-		return c.Status(http.StatusBadRequest).JSON(ResponseHTTP{
+		return c.Status(http.StatusBadRequest).JSON(models.ResponseHTTP{
 			Success: false,
 			Message: err.Error(),
 			Data:    nil,
@@ -166,7 +152,7 @@ func GetUserMe(c *fiber.Ctx) error {
 	// if user not found
 	
 	// @Success 200 {object} ResponseHTTP{data=[]models.User}
-	return c.JSON(ResponseHTTP{
+	return c.JSON(models.ResponseHTTP{
 		Success: true,
 		Message: fmt.Sprintf("I am user %v.", token.Token),
 		Data:    token,
