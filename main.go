@@ -20,7 +20,7 @@ import (
 //	@license.name	MIT License
 //	@license.url	https://opensource.org/license/mit/
 
-//	@host		localhost:3300
+//	@host		127.0.0.1:3300
 //	@BasePath	/
 //	@schemes	http
 func main() {

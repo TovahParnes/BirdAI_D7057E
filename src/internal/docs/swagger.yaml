@@ -15,7 +15,7 @@ definitions:
       success:
         type: boolean
     type: object
-host: localhost:3300
+host: 127.0.0.1:3300
 info:
   contact:
     email: ??
@@ -26,7 +26,7 @@ info:
     name: MIT License
     url: https://opensource.org/license/mit/
   termsOfService: http://swagger.io/terms/
-  title: BirdAI API HFENGVNSIV
+  title: BirdAI API
   version: "2.0"
 paths:
   /users/:
@@ -69,7 +69,7 @@ paths:
       - application/json
       description: Get user by ID
       parameters:
-      - description: Book ID
+      - description: User ID
         in: path
         name: id
         required: true
@@ -104,6 +104,11 @@ paths:
       consumes:
       - application/json
       description: Get set of all users
+      parameters:
+      - description: Set of users
+        in: path
+        name: set
+        type: integer
       produces:
       - application/json
       responses:

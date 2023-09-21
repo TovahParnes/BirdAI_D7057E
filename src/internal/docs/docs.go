@@ -92,6 +92,14 @@ const docTemplate = `{
                     "users"
                 ],
                 "summary": "Get set of all users",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Set of users",
+                        "name": "set",
+                        "in": "path"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -151,7 +159,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Book ID",
+                        "description": "User ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -225,10 +233,10 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "2.0",
-	Host:             "localhost:3300",
+	Host:             "127.0.0.1:3300",
 	BasePath:         "/",
 	Schemes:          []string{"http"},
-	Title:            "BirdAI API HFENGVNSIV",
+	Title:            "BirdAI API",
 	Description:      "A server for BirdAI API, for managing users, admin, birds, posts and more.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

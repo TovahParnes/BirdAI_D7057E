@@ -5,7 +5,7 @@
     "swagger": "2.0",
     "info": {
         "description": "A server for BirdAI API, for managing users, admin, birds, posts and more.",
-        "title": "BirdAI API HFENGVNSIV",
+        "title": "BirdAI API",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
             "name": "Tovah Parnes",
@@ -17,7 +17,7 @@
         },
         "version": "2.0"
     },
-    "host": "localhost:3300",
+    "host": "127.0.0.1:3300",
     "basePath": "/",
     "paths": {
         "/users/": {
@@ -89,6 +89,14 @@
                     "users"
                 ],
                 "summary": "Get set of all users",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Set of users",
+                        "name": "set",
+                        "in": "path"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -148,7 +156,7 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Book ID",
+                        "description": "User ID",
                         "name": "id",
                         "in": "path",
                         "required": true

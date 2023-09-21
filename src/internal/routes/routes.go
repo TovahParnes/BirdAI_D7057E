@@ -8,7 +8,6 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
-// New create an instance of Book app routes
 func New(app *fiber.App) *fiber.App {
 	app.Use(cors.New())
 	app.Use(logger.New(logger.Config{

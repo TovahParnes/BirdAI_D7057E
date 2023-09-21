@@ -19,7 +19,7 @@ type ResponseHTTP = models.ResponseHTTP
 //	@Tags			users
 //	@Accept			json
 //	@Produce		json
-//	@Param			id	path		int	true	"Book ID"
+//	@Param			id	path		int	true	"User ID"
 //	@Success		200	{object}	ResponseHTTP{data=[]models.User}
 //	@Failure		404	{object}	ResponseHTTP{}
 //	@Failure		503	{object}	ResponseHTTP{}
@@ -47,6 +47,7 @@ func GetUserById(c *fiber.Ctx) error {
 //	@Tags			users
 //	@Accept			json
 //	@Produce		json
+//	@Param			set	path		int	true	"Set of users"
 //	@Success		200	{object}	ResponseHTTP{data=[]models.User}
 //	@Failure		401	{object}	ResponseHTTP{}
 //	@Failure		406	{object}	ResponseHTTP{}
