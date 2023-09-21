@@ -9,6 +9,20 @@ import (
 	"github.com/joho/godotenv"
 )
 
+//	@title			BirdAI API
+//	@version		2.0
+//	@description	A server for BirdAI API, for managing users, admin, birds, posts and more.
+//	@termsOfService	http://swagger.io/terms/
+
+//	@contact.name	??
+//	@contact.email	??
+
+//	@license.name	MIT License
+//	@license.url	https://opensource.org/license/mit/
+
+//	@host		localhost:3300
+//	@BasePath	/
+//	@schemes	http
 func main() {
 	// get env variables
 	if err := godotenv.Load(); err != nil {

@@ -26,7 +26,7 @@ func New(app *fiber.App) *fiber.App {
 	*/
 
 	usersRoute := app.Group("/users")
-	usersRoute.Get("/set=:set<int>", users.GetAllUsers)
+	usersRoute.Get("/set::set<int>", users.GetAllUsers)
 	usersRoute.Get("/:id", users.GetUserById)
 	usersRoute.Post("/", users.CreateUser)
 	usersRoute.Post("/me", users.GetUserMe)
