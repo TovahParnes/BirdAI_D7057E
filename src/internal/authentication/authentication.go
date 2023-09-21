@@ -9,7 +9,7 @@ import (
 )
 
 // NewAuthentication instantiates the *Authentication.
-func NewAuthentication() (IAuthentication, error) {
+func NewAuthentication() (*Authentication, error) {
 	provider, err := oidc.NewProvider(
 		context.Background(),
 		"https://"+os.Getenv("AUTH0_DOMAIN")+"/",
