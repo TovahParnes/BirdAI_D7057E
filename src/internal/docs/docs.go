@@ -11,7 +11,7 @@ const docTemplate = `{
         "title": "{{.Title}}",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
-            "name": "??",
+            "name": "Tovah Parnes",
             "email": "??"
         },
         "license": {
@@ -228,7 +228,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:3300",
 	BasePath:         "/",
 	Schemes:          []string{"http"},
-	Title:            "BirdAI API",
+	Title:            "BirdAI API HFENGVNSIV",
 	Description:      "A server for BirdAI API, for managing users, admin, birds, posts and more.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
