@@ -20,9 +20,9 @@ import (
 //	@license.name	MIT License
 //	@license.url	https://opensource.org/license/mit/
 
-//	@host		127.0.0.1:3300
-//	@BasePath	/
-//	@schemes	http
+// @host		127.0.0.1:3000
+// @BasePath	/
+// @schemes	http
 func main() {
 	// get env variables
 	if err := godotenv.Load(); err != nil {

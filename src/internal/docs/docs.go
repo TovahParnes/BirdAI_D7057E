@@ -138,8 +138,12 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "Set of users",
                         "name": "set",
+<<<<<<< HEAD
                         "in": "path",
                         "required": true
+=======
+                        "in": "path"
+>>>>>>> 9e910e6 (Implementing endpoint structure)
                     }
                 ],
                 "responses": {

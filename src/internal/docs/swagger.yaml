@@ -126,6 +126,45 @@ paths:
       summary: Get current user
       tags:
       - users
+<<<<<<< HEAD
+=======
+  /users/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/users.ResponseHTTP'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.User'
+                  type: array
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/users.ResponseHTTP'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/users.ResponseHTTP'
+      summary: Get user by ID
+      tags:
+      - users
+>>>>>>> 9e910e6 (Implementing endpoint structure)
   /users/set:{set}:
     get:
       consumes:
@@ -135,7 +174,10 @@ paths:
       - description: Set of users
         in: path
         name: set
+<<<<<<< HEAD
         required: true
+=======
+>>>>>>> 9e910e6 (Implementing endpoint structure)
         type: integer
       produces:
       - application/json
