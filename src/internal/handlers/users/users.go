@@ -10,9 +10,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-type ResponseHTTP = models.ResponseHTTP
-
 // ResponseHTTP represents response body of this API
+type ResponseHTTP = models.ResponseHTTP
 
 // GetUser is a function to get a user by ID
 //	@Summary		Get user by ID
