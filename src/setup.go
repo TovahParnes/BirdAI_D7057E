@@ -1,6 +1,7 @@
 package src
 
 import (
+	"birdai/src/internal/docs"
 	"birdai/src/internal/routes"
 	"birdai/src/internal/storage"
 	"context"
@@ -14,6 +15,9 @@ import (
 func Setup(ctx context.Context) error {
 	fiberApp := fiber.New()
 	app := routes.New(fiberApp)
+
+	//Need to use the inported docs package, useless line but needed
+	docs.SwaggerInfo.Host = "localhost:3300"
 
 	app.Get("/swagger/*", swagger.HandlerDefault) // default
 	log.Fatal(app.Listen(":3300"))

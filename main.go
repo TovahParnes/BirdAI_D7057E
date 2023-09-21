@@ -14,7 +14,7 @@ import (
 //	@description	A server for BirdAI API, for managing users, admin, birds, posts and more.
 //	@termsOfService	http://swagger.io/terms/
 
-//	@contact.name	??
+//	@contact.name	Tovah Parnes
 //	@contact.email	??
 
 //	@license.name	MIT License
