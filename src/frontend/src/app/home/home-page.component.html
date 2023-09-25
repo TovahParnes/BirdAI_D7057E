@@ -1,5 +1,34 @@
-<div *ngIf="socialAuthServive.authState | async as socialUser">
-    <p>Hello, {{socialUser.name}}!</p>
-    <p>Your email: {{socialUser.email}}</p>
-    <button mat-raised-button (click)="logout()">Logout</button>
+<div class="navbar">
+  <head>
+    <title>Icon Example</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  </head>
+  <button class="upload-buttons"> <i class="fas fa-home"></i> </button>
+  <button class="upload-buttons"> <i class="fas fa-camera"></i> </button>
+  <button class="upload-buttons"> <i class="fas fa-folder"></i> </button>
+</div>
+
+<p class="blankspace"></p>
+
+<div class="container" *ngIf="socialAuthServive.authState | async as socialUser">
+    <p style="color: white;">Hello, {{socialUser.name}}!</p>
+    <p style="color: white;">Your email: {{socialUser.email}}</p>
+    <button class="upload-buttons" mat-raised-button (click)="logout()">Logout</button>
+</div>
+
+<body style="background-color: #1E1E1E;">
+    <p class="blankspace"></p>
+</body>
+
+<div class="container">
+    <div class="drop-container" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
+        <p>Drag &amp; Drop images here</p>
+        <input type="file" (change)="onFileSelected($event)" accept="image/*" multiple>
+        <p id="imagePreview"><img *ngFor="let imageUrl of imageUrls" [src]="imageUrl" alt="Uploaded Image"></p>
+      </div>
+      <p class="blankspace" style="background-color:#242526"></p>
+    <title>Upload buttons</title>
+    <link rel="stylesheet" type="text/css" href="home-page.component.css">
+    <button class="upload-buttons">Upload Image</button>
+    <button class="upload-buttons">Upload Sound</button>
 </div>
