@@ -25,10 +25,12 @@ func New(app *fiber.App) *fiber.App {
 	*/
 
 	usersRoute := app.Group("/users")
-	usersRoute.Get("/set::set<int>", users_handler.GetAllUsers)
+	usersRoute.Get("/list", users_handler.ListUsers)
 	usersRoute.Get("/:id", users_handler.GetUserById)
+	usersRoute.Get("/me", users_handler.GetUserMe)
 	usersRoute.Post("/", users_handler.CreateUser)
-	usersRoute.Post("/me", users_handler.GetUserMe)
+	
+
 
 	return app
 }

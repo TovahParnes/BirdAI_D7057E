@@ -16,7 +16,7 @@ func Setup(ctx context.Context) (*fiber.App, error) {
 	app := routes.New(fiberApp)
 
 	//Need to use the inported docs package, useless line but needed
-	docs.SwaggerInfo.Host = "localhost:3300"
+	docs.SwaggerInfo.Host = "localhost:3000"
 
 	app.Get("/swagger/*", swagger.HandlerDefault) // default
 	log.Fatal(app.Listen(":3300"))
@@ -33,7 +33,7 @@ func Setup(ctx context.Context) (*fiber.App, error) {
 			ClientId: "21bb4edc-05a7-4afc-86f1-2e151e4ba6e2",
 		},
 		// Ability to change OAuth2 redirect uri location
-		OAuth2RedirectUrl: "http://localhost:3300/swagger/oauth2-redirect.html",
+		OAuth2RedirectUrl: "http://localhost:3000/swagger/oauth2-redirect.html",
 	}))
 
 	return app, nil

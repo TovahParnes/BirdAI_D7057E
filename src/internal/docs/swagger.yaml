@@ -90,8 +90,52 @@ paths:
       summary: Get user by ID
       tags:
       - users
+  /users/list:
+    get:
+      consumes:
+      - application/json
+      description: List all users of a specified set
+      parameters:
+      - description: Set of users
+        in: query
+        name: set
+        required: true
+        type: integer
+      - description: Search parameter for user
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/users_handler.ResponseHTTP'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/users_handler.User'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "406":
+          description: Not Acceptable
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+      summary: List all users of a specified set
+      tags:
+      - users
   /users/me:
-    post:
+    get:
       consumes:
       - application/json
       description: Get current user
@@ -122,46 +166,6 @@ paths:
           schema:
             $ref: '#/definitions/users_handler.ResponseHTTP'
       summary: Get current user
-      tags:
-      - users
-  /users/set:{set}:
-    get:
-      consumes:
-      - application/json
-      description: Get set of all users
-      parameters:
-      - description: Set of users
-        in: path
-        name: set
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/users_handler.ResponseHTTP'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/users_handler.User'
-                  type: array
-              type: object
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
-        "406":
-          description: Not Acceptable
-          schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
-        "503":
-          description: Service Unavailable
-          schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
-      summary: Get set of all users
       tags:
       - users
 schemes:

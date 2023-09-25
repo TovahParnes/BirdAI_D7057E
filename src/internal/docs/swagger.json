@@ -61,8 +61,79 @@
                 }
             }
         },
+        "/users/list": {
+            "get": {
+                "description": "List all users of a specified set",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "List all users of a specified set",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Set of users",
+                        "name": "set",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search parameter for user",
+                        "name": "search",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/users_handler.ResponseHTTP"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/users_handler.User"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                        }
+                    },
+                    "406": {
+                        "description": "Not Acceptable",
+                        "schema": {
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                        }
+                    }
+                }
+            }
+        },
         "/users/me": {
-            "post": {
+            "get": {
                 "description": "Get current user",
                 "consumes": [
                     "application/json"
@@ -104,71 +175,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
-                        }
-                    },
-                    "503": {
-                        "description": "Service Unavailable",
-                        "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
-                        }
-                    }
-                }
-            }
-        },
-        "/users/set:{set}": {
-            "get": {
-                "description": "Get set of all users",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "Get set of all users",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Set of users",
-                        "name": "set",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/users_handler.ResponseHTTP"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/users_handler.User"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
-                        }
-                    },
-                    "406": {
-                        "description": "Not Acceptable",
                         "schema": {
                             "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }

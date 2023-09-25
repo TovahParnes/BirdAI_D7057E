@@ -44,21 +44,25 @@ func GetUserById(c *fiber.Ctx) error {
 	})
 }
 
-// GetAllUsers is a function to get a set of all users from database
+// ListUsers is a function to get a set of all users from database
 //
-//	@Summary		Get set of all users
-//	@Description	Get set of all users
+//	@Summary		List all users of a specified set
+//	@Description	List all users of a specified set
 //	@Tags			users
 //	@Accept			json
 //	@Produce		json
-//	@Param			set	path		int	true	"Set of users"
+//	@Param			set	query		int	true	"Set of users"
+//	@Param			search	query		string	false	"Search parameter for user"
 //	@Success		200	{object}	ResponseHTTP{data=[]users_handler.User}
 //	@Failure		401	{object}	ResponseHTTP{}
 //	@Failure		406	{object}	ResponseHTTP{}
 //	@Failure		503	{object}	ResponseHTTP{}
-//	@Router			/users/set:{set} [get]
-func GetAllUsers(c *fiber.Ctx) error {
-	set := c.Params("set")
+//	@Router			/users/list [get]
+func ListUsers(c *fiber.Ctx) error {
+	queries := c.Queries()
+	set := queries["set"]
+	search := queries["search"]
+	
 
 	//	@Failure	406	{object}	ResponseHTTP{}
 	// if body (searchUser) is not valid
@@ -85,7 +89,7 @@ func GetAllUsers(c *fiber.Ctx) error {
 
 	return c.JSON(handlers.ResponseHTTP{
 		Success: true,
-		Message: fmt.Sprintf("Users from set %v found.", set),
+		Message: fmt.Sprintf("Users from set %v found. Search param %v", set, search),
 		Data:    set,
 	})
 }
@@ -138,7 +142,7 @@ func CreateUser(c *fiber.Ctx) error {
 //	@Failure		401	{object}	ResponseHTTP{}
 //	@Failure		404	{object}	ResponseHTTP{}
 //	@Failure		503	{object}	ResponseHTTP{}
-//	@Router			/users/me [post]
+//	@Router			/users/me [get]
 func GetUserMe(c *fiber.Ctx) error {
 	token := new(handlers.Token)
 	if err := c.BodyParser(&token); err != nil {
