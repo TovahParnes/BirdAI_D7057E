@@ -40,25 +40,25 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     },
                     "406": {
                         "description": "Not Acceptable",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     }
                 }
@@ -83,7 +83,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/users.ResponseHTTP"
+                                    "$ref": "#/definitions/users_handler.ResponseHTTP"
                                 },
                                 {
                                     "type": "object",
@@ -91,7 +91,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.User"
+                                                "$ref": "#/definitions/users_handler.User"
                                             }
                                         }
                                     }
@@ -102,19 +102,19 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     }
                 }
@@ -138,12 +138,8 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "Set of users",
                         "name": "set",
-<<<<<<< HEAD
                         "in": "path",
                         "required": true
-=======
-                        "in": "path"
->>>>>>> 9e910e6 (Implementing endpoint structure)
                     }
                 ],
                 "responses": {
@@ -152,7 +148,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/users.ResponseHTTP"
+                                    "$ref": "#/definitions/users_handler.ResponseHTTP"
                                 },
                                 {
                                     "type": "object",
@@ -160,7 +156,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.User"
+                                                "$ref": "#/definitions/users_handler.User"
                                             }
                                         }
                                     }
@@ -171,19 +167,19 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     },
                     "406": {
                         "description": "Not Acceptable",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     }
                 }
@@ -217,7 +213,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/users.ResponseHTTP"
+                                    "$ref": "#/definitions/users_handler.ResponseHTTP"
                                 },
                                 {
                                     "type": "object",
@@ -225,7 +221,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.User"
+                                                "$ref": "#/definitions/users_handler.User"
                                             }
                                         }
                                     }
@@ -236,13 +232,13 @@ const docTemplate = `{
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     }
                 }
@@ -250,18 +246,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.User": {
-            "type": "object",
-            "properties": {
-                "_id": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "users.ResponseHTTP": {
+        "users_handler.ResponseHTTP": {
             "type": "object",
             "properties": {
                 "data": {},
@@ -272,6 +257,14 @@ const docTemplate = `{
                     "type": "boolean"
                 }
             }
+        },
+        "users_handler.User": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
+                }
+            }
         }
     }
 }`
@@ -279,7 +272,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "2.0",
-	Host:             "127.0.0.1:3300",
+	Host:             "127.0.0.1:3000",
 	BasePath:         "/",
 	Schemes:          []string{"http"},
 	Title:            "BirdAI API",

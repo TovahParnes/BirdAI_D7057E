@@ -17,7 +17,7 @@
         },
         "version": "2.0"
     },
-    "host": "127.0.0.1:3300",
+    "host": "127.0.0.1:3000",
     "basePath": "/",
     "paths": {
         "/users/": {
@@ -37,25 +37,25 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     },
                     "406": {
                         "description": "Not Acceptable",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     }
                 }
@@ -80,7 +80,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/users.ResponseHTTP"
+                                    "$ref": "#/definitions/users_handler.ResponseHTTP"
                                 },
                                 {
                                     "type": "object",
@@ -88,7 +88,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.User"
+                                                "$ref": "#/definitions/users_handler.User"
                                             }
                                         }
                                     }
@@ -99,19 +99,19 @@
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     }
                 }
@@ -135,12 +135,8 @@
                         "type": "integer",
                         "description": "Set of users",
                         "name": "set",
-<<<<<<< HEAD
                         "in": "path",
                         "required": true
-=======
-                        "in": "path"
->>>>>>> 9e910e6 (Implementing endpoint structure)
                     }
                 ],
                 "responses": {
@@ -149,7 +145,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/users.ResponseHTTP"
+                                    "$ref": "#/definitions/users_handler.ResponseHTTP"
                                 },
                                 {
                                     "type": "object",
@@ -157,7 +153,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.User"
+                                                "$ref": "#/definitions/users_handler.User"
                                             }
                                         }
                                     }
@@ -168,19 +164,19 @@
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     },
                     "406": {
                         "description": "Not Acceptable",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     }
                 }
@@ -214,7 +210,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/users.ResponseHTTP"
+                                    "$ref": "#/definitions/users_handler.ResponseHTTP"
                                 },
                                 {
                                     "type": "object",
@@ -222,7 +218,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.User"
+                                                "$ref": "#/definitions/users_handler.User"
                                             }
                                         }
                                     }
@@ -233,13 +229,13 @@
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseHTTP"
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     }
                 }
@@ -247,18 +243,7 @@
         }
     },
     "definitions": {
-        "models.User": {
-            "type": "object",
-            "properties": {
-                "_id": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "users.ResponseHTTP": {
+        "users_handler.ResponseHTTP": {
             "type": "object",
             "properties": {
                 "data": {},
@@ -267,6 +252,14 @@
                 },
                 "success": {
                     "type": "boolean"
+                }
+            }
+        },
+        "users_handler.User": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
                 }
             }
         }

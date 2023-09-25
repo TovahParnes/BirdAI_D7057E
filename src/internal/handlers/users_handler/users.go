@@ -23,7 +23,7 @@ type ResponseHTTP = handlers.ResponseHTTP
 //	@Accept			json
 //	@Produce		json
 //	@Param			id	path		int	true	"User ID"
-//	@Success		200	{object}	ResponseHTTP{data=[]models.User}
+//	@Success		200	{object}	ResponseHTTP{data=[]users_handler.User}
 //	@Failure		404	{object}	ResponseHTTP{}
 //	@Failure		503	{object}	ResponseHTTP{}
 //	@Router			/users/{id} [get]
@@ -36,7 +36,7 @@ func GetUserById(c *fiber.Ctx) error {
 	//	@Failure	404	{object}	ResponseHTTP{}
 	// if user not found
 
-	//	@Success	200	{object}	ResponseHTTP{data=[]models.User}
+	//	@Success	200	{object}	ResponseHTTP{data=[]users_handler.User}
 	return c.JSON(handlers.ResponseHTTP{
 		Success: true,
 		Message: fmt.Sprintf("User with id %v found. (not implemented)", id),
@@ -52,7 +52,7 @@ func GetUserById(c *fiber.Ctx) error {
 //	@Accept			json
 //	@Produce		json
 //	@Param			set	path		int	true	"Set of users"
-//	@Success		200	{object}	ResponseHTTP{data=[]models.User}
+//	@Success		200	{object}	ResponseHTTP{data=[]users_handler.User}
 //	@Failure		401	{object}	ResponseHTTP{}
 //	@Failure		406	{object}	ResponseHTTP{}
 //	@Failure		503	{object}	ResponseHTTP{}
@@ -134,7 +134,7 @@ func CreateUser(c *fiber.Ctx) error {
 //	@Tags			users
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}	ResponseHTTP{data=[]models.User}
+//	@Success		200	{object}	ResponseHTTP{data=[]users_handler.User}
 //	@Failure		401	{object}	ResponseHTTP{}
 //	@Failure		404	{object}	ResponseHTTP{}
 //	@Failure		503	{object}	ResponseHTTP{}
@@ -159,7 +159,7 @@ func GetUserMe(c *fiber.Ctx) error {
 	//	@Failure	404	{object}	ResponseHTTP{}
 	// if user not found
 
-	//	@Success	200	{object}	ResponseHTTP{data=[]models.User}
+	//	@Success	200	{object}	ResponseHTTP{data=[]users_handler.User}
 	return c.JSON(handlers.ResponseHTTP{
 		Success: true,
 		Message: fmt.Sprintf("I am user %v.", token.Token),
