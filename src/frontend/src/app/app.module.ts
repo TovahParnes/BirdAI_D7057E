@@ -1,5 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
+import {CommonModule} from "@angular/common";
 
 import {AppComponent} from './app.component';
 import {RouterModule} from '@angular/router';
@@ -31,6 +32,7 @@ import { UploadImageComponent } from './upload-image/upload-image.component';
       {path: 'upload-page', component: UploadImageComponent}
     ]),
     BrowserAnimationsModule,
+    CommonModule,
     //MatCardModule,
     //MatFormFieldModule,
     //MatButtonModule,

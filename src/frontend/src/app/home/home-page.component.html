@@ -12,6 +12,7 @@
 
 <div class="container" *ngIf="socialAuthServive.authState | async as socialUser">
     <p style="color: white;">Hello, {{socialUser.name}}!</p>
+    <p>ID: {{socialUser.id}}</p>
     <p style="color: white;">Your email: {{socialUser.email}}</p>
     <button class="upload-buttons" mat-raised-button (click)="logout()">Logout</button>
 </div>

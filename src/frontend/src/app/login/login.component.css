@@ -1,16 +1,46 @@
+.logo {
+  margin-top: 5%;
+  width: fit-content;
+  height: 500px;
+  justify-content: center;
+}
+
+h1 {
+  font-size: 50px;
+  font: 'https://fonts.googleapis.com/css?family=Noto+Sans';
+  color: white;
+  text-align: center; 
+  margin-top: -20px;
+}
+
 .google-login-btn {
-    background-image: url('src/assets/google-logo.png');
-    background-repeat: no-repeat;
-    background-size: 20%;
-    background-position: 10%;
-    padding-left: 10%;
-  }
+  background-image: url('src/assets/google-logo.png');
+  background-repeat: no-repeat;
+  background-size: 12%;
+  background-position: 92%;
+  padding-right: 50px;
+  border: none;
+  border-radius: 8px;
+  height: 40px;
+  width: 200px;
   
-  mat-card {
-    margin: 10% auto;
-    width: 50%;
-  }
-  
-  mat-form-field {
-    width: 100%;
-  }
+  display: block;
+  margin: 10% auto;
+}
+
+
+.center-nobg {
+  width: 600px;
+  margin: auto;
+  justify-content: center;
+}
+
+.center {
+  background-color: #242526;
+  display: block;
+  margin: 0 auto;
+  width: 400px;
+  height: 200px;
+  border-radius: 8px;
+  border: 3px solid #242526;
+}
