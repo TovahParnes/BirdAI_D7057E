@@ -33,34 +33,27 @@ paths:
     post:
       consumes:
       - application/json
-      description: Get current user
+      description: Create User
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
-            allOf:
-            - $ref: '#/definitions/users.ResponseHTTP'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/models.User'
-                  type: array
-              type: object
+            $ref: '#/definitions/users.ResponseHTTP'
         "401":
           description: Unauthorized
           schema:
             $ref: '#/definitions/users.ResponseHTTP'
-        "404":
-          description: Not Found
+        "406":
+          description: Not Acceptable
           schema:
             $ref: '#/definitions/users.ResponseHTTP'
         "503":
           description: Service Unavailable
           schema:
             $ref: '#/definitions/users.ResponseHTTP'
-      summary: Get current user
+      summary: Create user
       tags:
       - users
   /users/{id}:
@@ -99,6 +92,40 @@ paths:
       summary: Get user by ID
       tags:
       - users
+  /users/me:
+    post:
+      consumes:
+      - application/json
+      description: Get current user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/users.ResponseHTTP'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.User'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/users.ResponseHTTP'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/users.ResponseHTTP'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/users.ResponseHTTP'
+      summary: Get current user
+      tags:
+      - users
   /users/set:{set}:
     get:
       consumes:
@@ -108,6 +135,7 @@ paths:
       - description: Set of users
         in: path
         name: set
+        required: true
         type: integer
       produces:
       - application/json

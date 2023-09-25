@@ -25,6 +25,47 @@ const docTemplate = `{
     "paths": {
         "/users/": {
             "post": {
+                "description": "Create User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Create user",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/users.ResponseHTTP"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/users.ResponseHTTP"
+                        }
+                    },
+                    "406": {
+                        "description": "Not Acceptable",
+                        "schema": {
+                            "$ref": "#/definitions/users.ResponseHTTP"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/users.ResponseHTTP"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/me": {
+            "post": {
                 "description": "Get current user",
                 "consumes": [
                     "application/json"
@@ -97,7 +138,8 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "Set of users",
                         "name": "set",
-                        "in": "path"
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {

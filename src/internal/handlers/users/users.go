@@ -1,5 +1,8 @@
 package users
 
+// byt ut 406 till 400
+// 410 är bra att använda
+
 import (
 
 	//"swagger/database"
@@ -132,7 +135,7 @@ func CreateUser(c *fiber.Ctx) error {
 //	@Failure		401	{object}	ResponseHTTP{}
 //	@Failure		404	{object}	ResponseHTTP{}
 //	@Failure		503	{object}	ResponseHTTP{}
-//	@Router			/users/ [post]
+//	@Router			/users/me [post]
 func GetUserMe(c *fiber.Ctx) error {
 	token := new(models.Token)
 	if err := c.BodyParser(&token); err != nil {
