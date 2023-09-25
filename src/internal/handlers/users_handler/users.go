@@ -1,6 +1,5 @@
 package users_handler
 
-// byt ut 406 till 400
 // 410 är bra att använda
 
 import (
@@ -25,6 +24,7 @@ type ResponseHTTP = handlers.ResponseHTTP
 //	@Param			id	path		int	true	"User ID"
 //	@Success		200	{object}	ResponseHTTP{data=[]users_handler.User}
 //	@Failure		404	{object}	ResponseHTTP{}
+// 	@Failure		410	{object}	ResponseHTTP{}
 //	@Failure		503	{object}	ResponseHTTP{}
 //	@Router			/users/{id} [get]
 func GetUserById(c *fiber.Ctx) error {
@@ -35,6 +35,9 @@ func GetUserById(c *fiber.Ctx) error {
 
 	//	@Failure	404	{object}	ResponseHTTP{}
 	// if user not found
+
+	// 	@Failure	410	{object}	ResponseHTTP{}
+	// if user was deleted
 
 	//	@Success	200	{object}	ResponseHTTP{data=[]users_handler.User}
 	return c.JSON(handlers.ResponseHTTP{
@@ -51,35 +54,19 @@ func GetUserById(c *fiber.Ctx) error {
 //	@Tags			users
 //	@Accept			json
 //	@Produce		json
-//	@Param			set	query		int	true	"Set of users"
-//	@Param			search	query		string	false	"Search parameter for user"
+//	@Param			set	query		int	false	"Set of users"
+//	@Param			search	query	string	false	"Search parameter for user"
 //	@Success		200	{object}	ResponseHTTP{data=[]users_handler.User}
 //	@Failure		401	{object}	ResponseHTTP{}
-//	@Failure		406	{object}	ResponseHTTP{}
 //	@Failure		503	{object}	ResponseHTTP{}
 //	@Router			/users/list [get]
 func ListUsers(c *fiber.Ctx) error {
 	queries := c.Queries()
 	set := queries["set"]
 	search := queries["search"]
-	
-
-	//	@Failure	406	{object}	ResponseHTTP{}
-	// if body (searchUser) is not valid
-	/*
-		token := new(Token)
-		if err := c.BodyParser(&token); err != nil {
-			// @Failure 406 {object} ResponseHTTP{}
-			return c.Status(http.StatusBadRequest).JSON(ResponseHTTP{
-				Success: false,
-				Message: err.Error(),
-				Data:    nil,
-			})
-		}
-	*/
 
 	//	@Failure	401	{object}	ResponseHTTP{}
-	// Authenticate(body.token)
+	// Authenticate(jwt.token)
 
 	//	@Failure	503	{object}	ResponseHTTP{}
 	// if no connection to db was established
@@ -102,14 +89,14 @@ func ListUsers(c *fiber.Ctx) error {
 //	@Accept			json
 //	@Produce		json
 //	@Success		201	{object}	ResponseHTTP{}
+//	@Failure		400	{object}	ResponseHTTP{}
 //	@Failure		401	{object}	ResponseHTTP{}
-//	@Failure		406	{object}	ResponseHTTP{}
 //	@Failure		503	{object}	ResponseHTTP{}
 //	@Router			/users/ [post]
 func CreateUser(c *fiber.Ctx) error {
 	user := new(TokenUser)
 	if err := c.BodyParser(&user); err != nil {
-		//	@Failure	406	{object}	ResponseHTTP{}
+		//	@Failure	400	{object}	ResponseHTTP{}
 		return c.Status(http.StatusNotAcceptable).JSON(handlers.ResponseHTTP{
 			Success: false,
 			Message: err.Error(),
@@ -118,7 +105,7 @@ func CreateUser(c *fiber.Ctx) error {
 	}
 
 	//	@Failure	401	{object}	ResponseHTTP{}
-	// Authenticate(body.token)
+	// Authenticate(jwt.token)
 
 	//	@Failure	503	{object}	ResponseHTTP{}
 	// 	if no connection to db was established
@@ -141,21 +128,13 @@ func CreateUser(c *fiber.Ctx) error {
 //	@Success		200	{object}	ResponseHTTP{data=[]users_handler.User}
 //	@Failure		401	{object}	ResponseHTTP{}
 //	@Failure		404	{object}	ResponseHTTP{}
+// 	@Failure		410	{object}	ResponseHTTP{}
 //	@Failure		503	{object}	ResponseHTTP{}
 //	@Router			/users/me [get]
 func GetUserMe(c *fiber.Ctx) error {
-	token := new(handlers.Token)
-	if err := c.BodyParser(&token); err != nil {
-		//	@Failure	406	{object}	ResponseHTTP{}
-		return c.Status(http.StatusBadRequest).JSON(handlers.ResponseHTTP{
-			Success: false,
-			Message: err.Error(),
-			Data:    nil,
-		})
-	}
 
 	//	@Failure	401	{object}	ResponseHTTP{}
-	// Authenticate(body.token)
+	// Authenticate(jwt.token)
 
 	//	@Failure	503	{object}	ResponseHTTP{}
 	// if no connection to db was established
@@ -163,10 +142,13 @@ func GetUserMe(c *fiber.Ctx) error {
 	//	@Failure	404	{object}	ResponseHTTP{}
 	// if user not found
 
+	// 	@Failure	410	{object}	ResponseHTTP{}
+	// if user was deleted
+
 	//	@Success	200	{object}	ResponseHTTP{data=[]users_handler.User}
 	return c.JSON(handlers.ResponseHTTP{
 		Success: true,
-		Message: fmt.Sprintf("I am user %v.", token.Token),
-		Data:    token,
+		Message: fmt.Sprintf("I am user -me-. not implemented"),
+		Data:    nil,
 	})
 }

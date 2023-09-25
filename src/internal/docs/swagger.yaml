@@ -39,12 +39,12 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/users_handler.ResponseHTTP'
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           schema:
             $ref: '#/definitions/users_handler.ResponseHTTP'
-        "406":
-          description: Not Acceptable
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/users_handler.ResponseHTTP'
         "503":
@@ -83,6 +83,10 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/users_handler.ResponseHTTP'
+        "410":
+          description: Gone
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
         "503":
           description: Service Unavailable
           schema:
@@ -99,7 +103,6 @@ paths:
       - description: Set of users
         in: query
         name: set
-        required: true
         type: integer
       - description: Search parameter for user
         in: query
@@ -121,10 +124,6 @@ paths:
               type: object
         "401":
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
-        "406":
-          description: Not Acceptable
           schema:
             $ref: '#/definitions/users_handler.ResponseHTTP'
         "503":
@@ -159,6 +158,10 @@ paths:
             $ref: '#/definitions/users_handler.ResponseHTTP'
         "404":
           description: Not Found
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "410":
+          description: Gone
           schema:
             $ref: '#/definitions/users_handler.ResponseHTTP'
         "503":

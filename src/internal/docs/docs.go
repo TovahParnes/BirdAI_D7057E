@@ -43,14 +43,14 @@ const docTemplate = `{
                             "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     },
-                    "406": {
-                        "description": "Not Acceptable",
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
@@ -82,8 +82,7 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "Set of users",
                         "name": "set",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     },
                     {
                         "type": "string",
@@ -116,12 +115,6 @@ const docTemplate = `{
                     },
                     "401": {
                         "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
-                        }
-                    },
-                    "406": {
-                        "description": "Not Acceptable",
                         "schema": {
                             "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
@@ -182,6 +175,12 @@ const docTemplate = `{
                             "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
                     },
+                    "410": {
+                        "description": "Gone",
+                        "schema": {
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                        }
+                    },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
@@ -237,6 +236,12 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                        }
+                    },
+                    "410": {
+                        "description": "Gone",
                         "schema": {
                             "$ref": "#/definitions/users_handler.ResponseHTTP"
                         }
