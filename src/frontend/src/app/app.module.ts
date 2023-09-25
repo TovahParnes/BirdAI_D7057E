@@ -13,20 +13,23 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 //import {MatInputModule} from '@angular/material/input';
 import {GoogleLoginProvider, SocialLoginModule} from 'angularx-social-login';
 import {AuthGuardService} from './auth-guard.service';
+import { UploadImageComponent } from './upload-image/upload-image.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    MainPageComponent
+    MainPageComponent,
+    UploadImageComponent,
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot([
       {path: 'login', component: LoginComponent},
       {path: 'mainpage', component: MainPageComponent, canActivate: [AuthGuardService]},
-      {path: '**', component: LoginComponent}
+      {path: '**', component: LoginComponent},
+      {path: 'upload-page', component: UploadImageComponent}
     ]),
     BrowserAnimationsModule,
     CommonModule,

@@ -1,3 +1,63 @@
-div {
-    margin: 20px;
+.container {
+    text-align: center;
+    margin: 0 auto;
+    padding: 20px;
+    width: 40%;
+    background-color: #242526;
+    border-radius: 8px;
+    padding: 20px;
 }
+
+.upload-buttons {
+    background-color: #99E1D9;
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: auto;
+}
+
+.upload-buttons:hover {
+    background-color: #88cbc3;
+    color: black; 
+}
+
+.drop-container {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    margin: 0;
+}
+
+#imagePreview {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+#imagePreview img {
+    max-width: 150px;
+    max-height: 150px;
+    margin: 10px;
+}
+
+.blankspace {
+    background-color: #1E1E1E;
+}
+
+.navbar {
+    background-color: #242526;
+    height: 50px;
+    text-align: center;
+}
+
+.icons {
+    text-align: center;
+    width: 50px;
+    height: 50px;
+}
+
+
