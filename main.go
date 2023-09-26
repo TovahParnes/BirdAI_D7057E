@@ -20,7 +20,7 @@ import (
 //	@license.name	MIT License
 //	@license.url	https://opensource.org/license/mit/
 
-//	@host		127.0.0.1:3000
+//	@host		localhost:4000
 //	@BasePath	/
 //	@schemes	http
 func main() {
@@ -37,5 +37,5 @@ func main() {
 		fmt.Println(err.Error())
 	}
 
-	log.Fatal(app.Listen(":3000"))
+	log.Fatal(app.Listen(":4000"))
 }

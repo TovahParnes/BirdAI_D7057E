@@ -13,7 +13,7 @@ definitions:
       username:
         type: string
     type: object
-host: 127.0.0.1:3000
+host: localhost:4000
 info:
   contact:
     email: ??

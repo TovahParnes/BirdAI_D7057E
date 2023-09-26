@@ -17,7 +17,7 @@
         },
         "version": "2.0"
     },
-    "host": "127.0.0.1:3000",
+    "host": "localhost:4000",
     "basePath": "/",
     "paths": {
         "/users/": {
