@@ -1,0 +1,252 @@
+basePath: /
+definitions:
+  users_handler.ResponseHTTP:
+    properties:
+      data: {}
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  users_handler.User:
+    properties:
+      username:
+        type: string
+    type: object
+host: localhost:4000
+info:
+  contact:
+    email: ??
+    name: Tovah Parnes
+  description: A server for BirdAI API, for managing users, admin, birds, posts and
+    more.
+  license:
+    name: MIT License
+    url: https://opensource.org/license/mit/
+  termsOfService: http://swagger.io/terms/
+  title: BirdAI API
+  version: "2.0"
+paths:
+  /users/:
+    post:
+      consumes:
+      - application/json
+      description: Create User
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+      summary: Create user
+      tags:
+      - users
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete given user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+      summary: Delete given user
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: Get user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/users_handler.ResponseHTTP'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/users_handler.User'
+                  type: array
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "410":
+          description: Gone
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+      summary: Get user by ID
+      tags:
+      - users
+    patch:
+      consumes:
+      - application/json
+      description: Update given user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+      summary: Update given user
+      tags:
+      - users
+  /users/list:
+    get:
+      consumes:
+      - application/json
+      description: List all users of a specified set
+      parameters:
+      - description: Set of users
+        in: query
+        name: set
+        type: integer
+      - description: Search parameter for user
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/users_handler.ResponseHTTP'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/users_handler.User'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+      summary: List all users of a specified set
+      tags:
+      - users
+  /users/me:
+    get:
+      consumes:
+      - application/json
+      description: Get current user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/users_handler.ResponseHTTP'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/users_handler.User'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "410":
+          description: Gone
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+      summary: Get current user
+      tags:
+      - users
+schemes:
+- http
+swagger: "2.0"
