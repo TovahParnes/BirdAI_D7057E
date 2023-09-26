@@ -51,17 +51,17 @@ func TestMockMongoCollection(t *testing.T) {
 	})
 
 	t.Run("Test FindOne collection success", func(t *testing.T) {
-		person, err := userColl.FindOne(user.ID)
+		person, err := userColl.FindOne(user.ID.Hex())
 		require.Equal(t, user, person)
 		require.Nil(t, err)
 
-		person, err = userColl.FindOne(user2.ID)
+		person, err = userColl.FindOne(user2.ID.Hex())
 		require.Equal(t, user2, person)
 		require.Nil(t, err)
 	})
 
 	t.Run("Test FindOne collection failure", func(t *testing.T) {
-		person, err := userColl.FindOne(primitive.ObjectID{byte(3)})
+		person, err := userColl.FindOne("testtest")
 		require.Nil(t, person)
 		require.NotNil(t, err)
 	})
@@ -84,10 +84,10 @@ func TestMockMongoCollection(t *testing.T) {
 	})
 
 	t.Run("Test DeleteOne collection success", func(t *testing.T) {
-		person, err := userColl.DeleteOne(user.ID)
+		person, err := userColl.DeleteOne(user.ID.Hex())
 		require.Equal(t, user, person)
 		require.Nil(t, err)
-		foundPerson, _ := userColl.FindOne(user.ID)
+		foundPerson, _ := userColl.FindOne(user.ID.Hex())
 		require.Nil(t, foundPerson)
 	})
 }

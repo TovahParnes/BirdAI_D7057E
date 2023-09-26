@@ -28,9 +28,13 @@ type MockCollection struct {
 	data []storage.HandlerObject
 }
 
-func (m *MockCollection) FindOne(id primitive.ObjectID) (storage.HandlerObject, error) {
+func (m *MockCollection) FindOne(id string) (storage.HandlerObject, error) {
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
 	for _, one := range m.data {
-		if one.GetID() == id {
+		if one.GetID() == objectID {
 			return one, nil
 		}
 	}
@@ -88,9 +92,13 @@ func (m *MockCollection) UpdateOne(query bson.D) (storage.HandlerObject, error) 
 	return nil, errors.New("could not find")
 }
 
-func (m *MockCollection) DeleteOne(id primitive.ObjectID) (storage.HandlerObject, error) {
+func (m *MockCollection) DeleteOne(id string) (storage.HandlerObject, error) {
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
 	for i, one := range m.data {
-		if one.GetID() == id {
+		if one.GetID() == objectID {
 			m.data = append(m.data[:i], m.data[i+1:]...)
 			return one, nil
 		}
