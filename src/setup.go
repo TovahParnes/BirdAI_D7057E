@@ -19,7 +19,7 @@ func Setup(ctx context.Context) (*fiber.App, error) {
 	docs.SwaggerInfo.Host = "localhost:3000"
 
 	app.Get("/swagger/*", swagger.HandlerDefault) // default
-	log.Fatal(app.Listen(":3300"))
+	log.Fatal(app.Listen(":3000"))
 	storage.TestGet()
 
 	app.Get("/swagger/*", swagger.New(swagger.Config{ // custom
