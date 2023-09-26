@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"birdai/src/internal/handlers/users_handler"
+	users "birdai/src/internal/handlers/users_handler"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -25,11 +25,12 @@ func New(app *fiber.App) *fiber.App {
 	*/
 
 	usersRoute := app.Group("/users")
-	usersRoute.Get("/list", users_handler.ListUsers)
-	usersRoute.Get("/:id", users_handler.GetUserById)
-	usersRoute.Get("/me", users_handler.GetUserMe)
-	usersRoute.Post("/", users_handler.CreateUser)
-	
+	usersRoute.Get("/list", users.ListUsers)
+	usersRoute.Get("/:id", users.GetUserById)
+	usersRoute.Get("/me", users.GetUserMe)
+	usersRoute.Post("/", users.CreateUser)
+	usersRoute.Patch("/:id", users.UpdateUser)
+	usersRoute.Delete("/:id", users.DeleteUser)
 
 
 	return app

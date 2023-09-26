@@ -152,3 +152,81 @@ func GetUserMe(c *fiber.Ctx) error {
 		Data:    nil,
 	})
 }
+
+// UpdateUser is a function to update the given user from the databse
+//
+//	@Summary		Update given user
+//	@Description	Update given user
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"User ID"
+//	@Success		200	{object}	ResponseHTTP{}
+//	@Failure		400	{object}	ResponseHTTP{}
+//	@Failure		401	{object}	ResponseHTTP{}
+//	@Failure		403	{object}	ResponseHTTP{}
+// 	@Failure		404	{object}	ResponseHTTP{}
+//	@Failure		503	{object}	ResponseHTTP{}
+//	@Router			/users/{id} [patch]
+func UpdateUser(c *fiber.Ctx) error {
+	id := c.Params("id")
+
+	//	@Failure	401	{object}	ResponseHTTP{}
+	// Authenticate(jwt.token)
+
+	//	@Failure		403	{object}	ResponseHTTP{}
+	// if user is not admin or user is not the same as the one being updated
+
+	//	@Failure		400	{object}	ResponseHTTP{}
+	// something with body is wrong/missing
+
+	//	@Failure	503	{object}	ResponseHTTP{}
+	// if no connection to db was established
+
+	//	@Failure	404	{object}	ResponseHTTP{}
+	// if user not found
+
+	//	@Success	200	{object}	ResponseHTTP{data=[]users_handler.User}
+	return c.JSON(handlers.ResponseHTTP{
+		Success: true,
+		Message: fmt.Sprintf("User %v updated successfully. not implemented", id),
+		Data:    nil,
+	})
+}
+
+// DeleteUser is a function to update the given user from the databse
+//
+//	@Summary		Delete given user
+//	@Description	Delete given user
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"User ID"
+//	@Success		200	{object}	ResponseHTTP{}
+//	@Failure		401	{object}	ResponseHTTP{}
+//	@Failure		403	{object}	ResponseHTTP{}
+// 	@Failure		404	{object}	ResponseHTTP{}
+//	@Failure		503	{object}	ResponseHTTP{}
+//	@Router			/users/{id} [delete]
+func DeleteUser(c *fiber.Ctx) error {
+	id := c.Params("id")
+
+	//	@Failure	401	{object}	ResponseHTTP{}
+	// Authenticate(jwt.token)
+
+	//	@Failure		403	{object}	ResponseHTTP{}
+	// if user is not admin or user is not the same as the one being updated
+
+	//	@Failure	503	{object}	ResponseHTTP{}
+	// if no connection to db was established
+
+	//	@Failure	404	{object}	ResponseHTTP{}
+	// if user not found
+
+	//	@Success	200	{object}	ResponseHTTP{data=[]users_handler.User}
+	return c.JSON(handlers.ResponseHTTP{
+		Success: true,
+		Message: fmt.Sprintf("User %v deleted successfully. not implemented", id),
+		Data:    nil,
+	})
+}

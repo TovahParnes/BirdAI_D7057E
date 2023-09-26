@@ -55,6 +55,42 @@ paths:
       tags:
       - users
   /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete given user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+      summary: Delete given user
+      tags:
+      - users
     get:
       consumes:
       - application/json
@@ -92,6 +128,46 @@ paths:
           schema:
             $ref: '#/definitions/users_handler.ResponseHTTP'
       summary: Get user by ID
+      tags:
+      - users
+    patch:
+      consumes:
+      - application/json
+      description: Update given user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/users_handler.ResponseHTTP'
+      summary: Update given user
       tags:
       - users
   /users/list:
