@@ -40,25 +40,25 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     }
                 }
@@ -97,7 +97,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/users_handler.ResponseHTTP"
+                                    "$ref": "#/definitions/models.ResponseHTTP"
                                 },
                                 {
                                     "type": "object",
@@ -105,7 +105,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/users_handler.User"
+                                                "$ref": "#/definitions/models.User"
                                             }
                                         }
                                     }
@@ -116,13 +116,13 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     }
                 }
@@ -147,7 +147,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/users_handler.ResponseHTTP"
+                                    "$ref": "#/definitions/models.ResponseHTTP"
                                 },
                                 {
                                     "type": "object",
@@ -155,7 +155,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/users_handler.User"
+                                                "$ref": "#/definitions/models.User"
                                             }
                                         }
                                     }
@@ -166,25 +166,25 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     },
                     "410": {
                         "description": "Gone",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     }
                 }
@@ -218,7 +218,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/users_handler.ResponseHTTP"
+                                    "$ref": "#/definitions/models.ResponseHTTP"
                                 },
                                 {
                                     "type": "object",
@@ -226,7 +226,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/users_handler.User"
+                                                "$ref": "#/definitions/models.User"
                                             }
                                         }
                                     }
@@ -237,19 +237,19 @@ const docTemplate = `{
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     },
                     "410": {
                         "description": "Gone",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     }
                 }
@@ -279,31 +279,31 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     }
                 }
@@ -333,37 +333,37 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/users_handler.ResponseHTTP"
+                            "$ref": "#/definitions/models.ResponseHTTP"
                         }
                     }
                 }
@@ -371,7 +371,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "users_handler.ResponseHTTP": {
+        "models.ResponseHTTP": {
             "type": "object",
             "properties": {
                 "data": {},
@@ -383,9 +383,18 @@ const docTemplate = `{
                 }
             }
         },
-        "users_handler.User": {
+        "models.User": {
             "type": "object",
             "properties": {
+                "_id": {
+                    "type": "string"
+                },
+                "authId": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
                 "username": {
                     "type": "string"
                 }

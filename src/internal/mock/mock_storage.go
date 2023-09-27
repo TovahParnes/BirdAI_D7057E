@@ -1,34 +1,39 @@
 package mock
 
 import (
-	"birdai/src/internal/storage"
+	"birdai/src/internal/models"
 	"errors"
 	"fmt"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type MockMongoInstance struct {
-	Collections map[string]MockCollection
+	Collections map[string]models.IMongoCollection
 }
 
-func (m MockMongoInstance) GetCollection(name string) MockCollection {
+func (m MockMongoInstance) GetCollection(name string) models.IMongoCollection {
 	return m.Collections[name]
 }
 
 func (m MockMongoInstance) AddCollection(name string) {
-	m.Collections[name] = MockCollection{[]storage.HandlerObject{}}
+	m.Collections[name] = &mockCollection{[]models.HandlerObject{}}
 }
 
 func (m MockMongoInstance) DisconnectDB() {
 	fmt.Println("Disconnected")
 }
 
-type MockCollection struct {
-	data []storage.HandlerObject
+func NewMockMongoInstance() models.IMongoInstance {
+	return MockMongoInstance{map[string]models.IMongoCollection{}}
 }
 
-func (m *MockCollection) FindOne(id string) (storage.HandlerObject, error) {
+type mockCollection struct {
+	data []models.HandlerObject
+}
+
+func (m *mockCollection) FindOne(id string) (models.HandlerObject, error) {
 	objectID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -41,11 +46,11 @@ func (m *MockCollection) FindOne(id string) (storage.HandlerObject, error) {
 	return nil, errors.New("could not find")
 }
 
-func (m *MockCollection) FindAll() ([]storage.HandlerObject, error) {
+func (m *mockCollection) FindAll() ([]models.HandlerObject, error) {
 	return m.data, nil
 }
 
-func (m *MockCollection) UpdateOne(query bson.D) (storage.HandlerObject, error) {
+func (m *mockCollection) UpdateOne(query bson.D) (models.HandlerObject, error) {
 	doc, err := bson.Marshal(query)
 	if err != nil {
 		return nil, errors.New("wrong format")
@@ -54,33 +59,33 @@ func (m *MockCollection) UpdateOne(query bson.D) (storage.HandlerObject, error) 
 	for _, one := range m.data {
 		if one.GetID() == id {
 			switch one.(type) {
-			case storage.User:
-				var test storage.User
+			case models.User:
+				var test models.User
 				err = bson.Unmarshal(doc, &test)
 				one = test
 				return test, err
-			case storage.Admin:
-				var test storage.Admin
+			case models.Admin:
+				var test models.Admin
 				err = bson.Unmarshal(doc, &test)
 				one = test
 				return test, err
-			case storage.Bird:
-				var test storage.Bird
+			case models.Bird:
+				var test models.Bird
 				err = bson.Unmarshal(doc, &test)
 				one = test
 				return test, err
-			case storage.Post:
-				var test storage.Post
+			case models.Post:
+				var test models.Post
 				err = bson.Unmarshal(doc, &test)
 				one = test
 				return test, err
-			case storage.Sound:
-				var test storage.Sound
+			case models.Sound:
+				var test models.Sound
 				err = bson.Unmarshal(doc, &test)
 				one = test
 				return test, err
-			case storage.Image:
-				var test storage.Image
+			case models.Image:
+				var test models.Image
 				err = bson.Unmarshal(doc, &test)
 				one = test
 				return test, err
@@ -92,7 +97,7 @@ func (m *MockCollection) UpdateOne(query bson.D) (storage.HandlerObject, error) 
 	return nil, errors.New("could not find")
 }
 
-func (m *MockCollection) DeleteOne(id string) (storage.HandlerObject, error) {
+func (m *mockCollection) DeleteOne(id string) (models.HandlerObject, error) {
 	objectID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -106,7 +111,7 @@ func (m *MockCollection) DeleteOne(id string) (storage.HandlerObject, error) {
 	return nil, errors.New("could not find")
 }
 
-func (m *MockCollection) CreateOne(object storage.HandlerObject) error {
+func (m *mockCollection) CreateOne(object models.HandlerObject) error {
 	m.data = append(m.data, object)
 	return nil
 }
