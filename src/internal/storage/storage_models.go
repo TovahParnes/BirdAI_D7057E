@@ -11,10 +11,10 @@ import (
 // Structs for documents in all collections
 
 type User struct {
-	ID        primitive.ObjectID `bson:"_id"`
-	Username  string             `bson:"username"`
-	AuthID    string             `bson:"auth_id"`
-	CreatedAt primitive.DateTime `bson:"created_at"`
+	ID        primitive.ObjectID `bson:"_id" json:"_id" form:"_id"`
+	Username  string             `bson:"username" json:"authId" form:"authId"`
+	AuthID    string             `bson:"auth_id" json:"username" form:"username"`
+	CreatedAt primitive.DateTime `bson:"created_at" json:"createdAt" form:"createdAt"`
 }
 
 type Admin struct {
@@ -108,7 +108,7 @@ func (m MongoInstance) DisconnectDB() {
 }
 
 type IMongoInstance interface {
-	GetCollection(name string) MongoCollection
+	GetCollection(name string) IMongoCollection
 	AddCollection(name string)
 	DisconnectDB()
 }

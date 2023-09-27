@@ -14,7 +14,7 @@ var (
 )
 
 func TestMockMongoInstance(t *testing.T) {
-	mongoDB := mock.MockMongoInstance{Collections: make(map[string]mock.MockCollection)}
+	mongoDB := mock.NewMockMongoInstance()
 	t.Run("Test add collection", func(t *testing.T) {
 		mongoDB.AddCollection(collName)
 	})
@@ -28,7 +28,7 @@ func TestMockMongoInstance(t *testing.T) {
 }
 
 func TestMockMongoCollection(t *testing.T) {
-	mongoDB := mock.MockMongoInstance{Collections: make(map[string]mock.MockCollection)}
+	mongoDB := mock.NewMockMongoInstance()
 	mongoDB.AddCollection(collName)
 	userColl := mongoDB.GetCollection(collName)
 	user := storage.User{

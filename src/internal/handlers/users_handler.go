@@ -1,18 +1,14 @@
-package users_handler
+package handlers
 
 // 410 är bra att använda
 
 import (
-	"birdai/src/internal/handlers"
-
+	"birdai/src/internal/storage"
 	"fmt"
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
 )
-
-// ResponseHTTP represents response body of this API
-type ResponseHTTP = handlers.ResponseHTTP
 
 // GetUser is a function to get a user by ID
 //
@@ -24,11 +20,21 @@ type ResponseHTTP = handlers.ResponseHTTP
 //	@Param			id	path		int	true	"User ID"
 //	@Success		200	{object}	ResponseHTTP{data=[]users_handler.User}
 //	@Failure		404	{object}	ResponseHTTP{}
-// 	@Failure		410	{object}	ResponseHTTP{}
+//	@Failure		410	{object}	ResponseHTTP{}
 //	@Failure		503	{object}	ResponseHTTP{}
 //	@Router			/users/{id} [get]
-func GetUserById(c *fiber.Ctx) error {
+func (h *Handler) GetUserById(c *fiber.Ctx) error {
 	id := c.Params("id")
+
+	user, err := h.controller.CGetUserById(id)
+
+	if err != nil {
+		return c.Status(http.StatusNotFound).JSON(ResponseHTTP{
+			Success: false,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	}
 
 	//	@Failure	503	{object}	ResponseHTTP{}
 	// if no connection to db was established
@@ -40,11 +46,7 @@ func GetUserById(c *fiber.Ctx) error {
 	// if user was deleted
 
 	//	@Success	200	{object}	ResponseHTTP{data=[]users_handler.User}
-	return c.JSON(handlers.ResponseHTTP{
-		Success: true,
-		Message: fmt.Sprintf("User with id %v found. (not implemented)", id),
-		Data:    id,
-	})
+	return c.JSON(user)
 }
 
 // ListUsers is a function to get a set of all users from database
@@ -60,7 +62,7 @@ func GetUserById(c *fiber.Ctx) error {
 //	@Failure		401	{object}	ResponseHTTP{}
 //	@Failure		503	{object}	ResponseHTTP{}
 //	@Router			/users/list [get]
-func ListUsers(c *fiber.Ctx) error {
+func (h *Handler) ListUsers(c *fiber.Ctx) error {
 	queries := c.Queries()
 	set := queries["set"]
 	search := queries["search"]
@@ -74,7 +76,7 @@ func ListUsers(c *fiber.Ctx) error {
 	//	@Failure	404	{object}	ResponseHTTP{}
 	// if user not found
 
-	return c.JSON(handlers.ResponseHTTP{
+	return c.JSON(ResponseHTTP{
 		Success: true,
 		Message: fmt.Sprintf("Users from set %v found. Search param %v", set, search),
 		Data:    set,
@@ -93,11 +95,11 @@ func ListUsers(c *fiber.Ctx) error {
 //	@Failure		401	{object}	ResponseHTTP{}
 //	@Failure		503	{object}	ResponseHTTP{}
 //	@Router			/users/ [post]
-func CreateUser(c *fiber.Ctx) error {
-	user := new(TokenUser)
+func (h *Handler) CreateUser(c *fiber.Ctx) error {
+	user := new(storage.User)
 	if err := c.BodyParser(&user); err != nil {
 		//	@Failure	400	{object}	ResponseHTTP{}
-		return c.Status(http.StatusNotAcceptable).JSON(handlers.ResponseHTTP{
+		return c.Status(http.StatusNotAcceptable).JSON(ResponseHTTP{
 			Success: false,
 			Message: err.Error(),
 			Data:    nil,
@@ -109,11 +111,19 @@ func CreateUser(c *fiber.Ctx) error {
 
 	//	@Failure	503	{object}	ResponseHTTP{}
 	// 	if no connection to db was established
+	err := h.controller.CCreateUser(user)
+	if err != nil {
+		return c.Status(http.StatusServiceUnavailable).JSON(ResponseHTTP{
+			Success: false,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	}
 
 	//	@Success	201	{object}	ResponseHTTP{}
-	return c.Status(http.StatusCreated).JSON(handlers.ResponseHTTP{
+	return c.Status(http.StatusCreated).JSON(ResponseHTTP{
 		Success: true,
-		Message: fmt.Sprintf("User %v created sucessfully. (not implemented) ", user.User.Username),
+		Message: fmt.Sprintf("User %v created sucessfully ", user.Username),
 		Data:    user,
 	})
 }
@@ -128,10 +138,10 @@ func CreateUser(c *fiber.Ctx) error {
 //	@Success		200	{object}	ResponseHTTP{data=[]users_handler.User}
 //	@Failure		401	{object}	ResponseHTTP{}
 //	@Failure		404	{object}	ResponseHTTP{}
-// 	@Failure		410	{object}	ResponseHTTP{}
+//	@Failure		410	{object}	ResponseHTTP{}
 //	@Failure		503	{object}	ResponseHTTP{}
 //	@Router			/users/me [get]
-func GetUserMe(c *fiber.Ctx) error {
+func (h *Handler) GetUserMe(c *fiber.Ctx) error {
 
 	//	@Failure	401	{object}	ResponseHTTP{}
 	// Authenticate(jwt.token)
@@ -146,7 +156,7 @@ func GetUserMe(c *fiber.Ctx) error {
 	// if user was deleted
 
 	//	@Success	200	{object}	ResponseHTTP{data=[]users_handler.User}
-	return c.JSON(handlers.ResponseHTTP{
+	return c.JSON(ResponseHTTP{
 		Success: true,
 		Message: fmt.Sprintf("I am user -me-. not implemented"),
 		Data:    nil,
@@ -165,10 +175,10 @@ func GetUserMe(c *fiber.Ctx) error {
 //	@Failure		400	{object}	ResponseHTTP{}
 //	@Failure		401	{object}	ResponseHTTP{}
 //	@Failure		403	{object}	ResponseHTTP{}
-// 	@Failure		404	{object}	ResponseHTTP{}
+//	@Failure		404	{object}	ResponseHTTP{}
 //	@Failure		503	{object}	ResponseHTTP{}
 //	@Router			/users/{id} [patch]
-func UpdateUser(c *fiber.Ctx) error {
+func (h *Handler) UpdateUser(c *fiber.Ctx) error {
 	id := c.Params("id")
 
 	//	@Failure	401	{object}	ResponseHTTP{}
@@ -187,7 +197,7 @@ func UpdateUser(c *fiber.Ctx) error {
 	// if user not found
 
 	//	@Success	200	{object}	ResponseHTTP{data=[]users_handler.User}
-	return c.JSON(handlers.ResponseHTTP{
+	return c.JSON(ResponseHTTP{
 		Success: true,
 		Message: fmt.Sprintf("User %v updated successfully. not implemented", id),
 		Data:    nil,
@@ -205,10 +215,10 @@ func UpdateUser(c *fiber.Ctx) error {
 //	@Success		200	{object}	ResponseHTTP{}
 //	@Failure		401	{object}	ResponseHTTP{}
 //	@Failure		403	{object}	ResponseHTTP{}
-// 	@Failure		404	{object}	ResponseHTTP{}
+//	@Failure		404	{object}	ResponseHTTP{}
 //	@Failure		503	{object}	ResponseHTTP{}
 //	@Router			/users/{id} [delete]
-func DeleteUser(c *fiber.Ctx) error {
+func (h *Handler) DeleteUser(c *fiber.Ctx) error {
 	id := c.Params("id")
 
 	//	@Failure	401	{object}	ResponseHTTP{}
@@ -224,7 +234,7 @@ func DeleteUser(c *fiber.Ctx) error {
 	// if user not found
 
 	//	@Success	200	{object}	ResponseHTTP{data=[]users_handler.User}
-	return c.JSON(handlers.ResponseHTTP{
+	return c.JSON(ResponseHTTP{
 		Success: true,
 		Message: fmt.Sprintf("User %v deleted successfully. not implemented", id),
 		Data:    nil,

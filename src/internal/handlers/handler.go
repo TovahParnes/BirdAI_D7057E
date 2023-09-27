@@ -1,11 +1,14 @@
 package handlers
 
+import (
+	"birdai/src/internal/controllers"
+	"birdai/src/internal/storage"
+)
+
 type Handler struct {
-	// Db
-	// AI integration
-	// Controller
+	controller controllers.Controller
 }
 
-func GetNewHandler() Handler {
-	return Handler{}
+func NewHandler(db storage.IMongoInstance) Handler {
+	return Handler{controller: controllers.NewController(db)}
 }

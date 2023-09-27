@@ -9,26 +9,30 @@ import (
 )
 
 type MockMongoInstance struct {
-	Collections map[string]MockCollection
+	Collections map[string]storage.IMongoCollection
 }
 
-func (m MockMongoInstance) GetCollection(name string) MockCollection {
+func (m MockMongoInstance) GetCollection(name string) storage.IMongoCollection {
 	return m.Collections[name]
 }
 
 func (m MockMongoInstance) AddCollection(name string) {
-	m.Collections[name] = MockCollection{[]storage.HandlerObject{}}
+	m.Collections[name] = &mockCollection{[]storage.HandlerObject{}}
 }
 
 func (m MockMongoInstance) DisconnectDB() {
 	fmt.Println("Disconnected")
 }
 
-type MockCollection struct {
+func NewMockMongoInstance() storage.IMongoInstance {
+	return MockMongoInstance{map[string]storage.IMongoCollection{}}
+}
+
+type mockCollection struct {
 	data []storage.HandlerObject
 }
 
-func (m *MockCollection) FindOne(id string) (storage.HandlerObject, error) {
+func (m *mockCollection) FindOne(id string) (storage.HandlerObject, error) {
 	objectID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -41,11 +45,11 @@ func (m *MockCollection) FindOne(id string) (storage.HandlerObject, error) {
 	return nil, errors.New("could not find")
 }
 
-func (m *MockCollection) FindAll() ([]storage.HandlerObject, error) {
+func (m *mockCollection) FindAll() ([]storage.HandlerObject, error) {
 	return m.data, nil
 }
 
-func (m *MockCollection) UpdateOne(query bson.D) (storage.HandlerObject, error) {
+func (m *mockCollection) UpdateOne(query bson.D) (storage.HandlerObject, error) {
 	doc, err := bson.Marshal(query)
 	if err != nil {
 		return nil, errors.New("wrong format")
@@ -92,7 +96,7 @@ func (m *MockCollection) UpdateOne(query bson.D) (storage.HandlerObject, error) 
 	return nil, errors.New("could not find")
 }
 
-func (m *MockCollection) DeleteOne(id string) (storage.HandlerObject, error) {
+func (m *mockCollection) DeleteOne(id string) (storage.HandlerObject, error) {
 	objectID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -106,7 +110,7 @@ func (m *MockCollection) DeleteOne(id string) (storage.HandlerObject, error) {
 	return nil, errors.New("could not find")
 }
 
-func (m *MockCollection) CreateOne(object storage.HandlerObject) error {
+func (m *mockCollection) CreateOne(object storage.HandlerObject) error {
 	m.data = append(m.data, object)
 	return nil
 }
