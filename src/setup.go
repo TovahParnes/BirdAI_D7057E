@@ -2,7 +2,10 @@ package src
 
 import (
 	"birdai/src/internal/docs"
-	"birdai/src/internal/routes"
+	"birdai/src/internal/handlers"
+	"birdai/src/internal/mock"
+	"birdai/src/internal/models"
+	"birdai/src/internal/repositories"
 	"context"
 
 	swagger "github.com/arsmn/fiber-swagger/v2"
@@ -10,13 +13,13 @@ import (
 )
 
 func Setup(ctx context.Context) (*fiber.App, error) {
-	fiberApp := fiber.New()
-	app := routes.New(fiberApp)
+	app := fiber.New()
+	db := InitMockDB()
+	handlers.New(app, db)
 
 	//these two lines needs to be there for swagger to fuction
 	docs.SwaggerInfo.Host = "localhost:4000"
 	app.Get("/swagger/*", swagger.HandlerDefault) // default
-
 
 	app.Get("/swagger/*", swagger.New(swagger.Config{ // custom
 		URL:         "http://example.com/doc.json",
@@ -33,4 +36,15 @@ func Setup(ctx context.Context) (*fiber.App, error) {
 	}))
 
 	return app, nil
+}
+
+func InitMockDB() models.IMongoInstance {
+	db := mock.NewMockMongoInstance()
+	db.AddCollection(repositories.UserColl)
+	db.AddCollection(repositories.AdminColl)
+	db.AddCollection(repositories.BirdColl)
+	db.AddCollection(repositories.PostColl)
+	db.AddCollection(repositories.SoundColl)
+	db.AddCollection(repositories.ImageColl)
+	return db
 }

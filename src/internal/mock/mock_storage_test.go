@@ -2,11 +2,12 @@ package mock_test
 
 import (
 	"birdai/src/internal/mock"
-	"birdai/src/internal/storage"
+	"birdai/src/internal/models"
+	"testing"
+
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"testing"
 )
 
 var (
@@ -14,7 +15,7 @@ var (
 )
 
 func TestMockMongoInstance(t *testing.T) {
-	mongoDB := mock.MockMongoInstance{Collections: make(map[string]mock.MockCollection)}
+	mongoDB := mock.NewMockMongoInstance()
 	t.Run("Test add collection", func(t *testing.T) {
 		mongoDB.AddCollection(collName)
 	})
@@ -28,20 +29,20 @@ func TestMockMongoInstance(t *testing.T) {
 }
 
 func TestMockMongoCollection(t *testing.T) {
-	mongoDB := mock.MockMongoInstance{Collections: make(map[string]mock.MockCollection)}
+	mongoDB := mock.NewMockMongoInstance()
 	mongoDB.AddCollection(collName)
 	userColl := mongoDB.GetCollection(collName)
-	user := storage.User{
+	user := models.User{
 		ID:        primitive.ObjectID{byte(1)},
 		Username:  "bird1",
 		AuthID:    "123",
-		CreatedAt: 0,
+		CreatedAt: "0",
 	}
-	user2 := storage.User{
+	user2 := models.User{
 		ID:        primitive.ObjectID{byte(2)},
 		Username:  "bird2",
 		AuthID:    "124",
-		CreatedAt: 0,
+		CreatedAt: "0",
 	}
 	t.Run("Test CreateOne collection success", func(t *testing.T) {
 		err := userColl.CreateOne(user)
@@ -68,7 +69,7 @@ func TestMockMongoCollection(t *testing.T) {
 
 	t.Run("Test FindAll collection success", func(t *testing.T) {
 		persons, err := userColl.FindAll()
-		require.Equal(t, []storage.HandlerObject{user, user2}, persons)
+		require.Equal(t, []models.HandlerObject{user, user2}, persons)
 		require.Nil(t, err)
 	})
 
@@ -79,7 +80,7 @@ func TestMockMongoCollection(t *testing.T) {
 			{"auth_id", user.AuthID},
 			{"created_at", user.CreatedAt},
 		})
-		require.Equal(t, "bird_changed", person.(storage.User).Username)
+		require.Equal(t, "bird_changed", person.(models.User).Username)
 		require.Nil(t, err)
 	})
 

@@ -1,6 +1,4 @@
-package users_handler
-
-import "birdai/src/internal/handlers"
+package models
 
 type UserReponse struct {
 	Id        string `json:"_id" form:"_id"`
@@ -9,11 +7,11 @@ type UserReponse struct {
 	CreatedAt string `json:"createdAt" form:"createdAt"`
 }
 
-type User struct {
-	Username string `json:"username" form:"username"`
+type InputUser struct {
+	Username string `json:"user" bson:"username"`
 }
 
 type TokenUser struct {
-	handlers.Token
-	User User `json:"user" form:"user"`
+	Token
+	InputUser InputUser `json:"user" form:"user"`
 }

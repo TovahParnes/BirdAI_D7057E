@@ -1,15 +1,16 @@
-package storage
+package repositories
 
 import (
+	"birdai/src/internal/models"
 	"context"
 	"fmt"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"log"
+
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"log"
 )
 
-var mg MongoInstance
+var mg models.MongoInstance
 
 // TODO: Create a login for server
 const dbName = "birdai"
@@ -36,7 +37,7 @@ func Connect() error {
 		return err
 	}
 
-	mg = MongoInstance{
+	mg = models.MongoInstance{
 		Client: client,
 		Db:     db,
 	}
@@ -47,7 +48,7 @@ type resultDocument struct {
 	ID        string             `bson:"_id"`
 	Name      string             `bson:"username"`
 	Auth      string             `bson:"auth_id"`
-	CreatedAt primitive.DateTime `bson:"created_at"`
+	CreatedAt string `bson:"created_at"`
 }
 
 func Disconnect() {
@@ -64,7 +65,7 @@ func TestGet() {
 		fmt.Println(err)
 	}
 	/*
-		soundPath, _ := filepath.Abs("../BirdAI_D7057E/src/internal/storage/yippie.wav")
+		soundPath, _ := filepath.Abs("../BirdAI_D7057E/src/internal/repositories/yippie.wav")
 		fmt.Println(soundPath)
 		soundData, err := os.ReadFile(soundPath)
 		if err != nil {
@@ -99,7 +100,7 @@ func TestGet() {
 
 	/*
 
-		imagePath, _ := filepath.Abs("../BirdAI_D7057E/src/internal/storage/testImage.png")
+		imagePath, _ := filepath.Abs("../BirdAI_D7057E/src/internal/repositories/testImage.png")
 		fmt.Println(imagePath)
 		imageData, err := os.ReadFile(imagePath)
 		if err != nil {

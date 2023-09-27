@@ -1,6 +1,6 @@
 basePath: /
 definitions:
-  users_handler.ResponseHTTP:
+  models.ResponseHTTP:
     properties:
       data: {}
       message:
@@ -8,8 +8,14 @@ definitions:
       success:
         type: boolean
     type: object
-  users_handler.User:
+  models.User:
     properties:
+      _id:
+        type: string
+      authId:
+        type: string
+      createdAt:
+        type: string
       username:
         type: string
     type: object
@@ -38,19 +44,19 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
       summary: Create user
       tags:
       - users
@@ -71,23 +77,23 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
       summary: Delete given user
       tags:
       - users
@@ -108,25 +114,25 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/users_handler.ResponseHTTP'
+            - $ref: '#/definitions/models.ResponseHTTP'
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/users_handler.User'
+                    $ref: '#/definitions/models.User'
                   type: array
               type: object
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
         "410":
           description: Gone
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
       summary: Get user by ID
       tags:
       - users
@@ -146,27 +152,27 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
       summary: Update given user
       tags:
       - users
@@ -191,21 +197,21 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/users_handler.ResponseHTTP'
+            - $ref: '#/definitions/models.ResponseHTTP'
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/users_handler.User'
+                    $ref: '#/definitions/models.User'
                   type: array
               type: object
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
       summary: List all users of a specified set
       tags:
       - users
@@ -221,29 +227,29 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/users_handler.ResponseHTTP'
+            - $ref: '#/definitions/models.ResponseHTTP'
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/users_handler.User'
+                    $ref: '#/definitions/models.User'
                   type: array
               type: object
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
         "410":
           description: Gone
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/users_handler.ResponseHTTP'
+            $ref: '#/definitions/models.ResponseHTTP'
       summary: Get current user
       tags:
       - users
