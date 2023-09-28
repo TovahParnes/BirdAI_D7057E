@@ -20,9 +20,9 @@ import (
 //	@license.name	MIT License
 //	@license.url	https://opensource.org/license/mit/
 
-//	@host		localhost:4000
-//	@BasePath	/
-//	@schemes	http
+// @host		localhost:4000
+// @BasePath	/
+// @schemes	http
 func main() {
 	// get env variables
 	if err := godotenv.Load(); err != nil {
@@ -36,6 +36,6 @@ func main() {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-
 	log.Fatal(app.Listen(":4000"))
+
 }

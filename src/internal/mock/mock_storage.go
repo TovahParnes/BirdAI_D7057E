@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type MockMongoInstance struct {
@@ -34,12 +33,9 @@ type mockCollection struct {
 }
 
 func (m *mockCollection) FindOne(id string) (models.HandlerObject, error) {
-	objectID, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
+	//objectID, err := primitive.ObjectIDFromHex(id)
 	for _, one := range m.data {
-		if one.GetID() == objectID {
+		if one.GetId() == id {
 			return one, nil
 		}
 	}
@@ -57,7 +53,7 @@ func (m *mockCollection) UpdateOne(query bson.D) (models.HandlerObject, error) {
 	}
 	id := query[0].Value
 	for _, one := range m.data {
-		if one.GetID() == id {
+		if one.GetId() == id {
 			switch one.(type) {
 			case models.User:
 				var test models.User
@@ -79,17 +75,11 @@ func (m *mockCollection) UpdateOne(query bson.D) (models.HandlerObject, error) {
 				err = bson.Unmarshal(doc, &test)
 				one = test
 				return test, err
-			case models.Sound:
-				var test models.Sound
+			case models.Media:
+				var test models.Media
 				err = bson.Unmarshal(doc, &test)
 				one = test
 				return test, err
-			case models.Image:
-				var test models.Image
-				err = bson.Unmarshal(doc, &test)
-				one = test
-				return test, err
-
 			}
 		}
 	}
@@ -98,12 +88,9 @@ func (m *mockCollection) UpdateOne(query bson.D) (models.HandlerObject, error) {
 }
 
 func (m *mockCollection) DeleteOne(id string) (models.HandlerObject, error) {
-	objectID, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
+	//objectID, err := primitive.ObjectIDFromHex(id)
 	for i, one := range m.data {
-		if one.GetID() == objectID {
+		if one.GetId() == id {
 			m.data = append(m.data[:i], m.data[i+1:]...)
 			return one, nil
 		}
