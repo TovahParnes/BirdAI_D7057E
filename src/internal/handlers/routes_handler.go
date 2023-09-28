@@ -19,8 +19,8 @@ func New(app *fiber.App, db models.IMongoInstance) {
 
 	usersRoute := app.Group("/users")
 	usersRoute.Get("/list", handler.ListUsers)
-	usersRoute.Get("/:id", handler.GetUserById)
 	usersRoute.Get("/me", handler.GetUserMe)
+	usersRoute.Get("/:id", handler.GetUserById)
 	usersRoute.Post("/", handler.CreateUser)
 	usersRoute.Patch("/:id", handler.UpdateUser)
 	usersRoute.Delete("/:id", handler.DeleteUser)

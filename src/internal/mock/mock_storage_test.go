@@ -3,11 +3,11 @@ package mock_test
 import (
 	"birdai/src/internal/mock"
 	"birdai/src/internal/models"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 var (
@@ -32,22 +32,26 @@ func TestMockMongoCollection(t *testing.T) {
 	mongoDB := mock.NewMockMongoInstance()
 	mongoDB.AddCollection(collName)
 	userColl := mongoDB.GetCollection(collName)
-	user := models.User{
+	user := &models.User{
 		Id:        primitive.ObjectID{byte(1)}.String(),
 		Username:  "bird1",
 		AuthId:    "123",
 		CreatedAt: "0",
 	}
-	user2 := models.User{
+	user2 := &models.User{
 		Id:        primitive.ObjectID{byte(2)}.String(),
 		Username:  "bird2",
 		AuthId:    "124",
 		CreatedAt: "0",
 	}
 	t.Run("Test CreateOne collection success", func(t *testing.T) {
-		err := userColl.CreateOne(user)
+		newUser, err := userColl.CreateOne(user)
+		user = newUser.(*models.User)
+		require.NotNil(t, newUser)
 		require.Nil(t, err)
-		err = userColl.CreateOne(user2)
+		newUser, err = userColl.CreateOne(user2)
+		user2 = newUser.(*models.User)
+		require.NotNil(t, newUser)
 		require.Nil(t, err)
 	})
 
@@ -80,8 +84,9 @@ func TestMockMongoCollection(t *testing.T) {
 			{"auth_id", user.AuthId},
 			{"created_at", user.CreatedAt},
 		})
-		require.Equal(t, "bird_changed", person.(models.User).Username)
+		require.Equal(t, "bird_changed", person.(*models.User).Username)
 		require.Nil(t, err)
+		user = person.(*models.User)
 	})
 
 	t.Run("Test DeleteOne collection success", func(t *testing.T) {
