@@ -4,9 +4,11 @@ package handlers
 
 import (
 	"birdai/src/internal/models"
+	"birdai/src/internal/utils"
 	"fmt"
-	"github.com/gofiber/fiber/v2"
 	"net/http"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 // GetUserById is a function to get a user by ID
@@ -124,7 +126,6 @@ func (h *Handler) CreateUser(c *fiber.Ctx) error {
 			Data:    nil,
 		})
 	}
-	fmt.Printf("Created user: %s \n", createdUser)
 	h.me = createdUser
 
 	//	@Success	201	{object}	models.User{}
@@ -160,17 +161,19 @@ func (h *Handler) GetUserMe(c *fiber.Ctx) error {
 
 	//	@Success	200	{object}	models.ResponseHTTP{}
 	if h.me != nil {
-		return c.JSON(models.ResponseHTTP{
-			Success: true,
-			Message: fmt.Sprintf("Last saved person is: %s", h.me.Username),
-			Data:    nil,
-		})
+		//return c.ResponseHTTP(http.StatusAccepted, fmt.Sprintf("Last saved person is: %s", h.me.Username), nil)
+	
+		return c.Status(http.StatusAccepted).JSON(utils.ResponseHTTP(
+			http.StatusAccepted, 
+			fmt.Sprintf("Last saved person is: %s", h.me.Username), 
+			nil,
+			))
 	}
-	return c.JSON(models.ResponseHTTP{
-		Success: false,
-		Message: fmt.Sprintf("You have not created a person yet"),
-		Data:    nil,
-	})
+	return c.Status(http.StatusNotFound).JSON(utils.ErrorToResponseHTTP(
+		http.StatusNotFound, 
+		fmt.Sprintf("A current user was not found"), 
+		"",
+		))
 }
 
 // UpdateUser is a function to update the given user from the databse

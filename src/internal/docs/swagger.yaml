@@ -3,10 +3,21 @@ definitions:
   models.ResponseHTTP:
     properties:
       data: {}
-      message:
+      description:
+        description: the error description for the developer, aka err.Error()
         type: string
+      message:
+        description: the displayed error text for the user
+        type: string
+      name:
+        type: string
+      status:
+        type: integer
       success:
+        description: temporary, will be removed
         type: boolean
+      timestamp:
+        type: string
     type: object
   models.User:
     properties:
