@@ -23,9 +23,9 @@ import (
 // @Failure		503	{object}	models.ResponseHTTP{}
 // @Router			/users/{id} [get]
 func (h *Handler) GetUserById(c *fiber.Ctx) error {
-	id := c.Params("id")
-
-	user, err := h.controller.CGetUserById(id)
+	//id := c.Params("id")
+	authId := c.GetReqHeaders()["Authid"]
+	user, err := h.controller.CGetUserById(authId)
 
 	if err != nil {
 		return c.Status(http.StatusNotFound).JSON(models.ResponseHTTP{
@@ -62,6 +62,7 @@ func (h *Handler) GetUserById(c *fiber.Ctx) error {
 // @Failure		503	{object}	models.ResponseHTTP{}
 // @Router			/users/list [get]
 func (h *Handler) ListUsers(c *fiber.Ctx) error {
+	authId := c.GetReqHeaders()["Authid"]
 	//queries := c.Queries()
 	//set := queries["set"]
 	//search := queries["search"]
@@ -75,7 +76,7 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 	//	@Failure	404	{object}	models.ResponseHTTP{}
 	// if user not found
 
-	users, err := h.controller.CListUsers()
+	users, err := h.controller.CListUsers(authId)
 	if err != nil {
 		return c.Status(http.StatusNotFound).JSON(models.ResponseHTTP{
 			Success: false,
@@ -87,7 +88,7 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 	return c.JSON(users)
 }
 
-// CreateUser is a function to create a new user
+// Login is a function to create a new user
 //
 // @Summary		Create user
 // @Description	Create User
@@ -100,7 +101,7 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 // @Failure		401	{object}	models.ResponseHTTP{}
 // @Failure		503	{object}	models.ResponseHTTP{}
 // @Router			/users/ [post]
-func (h *Handler) CreateUser(c *fiber.Ctx) error {
+func (h *Handler) Login(c *fiber.Ctx) error {
 	var user *models.User
 	if err := c.BodyParser(&user); err != nil {
 		//	@Failure	400	{object}	models.ResponseHTTP{}
@@ -116,7 +117,7 @@ func (h *Handler) CreateUser(c *fiber.Ctx) error {
 
 	//	@Failure	503	{object}	models.ResponseHTTP{}
 	// 	if no connection to db was established
-	createdUser, err := h.controller.CCreateUser(user)
+	createdUser, err := h.controller.CLogin(user)
 	if err != nil {
 		return c.Status(http.StatusServiceUnavailable).JSON(models.ResponseHTTP{
 			Success: false,
@@ -124,8 +125,7 @@ func (h *Handler) CreateUser(c *fiber.Ctx) error {
 			Data:    nil,
 		})
 	}
-	fmt.Printf("Created user: %s \n", createdUser)
-	h.me = createdUser
+	//h.me = createdUser
 
 	//	@Success	201	{object}	models.User{}
 	return c.Status(http.StatusCreated).JSON(createdUser)
@@ -247,6 +247,7 @@ func (h *Handler) UpdateUser(c *fiber.Ctx) error {
 // @Router			/users/{id} [delete]
 func (h *Handler) DeleteUser(c *fiber.Ctx) error {
 	id := c.Params("id")
+	authId := c.GetReqHeaders()["Authid"]
 
 	//	@Failure	401	{object}	models.ResponseHTTP{}
 	// Authenticate(jwt.token)
@@ -260,7 +261,7 @@ func (h *Handler) DeleteUser(c *fiber.Ctx) error {
 	//	@Failure	404	{object}	models.ResponseHTTP{}
 	// if user not found
 
-	deletedUser, err := h.controller.CDeleteUser(id)
+	deletedUser, err := h.controller.CDeleteUser(id, authId)
 	if err != nil {
 		return c.Status(http.StatusNotFound).JSON(models.ResponseHTTP{
 			Success: false,
