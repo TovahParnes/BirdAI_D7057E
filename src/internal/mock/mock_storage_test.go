@@ -45,28 +45,37 @@ func TestMockMongoCollection(t *testing.T) {
 		CreatedAt: "0",
 	}
 	t.Run("Test CreateOne collection success", func(t *testing.T) {
-		newUser, err := userColl.CreateOne(user)
+		newId, err := userColl.CreateOne(user)
+		require.Nil(t, err)
+		filter := bson.M{"_id": newId}
+		newUser, err := userColl.FindOne(filter)
 		user = newUser.(*models.User)
 		require.NotNil(t, newUser)
 		require.Nil(t, err)
-		newUser, err = userColl.CreateOne(user2)
+		newId, err = userColl.CreateOne(user2)
+		require.Nil(t, err)
+		filter = bson.M{"_id": newId}
+		newUser, err = userColl.FindOne(filter)
 		user2 = newUser.(*models.User)
 		require.NotNil(t, newUser)
 		require.Nil(t, err)
 	})
 
 	t.Run("Test FindOne collection success", func(t *testing.T) {
-		person, err := userColl.FindOne(user.Id)
+		filter := bson.M{"_id": user.Id}
+		person, err := userColl.FindOne(filter)
 		require.Equal(t, user, person)
 		require.Nil(t, err)
 
-		person, err = userColl.FindOne(user2.Id)
+		filter = bson.M{"_id": user2.Id}
+		person, err = userColl.FindOne(filter)
 		require.Equal(t, user2, person)
 		require.Nil(t, err)
 	})
 
 	t.Run("Test FindOne collection failure", func(t *testing.T) {
-		person, err := userColl.FindOne("testtest")
+		filter := bson.M{"_id": "testtest"}
+		person, err := userColl.FindOne(filter)
 		require.Nil(t, person)
 		require.NotNil(t, err)
 	})
@@ -78,11 +87,11 @@ func TestMockMongoCollection(t *testing.T) {
 	})
 
 	t.Run("Test UpdateOne collection success", func(t *testing.T) {
-		person, err := userColl.UpdateOne(bson.D{
-			{"_id", user.Id},
-			{"username", "bird_changed"},
-			{"auth_id", user.AuthId},
-			{"created_at", user.CreatedAt},
+		person, err := userColl.UpdateOne(bson.M{
+			"_id":        user.Id,
+			"username":   "bird_changed",
+			"auth_id":    user.AuthId,
+			"created_at": user.CreatedAt,
 		})
 		require.Equal(t, "bird_changed", person.(*models.User).Username)
 		require.Nil(t, err)
@@ -90,10 +99,12 @@ func TestMockMongoCollection(t *testing.T) {
 	})
 
 	t.Run("Test DeleteOne collection success", func(t *testing.T) {
-		person, err := userColl.DeleteOne(user.Id)
+		filter := bson.M{"_id": user.Id}
+		person, err := userColl.DeleteOne(filter)
 		require.Equal(t, user, person)
 		require.Nil(t, err)
-		foundPerson, _ := userColl.FindOne(user.Id)
+		filter = bson.M{"_id": user.Id}
+		foundPerson, _ := userColl.FindOne(filter)
 		require.Nil(t, foundPerson)
 	})
 }

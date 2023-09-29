@@ -1,14 +1,14 @@
 package controllers
 
 import (
-	"birdai/src/internal/models"
+	"birdai/src/internal/repositories"
 )
 
 type Controller struct {
-	db models.IMongoInstance
+	db repositories.IMongoInstance
 }
 
-func NewController(db models.IMongoInstance) Controller {
+func NewController(db repositories.IMongoInstance) Controller {
 	return Controller{
 		db: db,
 	}

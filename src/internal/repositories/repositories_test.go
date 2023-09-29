@@ -1,17 +1,23 @@
 package repositories_test
 
 import (
+	"birdai/src/internal/models"
 	"birdai/src/internal/repositories"
 	"fmt"
-	"github.com/joho/godotenv"
 	"testing"
 )
 
 func TestConnection(t *testing.T) {
-	if err := godotenv.Load(); err != nil {
-		fmt.Errorf(err.Error())
-	}
 	t.Run("Test connect", func(t *testing.T) {
-		repositories.TestConnect()
+		mi, _ := repositories.Connect()
+		repositories.AddAllCollections(mi)
+		result, err := mi.GetCollection(repositories.UserColl).FindAll()
+		fmt.Println("Allting", result)
+		fmt.Println("Första", result.([]models.User)[0].Id)
+
+		if err != nil {
+			return
+		}
+		mi.DisconnectDB()
 	})
 }
