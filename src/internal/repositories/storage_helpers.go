@@ -5,6 +5,5 @@ var (
 	AdminColl = "admin"
 	BirdColl  = "bird"
 	PostColl  = "post"
-	SoundColl = "sound"
-	ImageColl = "image"
+	MediaColl = "media"
 )

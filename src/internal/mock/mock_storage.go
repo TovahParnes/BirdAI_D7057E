@@ -4,10 +4,8 @@ import (
 	"birdai/src/internal/models"
 	"errors"
 	"fmt"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"time"
-
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type MockMongoInstance struct {
@@ -102,15 +100,15 @@ func (m *mockCollection) DeleteOne(id string) (models.HandlerObject, error) {
 
 func (m *mockCollection) CreateOne(object models.HandlerObject) (models.HandlerObject, error) {
 	var newObject models.HandlerObject
-	timeNow := time.Now().Format(time.RFC3339)
 	switch object.(type) {
 	case *models.User:
 		newObject = &models.User{
-			Id:        primitive.NewObjectID().Hex(),
-			Username:  object.(*models.User).Username,
-			AuthId:    object.(*models.User).AuthId,
-			CreatedAt: timeNow,
+			Id:       primitive.NewObjectID().Hex(),
+			Username: object.(*models.User).Username,
+			AuthId:   object.(*models.User).AuthId,
+			Active:   object.(*models.User).Active,
 		}
+		newObject.SetCreatedAt()
 	case *models.Admin:
 		newObject = &models.Admin{
 			Id:     primitive.NewObjectID().Hex(),
@@ -129,14 +127,14 @@ func (m *mockCollection) CreateOne(object models.HandlerObject) (models.HandlerO
 
 	case *models.Post:
 		newObject = &models.Post{
-			Id:        primitive.NewObjectID().Hex(),
-			UserId:    object.(*models.Post).UserId,
-			BirdId:    object.(*models.Post).BirdId,
-			CreatedAt: timeNow,
-			Location:  object.(*models.Post).Location,
-			ImageId:   object.(*models.Post).ImageId,
-			SoundId:   object.(*models.Post).SoundId,
+			Id:       primitive.NewObjectID().Hex(),
+			UserId:   object.(*models.Post).UserId,
+			BirdId:   object.(*models.Post).BirdId,
+			Location: object.(*models.Post).Location,
+			ImageId:  object.(*models.Post).ImageId,
+			SoundId:  object.(*models.Post).SoundId,
 		}
+		newObject.SetCreatedAt()
 
 	case *models.Media:
 		newObject = &models.Media{
