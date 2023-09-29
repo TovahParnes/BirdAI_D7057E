@@ -8,17 +8,17 @@
     padding: 20px;
 }
 
-.upload-buttons {
+.button {
     background-color: #99E1D9;
     color: black;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin: auto;
+    margin: 5px;
 }
 
-.upload-buttons:hover {
+.button:hover {
     background-color: #88cbc3;
     color: black; 
 }

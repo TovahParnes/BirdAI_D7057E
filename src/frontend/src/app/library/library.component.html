@@ -1,0 +1,45 @@
+<div class="navbar">
+    <head>
+      <title>Icon Example</title>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    </head>
+    <button class="button" (click)="moveToHome()"> <i class="fas fa-home"></i> </button>
+    <button class="button"> <i class="fas fa-camera"></i> </button>
+    <button class="button"> <i class="fas fa-folder"></i></button>
+</div>
+
+<p></p>
+
+<!-- The display elements for the folders need to get the images, names & dates dynamically from the backend in a
+     loop generating all or a set amount with the user needing to scroll to fetch more folders. size and format 
+     of presented folders should be changed to make the viewing of folder easier for the user. -->
+
+<body>
+    <div class="container">
+        <div class="desc" style="display: flex;justify-content: space-between;">
+        <p style="flex: 1;">Duck</p>
+        <p style="flex: 1; text-align: right;">2023/09/06</p>
+        </div>
+        <div class="gallery">
+            <a target="_blank" (click)="moveToSpeciesPage()">
+            <img src="assets/duck.jpg" alt="Duck" style="width: 50%;">
+        </a>
+        </div>
+    </div>
+
+    <p></p>
+
+    <div class="container">
+        <div class="desc" style="display: flex;justify-content: space-between;">
+        <p style="flex: 1;">Budgie</p>
+        <p style="flex: 1; text-align: right;">2023/09/06</p>
+        </div>
+        <div class="gallery">
+            <a target="_blank" href="assets/undulat.jpg">
+            <img src="assets/undulat.jpg" alt="Duck" style="width: 50%;">
+        </a>
+        </div>
+    </div>
+
+</body>
+

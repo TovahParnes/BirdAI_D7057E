@@ -1,0 +1,52 @@
+<div class="navbar">
+    <title>Icon Example</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <button class="button" (click)="moveToHome()"> <i class="fas fa-home"></i> </button>
+  <button class="button"> <i class="fas fa-camera"></i> </button>
+  <button class="button" (click)="moveToLibrary()"> <i class="fas fa-folder"></i></button>
+</div>
+
+<!-- 
+    The images, name of species, description and map (map might not be implemented as it is alot of work for minor feature)
+    needs to be fetched from backend dynamically.
+-->
+
+<p></p>
+
+<div class="container">
+    <div style="text-align: center;">Duck</div>
+    <p></p>
+
+    
+        <!-- <div style="display: flex; align-items: center; justify-content: center;">
+        <img [src]="currentImage" alt="Slideshow Image" style="height: 150px; width: 200px; "> -->
+        <div class="image-container">
+            <div class="buttonContainer">        
+                <a class="prev" (click)="prevImage()">❮</a>
+                <a class="next" (click)="nextImage()">❯</a>
+            </div>
+            <img [src]="currentImage" alt="Slideshow Image" id="Slideshow-image" style="width: 50%;">
+        </div>
+        <p></p>
+        <!-- <div class="buttonContainer">
+        <a class="prev" (click)="prevImage()">❮</a>
+        <a class="next" (click)="nextImage()">❯</a>
+        </div> -->
+
+    <!-- <div class="scroll-container">
+        <img src="assets/undulat.jpg" alt="duck_1">
+        <img src="assets/duck.jpg" alt="duck_2">
+        <img src="assets/duck.jpg" alt="duck_3">
+        <img src="assets/duck.jpg" alt="duck_4">
+        
+    </div> -->
+    Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+    when an unknown printer took a galley of type and scrambled it to make a type 
+    specimen book. It has survived not only five centuries, but also the leap into 
+    electronic typesetting, remaining essentially unchanged. It was popularised in 
+    the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
+    and more recently with desktop publishing software like Aldus PageMaker including 
+    versions of Lorem Ipsum.
+    <div class="container"><img src="assets/map.png" style="width: 100%;"></div>
+</div>

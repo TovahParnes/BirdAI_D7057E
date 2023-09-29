@@ -3,23 +3,21 @@
     <title>Icon Example</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   </head>
-  <button class="upload-buttons"> <i class="fas fa-home"></i> </button>
-  <button class="upload-buttons"> <i class="fas fa-camera"></i> </button>
-  <button class="upload-buttons"> <i class="fas fa-folder"></i> </button>
+  <button class="button"> <i class="fas fa-home"></i> </button>
+  <button class="button" (click)="ngOnInit()"> <i class="fas fa-camera"></i> </button>
+  <button class="button" (click)="moveToLibrary()"> <i class="fas fa-folder"></i></button>
 </div>
 
-<p class="blankspace"></p>
+<p></p>
 
-<div class="container" *ngIf="socialAuthServive.authState | async as socialUser">
+<div class="container" *ngIf="socialAuthService.authState | async as socialUser">
     <p style="color: white;">Hello, {{socialUser.name}}!</p>
     <p>ID: {{socialUser.id}}</p>
     <p style="color: white;">Your email: {{socialUser.email}}</p>
-    <button class="upload-buttons" mat-raised-button (click)="logout()">Logout</button>
+    <button class="button" mat-raised-button (click)="logout()">Logout</button>
 </div>
 
-<body style="background-color: #1E1E1E;">
-    <p class="blankspace"></p>
-</body>
+<p></p>
 
 <div class="container">
     <div class="drop-container" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
@@ -30,6 +28,20 @@
       <p class="blankspace" style="background-color:#242526"></p>
     <title>Upload buttons</title>
     <link rel="stylesheet" type="text/css" href="home-page.component.css">
-    <button class="upload-buttons">Upload Image</button>
-    <button class="upload-buttons">Upload Sound</button>
+    <button class="button">Upload Image</button>
+    <button class="button">Upload Sound</button>
+</div>
+
+<div *ngIf="responseData">
+  <h1>Response Data</h1>
+  <p>Message: {{ responseData.message }}</p>
+  <p>Success: {{ responseData.success }}</p>
+  <ul>
+    <li *ngFor="let item of responseData.data">
+      <p>ID: {{ item.id }}</p>
+      <p>Auth ID: {{ item.authId }}</p>
+      <p>Created At: {{ item.createdAt }}</p>
+      <p>Username: {{ item.username }}</p>
+    </li>
+  </ul>
 </div>
