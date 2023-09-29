@@ -44,7 +44,6 @@ func InitMockDB() models.IMongoInstance {
 	db.AddCollection(repositories.AdminColl)
 	db.AddCollection(repositories.BirdColl)
 	db.AddCollection(repositories.PostColl)
-	db.AddCollection(repositories.SoundColl)
-	db.AddCollection(repositories.ImageColl)
+	db.AddCollection(repositories.MediaColl)
 	return db
 }

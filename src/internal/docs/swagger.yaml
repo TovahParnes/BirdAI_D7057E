@@ -12,6 +12,8 @@ definitions:
     properties:
       _id:
         type: string
+      active:
+        type: boolean
       authId:
         type: string
       createdAt:
@@ -38,6 +40,13 @@ paths:
       consumes:
       - application/json
       description: Create User
+      parameters:
+      - description: user
+        in: body
+        name: set
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
       produces:
       - application/json
       responses:
@@ -70,7 +79,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -106,7 +115,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -141,11 +150,12 @@ paths:
       - application/json
       description: Update given user
       parameters:
-      - description: User ID
-        in: path
-        name: id
+      - description: user
+        in: body
+        name: set
         required: true
-        type: integer
+        schema:
+          $ref: '#/definitions/models.User'
       produces:
       - application/json
       responses:
@@ -226,14 +236,7 @@ paths:
         "200":
           description: OK
           schema:
-            allOf:
-            - $ref: '#/definitions/models.ResponseHTTP'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/models.User'
-                  type: array
-              type: object
+            $ref: '#/definitions/models.ResponseHTTP'
         "401":
           description: Unauthorized
           schema:
