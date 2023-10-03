@@ -1,21 +1,7 @@
-import {Component} from '@angular/core';
-import {SocialAuthService, GoogleLoginProvider} from 'angularx-social-login';
+import {Component, OnInit} from '@angular/core';
+import {SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
-//import {Directive} from '@angular/core'
-import { HttpClient } from '@angular/common/http';
-//import { Observable } from 'rxjs';
-
-
-interface ApiResponse {
-  data: {  
-    id : string;
-    authId: string;
-    createdAt: string;
-    username: string;
-  }[];
-  message: string;
-  success: boolean;
-}
+import {AppComponent} from '../app.component';
 
 @Component({
   selector: 'app-home-page',
@@ -23,22 +9,46 @@ interface ApiResponse {
   styleUrls: ['./home-page.component.css'],
 })
 
-export class MainPageComponent {
+export class MainPageComponent implements OnInit {
 
-  responseData: ApiResponse | null = null;
+  user: SocialUser = new SocialUser;
+  loggedIn: boolean = false;
 
-  constructor(private router: Router,
-              public socialAuthService: SocialAuthService,
-              private http: HttpClient,
-              ) {
+  constructor(
+    private router: Router, 
+    public mainApp: AppComponent,
+    public socialAuthService: SocialAuthService) {
+  }
+
+  ngOnInit() {
+    this.socialAuthService.authState.subscribe((user) => {
+      this.user = user;
+      this.loggedIn = (user != null);
+    });
   }
 
   logout(): void {
     this.socialAuthService.signOut().then(() => this.router.navigate(['login']));
   }
 
-  moveToLibrary(): void {
+  navigateToHome(): void {
+    this.router.navigate(['mainpage']);
+  }
+
+  navigateToTakenImages(): void {
+    this.router.navigate(['takenImages']);
+  }
+
+  navigateToLibrary(): void {
     this.router.navigate(['library']);
+  }
+
+  navigateToProfilePage(): void {
+    this.router.navigate(['profile']);
+  }
+
+  toggleTheme(): void {
+    this.mainApp.switchDarkmodeSetting();
   }
 
   imageUrls: string[] = [];
@@ -79,14 +89,4 @@ export class MainPageComponent {
       }
     }
   }
-
-  ngOnInit(): void {
-    // Make an HTTP GET request to the Swagger service's API
-    this.http.get<ApiResponse>('http://localhost:4000/swagger/index.html').subscribe(data => {
-      this.responseData = data;
-      console.log(data);
-    });
-  }
-
 }
-

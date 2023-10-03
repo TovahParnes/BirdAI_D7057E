@@ -1,21 +1,28 @@
-import {BrowserModule} from '@angular/platform-browser';
+// base imports
 import {NgModule} from '@angular/core';
-import {CommonModule} from "@angular/common";
-
-import {AppComponent} from './app.component';
 import {RouterModule} from '@angular/router';
+import {BrowserModule} from '@angular/platform-browser';
+import {CommonModule} from "@angular/common";
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {HttpClientModule} from '@angular/common/http';
+import {FormsModule} from '@angular/forms';
+
+// page components imports
+import {AppComponent} from './app.component';
 import {LoginComponent} from './login/login.component';
 import {MainPageComponent} from './home/home-page.component';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-//import {MatCardModule} from '@angular/material/card';
-//import {MatFormFieldModule} from '@angular/material/form-field';
-//import {MatButtonModule} from '@angular/material/button';
-//import {MatInputModule} from '@angular/material/input';
-import {GoogleLoginProvider, SocialLoginModule} from 'angularx-social-login';
-import {AuthGuardService} from './auth-guard.service';
-import { LibraryComponent } from './library/library.component';
-import { SpeciesPageComponent } from './species-page/species-page.component';
-import { HttpClientModule } from '@angular/common/http';
+import {LibraryComponent} from './library/library.component';
+import {TakenImagesPageComponent} from './taken-images-page/taken-images-page.component';
+import {SpeciesPageComponent} from './species-page/species-page.component';
+import {ProfilePageComponent} from './profile-page/profile-page.component';
+
+// login authguard imports
+import {GoogleLoginProvider, GoogleSigninButtonDirective, GoogleSigninButtonModule, SocialLoginModule, SocialAuthServiceConfig} from '@abacritt/angularx-social-login';
+import {AuthGuardService} from './services/auth-guard.service';
+
+// material
+import {MatButtonModule} from '@angular/material/button';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
@@ -24,6 +31,8 @@ import { HttpClientModule } from '@angular/common/http';
     MainPageComponent,
     LibraryComponent,
     SpeciesPageComponent,
+    TakenImagesPageComponent,
+    ProfilePageComponent,
   ],
   imports: [
     BrowserModule,
@@ -31,34 +40,39 @@ import { HttpClientModule } from '@angular/common/http';
     RouterModule.forRoot([
       {path: 'login', component: LoginComponent},
       {path: 'mainpage', component: MainPageComponent, canActivate: [AuthGuardService]},
-      {path: 'library', component: LibraryComponent},
-      {path: 'species-page', component: SpeciesPageComponent},
+      {path: 'library', component: LibraryComponent, canActivate: [AuthGuardService]},
+      {path: 'takenImages', component: TakenImagesPageComponent, canActivate: [AuthGuardService]},
+      {path: 'profile', component: ProfilePageComponent, canActivate: [AuthGuardService]},
+      {path: 'species-page', component: SpeciesPageComponent, canActivate: [AuthGuardService]},
       {path: '**', component: LoginComponent},
     ]),
     BrowserAnimationsModule,
     CommonModule,
-    //MatCardModule,
-    //MatFormFieldModule,
-    //MatButtonModule,
-    //MatInputModule,
+    GoogleSigninButtonModule,
     SocialLoginModule,
-
+    MatButtonModule,
+    MatSlideToggleModule,
+    FormsModule,
   ],
   exports:[RouterModule],
-  providers: [{
-    provide: 'SocialAuthServiceConfig',
-    useValue: {
-      autoLogin: true,
-      providers: [
-        {
-          id: GoogleLoginProvider.PROVIDER_ID,
-          provider: new GoogleLoginProvider('148517665605-jspahbqleats6lvlag9kasc2c11b5g7o.apps.googleusercontent.com')
+  providers: [
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider('1048676205865-lm62p2961pftdfrj919m4fts8lel1hu9.apps.googleusercontent.com')
+          },
+        ],
+        onError: (err) => {
+          console.error(err);
         }
-      ]
-    }
-  },
-    AuthGuardService],
+      } as SocialAuthServiceConfig,
+    },
+    AuthGuardService,
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}
