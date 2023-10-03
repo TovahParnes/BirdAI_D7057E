@@ -24,17 +24,51 @@
 </div>
 
 <p></p>
+<mat-card class="card">
+  <h1 style="margin-top: 0px;">Welcome to Bird AI</h1>
+  <p>With the help of ai figure out what kind of bird it is you found</p>
+  
+  <mat-vertical-stepper #stepper>
+    <form [formGroup]="form">
 
-<div class="container">
-    <div class="drop-container" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
-        <p>Drag &amp; Drop images here</p>
-        <input type="file" (change)="onFileSelected($event)" accept="image/*" multiple>
-        <p id="imagePreview"><img *ngFor="let imageUrl of imageUrls" [src]="imageUrl" alt="Uploaded Image"></p>
+    <mat-step>
+      <ng-template matStepLabel>Select type of media</ng-template>
+      <mat-radio-group formControlName="option">
+        <mat-radio-button value="option1">Image</mat-radio-button><br>
+        <mat-radio-button value="option2">Sound</mat-radio-button>
+      </mat-radio-group>
+      <br/>
+
+      <div>
+        <button mat-button matStepperNext>Next</button>
       </div>
-      <p class="blankspace" style="background-color:#242526"></p>
-    <title>Upload buttons</title>
-    <link rel="stylesheet" type="text/css" href="home-page.component.css">
-    <button mat-raised-button color="accent" class="upload-buttons">Upload Image</button>
-    <button mat-raised-button color="accent" class="upload-buttons">Upload Sound</button>
-</div>
+
+    </mat-step>
+
+    <mat-step *ngIf="form.value.option === 'option1'">
+        <ng-template matStepLabel>Select the Image</ng-template>       
+        <input type="file" (change)="onFileSelected($event)" accept="image/*" style="padding-top: 6px"/>
+        <img *ngIf="selectedImage" [src]="selectedImage" alt="Selected Image" width="200" />
+  
+        <div style="padding-top: 6px">
+          <button mat-button matStepperPrevious style="margin-right: 6px;">Back</button>
+          <button mat-raised-button color="primary" type="button" (click)="onSubmit()" [disabled]="!selectedImage">Submit</button>
+        </div>
+
+    </mat-step>
+
+    <mat-step *ngIf="form.value.option === 'option2'">
+      <ng-template matStepLabel>Select the Sound</ng-template>
+      <p>Not implemented</p>
+
+      <div>
+        <button mat-button matStepperPrevious style="margin-right: 6px;">Back</button>
+        <button mat-button matStepperNext disabled>Submit</button>
+      </div>
+      
+    </mat-step>
+    </form>
+
+  </mat-vertical-stepper>
+</mat-card>
 

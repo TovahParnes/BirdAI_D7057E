@@ -1,7 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
 import {AppComponent} from '../app.component';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-home-page',
@@ -13,18 +15,32 @@ export class MainPageComponent implements OnInit {
 
   user: SocialUser = new SocialUser;
   loggedIn: boolean = false;
+  isLinear = false;
+  form!: FormGroup;
+  selectedImage: any;
 
   constructor(
     private router: Router, 
     public mainApp: AppComponent,
-    public socialAuthService: SocialAuthService) {
+    public socialAuthService: SocialAuthService,
+    private formBuilder: FormBuilder) {
   }
 
   ngOnInit() {
-    this.socialAuthService.authState.subscribe((user) => {
+      this.socialAuthService.authState.subscribe((user) => {
       this.user = user;
       this.loggedIn = (user != null);
+    }),
+
+    this.form = this.formBuilder.group({
+      option: new FormControl(), // Initialize with a default value
     });
+  }
+
+  @ViewChild('stepper') stepper!: MatStepper;
+
+  ngAfterViewInit() {
+    this.stepper.selectedIndex = -1;
   }
 
   logout(): void {
@@ -51,42 +67,24 @@ export class MainPageComponent implements OnInit {
     this.mainApp.switchDarkmodeSetting();
   }
 
-  imageUrls: string[] = [];
-
-  onDragOver(event: DragEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
-  }
-
-  onDragLeave(event: DragEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
-  }
-
-  onDrop(event: DragEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
-    const files = event.dataTransfer?.files;
-    if (files) {this.processFiles(files);
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (e) => {
+        this.selectedImage = reader.result;
+      };
     }
   }
 
-  onFileSelected(event: Event): void {
-    const inputElement = event.target as HTMLInputElement;
-    const files = inputElement.files;
-    this.processFiles(files);
-    inputElement.value = ''; // Reset the input value to allow re-uploading the same file
-  }
+  onSubmit() {
+    // Handle form submission here, e.g., send the image to a server
+    // You can access the selected image using this.selectedImage
+    console.log('Image submitted:', this.selectedImage);
 
-  private processFiles(files: FileList | null): void {
-    if (!files) return;
-
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      if (file.type.startsWith('image/')) {
-        const imageUrl = URL.createObjectURL(file);
-        this.imageUrls.push(imageUrl);
-      }
-    }
+    // Reset the form or perform any other necessary actions
+    this.form.reset();
+    this.selectedImage = null;
   }
 }

@@ -5,7 +5,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {CommonModule} from "@angular/common";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientModule} from '@angular/common/http';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 // page components imports
 import {AppComponent} from './app.component';
@@ -17,12 +17,16 @@ import {SpeciesPageComponent} from './species-page/species-page.component';
 import {ProfilePageComponent} from './profile-page/profile-page.component';
 
 // login authguard imports
-import {GoogleLoginProvider, GoogleSigninButtonDirective, GoogleSigninButtonModule, SocialLoginModule, SocialAuthServiceConfig} from '@abacritt/angularx-social-login';
+import {GoogleLoginProvider, GoogleSigninButtonModule, SocialLoginModule, SocialAuthServiceConfig} from '@abacritt/angularx-social-login';
 import {AuthGuardService} from './services/auth-guard.service';
 
 // material
 import {MatButtonModule} from '@angular/material/button';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatStepperModule} from '@angular/material/stepper';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatCardModule} from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -50,11 +54,18 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     CommonModule,
     GoogleSigninButtonModule,
     SocialLoginModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatButtonModule,
     MatSlideToggleModule,
-    FormsModule,
+    MatStepperModule,
+    MatRadioModule,
+    MatFormFieldModule,
+    MatCardModule,
   ],
-  exports:[RouterModule],
+  exports:[
+    RouterModule
+  ],
   providers: [
     {
       provide: 'SocialAuthServiceConfig',
