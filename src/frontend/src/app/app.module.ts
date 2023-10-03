@@ -16,7 +16,7 @@ import {TakenImagesPageComponent} from './taken-images-page/taken-images-page.co
 import {SpeciesPageComponent} from './species-page/species-page.component';
 import {ProfilePageComponent} from './profile-page/profile-page.component';
 
-import { CardComponent, Card2Component } from './card/card.component';
+import { CardComponent, Card2Component, BottomInfoComponent} from './card/card.component';
 import { FirstPageComponent } from './first-page/first-page.component';
 
 
@@ -35,6 +35,8 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { AboutComponent } from './about/about.component';
+
 
 
 
@@ -49,7 +51,11 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     ProfilePageComponent,
     CardComponent,
     Card2Component,
+
+    BottomInfoComponent,
     FirstPageComponent,
+    AboutComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -64,6 +70,8 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
       {path: 'species-page', component: SpeciesPageComponent,},
       {path: 'first-page', component: FirstPageComponent,},
+      {path: 'about', component: AboutComponent,},
+
       {path: '**', component: LoginComponent},
     ]),
     BrowserAnimationsModule,

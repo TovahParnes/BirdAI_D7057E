@@ -7,6 +7,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
+
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
@@ -25,12 +26,14 @@ export class MainPageComponent implements OnInit {
   data: any;
   dataImg: any;
 
+
   constructor(
     private router: Router, 
     public mainApp: AppComponent,
     public socialAuthService: SocialAuthService,
     private formBuilder: FormBuilder,
     private httpClient: HttpClient) {
+
   }
 
   ngOnInit() {
@@ -82,7 +85,3 @@ export class MainPageComponent implements OnInit {
     this.isLoading = false
   }
 }
-
-
-
-

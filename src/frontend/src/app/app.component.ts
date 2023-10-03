@@ -1,3 +1,4 @@
+
 import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { Component } from '@angular/core';
 import {AuthGuardService} from './services/auth-guard.service';
@@ -58,6 +59,7 @@ export class AppComponent {
   navigateToProfilePage(): void {
     this.router.navigate(['profile']);
   }
+
 
 
 }

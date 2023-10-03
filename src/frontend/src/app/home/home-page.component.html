@@ -7,10 +7,18 @@
 
   <div class="nav-buttons">
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 1dba928 (add bottominfo & about.component, modify firstpage, add title to all pages)
     <button class="selected-nav-button" (click)="mainApp.navigateToHome()"><span class="material-symbols-outlined">home</span></button>
     <button class="nav-button" (click)="mainApp.navigateToTakenImages()"><span class="material-symbols-outlined">image</span></button>
     <button class="nav-button" (click)="mainApp.navigateToLibrary()"><span class="material-symbols-outlined">grid_view</span></button>  
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 1dba928 (add bottominfo & about.component, modify firstpage, add title to all pages)
   </div>
 
   <div class="profile">
@@ -18,14 +26,26 @@
       <img src="{{socialUser.photoUrl}}" width="40px" height="40px" style="border-radius: 50%;">
     </button> 
     <ul class="sub-menu">
+<<<<<<< HEAD
+
       <!-- <mat-slide-toggle [(ngModel)]="mainApp.isDark">Darkmode</mat-slide-toggle><br> -->
       <button mat-raised-button (click)="mainApp.navigateToProfilePage()">Profile</button><br> <!-- {{socialUser.name}}<span class="material-symbols-outlined">chevron_right</span> -->
       <button mat-raised-button (click)="mainApp.logout()">Logout</button>
+
+=======
+      <!-- <mat-slide-toggle [(ngModel)]="mainApp.isDark">Darkmode</mat-slide-toggle><br> -->
+      <button mat-raised-button (click)="mainApp.navigateToProfilePage()">Profile</button><br> <!-- {{socialUser.name}}<span class="material-symbols-outlined">chevron_right</span> -->
+      <button mat-raised-button (click)="mainApp.logout()">Logout</button>
+>>>>>>> 1dba928 (add bottominfo & about.component, modify firstpage, add title to all pages)
     </ul>
   </div>
 </div>
 
 <p></p>
+
+<div style="text-align: center; font-size: 32px">
+  Home
+</div>
 
 <mat-card class="card">
   <h1 style="margin-top: 0px;">Welcome to Bird AI</h1>
@@ -37,6 +57,8 @@
 <mat-card class="card">
   
   <mat-vertical-stepper>
+
+
     <form [formGroup]="form">
 
     <mat-step>
@@ -62,6 +84,7 @@
         <div style="padding-top: 6px">
           <button mat-button matStepperPrevious style="margin-right: 6px;">Back</button>
             <button mat-raised-button color="primary" type="button" (click)="onSubmit(loading)" [disabled]="!selectedImage">Submit</button>
+
         </div>
 
     </mat-step>
@@ -81,6 +104,11 @@
   </mat-vertical-stepper>
 </mat-card>
 
+
+<p></p>
+
+<app-bottominfo></app-bottominfo>
+
 <p></p>
 
 <div #loading style="height: 1000px;">
@@ -90,4 +118,5 @@
   <mat-card *ngIf="data != null" class="card">
   </mat-card>
 </div>
+
 

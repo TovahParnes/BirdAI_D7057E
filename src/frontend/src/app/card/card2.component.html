@@ -1,5 +1,6 @@
-    <div class="container">
-        <div class="desc" style="display: flex;justify-content: space-between;">
+
+    <div class="container" (mouseenter)="changeTextColor('#2196f3')" (mouseleave)="changeTextColor('white')">
+        <div class="desc" style="display: flex;justify-content: space-between;" [style.color]=textColor>
         <p style="flex: 1;">{{title}}</p>
         <p style="flex: 1; text-align: right;">{{date}}</p>
         </div>

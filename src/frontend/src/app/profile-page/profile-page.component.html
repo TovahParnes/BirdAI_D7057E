@@ -7,8 +7,8 @@
   
     <div class="nav-buttons">
       <button class="nav-button" (click)="navigateToHome()"><span class="material-symbols-outlined">home</span></button>
-      <button class="nav-button" (click)="navigateToTakenImages()"><span class="material-symbols-outlined">image</span></button>
-      <button class="nav-button" (click)="navigateToLibrary()"><span class="material-symbols-outlined">grid_view</span></button>  
+      <button class="nav-button" (click)="navigateToLibrary()"><span class="material-symbols-outlined">image</span></button>
+      <button class="nav-button" (click)="navigateToTakenImages()"><span class="material-symbols-outlined">grid_view</span></button>  
     </div>
   
     <div class="profile">
@@ -25,7 +25,15 @@
 
 <p></p>
 
+<div style="text-align: center; font-size: 32px">
+  Profile
+</div>
+
+<p></p>
+
 <div class="container" *ngIf="socialAuthService.authState | async as socialUser">
     <img src="{{socialUser.photoUrl}}" width="120px" height="120px" style="border-radius: 50%;">
     <h2 style="color: white;">{{socialUser.name}}</h2>
 </div>
+
+<app-bottominfo></app-bottominfo>
