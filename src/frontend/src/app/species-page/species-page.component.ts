@@ -1,6 +1,7 @@
-import { Component, ElementRef, AfterViewInit } from '@angular/core';
+import {Component, ElementRef, AfterViewInit} from '@angular/core';
+import {SocialAuthService, GoogleLoginProvider} from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
-import {SocialAuthService, GoogleLoginProvider} from 'angularx-social-login';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-species-page',
@@ -12,6 +13,7 @@ export class SpeciesPageComponent implements AfterViewInit{
 
   constructor(
     private router: Router,
+    public mainApp: AppComponent,
     public socialAuthService: SocialAuthService,
     private elRef: ElementRef
     ) {
@@ -24,6 +26,10 @@ export class SpeciesPageComponent implements AfterViewInit{
 
   moveToLibrary(): void {
     this.router.navigate(['library']);
+  }
+
+  toggleTheme(): void {
+    //this.mainApp.switchDarkmodeSetting();
   }
 
   images: string[] = [

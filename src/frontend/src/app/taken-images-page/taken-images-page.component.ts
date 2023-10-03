@@ -4,15 +4,15 @@ import {Router} from '@angular/router';
 import { AppComponent } from '../app.component';
 
 @Component({
-  selector: 'app-library',
-  templateUrl: './library.component.html',
-  styleUrls: ['./library.component.css']
+  selector: 'app-taken-images-page',
+  templateUrl: './taken-images-page.component.html',
+  styleUrls: ['./taken-images-page.component.css']
 })
 
-export class LibraryComponent {
+export class TakenImagesPageComponent {
 
   constructor(
-    private router: Router, 
+    private router: Router,
     public mainApp: AppComponent,
     public socialAuthService: SocialAuthService) {
   }

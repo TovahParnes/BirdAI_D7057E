@@ -1,26 +1,10 @@
-.container {
-    text-align: center;
-    margin: 0 auto;
-    padding: 20px;
-    width: 40%;
-    background-color: #242526;
-    border-radius: 8px;
-    padding: 20px;
-}
-
-.button {
-    background-color: #99E1D9;
-    color: black;
+.upload-buttons {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin: 5px;
-}
-
-.button:hover {
-    background-color: #88cbc3;
-    color: black; 
+    margin-left: 1px;
+    margin-right: 1px;
 }
 
 .drop-container {
@@ -28,7 +12,7 @@
     padding: 20px;
     text-align: center;
     cursor: pointer;
-    background-color: #f9f9f9;
+    background-color: #f3f3f3;
     margin: 0;
 }
 
@@ -43,21 +27,3 @@
     max-height: 150px;
     margin: 10px;
 }
-
-.blankspace {
-    background-color: #1E1E1E;
-}
-
-.navbar {
-    background-color: #242526;
-    height: 50px;
-    text-align: center;
-}
-
-.icons {
-    text-align: center;
-    width: 50px;
-    height: 50px;
-}
-
-

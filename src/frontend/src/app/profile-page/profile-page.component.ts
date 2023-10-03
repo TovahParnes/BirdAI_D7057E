@@ -4,12 +4,11 @@ import {Router} from '@angular/router';
 import { AppComponent } from '../app.component';
 
 @Component({
-  selector: 'app-library',
-  templateUrl: './library.component.html',
-  styleUrls: ['./library.component.css']
+  selector: 'app-profile-page',
+  templateUrl: './profile-page.component.html',
+  styleUrls: ['./profile-page.component.css']
 })
-
-export class LibraryComponent {
+export class ProfilePageComponent {
 
   constructor(
     private router: Router, 
@@ -28,7 +27,7 @@ export class LibraryComponent {
   navigateToTakenImages(): void {
     this.router.navigate(['takenImages']);
   }
-
+  
   navigateToLibrary(): void {
     this.router.navigate(['library']);
   }
@@ -39,9 +38,5 @@ export class LibraryComponent {
 
   toggleTheme(): void {
     //this.mainApp.switchDarkmodeSetting();
-  }
-
-  navigateToSpecies(): void {
-    this.router.navigate(['species-page']);
   }
 }
