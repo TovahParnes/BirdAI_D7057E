@@ -2,8 +2,6 @@
 
 
 html, body {
-    background-color: #18191A;
-    color: white;
     height: 100%;
     color-scheme: dark;
 }
@@ -11,6 +9,14 @@ html, body {
 body {
     margin: 0;
     font-family: Sans, "Helvetica Neue", sans-serif;
+}
+
+.card {
+    margin: 0 auto;
+    max-width: 50%;
+    padding: 20px;
+    border-radius: 7px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.16);
 }
 
 .container {
@@ -35,7 +41,7 @@ button:hover {
 /* nav bar */
 
 .navbar {
-    background-color: #242526;
+    background-color: #424242;
     color: #fff;
     text-align: center;
     border-bottom: 1px solid rgb(59, 59, 59);
@@ -61,9 +67,9 @@ button:hover {
 
 .selected-nav-button{
     border: none;
-    color: #99E1D9;
-    border-bottom: 2px solid #99E1D9;
-    background-color: #242526;
+    color: #2196f3;
+    border-bottom: 2px solid #2196f3;
+    background-color: #424242;
     margin-top: 0;
     height: 51px;
     width: 80px;
@@ -82,7 +88,7 @@ button:hover {
     border: none;
     border-radius: 8%;
     color: rgb(184, 184, 184);
-    background-color: #242526;
+    background-color: #424242;
     height: 40px;
     width: 80px;
     cursor: pointer;
@@ -109,7 +115,7 @@ button:hover {
     position: absolute;
     top: 60%;
     right: 1%;
-    background-color: #242526;
+    background-color: #424242;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25); 
     z-index: 2;
     border-radius: 7px;
