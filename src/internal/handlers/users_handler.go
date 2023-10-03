@@ -19,36 +19,17 @@ import (
 // @Accept			json
 // @Produce		json
 // @Param			id	path	string	true	"User ID"
-// @Success		200	{object}	models.Response{data=[]models.User}
-// @Failure		404	{object}	models.Response{data=[]models.Err}
-// @Failure		410	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Success		200	{object}	models.Response{data=[]models.User} - user retrieved successfully
+// @Failure		404	{object}	models.Response{data=[]models.Err} - user not found
+// @Failure		410	{object}	models.Response{data=[]models.Err} - user was deleted
+// @Failure		503	{object}	models.Response{data=[]models.Err} - no connection to db was established
 // @Router			/users/{id} [get]
 func (h *Handler) GetUserById(c *fiber.Ctx) error {
 	id := c.Params("id")
 
-	response, _ := h.controller.CGetUserById(id)
+	response := h.controller.CGetUserById(id)
 
-	if err != nil {
-		
-		return c.Status().JSON(models.Response{
-			Success: false,
-			Message: err.Error(),
-			Data:    nil,
-		})
-	}
-
-	//	@Failure	503	{object}	models.Response{}
-	// if no connection to db was established
-
-	//	@Failure	404	{object}	models.Response{}
-	// if user not found
-
-	// 	@Failure	410	{object}	models.Response{}
-	// if user was deleted
-
-	//	@Success	200	{object}	models.User{}
-	return c.JSON(user)
+	return utils.ResponseToStatus(c, response)
 }
 
 // ListUsers is a function to get a set of all users from database

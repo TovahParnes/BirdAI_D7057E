@@ -3,16 +3,24 @@ package controllers
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/repositories"
+	"birdai/src/internal/utils"
+
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func (c *Controller) CGetUserById(id string) (*models.User, error) {
+func (c *Controller) CGetUserById(id string) (models.Response) {
 	coll := c.db.GetCollection(repositories.UserColl)
-	user, err := coll.FindOne(id)
-	if user != nil {
-		return user.(*models.User), err
+	response := coll.FindOne(id)
+
+	if !response.Data.(models.Err).Success {
+		return response
 	}
-	return &models.User{}, err
+
+	if response.Data.(*models.User).Active == false {
+		return utils.ErrorDeleted("User collection")
+	}
+
+	return response
 }
 
 func (c *Controller) CCreateUser(user *models.User) (*models.User, error) {

@@ -2,8 +2,10 @@ package mock
 
 import (
 	"birdai/src/internal/models"
+	"birdai/src/internal/utils"
 	"errors"
 	"fmt"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -32,14 +34,14 @@ type mockCollection struct {
 	data []models.HandlerObject
 }
 
-func (m *mockCollection) FindOne(id string) (models.HandlerObject, error) {
+func (m *mockCollection) FindOne(id string) (models.Response) {
 	//objectID, err := primitive.ObjectIDFromHex(id)
 	for _, one := range m.data {
 		if one.GetId() == id {
-			return one, nil
+			return utils.Response(one)
 		}
 	}
-	return nil, errors.New("could not find")
+	return utils.ErrorNotFoundInDatabase("User collection")
 }
 
 func (m *mockCollection) FindAll() ([]models.HandlerObject, error) {
