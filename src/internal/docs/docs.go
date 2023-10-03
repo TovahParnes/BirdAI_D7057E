@@ -44,7 +44,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "admin",
-                        "name": "set",
+                        "name": "admin",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -70,10 +70,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -91,10 +88,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -112,10 +106,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -133,10 +124,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -211,10 +199,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -232,10 +217,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -253,10 +235,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -296,10 +275,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.AdminOutput"
-                                            }
+                                            "$ref": "#/definitions/models.AdminOutput"
                                         }
                                     }
                                 }
@@ -317,10 +293,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -338,10 +311,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -359,10 +329,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -380,10 +347,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -401,10 +365,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -453,10 +414,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.AdminOutput"
-                                            }
+                                            "$ref": "#/definitions/models.AdminOutput"
                                         }
                                     }
                                 }
@@ -474,10 +432,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -495,10 +450,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -516,10 +468,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -537,10 +486,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -593,10 +539,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -614,10 +557,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -635,10 +575,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -656,10 +593,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -721,10 +655,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -742,10 +673,8 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
+<<<<<<< HEAD
                                         }
                                     }
                                 }
@@ -754,6 +683,203 @@ const docTemplate = `{
                     },
                     "403": {
                         "description": "Forbidden",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Err"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Err"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Err"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/ai/inputimage": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Send in an image to get a response of which type of bird it is",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ai"
+                ],
+                "summary": "Analyze image",
+                "parameters": [
+                    {
+                        "description": "picture",
+                        "name": "set",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.MediaInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/models.Err"
+                                            }
+=======
+>>>>>>> f463ec0 (106 validation functions (#123))
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Err"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Err"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Err"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/ai/inputimage": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Send in an image to get a response of which type of bird it is",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ai"
+                ],
+                "summary": "Analyze image",
+                "parameters": [
+                    {
+                        "description": "picture",
+                        "name": "set",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.MediaInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
                         "schema": {
                             "allOf": [
                                 {
@@ -773,8 +899,29 @@ const docTemplate = `{
                             ]
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/models.Err"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "allOf": [
                                 {
@@ -878,10 +1025,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -899,10 +1043,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -946,10 +1087,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.BirdOutput"
-                                            }
+                                            "$ref": "#/definitions/models.BirdOutput"
                                         }
                                     }
                                 }
@@ -967,10 +1105,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -988,10 +1123,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1009,10 +1141,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1022,6 +1151,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Update given bird",
                 "consumes": [
                     "application/json"
@@ -1069,10 +1203,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1090,10 +1221,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1111,10 +1239,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1132,10 +1257,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1153,10 +1275,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1168,6 +1287,11 @@ const docTemplate = `{
         },
         "/posts/": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Create a new post",
                 "consumes": [
                     "application/json"
@@ -1182,7 +1306,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "post",
-                        "name": "set",
+                        "name": "post",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -1208,10 +1332,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1229,10 +1350,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1250,10 +1368,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1323,10 +1438,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1344,10 +1456,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1391,10 +1500,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.PostOutput"
-                                            }
+                                            "$ref": "#/definitions/models.PostOutput"
                                         }
                                     }
                                 }
@@ -1412,10 +1518,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1433,10 +1536,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1454,10 +1554,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1467,6 +1564,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete given post",
                 "consumes": [
                     "application/json"
@@ -1505,10 +1607,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1526,10 +1625,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1547,10 +1643,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1568,10 +1661,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1581,6 +1671,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Update given post",
                 "consumes": [
                     "application/json"
@@ -1628,10 +1723,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1649,10 +1741,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1670,10 +1759,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1691,10 +1777,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1712,10 +1795,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1735,13 +1815,13 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "Login a user",
                 "parameters": [
                     {
                         "description": "user",
-                        "name": "set",
+                        "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -1761,10 +1841,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.UserDB"
                                         }
                                     }
                                 }
@@ -1782,10 +1859,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1803,10 +1877,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1824,10 +1895,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1839,11 +1907,6 @@ const docTemplate = `{
         },
         "/users/list": {
             "get": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "List all users of a specified set",
                 "consumes": [
                     "application/json"
@@ -1852,7 +1915,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "List all users of a specified set",
                 "parameters": [
@@ -1902,10 +1965,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1923,10 +1983,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1951,7 +2008,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "Get current user",
                 "responses": {
@@ -1966,10 +2023,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.UserOutput"
-                                            }
+                                            "$ref": "#/definitions/models.UserOutput"
                                         }
                                     }
                                 }
@@ -1987,10 +2041,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -2008,10 +2059,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -2029,10 +2077,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -2050,10 +2095,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -2065,11 +2107,6 @@ const docTemplate = `{
         },
         "/users/{id}": {
             "get": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "Get user by ID",
                 "consumes": [
                     "application/json"
@@ -2078,7 +2115,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "Get user by ID",
                 "parameters": [
@@ -2102,10 +2139,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.UserOutput"
-                                            }
+                                            "$ref": "#/definitions/models.UserOutput"
                                         }
                                     }
                                 }
@@ -2123,10 +2157,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -2144,10 +2175,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -2165,10 +2193,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -2191,7 +2216,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "Delete given user",
                 "parameters": [
@@ -2221,10 +2246,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -2242,10 +2264,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -2263,10 +2282,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -2284,10 +2300,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -2310,7 +2323,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "Update given user",
                 "parameters": [
@@ -2349,10 +2362,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -2370,10 +2380,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -2391,10 +2398,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -2412,10 +2416,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -2433,10 +2434,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -2513,10 +2511,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -2534,10 +2529,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -2630,6 +2622,17 @@ const docTemplate = `{
                 }
             }
         },
+        "models.MediaInput": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "string"
+                },
+                "fileType": {
+                    "type": "string"
+                }
+            }
+        },
         "models.MediaOutput": {
             "type": "object",
             "properties": {
@@ -2653,9 +2656,6 @@ const docTemplate = `{
                 "birdId": {
                     "type": "string"
                 },
-                "createdAt": {
-                    "type": "string"
-                },
                 "imageId": {
                     "type": "string"
                 },
@@ -2663,9 +2663,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "soundId": {
-                    "type": "string"
-                },
-                "userId": {
                     "type": "string"
                 }
             }
@@ -2705,9 +2702,32 @@ const docTemplate = `{
                 }
             }
         },
+        "models.UserDB": {
+            "type": "object",
+            "properties": {
+                "_id": {
+                    "type": "string"
+                },
+                "active": {
+                    "type": "boolean"
+                },
+                "authId": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "models.UserInput": {
             "type": "object",
             "properties": {
+                "_id": {
+                    "type": "string"
+                },
                 "active": {
                     "type": "boolean"
                 },

@@ -27,9 +27,9 @@ func New(app *fiber.App, db repositories.IMongoInstance) {
 
 	// Add the JWTProtected() method if JTW key is required.
 	usersRoute := app.Group("/users")
-	usersRoute.Get("/list", JWTProtected(), handler.ListUsers)
+	usersRoute.Get("/list", handler.ListUsers)
 	usersRoute.Get("/me", JWTProtected(), handler.GetUserMe)
-	usersRoute.Get("/:id", JWTProtected(), handler.GetUserById)
+	usersRoute.Get("/:id", handler.GetUserById)
 	usersRoute.Post("/", handler.LoginUser)
 	usersRoute.Patch("/:id", JWTProtected(), handler.UpdateUser)
 	usersRoute.Delete("/:id", JWTProtected(), handler.DeleteUser)
@@ -37,23 +37,32 @@ func New(app *fiber.App, db repositories.IMongoInstance) {
 	birdsRoute := app.Group("/birds")
 	birdsRoute.Get("/list", handler.ListBirds)
 	birdsRoute.Get("/:id", handler.GetBirdById)
-	birdsRoute.Patch("/:id", handler.UpdateBird)
+	birdsRoute.Patch("/:id", JWTProtected(), handler.UpdateBird)
 
 	postsRoute := app.Group("/posts")
 	postsRoute.Get("/list", handler.ListPosts)
 	usersRoute.Get("/:id/posts/list", handler.ListUsersPosts)
 	postsRoute.Get("/:id", handler.GetPostById)
-	postsRoute.Post("/", handler.CreatePost)
-	postsRoute.Patch("/:id", handler.UpdatePost)
-	postsRoute.Delete("/:id", handler.DeletePost)
+	postsRoute.Post("/", JWTProtected(), handler.CreatePost)
+	postsRoute.Patch("/:id", JWTProtected(), handler.UpdatePost)
+	postsRoute.Delete("/:id", JWTProtected(), handler.DeletePost)
 
 	adminRoute := app.Group("/admins")
-	adminRoute.Get("/list", handler.ListAdmins)
-	adminRoute.Get("/me", handler.GetAdminMe)
-	adminRoute.Get("/:id", handler.GetAdminById)
-	adminRoute.Post("/", handler.CreateAdmin)
-	adminRoute.Patch("/:id", handler.UpdateAdmin)
-	adminRoute.Delete("/:id", handler.DeleteAdmin)
+	adminRoute.Get("/list", JWTProtected(), handler.ListAdmins)
+	adminRoute.Get("/me", JWTProtected(), handler.GetAdminMe)
+	adminRoute.Get("/:id", JWTProtected(), handler.GetAdminById)
+	adminRoute.Post("/", JWTProtected(), handler.CreateAdmin)
+	adminRoute.Patch("/:id", JWTProtected(), handler.UpdateAdmin)
+	adminRoute.Delete("/:id", JWTProtected(), handler.DeleteAdmin)
+<<<<<<< HEAD
+
+	aiRoute := app.Group("/ai")
+	aiRoute.Post("/inputimage", handler.ImagePrediction)
+=======
+>>>>>>> f463ec0 (106 validation functions (#123))
+
+	aiRoute := app.Group("/ai")
+	aiRoute.Post("/inputimage", handler.ImagePrediction)
 
 }
 

@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -11,6 +12,14 @@ export class CardComponent {
   title!: string;
   @Input()
   imageSrc!: string;
+
+  @Input()
+  textColor: string = 'white';
+
+  changeTextColor(color: string) {
+    this.textColor = color;
+  }
+
 
 }
 
@@ -26,4 +35,27 @@ export class Card2Component {
   imageSrc!: string;
   @Input()
   date!: string;
+
+  @Input()
+  textColor: string = 'white';
+
+  changeTextColor(color: string) {
+    this.textColor = color;
+  }
 }
+@Component({
+  selector: 'app-bottominfo',
+  templateUrl: './bottominfo.component.html',
+  styleUrls: ['./bottominfo.component.css']
+})
+export class BottomInfoComponent{
+  constructor(
+    private router: Router,
+  ){
+
+  }
+  navigateToAbout(){
+    this.router.navigate(['about']);
+  }
+}
+

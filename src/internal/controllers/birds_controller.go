@@ -15,7 +15,7 @@ func (c *Controller) CGetBirdById(id string) (models.Response) {
 	return utils.ErrorNotImplemented("CGetBirdById")
 }
 
-func (c *Controller) CListBirds(set int, search string) (models.Response) {
+func (c *Controller) CListBirds(set string, search string) (models.Response) {
 	/*
 	coll := c.db.GetCollection(repositories.BirdColl)
 	response := coll.FindAll()

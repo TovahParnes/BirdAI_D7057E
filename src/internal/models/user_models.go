@@ -14,7 +14,14 @@ type UserLogin struct {
 }
 
 type UserInput struct {
-	Id       string `bson:"_id" json:"_id" form:"_id"`
+<<<<<<< HEAD
+<<<<<<< HEAD
+	Id       string `bson:"_id"`
+=======
+>>>>>>> f463ec0 (106 validation functions (#123))
+=======
+	Id       string `bson:"_id"`
+>>>>>>> 9295f66 (implemented admin repository and refactored repositories)
 	Username string `json:"user" bson:"username"`
 	Active   bool   `bson:"active"`
 }
@@ -25,3 +32,20 @@ type UserOutput struct {
 	CreatedAt string `bson:"created_at" json:"createdAt" form:"createdAt"`
 	Active    bool   `bson:"active"`
 }
+
+func UserDBToOutput(db *UserDB) *UserOutput {
+	return &UserOutput{
+		Id:        db.Id,
+		Username:  db.Username,
+		CreatedAt: db.CreatedAt,
+		Active:    db.Active,
+	}
+<<<<<<< HEAD
+<<<<<<< HEAD
+}
+=======
+}
+>>>>>>> f463ec0 (106 validation functions (#123))
+=======
+}
+>>>>>>> 9295f66 (implemented admin repository and refactored repositories)

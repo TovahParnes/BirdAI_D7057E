@@ -18,7 +18,7 @@ func ResponseToStatus(c *fiber.Ctx, response models.Response) error {
 	if IsTypeError(response){
 		return c.Status(response.Data.(models.Err).StatusCode).JSON(response)
 	}
-	return c.Status(http.StatusAccepted).JSON(response)
+	return c.Status(http.StatusOK).JSON(response)
 }
 
 

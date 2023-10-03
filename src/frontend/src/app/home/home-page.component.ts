@@ -1,11 +1,17 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
+import {AnalyzeResponse} from 'src/assets/components/components';
 import {AppComponent} from '../app.component';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { MatStepper } from '@angular/material/stepper';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
+import { NgOptimizedImage } from '@angular/common'
+<<<<<<< HEAD
+
+=======
+>>>>>>> 48bbdbc (112 Create AI analyze endpoint for Frontend)
 
 @Component({
   selector: 'app-home-page',
@@ -24,13 +30,27 @@ export class MainPageComponent implements OnInit {
 
   data: any;
   dataImg: any;
+  analyzed: AnalyzeResponse | null = null;
+<<<<<<< HEAD
+
+=======
+>>>>>>> 48bbdbc (112 Create AI analyze endpoint for Frontend)
 
   constructor(
-    private router: Router, 
+    private router: Router,
     public mainApp: AppComponent,
     public socialAuthService: SocialAuthService,
     private formBuilder: FormBuilder,
+<<<<<<< HEAD
+<<<<<<< HEAD
+    private http: HttpClient) {
+=======
     private httpClient: HttpClient) {
+
+>>>>>>> c3ee994 (add bottominfo & about.component, modify firstpage)
+=======
+    private http: HttpClient) {
+>>>>>>> 48bbdbc (112 Create AI analyze endpoint for Frontend)
   }
 
   ngOnInit() {
@@ -59,30 +79,38 @@ export class MainPageComponent implements OnInit {
     this.selectedImage = null;
   }
 
+  postImage(): Observable<AnalyzeResponse> {
+    //console.log(header);
+    const body = {'data': `${this.selectedImage}`, 'fileType': "JPG"};
+    return this.http.post<AnalyzeResponse>(environment.identifyRequestURL+"/ai/inputimage", body)
+  }
+
   onSubmit(el: HTMLElement) {
     this.isLoading = true;
 
-    const header = {'Authorization': `Bearer ${environment.secret}`};
-    const body = {'img': `${this.selectedImage}`};
-    this.httpClient.post<any>(environment.identifyRequestURL, body, { headers: header })
-    .subscribe(
-      () => {
+    this.postImage().subscribe(
+      (response: AnalyzeResponse) => {
         console.log("Succesfully sent data");
+        console.log(response.data);
         this.form.reset();
         this.dataImg = this.selectedImage;
         this.selectedImage = null;
         el.scrollIntoView();
+        this.analyzed = response;
+<<<<<<< HEAD
 
+=======
         
+>>>>>>> 48bbdbc (112 Create AI analyze endpoint for Frontend)
       },
-      err => { 
-        console.error("Failed at sending data:" + err); 
+      err => {
+        console.error("Failed at sending data:" + err);
       }
     );
     this.isLoading = false
   }
+<<<<<<< HEAD
 }
-
-
-
-
+=======
+}
+>>>>>>> c3ee994 (add bottominfo & about.component, modify firstpage)

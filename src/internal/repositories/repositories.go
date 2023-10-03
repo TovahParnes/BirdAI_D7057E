@@ -4,10 +4,11 @@ import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
 	"context"
+	"time"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"time"
 )
 
 // TODO: Create a login for Db
@@ -50,7 +51,34 @@ func Connect(dbName, mongoURI string) (IMongoInstance, error) {
 	return m, nil
 }
 
-// Collection functions
+// SetupRepositories return a RepositoryEndpoints struct that allows access to the different repositories and functions
+// Needs to swap out, so it uses env variables instead of set names
+func SetupRepositories() (RepositoryEndpoints, error) {
+	mongoInstance, err := Connect("birdai", "mongodb://localhost:27017")
+	if err != nil {
+		return RepositoryEndpoints{}, err
+	}
+	AddAllCollections(mongoInstance)
+	user := UserRepository{}
+	user.SetCollection(mongoInstance.GetCollection(UserColl))
+	post := PostRepository{}
+	post.SetCollection(mongoInstance.GetCollection(PostColl))
+	bird := BirdRepository{}
+	bird.SetCollection(mongoInstance.GetCollection(BirdColl))
+	media := MediaRepository{}
+	media.SetCollection(mongoInstance.GetCollection(MediaColl))
+	admin := AdminRepository{}
+	admin.SetCollection(mongoInstance.GetCollection(AdminColl))
+	return RepositoryEndpoints{
+		User:  user,
+		Post:  post,
+		Bird:  bird,
+		Media: media,
+		Admin: admin,
+	}, nil
+}
+
+// collection functions
 
 // AddAllCollections adds all collections to the MongoInstance
 func AddAllCollections(m IMongoInstance) {
@@ -136,39 +164,39 @@ func (m *MongoCollection) FindOne(query bson.M) models.Response {
 		var result models.UserDB
 		err := m.Collection.FindOne(m.ctx, query).Decode(&result)
 		if err != nil {
-			return utils.ErrorNotFoundInDatabase("User Collection")
+			return utils.ErrorNotFoundInDatabase("User collection")
 		}
 		return utils.Response(&result)
 	case AdminColl:
 		var result models.AdminDB
 		err := m.Collection.FindOne(m.ctx, query).Decode(&result)
 		if err != nil {
-			return utils.ErrorNotFoundInDatabase("Admin Collection")
+			return utils.ErrorNotFoundInDatabase("Admin collection")
 		}
 		return utils.Response(&result)
 	case BirdColl:
 		var result models.BirdDB
 		err := m.Collection.FindOne(m.ctx, query).Decode(&result)
 		if err != nil {
-			return utils.ErrorNotFoundInDatabase("Bird Collection")
+			return utils.ErrorNotFoundInDatabase("Bird collection")
 		}
 		return utils.Response(&result)
 	case PostColl:
 		var result models.PostDB
 		err := m.Collection.FindOne(m.ctx, query).Decode(&result)
 		if err != nil {
-			return utils.ErrorNotFoundInDatabase("Post Collection")
+			return utils.ErrorNotFoundInDatabase("Post collection")
 		}
 		return utils.Response(&result)
 	case MediaColl:
 		var result models.MediaDB
 		err := m.Collection.FindOne(m.ctx, query).Decode(&result)
 		if err != nil {
-			return utils.ErrorNotFoundInDatabase("Media Collection")
+			return utils.ErrorNotFoundInDatabase("Media collection")
 		}
 		return utils.Response(&result)
 	default:
-		// Collection name was not found
+		// collection name was not found
 		return utils.ErrorCollectionNotFound("FindOne")
 	}
 }
@@ -199,7 +227,7 @@ func (m *MongoCollection) FindAll(filter bson.M, limit int, skip int) models.Res
 			bsonBody, _ := bson.Marshal(result)
 			err := bson.Unmarshal(bsonBody, &tempResult)
 			if err != nil {
-				return utils.ErrorNotFoundInDatabase("User Collection")
+				return utils.ErrorNotFoundInDatabase("User collection")
 			}
 			resultStruct = append(resultStruct, tempResult)
 		}
@@ -211,7 +239,7 @@ func (m *MongoCollection) FindAll(filter bson.M, limit int, skip int) models.Res
 			bsonBody, _ := bson.Marshal(result)
 			err := bson.Unmarshal(bsonBody, &tempResult)
 			if err != nil {
-				return utils.ErrorNotFoundInDatabase("Admin Collection")
+				return utils.ErrorNotFoundInDatabase("Admin collection")
 			}
 			resultStruct = append(resultStruct, tempResult)
 		}
@@ -223,7 +251,7 @@ func (m *MongoCollection) FindAll(filter bson.M, limit int, skip int) models.Res
 			bsonBody, _ := bson.Marshal(result)
 			err := bson.Unmarshal(bsonBody, &tempResult)
 			if err != nil {
-				return utils.ErrorNotFoundInDatabase("Bird Collection")
+				return utils.ErrorNotFoundInDatabase("Bird collection")
 			}
 			resultStruct = append(resultStruct, tempResult)
 		}
@@ -235,7 +263,7 @@ func (m *MongoCollection) FindAll(filter bson.M, limit int, skip int) models.Res
 			bsonBody, _ := bson.Marshal(result)
 			err := bson.Unmarshal(bsonBody, &tempResult)
 			if err != nil {
-				return utils.ErrorNotFoundInDatabase("Post Collection")
+				return utils.ErrorNotFoundInDatabase("Post collection")
 			}
 			resultStruct = append(resultStruct, tempResult)
 		}
@@ -247,13 +275,13 @@ func (m *MongoCollection) FindAll(filter bson.M, limit int, skip int) models.Res
 			bsonBody, _ := bson.Marshal(result)
 			err := bson.Unmarshal(bsonBody, &tempResult)
 			if err != nil {
-				return utils.ErrorNotFoundInDatabase("Media Collection")
+				return utils.ErrorNotFoundInDatabase("Media collection")
 			}
 			resultStruct = append(resultStruct, tempResult)
 		}
 		return utils.Response(resultStruct)
 	default:
-		// Collection name was not found
+		// collection name was not found
 		return utils.ErrorCollectionNotFound("FindAll")
 	}
 }

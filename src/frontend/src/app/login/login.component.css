@@ -1,8 +1,9 @@
 .logo {
-  margin-top: 5%;
-  width: fit-content;
-  height: 500px;
-  justify-content: center;
+  margin-left: auto;
+  margin: 0 auto;
+  height: 400px;
+  width: 400px;
+  display: block;
 }
 
 h1 {

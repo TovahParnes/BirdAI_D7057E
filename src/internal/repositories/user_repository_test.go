@@ -4,12 +4,13 @@ import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/repositories"
 	"birdai/src/internal/utils"
+	"testing"
+
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"golang.org/x/net/context"
-	"testing"
 )
 
 // TestRepository functions
@@ -17,7 +18,8 @@ func TestUserRepository(t *testing.T) {
 	mi, err := repositories.Connect("testDB", "mongodb://localhost:27017")
 	require.Nil(t, err)
 	mi.AddCollection(repositories.UserColl)
-	userColl := repositories.UserEndpoints{Collection: mi.GetCollection(repositories.UserColl)}
+	userColl := repositories.UserRepository{}
+	userColl.SetCollection(mi.GetCollection(repositories.UserColl))
 
 	testUser1 := &models.UserDB{
 		Username: "test User 1",
@@ -92,16 +94,18 @@ func TestUserRepository(t *testing.T) {
 		require.Equal(t, testUser1, response.Data.(*models.UserDB))
 
 	})
-	mi.DisconnectDB()
 
 	// Need to delete everything from testDB
-	client, _ := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://localhost:27017"))
-	if err != nil {
-		return
-	}
-	db := client.Database("testDB")
-	_, err = db.Collection(repositories.UserColl).DeleteMany(context.TODO(), bson.M{})
-	if err != nil {
-		return
-	}
+	t.Cleanup(func() {
+		mi.DisconnectDB()
+		client, _ := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://localhost:27017"))
+		if err != nil {
+			return
+		}
+		db := client.Database("testDB")
+		_, err = db.Collection(repositories.UserColl).DeleteMany(context.TODO(), bson.M{})
+		if err != nil {
+			return
+		}
+	})
 }
