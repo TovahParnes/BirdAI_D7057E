@@ -6,9 +6,9 @@
   </div>
 
   <div class="nav-buttons">
-    <button class="selected-nav-button" (click)="navigateToHome()"><span class="material-symbols-outlined">home</span></button>
-    <button class="nav-button" (click)="navigateToTakenImages()"><span class="material-symbols-outlined">image</span></button>
-    <button class="nav-button" (click)="navigateToLibrary()"><span class="material-symbols-outlined">grid_view</span></button>  
+    <button class="selected-nav-button" (click)="mainApp.navigateToHome()"><span class="material-symbols-outlined">home</span></button>
+    <button class="nav-button" (click)="mainApp.navigateToTakenImages()"><span class="material-symbols-outlined">image</span></button>
+    <button class="nav-button" (click)="mainApp.navigateToLibrary()"><span class="material-symbols-outlined">grid_view</span></button>  
   </div>
 
   <div class="profile">
@@ -16,17 +16,23 @@
       <img src="{{socialUser.photoUrl}}" width="40px" height="40px" style="border-radius: 50%;">
     </button> 
     <ul class="sub-menu">
-      <button class="sub-menu-button" (click)="navigateToProfilePage()">{{socialUser.name}}<span class="material-symbols-outlined">chevron_right</span></button><br>
-      <mat-slide-toggle [(ngModel)]="mainApp.isDark">Darkmode</mat-slide-toggle><br>
-      <button class="sub-menu-button" (click)="logout()">Logout</button>
+      <!-- <mat-slide-toggle [(ngModel)]="mainApp.isDark">Darkmode</mat-slide-toggle><br> -->
+      <button mat-raised-button (click)="mainApp.navigateToProfilePage()">Profile</button><br> <!-- {{socialUser.name}}<span class="material-symbols-outlined">chevron_right</span> -->
+      <button mat-raised-button (click)="mainApp.logout()">Logout</button>
     </ul>
   </div>
 </div>
 
 <p></p>
+
 <mat-card class="card">
   <h1 style="margin-top: 0px;">Welcome to Bird AI</h1>
-  <p>With the help of ai figure out what kind of bird it is you found</p>
+  <p>With the help of ai figure out what kind of bird it is you found. Our model is trained on over 500 species of birds.</p>
+</mat-card>
+
+<p></p>
+
+<mat-card class="card">
   
   <mat-vertical-stepper #stepper>
     <form [formGroup]="form">
@@ -47,7 +53,7 @@
 
     <mat-step *ngIf="form.value.option === 'option1'">
         <ng-template matStepLabel>Select the Image</ng-template>       
-        <input type="file" (change)="onFileSelected($event)" accept="image/*" style="padding-top: 6px"/>
+        <input type="file" mat-button (change)="onFileSelected($event)" accept="image/*" style="padding-top: 6px"/>
         <img *ngIf="selectedImage" [src]="selectedImage" alt="Selected Image" width="200" />
   
         <div style="padding-top: 6px">
@@ -66,6 +72,10 @@
         <button mat-button matStepperNext disabled>Submit</button>
       </div>
       
+    </mat-step>
+
+    <mat-step *ngIf!="form.value.option == ''">
+      <ng-template color="warning" matStepLabel>Select the Sound</ng-template>
     </mat-step>
     </form>
 

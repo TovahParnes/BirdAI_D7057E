@@ -46,10 +46,10 @@ import { CardComponent, Card2Component } from './card/card.component';
     HttpClientModule,
     RouterModule.forRoot([
       {path: 'login', component: LoginComponent},
-      {path: 'mainpage', component: MainPageComponent, canActivate: [AuthGuardService]},
-    {path: 'library', component: LibraryComponent, },
+      {path: 'mainpage', component: MainPageComponent},
+      {path: 'library', component: LibraryComponent, },
       {path: 'takenImages', component: TakenImagesPageComponent, },
-      {path: 'profile', component: ProfilePageComponent, canActivate: [AuthGuardService]},
+      {path: 'profile', component: ProfilePageComponent},  //canActivate: [AuthGuardService]
       {path: 'species-page', component: SpeciesPageComponent,},
       {path: '**', component: LoginComponent},
     ]),

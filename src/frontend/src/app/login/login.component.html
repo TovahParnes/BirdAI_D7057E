@@ -4,8 +4,11 @@
         <h1>BirdAI</h1>
     </div>
 
+    <div *ngIf="mainApp.user">
+        {{login()}}
+    </div>
+
     <div class="login-button">
         <asl-google-signin-button *ngIf="!mainApp.user" type='standard' size='medium' theme="filled_black"></asl-google-signin-button>
-        <button mat-raised-button color="accent" style="font-weight: bolder;" *ngIf="mainApp.user" (click)="navigateToHome()">Continue as: {{mainApp.user.name}}</button>
     </div>
 </div>
