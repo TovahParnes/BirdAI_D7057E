@@ -27,3 +27,14 @@
     max-height: 150px;
     margin: 10px;
 }
+
+.input[type=file]::file-selector-button {
+    position: relative;
+    top: 150px;
+    width: 150px;
+    padding: 10px;
+    border: 1px dashed #BBB;
+    text-align: center;
+    background-color: #DDD;
+    cursor: pointer;
+  }

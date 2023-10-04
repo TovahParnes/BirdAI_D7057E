@@ -1,6 +1,7 @@
 import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { Component } from '@angular/core';
 import {AuthGuardService} from './services/auth-guard.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -26,7 +27,9 @@ export class AppComponent {
   user:any;
   loggedIn: boolean = false;
 
-  constructor(private authService: SocialAuthService) { }
+  constructor(
+    private router: Router,
+    private authService: SocialAuthService) { }
 
   ngOnInit() {
     this.authService.authState.subscribe((user) => {
@@ -35,5 +38,26 @@ export class AppComponent {
       localStorage.setItem('id_token', user.idToken);
     });
   }
+
+  logout(): void {
+    this.authService.signOut().then(() => this.router.navigate(['login']));
+  }
+
+  navigateToHome(): void {
+    this.router.navigate(['mainpage']);
+  }
+
+  navigateToTakenImages(): void {
+    this.router.navigate(['takenImages']);
+  }
+
+  navigateToLibrary(): void {
+    this.router.navigate(['library']);
+  }
+
+  navigateToProfilePage(): void {
+    this.router.navigate(['profile']);
+  }
+
 
 }
