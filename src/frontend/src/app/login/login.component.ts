@@ -2,6 +2,8 @@ import {Component} from '@angular/core';
 import {GoogleLoginProvider, SocialAuthService} from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
 import { AppComponent } from '../app.component';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -10,12 +12,27 @@ import { AppComponent } from '../app.component';
 })
 export class LoginComponent {
 
-  constructor(private router: Router,
-              public mainApp: AppComponent,
-              private socialAuthService: SocialAuthService) {
+  constructor(
+    public mainApp: AppComponent,
+    private router: Router,
+    private httpClient: HttpClient,
+    private socialAuthService: SocialAuthService) {
   }
   
-  navigateToHome(): void {
-    this.router.navigate(['mainpage']);
+  postLoggedInUser(token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+      'authId': `${this.mainApp.user.id}`
+    })
+    return this.httpClient.post("localhost:4000/users", { headers: headers })
+  }
+
+
+  login(): void {
+    this.postLoggedInUser("ss").subscribe(
+      error => console.log("Could not login"),
+      () => this.router.navigate(['mainpage'])
+    );
   }
 }

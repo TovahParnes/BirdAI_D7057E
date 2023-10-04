@@ -43,7 +43,7 @@ import {MatCardModule} from '@angular/material/card';
     HttpClientModule,
     RouterModule.forRoot([
       {path: 'login', component: LoginComponent},
-      {path: 'mainpage', component: MainPageComponent, canActivate: [AuthGuardService]},
+      {path: 'mainpage', component: MainPageComponent},
       {path: 'library', component: LibraryComponent, canActivate: [AuthGuardService]},
       {path: 'takenImages', component: TakenImagesPageComponent, canActivate: [AuthGuardService]},
       {path: 'profile', component: ProfilePageComponent, canActivate: [AuthGuardService]},
