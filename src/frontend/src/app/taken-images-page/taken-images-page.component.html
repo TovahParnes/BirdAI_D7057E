@@ -22,3 +22,29 @@
         </ul>
     </div>
 </div>
+
+<p></p>
+
+<div class="card-container">
+<button (click)="sortCards()">Sort by Name</button>
+</div>
+
+<p></p>
+
+<div class="card-container">
+  <div *ngFor="let card of cardlist">
+    <a target="_blank" (click)="navigateToSpecies(card.imageSrc, card.title)">
+    <app-card title={{card.title}} imageSrc={{card.imageSrc}}></app-card>
+  </a>
+  </div>
+</div>
+
+<!-- <div class="card-container">
+  <app-card title="Duck" imageSrc="assets/duck.jpg"></app-card>
+  <app-card title="Kangaroo" imageSrc="assets/undulat.jpg"></app-card>
+  <app-card title="Elephant" imageSrc="assets/duck.jpg"></app-card>
+  <app-card title="Tiger" imageSrc="assets/duck.jpg"></app-card>
+  <app-card title="Cricket" imageSrc="assets/duck.jpg"></app-card>
+  <app-card title="Spider" imageSrc="assets/duck.jpg"></app-card>
+</div> -->
+      

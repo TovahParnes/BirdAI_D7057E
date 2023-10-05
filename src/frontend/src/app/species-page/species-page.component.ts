@@ -1,7 +1,19 @@
-import {Component, ElementRef, AfterViewInit} from '@angular/core';
+import {Component, ElementRef, AfterViewInit, OnInit} from '@angular/core';
 import {SocialAuthService, GoogleLoginProvider} from '@abacritt/angularx-social-login';
-import {Router} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
 import { AppComponent } from '../app.component';
+import { HttpClient } from '@angular/common/http';
+
+interface ApiResponse {
+  data: {  
+    id : string;
+    authId: string;
+    createdAt: string;
+    username: string;
+  }[];
+  message: string;
+  success: boolean;
+}
 
 @Component({
   selector: 'app-species-page',
@@ -10,33 +22,63 @@ import { AppComponent } from '../app.component';
 })
 
 export class SpeciesPageComponent implements AfterViewInit{
+  imageId!: string;
+  imageName!: string;
+  responseData: ApiResponse | null = null;
+  images: string[] = [];
 
   constructor(
     private router: Router,
     public mainApp: AppComponent,
     public socialAuthService: SocialAuthService,
-    private elRef: ElementRef
+    private elRef: ElementRef,
+    private http: HttpClient,
+    private route: ActivatedRoute,
     ) {
 
   }
 
-  moveToHome(){
+  ngOnInit() {
+    // Make an HTTP GET request to the Swagger service's API
+    this.http.get<ApiResponse>('http://localhost:4000/swagger/index.html').subscribe(data => {
+      this.responseData = data;
+      console.log(data);
+    });
+    this.route.queryParams.subscribe(params => {
+      this.imageId = decodeURIComponent(params['imageId']);
+      this.imageName = decodeURIComponent(params['imageName'])
+
+      this.images = [
+        this.imageId,
+        'assets/map.png',
+      ];
+    });
+  }
+
+  navigateToHome(): void {
     this.router.navigate(['mainpage']);
   }
 
-  moveToLibrary(): void {
+  navigateToTakenImages(): void {
+    this.router.navigate(['takenImages']);
+  }
+
+  navigateToLibrary(): void {
     this.router.navigate(['library']);
+  }
+
+  navigateToProfilePage(): void {
+    this.router.navigate(['profile']);
+  }
+
+  logout(): void {
+    this.socialAuthService.signOut().then(() => this.router.navigate(['login']));
   }
 
   toggleTheme(): void {
     //this.mainApp.switchDarkmodeSetting();
   }
 
-  images: string[] = [
-    'assets/duck.jpg',
-    'assets/undulat.jpg',
-    'assets/map.png',
-  ];
   currentImageIndex = 0;
 
   ngAfterViewInit() {

@@ -30,7 +30,14 @@
      of presented folders should be changed to make the viewing of folder easier for the user. -->
 
 <body>
-    <div class="container">
+        <div *ngFor="let card of cardlist">
+            <p></p>
+            <a target="_blank" (click)="navigateToSpecies(card.imageSrc, card.title)">
+            <app-card2 title={{card.title}} imageSrc={{card.imageSrc}} date={{card.date}}></app-card2>
+        </a>
+        </div>
+
+    <!-- <div class="container">
         <div class="desc" style="display: flex;justify-content: space-between;">
         <p style="flex: 1;">Duck</p>
         <p style="flex: 1; text-align: right;">2023/09/06</p>
@@ -54,7 +61,7 @@
             <img src="assets/undulat.jpg" alt="Duck" style="width: 50%;">
         </a>
         </div>
-    </div>
+    </div> -->
 
 </body>
 
