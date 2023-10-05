@@ -51,10 +51,12 @@
     </mat-step>
 
     <mat-step *ngIf="form.value.option === 'option1'">
-        <ng-template matStepLabel>Select the Image</ng-template>       
-        <input type="file" (change)="onFileSelected($event)" accept="image/*" style="padding-top: 6px"/>
-        <img *ngIf="selectedImage" [src]="selectedImage" alt="Selected Image" width="200" />
-  
+        <ng-template matStepLabel>Select the Image</ng-template>
+        <input type="file" (change)="onFileSelected($event)" accept="image/*" style="padding-top: 2px; padding-bottom: 4px"/>
+
+        <img *ngIf="selectedImage" [src]="selectedImage" alt="Selected Image" width="92%" />
+        <button *ngIf="selectedImage" mat-icon-button style="position: absolute; left: 22px; top: 22px;" (click)="onClear()" color="primary"><mat-icon>delete</mat-icon></button>
+        
         <div style="padding-top: 6px">
           <button mat-button matStepperPrevious style="margin-right: 6px;">Back</button>
             <button mat-raised-button color="primary" type="button" (click)="onSubmit(loading)" [disabled]="!selectedImage">Submit</button>
