@@ -1,12 +1,7 @@
 package models
 
 import (
-	"context"
-	"log"
 	"time"
-
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 // Structs for documents in all collections
@@ -50,7 +45,7 @@ type Media struct {
 	FileType string `bson:"file_type"`
 }
 
-// GetID for all types, to make them HandlerObjects
+// Functions for all types, to make them HandlerObjects
 
 func (u *User) GetId() string {
 	return u.Id
@@ -92,45 +87,4 @@ func (m *Media) SetCreatedAt() {
 type HandlerObject interface {
 	GetId() string
 	SetCreatedAt()
-}
-
-type MongoInstance struct {
-	Client      *mongo.Client
-	Db          *mongo.Database
-	Collections map[string]MongoCollection
-}
-
-func (m MongoInstance) GetCollection(name string) MongoCollection {
-	return m.Collections[name]
-}
-
-func (m MongoInstance) AddCollection(name string) {
-	m.Collections[name] = MongoCollection{Collection: m.Db.Collection(name)}
-}
-
-func (m MongoInstance) DisconnectDB() {
-	if m.Client != nil {
-		if err := m.Client.Disconnect(context.TODO()); err != nil {
-			log.Fatalf("Error disconnecting from MongoDB %s", err)
-		}
-	}
-}
-
-type IMongoInstance interface {
-	GetCollection(name string) IMongoCollection
-	AddCollection(name string)
-	DisconnectDB()
-}
-
-type MongoCollection struct {
-	Collection *mongo.Collection
-}
-
-// IMongoCollection TODO: Update input when known what is needed
-type IMongoCollection interface {
-	FindOne(id string) (HandlerObject, error)
-	FindAll() ([]HandlerObject, error)
-	UpdateOne(query bson.D) (HandlerObject, error)
-	DeleteOne(id string) (HandlerObject, error)
-	CreateOne(object HandlerObject) (HandlerObject, error)
 }
