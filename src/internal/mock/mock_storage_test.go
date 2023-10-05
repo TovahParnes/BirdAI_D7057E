@@ -84,7 +84,7 @@ func TestMockMongoCollection(t *testing.T) {
 	})
 
 	t.Run("Test FindAll collection success", func(t *testing.T) {
-		response := userColl.FindAll()
+		response := userColl.FindAll(bson.M{}, 0, 0)
 		require.Equal(t, []*models.UserDB{user, user2}, response.Data)
 	})
 

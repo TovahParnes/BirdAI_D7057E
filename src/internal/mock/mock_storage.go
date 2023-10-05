@@ -80,7 +80,7 @@ func (m *mockCollection) FindOne(query bson.M) models.Response {
 	return utils.ErrorNotFoundInDatabase("User collection")
 }
 
-func (m *mockCollection) FindAll() models.Response {
+func (m *mockCollection) FindAll(filter bson.M, limit, skip int) models.Response {
 	if len(m.data) == 0 {
 		return utils.ErrorNotFoundInDatabase("")
 	}

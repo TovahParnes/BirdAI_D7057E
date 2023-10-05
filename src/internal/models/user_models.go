@@ -14,6 +14,7 @@ type UserLogin struct {
 }
 
 type UserInput struct {
+	Id       string `bson:"_id" json:"_id" form:"_id"`
 	Username string `json:"user" bson:"username"`
 	Active   bool   `bson:"active"`
 }
