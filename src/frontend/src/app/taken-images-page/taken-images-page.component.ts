@@ -1,15 +1,28 @@
-import {Component} from '@angular/core';
+import {Component, ViewChildren, QueryList} from '@angular/core';
 import {SocialAuthService, GoogleLoginProvider} from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
 import { AppComponent } from '../app.component';
+import { CardComponent } from '../card/card.component';
 
 @Component({
   selector: 'app-taken-images-page',
   templateUrl: './taken-images-page.component.html',
-  styleUrls: ['./taken-images-page.component.css']
+  styleUrls: ['./taken-images-page.component.css'],
 })
 
 export class TakenImagesPageComponent {
+
+  @ViewChildren(CardComponent)
+  cards!: QueryList<CardComponent>;
+
+  cardlist = [
+    {title: 'Duck',imageSrc: 'assets/duck.jpg'},
+    {title: 'Kangaroo',imageSrc: 'assets/duck.jpg'},
+    {title: 'Elephant',imageSrc: 'assets/undulat.jpg'},
+    {title: 'Duck',imageSrc: 'assets/duck.jpg'},
+    {title: 'Kangaroo',imageSrc: 'assets/duck.jpg'},
+    {title: 'Elephant',imageSrc: 'assets/undulat.jpg'},
+  ]
 
   constructor(
     private router: Router,
@@ -41,7 +54,18 @@ export class TakenImagesPageComponent {
     //this.mainApp.switchDarkmodeSetting();
   }
 
-  navigateToSpecies(): void {
-    this.router.navigate(['species-page']);
+  navigateToSpecies(imageId: string, imageName: string): void {
+    this.router.navigate(['species-page'], {
+      queryParams: {
+        imageId: encodeURIComponent(imageId),
+        imageName: encodeURIComponent(imageName),
+      }
+      });
+  }
+
+  sortCards() {
+    // const sortedCards = this.cards.toArray().sort((a, b) => a.title.localeCompare(b.title));
+    // this.cards.reset(sortedCards);
+    this.cardlist.sort((a, b) => a.title.localeCompare(b.title));
   }
 }

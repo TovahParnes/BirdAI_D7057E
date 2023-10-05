@@ -1,98 +1,115 @@
 div.scroll-container {
-    background-color: #242526;
-    overflow: auto;
-    white-space: nowrap;
-    padding: 10px;
-    margin: auto;
-    border-radius: 5px;
-  }
-  
-  div.scroll-container img {
-    padding: 10px;
-    width: 56%;
-  }
-
-  .container {
-    text-align: left;
-    margin: 0 auto;
-    padding: 20px;
-    width: 40%;
-    background-color: #1E1E1E;
-    border-radius: 8px;
-    padding: 20px;
-    color: white;
+  background-color: #242526;
+  overflow: auto;
+  white-space: nowrap;
+  padding: 10px;
+  margin: auto;
+  border-radius: 5px;
 }
 
-.navbar {
-    background-color: #242526;
-    height: 50px;
-    text-align: center;
+div.scroll-container img {
+  padding: 10px;
+  width: 56%;
 }
 
-.icons {
-    text-align: center;
-    width: 50px;
-    height: 50px;
+.container {
+  text-align: left;
+  margin: 0 auto;
+  padding: 20px;
+  width: 40%;
+  background-color: #1E1E1E;
+  border-radius: 8px;
+  padding: 20px;
+  color: white;
+  overflow: hidden;
 }
+
+/* .navbar {
+  background-color: #242526;
+  height: 50px;
+  text-align: center;
+} */
+
+/* .icons {
+  text-align: center;
+  width: 50px;
+  height: 50px;
+} */
 
 .button {
-    background-color: #99E1D9;
-    color: black;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 5px;
+  background-color: #99E1D9;
+  color: black;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 5px;
 }
 
 .button:hover {
-    background-color: #88cbc3;
-    color: black; 
+  background-color: #88cbc3;
+  color: black; 
 }
 
-/* .buttonContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-} */
-
 .buttonContainer {
-  position: absolute;
-  top: 40%;
-  left: 10;
-  transform: translateY(-50%);
-  z-index: 1;
+
+top: 40%;
+left: 10;
+transform: translateY(-50%);
+z-index: 1;
 }
 
 .prev,
 .next {
-  cursor: pointer;
-  width: auto;
-  padding: 16px;
-  color: white;
-  font-weight: bold;
-  font-size: 20px;
-  /* border-radius: 0 3px 3px 0; */
-  border: none;
-  background-color: transparent;
-  user-select: none;
-  -webkit-user-select: none;
+cursor: pointer;
+width: auto;
+padding: 16px 16px;
+color: #99E1D9;
+font-weight: bold;
+font-size: 20px;
+border: none;
+background-color: transparent;
+user-select: none;
+-webkit-user-select: none;
 }
 
-/* Position the "next button" to the right */
+.prev {
+margin-right: 80%;
+}
+
 .next {
-  border-radius: 3px 0 0 3px;
+border-radius: 3px 0 0 3px;
 }
 
 .prev:hover,
 .next:hover {
-  background-color: rgba(0, 0, 0, 0.8);
+background-color: rgba(0, 0, 0, 0.8);
 }
 
+/* .image-container {
+position: relative;
+display: inline-block;
+display: flex;
+justify-content: center;
+align-items: center; 
+} */
+
 .image-container {
-  position: relative;
-  display: inline-block;
-  display: flex;
-  justify-content: center;
-  align-items: center; 
+position: relative;
+display: inline-block;
+display: flex;
+justify-content: center;
+align-items: center; 
+width: 500px; 
+height: 200px; 
+overflow: hidden; 
+margin: auto;
+z-index: 500;
+}
+
+.fit-image {
+max-width: 100%; 
+max-height: 100%; 
+display: block; 
+margin: auto; 
 }

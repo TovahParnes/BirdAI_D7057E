@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {SocialAuthService, GoogleLoginProvider} from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
 import { AppComponent } from '../app.component';
+import { Card2Component } from '../card/card.component';
 
 @Component({
   selector: 'app-library',
@@ -10,6 +11,11 @@ import { AppComponent } from '../app.component';
 })
 
 export class LibraryComponent {
+
+  cardlist = [
+    {title: 'Duck',imageSrc: 'assets/duck.jpg', date:'2023-10-05'},
+    {title: 'Budgie',imageSrc: 'assets/undulat.jpg', date:'2023-10-04'},
+  ]
 
   constructor(
     private router: Router, 
@@ -41,7 +47,12 @@ export class LibraryComponent {
     //this.mainApp.switchDarkmodeSetting();
   }
 
-  navigateToSpecies(): void {
-    this.router.navigate(['species-page']);
+  navigateToSpecies(imageId: string, imageName: string): void {
+    this.router.navigate(['species-page'], {
+      queryParams: {
+        imageId: encodeURIComponent(imageId),
+        imageName: encodeURIComponent(imageName),
+      }
+      });
   }
 }

@@ -1,0 +1,33 @@
+.container {
+    text-align: center;
+    margin: 0 auto;
+    padding: 20px;
+    width: 40%;
+    background-color: #1E1E1E;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+div.gallery {
+    margin: 5px;
+    width: 180px;
+    text-align: center;
+    margin: 0 auto;
+    width: 100%;
+    
+}
+  
+div.gallery:hover {
+    border: 1px solid #777;
+}
+  
+div.gallery img {
+    width: 100%;
+    height: auto;
+}
+  
+div.desc {
+    padding: 15px;
+    text-align: left;
+    color: white;
+}

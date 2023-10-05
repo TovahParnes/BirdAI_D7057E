@@ -27,6 +27,7 @@ import {MatStepperModule} from '@angular/material/stepper';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatCardModule} from '@angular/material/card';
+import { CardComponent, Card2Component } from './card/card.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,8 @@ import {MatCardModule} from '@angular/material/card';
     SpeciesPageComponent,
     TakenImagesPageComponent,
     ProfilePageComponent,
+    CardComponent,
+    Card2Component,
   ],
   imports: [
     BrowserModule,
@@ -44,10 +47,10 @@ import {MatCardModule} from '@angular/material/card';
     RouterModule.forRoot([
       {path: 'login', component: LoginComponent},
       {path: 'mainpage', component: MainPageComponent, canActivate: [AuthGuardService]},
-      {path: 'library', component: LibraryComponent, canActivate: [AuthGuardService]},
-      {path: 'takenImages', component: TakenImagesPageComponent, canActivate: [AuthGuardService]},
+    {path: 'library', component: LibraryComponent, },
+      {path: 'takenImages', component: TakenImagesPageComponent, },
       {path: 'profile', component: ProfilePageComponent, canActivate: [AuthGuardService]},
-      {path: 'species-page', component: SpeciesPageComponent, canActivate: [AuthGuardService]},
+      {path: 'species-page', component: SpeciesPageComponent,},
       {path: '**', component: LoginComponent},
     ]),
     BrowserAnimationsModule,
