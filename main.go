@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/joho/godotenv"
 )
@@ -20,13 +21,18 @@ import (
 //	@license.name	MIT License
 //	@license.url	https://opensource.org/license/mit/
 
-// @host		localhost:4000
+// @host		localhost:3000
 // @BasePath	/
 // @schemes	http
 func main() {
 	// get env variables
 	if err := godotenv.Load(); err != nil {
 		log.Fatalf("Failed to load env: %v", err)
+	}
+
+	// get JWT secret variable
+	if err := godotenv.Load("secret/.env"); err != nil {
+		log.Fatalf("Failed to load secret env: %v", err)
 	}
 
 	// setup global context
@@ -36,6 +42,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	log.Fatal(app.Listen(":4000"))
+	fmt.Println("Port used: " + os.Getenv("PORT"))
+	log.Fatal(app.Listen(":" + os.Getenv("PORT")))
 
 }

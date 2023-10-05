@@ -3,16 +3,13 @@ FROM golang:1.21.1
 # Set destination for COPY
 WORKDIR /app
 
-# Download Go modules
-COPY go.mod go.sum ./
+ADD . /app
+
 RUN go mod download
 
-# Copy the source code. Note the slash at the end, as explained in
-# https://docs.docker.com/engine/reference/builder/#copy
-COPY *.go ./
+RUN go env -w GO111MODULE=on
 
-# Build
-RUN CGO_ENABLED=0 GOOS=linux go build -o /BirdAI_D7057E
+RUN go build -o /BirdAI_D7057E
 
 # Optional:
 # To bind to a TCP port, runtime parameters must be supplied to the docker command.

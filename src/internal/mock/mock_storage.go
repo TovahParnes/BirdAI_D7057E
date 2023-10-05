@@ -34,16 +34,85 @@ type mockCollection struct {
 }
 
 func (m *mockCollection) FindOne(query bson.M) (models.HandlerObject, error) {
+	doc, err := bson.Marshal(query)
+	if err != nil {
+		return nil, errors.New("wrong format")
+	}
 	for _, one := range m.data {
-		if one.GetId() == query["_id"] {
-			return one, nil
+		switch one.(type) {
+		case *models.User:
+			var test *models.User
+			err = bson.Unmarshal(doc, &test)
+			if test.Id != "" && test.Id == one.(*models.User).Id || test.AuthId != "" && test.AuthId == one.(*models.User).AuthId {
+				return one, nil
+			}
+		case *models.Admin:
+			var test *models.Admin
+			err = bson.Unmarshal(doc, &test)
+			if test.Id != "" && test.Id == one.(*models.Admin).Id {
+				return one, nil
+			}
+		case *models.Bird:
+			var test *models.Bird
+			err = bson.Unmarshal(doc, &test)
+			if test.Id != "" && test.Id == one.(*models.Bird).Id {
+				return one, nil
+			}
+		case *models.Post:
+			var test *models.Post
+			err = bson.Unmarshal(doc, &test)
+			if test.Id != "" && test.Id == one.(*models.Post).Id {
+				return one, nil
+			}
+		case *models.Media:
+			var test *models.Media
+			err = bson.Unmarshal(doc, &test)
+			if test.Id != "" && test.Id == one.(*models.Media).Id {
+				return one, nil
+			}
 		}
 	}
 	return nil, errors.New("could not find")
 }
 
 func (m *mockCollection) FindAll() (interface{}, error) {
-	return m.data, nil
+	if len(m.data) == 0 {
+		return nil, errors.New("is empty")
+	}
+	switch m.data[0].(type) {
+	case *models.User:
+		var list []*models.User
+		for _, ob := range m.data {
+			list = append(list, ob.(*models.User))
+		}
+		return list, nil
+	case *models.Admin:
+		var list []*models.Admin
+		for _, ob := range m.data {
+			list = append(list, ob.(*models.Admin))
+		}
+		return list, nil
+	case *models.Bird:
+		var list []*models.Bird
+		for _, ob := range m.data {
+			list = append(list, ob.(*models.Bird))
+		}
+		return list, nil
+	case *models.Post:
+		var list []*models.Post
+		for _, ob := range m.data {
+			list = append(list, ob.(*models.Post))
+		}
+		return list, nil
+	case *models.Media:
+		var list []*models.Media
+		for _, ob := range m.data {
+			list = append(list, ob.(*models.Media))
+		}
+		return list, nil
+	default:
+		return nil, errors.New("wrong model type")
+	}
 }
 
 func (m *mockCollection) UpdateOne(query bson.M) (models.HandlerObject, error) {

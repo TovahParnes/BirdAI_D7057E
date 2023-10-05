@@ -3,6 +3,7 @@ package handlers
 import (
 	"birdai/src/internal/controllers"
 	"birdai/src/internal/models"
+	"birdai/src/internal/repositories"
 )
 
 type Handler struct {
@@ -10,6 +11,6 @@ type Handler struct {
 	me         *models.User
 }
 
-func NewHandler(db models.IMongoInstance) Handler {
+func NewHandler(db repositories.IMongoInstance) Handler {
 	return Handler{controller: controllers.NewController(db)}
 }

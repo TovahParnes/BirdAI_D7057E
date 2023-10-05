@@ -6,39 +6,41 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func (c *Controller) CGetUserById(id string) (*models.User, error) {
-	coll := c.db.GetCollection(repositories.UserColl)
-	user, err := coll.FindOne(id)
-	if user != nil {
-		return user.(*models.User), err
+func (c *Controller) CGetUserById(authId string) (*models.User, error) {
+	user, err := c.auth.CheckUser(authId)
+	if err != nil {
+		return &models.User{}, err
 	}
-	return &models.User{}, err
+	return user.(*models.User), err
 }
 
-func (c *Controller) CCreateUser(user *models.User) (*models.User, error) {
-	coll := c.db.GetCollection(repositories.UserColl)
-	createdUser, err := coll.CreateOne(user)
-	newUser, _ := coll.FindOne(createdUser)
-	if newUser != nil {
-		return newUser.(*models.User), err
+func (c *Controller) CLogin(user *models.User) (string, error) {
+	authUser, err := c.auth.LoginUser(user)
+	if err != nil {
+		return "", err
 	}
-	return &models.User{}, err
+	return authUser, nil
 }
 
-func (c *Controller) CListUsers() ([]*models.User, error) {
-	coll := c.db.GetCollection(repositories.UserColl)
-	usersObjects, err := coll.FindAll()
-	users := []*models.User{}
-	for _, usersObject := range usersObjects {
-		users = append(users, usersObject.(*models.User))
+func (c *Controller) CListUsers(authId string) ([]*models.User, error) {
+	_, err := c.auth.CheckUser(authId)
+	if err != nil {
+		return nil, err
 	}
+	coll := c.db.GetCollection(repositories.UserColl)
+	inter, err := coll.FindAll()
+	users := inter.([]*models.User)
 
 	return users, err
 }
 
-func (c *Controller) CDeleteUser(id string) (*models.User, error) {
+func (c *Controller) CDeleteUser(id, authId string) (*models.User, error) {
+	_, err := c.auth.CheckUser(authId)
+	if err != nil {
+		return nil, err
+	}
 	coll := c.db.GetCollection(repositories.UserColl)
-	deletedUser, err := coll.DeleteOne(id)
+	deletedUser, err := coll.DeleteOne(bson.M{"_id": id})
 	if deletedUser != nil {
 		return deletedUser.(*models.User), err
 	}
@@ -46,6 +48,10 @@ func (c *Controller) CDeleteUser(id string) (*models.User, error) {
 }
 
 func (c *Controller) CUpdateUser(user *models.User) (*models.User, error) {
+	_, err := c.auth.CheckUser(user.AuthId)
+	if err != nil {
+		return nil, err
+	}
 	coll := c.db.GetCollection(repositories.UserColl)
 	updatedUser, err := coll.UpdateOne(bson.M{
 		"_id":        user.Id,
