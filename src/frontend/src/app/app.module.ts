@@ -15,6 +15,7 @@ import {LibraryComponent} from './library/library.component';
 import {TakenImagesPageComponent} from './taken-images-page/taken-images-page.component';
 import {SpeciesPageComponent} from './species-page/species-page.component';
 import {ProfilePageComponent} from './profile-page/profile-page.component';
+import {CardComponent, Card2Component} from './card/card.component';
 
 // login authguard imports
 import {GoogleLoginProvider, GoogleSigninButtonModule, SocialLoginModule, SocialAuthServiceConfig} from '@abacritt/angularx-social-login';
@@ -27,7 +28,9 @@ import {MatStepperModule} from '@angular/material/stepper';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatCardModule} from '@angular/material/card';
-import { CardComponent, Card2Component } from './card/card.component';
+import {MatIconModule} from '@angular/material/icon';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+
 
 @NgModule({
   declarations: [
@@ -65,6 +68,8 @@ import { CardComponent, Card2Component } from './card/card.component';
     MatRadioModule,
     MatFormFieldModule,
     MatCardModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
   ],
   exports:[
     RouterModule

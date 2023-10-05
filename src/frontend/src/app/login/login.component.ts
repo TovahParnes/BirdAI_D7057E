@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import { AppComponent } from '../app.component';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -19,20 +20,33 @@ export class LoginComponent {
     private socialAuthService: SocialAuthService) {
   }
   
+  public triedLogIn = false;
+
   postLoggedInUser(token: string): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-      'authId': `${this.mainApp.user.id}`
-    })
-    return this.httpClient.post("localhost:4000/users", { headers: headers })
+    const header = {
+      'Authorization': `Bearer ${token}`
+    };
+    const body = {
+      'username': `${this.mainApp.user.name}`,'authId': `${this.mainApp.user.id}`
+    };
+    return this.httpClient.post<any>(environment.loginURL, body, { headers: header });
   }
 
 
   login(): void {
-    this.postLoggedInUser("ss").subscribe(
-      error => console.log("Could not login"),
-      () => this.router.navigate(['mainpage'])
-    );
+    console.log(this.mainApp.user);
+    this.router.navigate(['mainpage']); // TODO-REMOVE
+
+    // this.postLoggedInUser("environment.secret")
+    // .subscribe(
+    //   () => {
+    //     console.log("logged in");
+    //     this.router.navigate(['mainpage']);
+    //   },
+    //   err => {
+    //     console.error("Could not login:" + err);
+    //   }
+    // );
+    this.triedLogIn = true;
   }
 }
