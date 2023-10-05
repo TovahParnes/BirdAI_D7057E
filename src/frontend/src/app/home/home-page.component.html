@@ -17,7 +17,7 @@
     </button> 
     <ul class="sub-menu">
       <!-- <mat-slide-toggle [(ngModel)]="mainApp.isDark">Darkmode</mat-slide-toggle><br> -->
-      <button mat-raised-button (click)="mainApp.navigateToProfilePage()">Profile</button><br> <!-- {{socialUser.name}}<span class="material-symbols-outlined">chevron_right</span> -->
+      <button mat-raised-button (click)="mainApp.navigateToProfilePage()">Profile</button><br>
       <button mat-raised-button (click)="mainApp.logout()">Logout</button>
     </ul>
   </div>
@@ -34,7 +34,7 @@
 
 <mat-card class="card">
   
-  <mat-vertical-stepper #stepper>
+  <mat-vertical-stepper>
     <form [formGroup]="form">
 
     <mat-step>
@@ -48,17 +48,18 @@
       <div>
         <button mat-button matStepperNext>Next</button>
       </div>
-
     </mat-step>
 
     <mat-step *ngIf="form.value.option === 'option1'">
-        <ng-template matStepLabel>Select the Image</ng-template>       
-        <input type="file" mat-button (change)="onFileSelected($event)" accept="image/*" style="padding-top: 6px"/>
-        <img *ngIf="selectedImage" [src]="selectedImage" alt="Selected Image" width="200" />
-  
+        <ng-template matStepLabel>Select the Image</ng-template>
+        <input type="file" (change)="onFileSelected($event)" accept="image/*" style="padding-top: 2px; padding-bottom: 4px"/>
+
+        <img *ngIf="selectedImage" [src]="selectedImage" alt="Selected Image" width="92%" />
+        <button *ngIf="selectedImage" mat-icon-button style="position: absolute; left: 22px; top: 22px;" (click)="onClear()" color="primary"><mat-icon>delete</mat-icon></button>
+        
         <div style="padding-top: 6px">
           <button mat-button matStepperPrevious style="margin-right: 6px;">Back</button>
-          <button mat-raised-button color="primary" type="button" (click)="onSubmit()" [disabled]="!selectedImage">Submit</button>
+            <button mat-raised-button color="primary" type="button" (click)="onSubmit(loading)" [disabled]="!selectedImage">Submit</button>
         </div>
 
     </mat-step>
@@ -73,12 +74,18 @@
       </div>
       
     </mat-step>
-
-    <mat-step *ngIf!="form.value.option == ''">
-      <ng-template color="warning" matStepLabel>Select the Sound</ng-template>
-    </mat-step>
     </form>
 
   </mat-vertical-stepper>
 </mat-card>
+
+<p></p>
+
+<div #loading style="height: 1000px;">
+  <div *ngIf="isLoading" style="height: 100%; z-index: 1000; position: fixed; top: 0px; width: 100%; background-color:  #4242425b;">
+    <mat-spinner style="margin: auto; top: 40%;"></mat-spinner>
+  </div>
+  <mat-card *ngIf="data != null" class="card">
+  </mat-card>
+</div>
 

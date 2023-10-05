@@ -27,6 +27,9 @@ import {MatStepperModule} from '@angular/material/stepper';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatCardModule} from '@angular/material/card';
+import {MatIconModule} from '@angular/material/icon';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+
 
 @NgModule({
   declarations: [
@@ -62,6 +65,8 @@ import {MatCardModule} from '@angular/material/card';
     MatRadioModule,
     MatFormFieldModule,
     MatCardModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
   ],
   exports:[
     RouterModule

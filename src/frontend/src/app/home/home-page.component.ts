@@ -4,6 +4,8 @@ import {Router} from '@angular/router';
 import {AppComponent} from '../app.component';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-home-page',
@@ -18,12 +20,17 @@ export class MainPageComponent implements OnInit {
   isLinear = false;
   form!: FormGroup;
   selectedImage: any;
+  isLoading: boolean = false;
+
+  data: any;
+  dataImg: any;
 
   constructor(
     private router: Router, 
     public mainApp: AppComponent,
     public socialAuthService: SocialAuthService,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private httpClient: HttpClient) {
   }
 
   ngOnInit() {
@@ -37,16 +44,6 @@ export class MainPageComponent implements OnInit {
     });
   }
 
-  @ViewChild('stepper') stepper!: MatStepper;
-
-  ngAfterViewInit() {
-    this.stepper.selectedIndex = -1;
-  }
-
-  toggleTheme(): void {
-    this.mainApp.switchDarkmodeSetting();
-  }
-
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -58,13 +55,34 @@ export class MainPageComponent implements OnInit {
     }
   }
 
-  onSubmit() {
-    // Handle form submission here, e.g., send the image to a server
-    // You can access the selected image using this.selectedImage
-    console.log('Image submitted:', this.selectedImage);
-
-    // Reset the form or perform any other necessary actions
-    this.form.reset();
+  onClear() {
     this.selectedImage = null;
   }
+
+  onSubmit(el: HTMLElement) {
+    this.isLoading = true;
+
+    const header = {'Authorization': `Bearer ${environment.secret}`};
+    const body = {'img': `${this.selectedImage}`};
+    this.httpClient.post<any>(environment.identifyRequestURL, body, { headers: header })
+    .subscribe(
+      () => {
+        console.log("Succesfully sent data");
+        this.form.reset();
+        this.dataImg = this.selectedImage;
+        this.selectedImage = null;
+        el.scrollIntoView();
+
+        
+      },
+      err => { 
+        console.error("Failed at sending data:" + err); 
+      }
+    );
+    this.isLoading = false
+  }
 }
+
+
+
+

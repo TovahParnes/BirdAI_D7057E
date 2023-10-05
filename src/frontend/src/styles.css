@@ -1,14 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 
-
 html, body {
     height: 100%;
     color-scheme: dark;
+    scroll-behavior: smooth;
+    
 }
 
 body {
     margin: 0;
-    font-family: Sans, "Helvetica Neue", sans-serif;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .card {
@@ -50,6 +51,7 @@ button:hover {
     position: sticky;
 
     top: 0px;
+    z-index: 1000;
 }
 
 .nav-logo {
@@ -138,5 +140,20 @@ button:hover {
 }
 
 /* end navbar */
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.bot-navbar {
+    background-color:  #424242;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color:  #424242a9;
+    padding: 10px 0;
+}
+
+.bot-navbar {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
