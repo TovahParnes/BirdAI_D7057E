@@ -79,8 +79,21 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 // @Router			/users/ [post]
 func (h *Handler) Login(c *fiber.Ctx) error {
 
+	var user *models.User
+	if err := c.BodyParser(&user);
+	err != nil {
+		//	@Failure	400	{object}	models.Response{}
+		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
+		}
+	}
+
+	response := h.controller.CCreateUser(user)
+
+	return utils.ResponseToStatus(c, response)
+
 	//	@Failure	401	{object}	models.Response{}
 	//parse auth header
+	/*
 	auth = h.controller.CAuthenticate(authHeader)
 	if !auth.data.success {
 		return c.Status(auth.StatusCode).JSON(auth)
@@ -92,7 +105,7 @@ func (h *Handler) Login(c *fiber.Ctx) error {
 	}
 
 	utils.ErrorUnauthorized("test")
-
+	
 
 
 
@@ -132,6 +145,8 @@ func (h *Handler) Login(c *fiber.Ctx) error {
 		fmt.Sprintf("User created successfully"), 
 		nil,
 		))
+	*/
+	
 }
 
 // GetUserMe is a function to get the current user from the databse

@@ -23,16 +23,16 @@ func (c *Controller) CGetUserById(id string) (models.Response) {
 	return response
 }
 
-func (c *Controller) CCreateUser(user *models.User) (response) {
+func (c *Controller) CCreateUser(user *models.User) (models.Response) {
 	coll := c.db.GetCollection(repositories.UserColl)
-	createdUser, err := coll.CreateOne(user)
-	if createdUser != nil {
-		return createdUser.(*models.User), err
+	response := coll.CreateOne(user)
+	if !response.Data.(models.Err).Success {
+		return response
 	}
-	return &models.User{}, err
+	return response
 }
 
-func (c *Controller) CListUsers() ([]*models.User, error) {
+func (c *Controller) CListUsers() (models.Response) {
 	coll := c.db.GetCollection(repositories.UserColl)
 	response := coll.FindAll()
 	users := []*models.User{}
@@ -41,7 +41,7 @@ func (c *Controller) CListUsers() ([]*models.User, error) {
 		users = append(users, usersObject.(*models.User))
 	}
 
-	return utils.Response(users).Data.([]*models.User)
+	return utils.Response(users)
 }
 
 func (c *Controller) CDeleteUser(id string) (*models.User, error) {

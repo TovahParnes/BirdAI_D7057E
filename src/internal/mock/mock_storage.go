@@ -5,6 +5,7 @@ import (
 	"birdai/src/internal/utils"
 	"errors"
 	"fmt"
+	"net/http"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -100,7 +101,7 @@ func (m *mockCollection) DeleteOne(id string) (models.HandlerObject, error) {
 	return nil, errors.New("could not find")
 }
 
-func (m *mockCollection) CreateOne(object models.HandlerObject) (models.HandlerObject, error) {
+func (m *mockCollection) CreateOne(object models.HandlerObject) (models.Response) {
 	var newObject models.HandlerObject
 	switch object.(type) {
 	case *models.User:
@@ -146,8 +147,8 @@ func (m *mockCollection) CreateOne(object models.HandlerObject) (models.HandlerO
 		}
 
 	default:
-		return nil, nil
+		return utils.ErrorToResponse(http.StatusBadRequest, "Could not create object", "")
 	}
 	m.data = append(m.data, newObject)
-	return newObject, nil
+	return utils.Response(newObject)
 }
