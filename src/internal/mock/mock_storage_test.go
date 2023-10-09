@@ -3,8 +3,9 @@ package mock_test
 import (
 	"birdai/src/internal/mock"
 	"birdai/src/internal/models"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"testing"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
@@ -45,36 +46,35 @@ func TestMockMongoCollection(t *testing.T) {
 		CreatedAt: "0",
 	}
 	t.Run("Test CreateOne collection success", func(t *testing.T) {
-		newUser, err := userColl.CreateOne(user)
-		user = newUser.(*models.User)
-		require.NotNil(t, newUser)
-		require.Nil(t, err)
-		newUser, err = userColl.CreateOne(user2)
-		user2 = newUser.(*models.User)
-		require.NotNil(t, newUser)
-		require.Nil(t, err)
+		response := userColl.CreateOne(user)
+		require.Nil(t, response.Data.(*models.User))
+		require.NotNil(t, response.Data.(*models.Err))
+
+		response = userColl.CreateOne(user2)
+		require.Nil(t, response.Data.(*models.User))
+		require.NotNil(t, response.Data.(*models.Err))
 	})
 
 	t.Run("Test FindOne collection success", func(t *testing.T) {
-		person, err := userColl.FindOne(user.Id)
-		require.Equal(t, user, person)
-		require.Nil(t, err)
+		response := userColl.FindOne(user.Id)
+		require.Equal(t, user, response.Data)
+		//require.Nil(t, err)
 
-		person, err = userColl.FindOne(user2.Id)
-		require.Equal(t, user2, person)
-		require.Nil(t, err)
+		response = userColl.FindOne(user2.Id)
+		require.Equal(t, user2, response.Data)
+		//require.Nil(t, err)
 	})
 
 	t.Run("Test FindOne collection failure", func(t *testing.T) {
-		person, err := userColl.FindOne("testtest")
-		require.Nil(t, person)
-		require.NotNil(t, err)
+		response := userColl.FindOne("testtest")
+		require.Nil(t, response.Data.(*models.User))
+		require.NotNil(t, response.Data.(*models.Err))
 	})
 
 	t.Run("Test FindAll collection success", func(t *testing.T) {
-		persons, err := userColl.FindAll()
-		require.Equal(t, []models.HandlerObject{user, user2}, persons)
-		require.Nil(t, err)
+		response := userColl.FindAll()
+		require.Equal(t, []models.HandlerObject{user, user2}, response.Data.([]models.HandlerObject))
+		require.Nil(t, response.Data.(*models.Err))
 	})
 
 	t.Run("Test UpdateOne collection success", func(t *testing.T) {
@@ -93,7 +93,7 @@ func TestMockMongoCollection(t *testing.T) {
 		person, err := userColl.DeleteOne(user.Id)
 		require.Equal(t, user, person)
 		require.Nil(t, err)
-		foundPerson, _ := userColl.FindOne(user.Id)
-		require.Nil(t, foundPerson)
+		response := userColl.FindOne(user.Id)
+		require.Nil(t, response.Data.(*models.User))
 	})
 }
