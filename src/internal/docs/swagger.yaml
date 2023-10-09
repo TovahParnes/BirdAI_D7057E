@@ -1,8 +1,7 @@
 basePath: /
 definitions:
-  models.ResponseHTTP:
+  models.Err:
     properties:
-      data: {}
       description:
         description: the error description for the developer, aka err.Error()
         type: string
@@ -13,9 +12,10 @@ definitions:
         type: string
       status:
         type: integer
-      success:
-        description: temporary, will be removed
-        type: boolean
+    type: object
+  models.Response:
+    properties:
+      data: {}
       timestamp:
         type: string
     type: object
@@ -64,19 +64,47 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
       summary: Create user
       tags:
       - users
@@ -97,23 +125,51 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            $ref: '#/definitions/models.Response'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
       summary: Delete given user
       tags:
       - users
@@ -134,7 +190,7 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/models.ResponseHTTP'
+            - $ref: '#/definitions/models.Response'
             - properties:
                 data:
                   items:
@@ -144,15 +200,36 @@ paths:
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "410":
           description: Gone
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
       summary: Get user by ID
       tags:
       - users
@@ -161,9 +238,14 @@ paths:
       - application/json
       description: Update given user
       parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
       - description: user
         in: body
-        name: set
+        name: user
         required: true
         schema:
           $ref: '#/definitions/models.User'
@@ -173,27 +255,62 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            $ref: '#/definitions/models.Response'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
       summary: Update given user
       tags:
       - users
@@ -218,7 +335,7 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/models.ResponseHTTP'
+            - $ref: '#/definitions/models.Response'
             - properties:
                 data:
                   items:
@@ -228,11 +345,25 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
       summary: List all users of a specified set
       tags:
       - users
@@ -247,23 +378,58 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.User'
+                  type: array
+              type: object
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "410":
           description: Gone
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
       summary: Get current user
       tags:
       - users

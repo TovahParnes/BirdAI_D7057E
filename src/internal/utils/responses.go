@@ -3,6 +3,7 @@ package utils
 import (
 	"birdai/src/internal/models"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -14,7 +15,7 @@ func CreationResponseToStatus(c *fiber.Ctx, response models.Response) error {
 }
 
 func ResponseToStatus(c *fiber.Ctx, response models.Response) error {
-	if !response.Data.(models.Err).Success{
+	if IsTypeError(response){
 		return c.Status(response.Data.(models.Err).StatusCode).JSON(response)
 	}
 	return c.Status(http.StatusAccepted).JSON(response)
@@ -31,12 +32,31 @@ func Response(data interface{}) models.Response {
 
 func ErrorToResponse(statusCode int, message string, err string) models.Response {
 	return  Response(models.Err{
-		Success: false,
 		StatusCode : statusCode,
 		StatusName: http.StatusText(statusCode),
 		Message: message,
 		Description: err,
 	})
+}
+
+func IsTypeError(response models.Response) bool {
+	return reflect.TypeOf(response.Data) == reflect.TypeOf(models.Err{})
+}
+
+func IsTypeUser(response models.Response) bool {
+	return reflect.TypeOf(response.Data) == reflect.TypeOf(models.User{})
+}
+
+func IsTypeBird(response models.Response) bool {
+	return reflect.TypeOf(response.Data) == reflect.TypeOf(models.Bird{})
+}
+
+func IsTypePost(response models.Response) bool {
+	return reflect.TypeOf(response.Data) == reflect.TypeOf(models.Post{})
+}
+
+func IsTypeAdmin(response models.Response) bool {
+	return reflect.TypeOf(response.Data) == reflect.TypeOf(models.Admin{})
 }
 
 
@@ -61,3 +81,4 @@ func ErrorDeleted(err string) models.Response{
 func ErrorParams(err string) models.Response{
 	return ErrorToResponse(http.StatusBadRequest, "Could not parse parameters", err)
 }
+

@@ -10,7 +10,6 @@ type Response struct {
 }
 
 type Err struct {
-	Success bool `json:"success"`
 	StatusCode int `json:"status"`
 	StatusName string `json:"name"`
 	Message string `json:"message"` //the displayed error text for the user

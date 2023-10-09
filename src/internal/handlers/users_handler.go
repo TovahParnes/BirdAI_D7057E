@@ -13,15 +13,15 @@ import (
 //
 // @Summary		Get user by ID
 // @Description	Get user by ID
-// @Tags			users
-// @Accept			json
+// @Tags		users
+// @Accept		json
 // @Produce		json
-// @Param			id	path	string	true	"User ID"
-// @Success		200	{object}	models.Response{data=[]models.User} - user retrieved successfully
-// @Failure		404	{object}	models.Response{data=[]models.Err} - user not found
-// @Failure		410	{object}	models.Response{data=[]models.Err} - user was deleted
-// @Failure		503	{object}	models.Response{data=[]models.Err} - no connection to db was established
-// @Router			/users/{id} [get]
+// @Param		id	path	string	true	"User ID"
+// @Success		200	{object}	models.Response{data=[]models.User}
+// @Failure		404	{object}	models.Response{data=[]models.Err}
+// @Failure		410	{object}	models.Response{data=[]models.Err}
+// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Router		/users/{id} [get]
 func (h *Handler) GetUserById(c *fiber.Ctx) error {
 	id := c.Params("id")
 
@@ -99,7 +99,7 @@ func (h *Handler) CreateUser(c *fiber.Ctx) error {
 
 	response := h.controller.CCreateUser(user)
 
-	if !response.Data.(models.Err).Success {
+	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
 	return utils.CreationResponseToStatus(c, response)
@@ -137,7 +137,8 @@ func (h *Handler) GetUserMe(c *fiber.Ctx) error {
 // @Tags			users
 // @Accept			json
 // @Produce		json
-// @Param		set	body		models.User	true	"user"
+// @Param		id	path	string	true	"User ID"
+// @Param		user	body		models.User	true	"user"
 // @Success		200	{object}	models.Response{}
 // @Failure		400	{object}	models.Response{data=[]models.Err}
 // @Failure		401	{object}	models.Response{data=[]models.Err}
@@ -149,7 +150,7 @@ func (h *Handler) UpdateUser(c *fiber.Ctx) error {
 	//	@Failure	401	{object}	models.Response{}
 	// Authenticate(jwt.token)
 
-
+	id := c.Params("id")
 	var user *models.User
 	if err := c.BodyParser(&user); err != nil {
 		//	@Failure	400	{object}	models.Response{}
@@ -160,7 +161,7 @@ func (h *Handler) UpdateUser(c *fiber.Ctx) error {
 	//	@Failure		403	{object}	models.Response{}
 	// if user is not admin or user is not the same as the one being updated
 
-	response := h.controller.CUpdateUser(user)
+	response := h.controller.CUpdateUser(id, user)
 	return utils.ResponseToStatus(c, response)
 }
 

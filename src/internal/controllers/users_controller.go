@@ -12,11 +12,11 @@ func (c *Controller) CGetUserById(id string) (models.Response) {
 	coll := c.db.GetCollection(repositories.UserColl)
 	response := coll.FindOne(id)
 
-	if !response.Data.(models.Err).Success {
+	if utils.IsTypeError(response) {
 		return response
 	}
 
-	if response.Data.(*models.User).Active == false {
+	if utils.IsTypeUser(response) && response.Data.(models.User).Active == false {
 		return utils.ErrorDeleted("User collection")
 	}
 
@@ -26,7 +26,7 @@ func (c *Controller) CGetUserById(id string) (models.Response) {
 func (c *Controller) CCreateUser(user *models.User) (models.Response) {
 	coll := c.db.GetCollection(repositories.UserColl)
 	response := coll.CreateOne(user)
-	if !response.Data.(models.Err).Success {
+	if utils.IsTypeError(response) {
 		return response
 	}
 	return response
@@ -36,6 +36,10 @@ func (c *Controller) CListUsers() (models.Response) {
 	coll := c.db.GetCollection(repositories.UserColl)
 	response := coll.FindAll()
 	users := []*models.User{}
+
+	if utils.IsTypeError(response) {
+		return response
+	}
 
 	for _, usersObject := range response.Data.([]models.HandlerObject) {
 		users = append(users, usersObject.(*models.User))
@@ -50,13 +54,14 @@ func (c *Controller) CDeleteUser(id string) (models.Response) {
 	return response
 }
 
-func (c *Controller) CUpdateUser(user *models.User) (models.Response) {
+func (c *Controller) CUpdateUser(id string, user *models.User) (models.Response) {
 	coll := c.db.GetCollection(repositories.UserColl)
 	response := coll.UpdateOne(bson.D{
-		{Key: "_id", Value: user.Id},
+		{Key: "_id", Value: id},
 		{Key: "username", Value: user.Username},
 		{Key: "auth_id", Value: user.AuthId},
 		{Key: "created_at", Value: user.CreatedAt},
+		{Key: "active", Value: user.Active},
 	})
 	return response
 }
