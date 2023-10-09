@@ -77,19 +77,7 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 // @Failure		401	{object}	models.Response{data=[]models.Err}
 // @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router			/users/ [post]
-func (h *Handler) Login(c *fiber.Ctx) error {
-
-	var user *models.User
-	if err := c.BodyParser(&user);
-	err != nil {
-		//	@Failure	400	{object}	models.Response{}
-		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
-		}
-	}
-
-	response := h.controller.CCreateUser(user)
-
-	return utils.ResponseToStatus(c, response)
+func (h *Handler) CreateUser(c *fiber.Ctx) error {
 
 	//	@Failure	401	{object}	models.Response{}
 	//parse auth header
@@ -99,54 +87,24 @@ func (h *Handler) Login(c *fiber.Ctx) error {
 		return c.Status(auth.StatusCode).JSON(auth)
 	}
 
+
 	response = h.controller.CLoginUser(auth.data)
-	if !auth.data.success {
-		return c.Status(auth.StatusCode).JSON(auth)
-	}
+	*/
 
-	utils.ErrorUnauthorized("test")
-	
-
-
-
-	getCurrentUserFromAuth(auth.data)
 
 	var user *models.User
-	var response *models.Response
 	if err := c.BodyParser(&user);
 	err != nil {
 		//	@Failure	400	{object}	models.Response{}
-		return c.Status(http.StatusNotAcceptable).JSON(models.Response{
-			Success: false,
-			Message: err.Error(),
-			Data:    nil,
-		})
+		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
 
-	response = h.controller.CCreateUser(user)
-	return c.status(createdUser.StatusCode).JSON(createdUser)
+	response := h.controller.CCreateUser(user)
 
-
-	//	@Failure	503	{object}	models.Response{}
-	// 	if no connection to db was established
-	createdUser, err := h.controller.CCreateUser(user)
-	if err != nil {
-		return c.Status(http.StatusServiceUnavailable).JSON(utils.Response(
-			http.StatusAccepted, 
-			fmt.Sprintf("User created su"), 
-			nil,
-			))
+	if !response.Data.(models.Err).Success {
+		return utils.ResponseToStatus(c, response)
 	}
-	h.me = createdUser
-
-	//	@Success	201	{object}	models.User{}
-	return c.Status(http.StatusCreated).JSON(utils.Response(
-		http.StatusCreated, 
-		fmt.Sprintf("User created successfully"), 
-		nil,
-		))
-	*/
-	
+	return utils.CreationResponseToStatus(c, response)
 }
 
 // GetUserMe is a function to get the current user from the databse
@@ -164,37 +122,14 @@ func (h *Handler) Login(c *fiber.Ctx) error {
 // @Router			/users/me [get]
 func (h *Handler) GetUserMe(c *fiber.Ctx) error {
 
-	id = h.controller.getIdFromAuthHeader(c)
-
-	user, err := h.controller.CGetUserById(id)
-
 	//	@Failure	401	{object}	models.Response{}
 	// Authenticate(jwt.token)
+	//id = h.controller.getIdFromAuthHeader(c)
+	tempId := "1"
 
-	//	@Failure	503	{object}	models.Response{}
-	// if no connection to db was established
+	response := h.controller.CGetUserById(tempId)
 
-	//	@Failure	404	{object}	models.Response{}
-	// if user not found
-
-	// 	@Failure	410	{object}	models.Response{}
-	// if user was deleted
-
-	//	@Success	200	{object}	models.Response{}
-	if h.me != nil {
-		//return c.Response(http.StatusAccepted, fmt.Sprintf("Last saved person is: %s", h.me.Username), nil)
-	
-		return c.Status(http.StatusAccepted).JSON(utils.Response(
-			http.StatusAccepted, 
-			fmt.Sprintf("Last saved person is: %s", h.me.Username), 
-			nil,
-			))
-	}
-	return c.Status(http.StatusNotFound).JSON(utils.ErrorToResponse(
-		http.StatusNotFound, 
-		fmt.Sprintf("A current user was not found"), 
-		"",
-		))
+	return utils.ResponseToStatus(c, response)
 }
 
 // UpdateUser is a function to update the given user from the databse
