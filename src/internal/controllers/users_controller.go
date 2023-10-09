@@ -53,16 +53,13 @@ func (c *Controller) CDeleteUser(id string) (*models.User, error) {
 	return &models.User{}, err
 }
 
-func (c *Controller) CUpdateUser(user *models.User) (*models.User, error) {
+func (c *Controller) CUpdateUser(user *models.User) (models.Response) {
 	coll := c.db.GetCollection(repositories.UserColl)
-	updatedUser, err := coll.UpdateOne(bson.D{
+	response := coll.UpdateOne(bson.D{
 		{Key: "_id", Value: user.Id},
 		{Key: "username", Value: user.Username},
 		{Key: "auth_id", Value: user.AuthId},
 		{Key: "created_at", Value: user.CreatedAt},
 	})
-	if updatedUser != nil {
-		return updatedUser.(*models.User), err
-	}
-	return &models.User{}, err
+	return response
 }

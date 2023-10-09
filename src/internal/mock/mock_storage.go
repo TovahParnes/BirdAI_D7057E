@@ -49,10 +49,10 @@ func (m *mockCollection) FindAll() (models.Response) {
 	return utils.Response(m.data)
 }
 
-func (m *mockCollection) UpdateOne(query bson.D) (models.HandlerObject, error) {
+func (m *mockCollection) UpdateOne(query bson.D) (models.Response) {
 	doc, err := bson.Marshal(query)
 	if err != nil {
-		return nil, errors.New("wrong format")
+		return utils.ErrorToResponse(http.StatusBadRequest, "Could not update object", err.Error())
 	}
 	id := query[0].Value
 	for i, one := range m.data {
@@ -62,32 +62,32 @@ func (m *mockCollection) UpdateOne(query bson.D) (models.HandlerObject, error) {
 				var test *models.User
 				err = bson.Unmarshal(doc, &test)
 				m.data[i] = test
-				return test, err
+				return utils.Response(test)
 			case *models.Admin:
 				var test *models.Admin
 				err = bson.Unmarshal(doc, &test)
 				m.data[i] = test
-				return test, err
+				return utils.Response(test)
 			case *models.Bird:
 				var test *models.Bird
 				err = bson.Unmarshal(doc, &test)
 				m.data[i] = test
-				return test, err
+				return utils.Response(test)
 			case *models.Post:
 				var test *models.Post
 				err = bson.Unmarshal(doc, &test)
 				m.data[i] = test
-				return test, err
+				return utils.Response(test)
 			case *models.Media:
 				var test *models.Media
 				err = bson.Unmarshal(doc, &test)
 				m.data[i] = test
-				return test, err
+				return utils.Response(test)
 			}
 		}
 	}
 
-	return nil, errors.New("could not find")
+	return utils.ErrorNotFoundInDatabase("User collection")
 }
 
 func (m *mockCollection) DeleteOne(id string) (models.HandlerObject, error) {

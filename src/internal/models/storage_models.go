@@ -130,7 +130,7 @@ type MongoCollection struct {
 type IMongoCollection interface {
 	FindOne(id string) (Response)
 	FindAll() (Response)
-	UpdateOne(query bson.D) (HandlerObject, error)
+	UpdateOne(query bson.D) (Response)
 	DeleteOne(id string) (HandlerObject, error)
 	CreateOne(object HandlerObject) (Response)
 }

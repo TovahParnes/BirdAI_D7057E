@@ -148,46 +148,22 @@ func (h *Handler) GetUserMe(c *fiber.Ctx) error {
 // @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router			/users/{id} [patch]
 func (h *Handler) UpdateUser(c *fiber.Ctx) error {
+	//	@Failure	401	{object}	models.Response{}
+	// Authenticate(jwt.token)
+
+
 	var user *models.User
 	if err := c.BodyParser(&user); err != nil {
 		//	@Failure	400	{object}	models.Response{}
-		return c.Status(http.StatusNotAcceptable).JSON(models.Response{
-			Success: false,
-			Message: err.Error(),
-			Data:    nil,
-		})
+		// something with body is wrong/missing
+		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
-
-	//	@Failure	401	{object}	models.Response{}
-	// Authenticate(jwt.token)
 
 	//	@Failure		403	{object}	models.Response{}
 	// if user is not admin or user is not the same as the one being updated
 
-	//	@Failure		400	{object}	models.Response{}
-	// something with body is wrong/missing
-
-	//	@Failure	503	{object}	models.Response{}
-	// if no connection to db was established
-
-	//	@Failure	404	{object}	models.Response{}
-	// if user not found
-
-	updatedPerson, err := h.controller.CUpdateUser(user)
-	if err != nil {
-		return c.Status(http.StatusNotFound).JSON(models.Response{
-			Success: false,
-			Message: err.Error(),
-			Data:    nil,
-		})
-	}
-
-	//	@Success	200	{object}	models.User{}
-	return c.JSON(models.Response{
-		Success: true,
-		Message: fmt.Sprintf("User %v updated successfully", updatedPerson.Username),
-		Data:    nil,
-	})
+	response := h.controller.CUpdateUser(user)
+	return utils.ResponseToStatus(c, response)
 }
 
 // DeleteUser is a function to update the given user from the database
