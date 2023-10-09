@@ -16,37 +16,41 @@ export class LoginComponent {
   constructor(
     public mainApp: AppComponent,
     private router: Router,
-    private httpClient: HttpClient,
+    private http: HttpClient,
     private socialAuthService: SocialAuthService) {
   }
-  
+
   public triedLogIn = false;
 
   postLoggedInUser(token: string): Observable<any> {
-    const header = {
-      'Authorization': `Bearer ${token}`
-    };
+    var header = {
+      headers: new HttpHeaders()
+        .set('Authorization',  `Bearer ${token}`)
+    }
+    //console.log(header);
     const body = {
       'username': `${this.mainApp.user.name}`,'authId': `${this.mainApp.user.id}`
     };
-    return this.httpClient.post<any>(environment.loginURL, body, { headers: header });
+    // return this.httpClient.post<any>(environment.loginURL, body, { headers: header });
+    return this.http.post<any>(environment.loginURL, body, header);
   }
 
 
   login(): void {
     console.log(this.mainApp.user);
-    this.router.navigate(['mainpage']); // TODO-REMOVE
+    //this.router.navigate(['mainpage']); // TODO-REMOVE
 
-    // this.postLoggedInUser("environment.secret")
-    // .subscribe(
-    //   () => {
-    //     console.log("logged in");
-    //     this.router.navigate(['mainpage']);
-    //   },
-    //   err => {
-    //     console.error("Could not login:" + err);
-    //   }
-    // );
+    this.postLoggedInUser(environment.secret)
+    .subscribe(
+      (value: any) => {
+        console.log("logged in");
+        console.log(value);
+        this.router.navigate(['mainpage']);
+      },
+      err => {
+        console.error("Could not login:" + err);
+      }
+    );
     this.triedLogIn = true;
   }
 }

@@ -6,12 +6,12 @@ export const environment = {
   production: false,
   companyEmail: "Bird.AI@outlook.com",
 
-  loginURL: "localhost:4000/users",
-  identifyRequestURL: "localhost:4000",
+  loginURL: "http://localhost:3000/users",
+  identifyRequestURL: "http://localhost:4000",
 
-  secret: "492aa87ff2efcabc17273c061ee2913f5bdcfe256080dc824d3a8e6a4c575816c7c246061fdb648bce5cfd0ded0af1bebb8f83be2de3dc78086a9a0d3c45ade2"
+  secret: "eyJhbGciOiJIUzI1NiJ9.e30.DXCaKJxPJq8JhXOZIN4yWdBwJ4sraVbwH9imDCHZPaA"
   };
-  
+
   /*
    * For easier debugging in development mode, you can import the following file
    * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

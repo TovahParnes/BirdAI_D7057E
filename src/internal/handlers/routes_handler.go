@@ -10,10 +10,7 @@ import (
 )
 
 func New(app *fiber.App, db repositories.IMongoInstance) {
-	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "*",
-		AllowCredentials: true,
-	}))
+	app.Use(cors.New())
 	//app.Use(jwtware.New(jwtware.Config{
 	//	SigningKey: jwtware.SigningKey{Key: []byte(os.Getenv("JWT_SECRET"))},
 	//}))
