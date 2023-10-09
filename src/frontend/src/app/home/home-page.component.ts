@@ -1,21 +1,11 @@
-import {Component} from '@angular/core';
-import {SocialAuthService, GoogleLoginProvider} from 'angularx-social-login';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
-//import {Directive} from '@angular/core'
+import {AppComponent} from '../app.component';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { MatStepper } from '@angular/material/stepper';
 import { HttpClient } from '@angular/common/http';
-//import { Observable } from 'rxjs';
-
-
-interface ApiResponse {
-  data: {  
-    id : string;
-    authId: string;
-    createdAt: string;
-    username: string;
-  }[];
-  message: string;
-  success: boolean;
-}
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-home-page',
@@ -23,70 +13,76 @@ interface ApiResponse {
   styleUrls: ['./home-page.component.css'],
 })
 
-export class MainPageComponent {
+export class MainPageComponent implements OnInit {
 
-  responseData: ApiResponse | null = null;
+  user: SocialUser = new SocialUser;
+  loggedIn: boolean = false;
+  isLinear = false;
+  form!: FormGroup;
+  selectedImage: any;
+  isLoading: boolean = false;
 
-  constructor(private router: Router,
-              public socialAuthService: SocialAuthService,
-              private http: HttpClient,
-              ) {
+  data: any;
+  dataImg: any;
+
+  constructor(
+    private router: Router, 
+    public mainApp: AppComponent,
+    public socialAuthService: SocialAuthService,
+    private formBuilder: FormBuilder,
+    private httpClient: HttpClient) {
   }
 
-  logout(): void {
-    this.socialAuthService.signOut().then(() => this.router.navigate(['login']));
-  }
+  ngOnInit() {
+      this.socialAuthService.authState.subscribe((user) => {
+      this.user = user;
+      this.loggedIn = (user != null);
+    }),
 
-  moveToLibrary(): void {
-    this.router.navigate(['library']);
-  }
-
-  imageUrls: string[] = [];
-
-  onDragOver(event: DragEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
-  }
-
-  onDragLeave(event: DragEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
-  }
-
-  onDrop(event: DragEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
-    const files = event.dataTransfer?.files;
-    if (files) {this.processFiles(files);
-    }
-  }
-
-  onFileSelected(event: Event): void {
-    const inputElement = event.target as HTMLInputElement;
-    const files = inputElement.files;
-    this.processFiles(files);
-    inputElement.value = ''; // Reset the input value to allow re-uploading the same file
-  }
-
-  private processFiles(files: FileList | null): void {
-    if (!files) return;
-
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      if (file.type.startsWith('image/')) {
-        const imageUrl = URL.createObjectURL(file);
-        this.imageUrls.push(imageUrl);
-      }
-    }
-  }
-
-  ngOnInit(): void {
-    // Make an HTTP GET request to the Swagger service's API
-    this.http.get<ApiResponse>('http://localhost:4000/swagger/index.html').subscribe(data => {
-      this.responseData = data;
-      console.log(data);
+    this.form = this.formBuilder.group({
+      option: new FormControl(), // Initialize with a default value
     });
   }
 
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (e) => {
+        this.selectedImage = reader.result;
+      };
+    }
+  }
+
+  onClear() {
+    this.selectedImage = null;
+  }
+
+  onSubmit(el: HTMLElement) {
+    this.isLoading = true;
+
+    const header = {'Authorization': `Bearer ${environment.secret}`};
+    const body = {'img': `${this.selectedImage}`};
+    this.httpClient.post<any>(environment.identifyRequestURL, body, { headers: header })
+    .subscribe(
+      () => {
+        console.log("Succesfully sent data");
+        this.form.reset();
+        this.dataImg = this.selectedImage;
+        this.selectedImage = null;
+        el.scrollIntoView();
+
+        
+      },
+      err => { 
+        console.error("Failed at sending data:" + err); 
+      }
+    );
+    this.isLoading = false
+  }
 }
+
+
+
 

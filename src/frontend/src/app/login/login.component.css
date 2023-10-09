@@ -13,34 +13,17 @@ h1 {
   margin-top: -20px;
 }
 
-.google-login-btn {
-  background-image: url('src/assets/google-logo.png');
-  background-repeat: no-repeat;
-  background-size: 12%;
-  background-position: 92%;
-  padding-right: 50px;
-  border: none;
-  border-radius: 8px;
+.login-button {
+  color-scheme: light;
   height: 40px;
-  width: 200px;
-  
-  display: block;
+  width: 250px;
+  display: flex;
   margin: 10% auto;
+  justify-content: center;
 }
-
 
 .center-nobg {
   width: 600px;
   margin: auto;
   justify-content: center;
-}
-
-.center {
-  background-color: #242526;
-  display: block;
-  margin: 0 auto;
-  width: 400px;
-  height: 200px;
-  border-radius: 8px;
-  border: 3px solid #242526;
 }

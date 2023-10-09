@@ -4,6 +4,9 @@ up:
 down:
 	docker-compose down
 
+build:
+	docker build -t bird_ai .
+
 con:
 	docker container ls
 

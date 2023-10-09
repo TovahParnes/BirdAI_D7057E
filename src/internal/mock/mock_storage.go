@@ -2,7 +2,9 @@ package mock
 
 import (
 	"birdai/src/internal/models"
+	"birdai/src/internal/repositories"
 	"birdai/src/internal/utils"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -11,10 +13,10 @@ import (
 )
 
 type MockMongoInstance struct {
-	Collections map[string]models.IMongoCollection
+	Collections map[string]repositories.IMongoCollection
 }
 
-func (m MockMongoInstance) GetCollection(name string) models.IMongoCollection {
+func (m MockMongoInstance) GetCollection(name string) repositories.IMongoCollection {
 	return m.Collections[name]
 }
 
@@ -26,34 +28,104 @@ func (m MockMongoInstance) DisconnectDB() {
 	fmt.Println("Disconnected")
 }
 
-func NewMockMongoInstance() models.IMongoInstance {
-	return MockMongoInstance{map[string]models.IMongoCollection{}}
+func NewMockMongoInstance() repositories.IMongoInstance {
+	return MockMongoInstance{map[string]repositories.IMongoCollection{}}
 }
 
 type mockCollection struct {
 	data []models.HandlerObject
 }
 
-func (m *mockCollection) FindOne(id string) (models.Response) {
+func (m *mockCollection) FindOne(query bson.M) (models.Response) {
+
+	doc, err := bson.Marshal(query)
+	if err != nil {
+		return utils.ErrorParams(err.Error())
+	}
 	//objectID, err := primitive.ObjectIDFromHex(id)
 	for _, one := range m.data {
-		if one.GetId() == id {
-			return utils.Response(one)
+		switch one.(type) {
+		case *models.User:
+			var test *models.User
+			err = bson.Unmarshal(doc, &test)
+			if test.Id != "" && test.Id == one.(*models.User).Id || test.AuthId != "" && test.AuthId == one.(*models.User).AuthId {
+				return utils.Response(one)
+			}
+		case *models.Admin:
+			var test *models.Admin
+			err = bson.Unmarshal(doc, &test)
+			if test.Id != "" && test.Id == one.(*models.Admin).Id {
+				return utils.Response(one)
+			}
+		case *models.Bird:
+			var test *models.Bird
+			err = bson.Unmarshal(doc, &test)
+			if test.Id != "" && test.Id == one.(*models.Bird).Id {
+				return utils.Response(one)
+			}
+		case *models.Post:
+			var test *models.Post
+			err = bson.Unmarshal(doc, &test)
+			if test.Id != "" && test.Id == one.(*models.Post).Id {
+				return utils.Response(one)
+			}
+		case *models.Media:
+			var test *models.Media
+			err = bson.Unmarshal(doc, &test)
+			if test.Id != "" && test.Id == one.(*models.Media).Id {
+				return utils.Response(one)
+			}
 		}
 	}
 	return utils.ErrorNotFoundInDatabase("User collection")
 }
 
 func (m *mockCollection) FindAll() (models.Response) {
-	return utils.Response(m.data)
+	if len(m.data) == 0 {
+		return utils.ErrorNotFoundInDatabase("User collection")
+	}
+	switch m.data[0].(type) {
+	case *models.User:
+		var list []*models.User
+		for _, ob := range m.data {
+			list = append(list, ob.(*models.User))
+		}
+		return utils.Response(list)
+	case *models.Admin:
+		var list []*models.Admin
+		for _, ob := range m.data {
+			list = append(list, ob.(*models.Admin))
+		}
+		return utils.Response(list)
+	case *models.Bird:
+		var list []*models.Bird
+		for _, ob := range m.data {
+			list = append(list, ob.(*models.Bird))
+		}
+		return utils.Response(list)
+	case *models.Post:
+		var list []*models.Post
+		for _, ob := range m.data {
+			list = append(list, ob.(*models.Post))
+		}
+		return utils.Response(list)
+	case *models.Media:
+		var list []*models.Media
+		for _, ob := range m.data {
+			list = append(list, ob.(*models.Media))
+		}
+		return utils.Response(list)
+	default:
+		return utils.ErrorToResponse(http.StatusBadRequest, "Wrong model", errors.New("Could not find objects").Error())
+	}
 }
 
-func (m *mockCollection) UpdateOne(query bson.D) (models.Response) {
+func (m *mockCollection) UpdateOne(query bson.M) (models.Response) {
 	doc, err := bson.Marshal(query)
 	if err != nil {
 		return utils.ErrorToResponse(http.StatusBadRequest, "Could not update object", err.Error())
 	}
-	id := query[0].Value
+	id := query["_id"]
 	for i, one := range m.data {
 		if one.GetId() == id {
 			switch one.(type) {
@@ -89,10 +161,10 @@ func (m *mockCollection) UpdateOne(query bson.D) (models.Response) {
 	return utils.ErrorNotFoundInDatabase("User collection")
 }
 
-func (m *mockCollection) DeleteOne(id string) (models.Response) {
+func (m *mockCollection) DeleteOne(query bson.M) (models.Response) {
 	//objectID, err := primitive.ObjectIDFromHex(id)
 	for i, one := range m.data {
-		if one.GetId() == id {
+		if one.GetId() == query["_id"] {
 			m.data = append(m.data[:i], m.data[i+1:]...)
 			return utils.Response(one)
 		}

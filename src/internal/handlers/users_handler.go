@@ -44,6 +44,7 @@ func (h *Handler) GetUserById(c *fiber.Ctx) error {
 // @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router			/users/list [get]
 func (h *Handler) ListUsers(c *fiber.Ctx) error {
+	//authId := c.GetReqHeaders()["Authid"]
 	//queries := c.Queries()
 	//set := queries["set"]
 	//search := queries["search"]
@@ -61,7 +62,7 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 	return utils.ResponseToStatus(c, response)
 }
 
-// CreateUser is a function to create a new user
+// Login is a function to create a new user
 //
 // @Summary		Create user
 // @Description	Create User
@@ -180,6 +181,7 @@ func (h *Handler) UpdateUser(c *fiber.Ctx) error {
 // @Router			/users/{id} [delete]
 func (h *Handler) DeleteUser(c *fiber.Ctx) error {
 	id := c.Params("id")
+	//authId := c.GetReqHeaders()["Authid"]
 
 	//	@Failure	401	{object}	models.Response{}
 	// Authenticate(jwt.token)

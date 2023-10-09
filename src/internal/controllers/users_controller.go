@@ -10,7 +10,8 @@ import (
 
 func (c *Controller) CGetUserById(id string) (models.Response) {
 	coll := c.db.GetCollection(repositories.UserColl)
-	response := coll.FindOne(id)
+	filter := bson.M{"_id": id}
+	response := coll.FindOne(filter)
 
 	if utils.IsTypeError(response) {
 		return response
@@ -50,18 +51,19 @@ func (c *Controller) CListUsers() (models.Response) {
 
 func (c *Controller) CDeleteUser(id string) (models.Response) {
 	coll := c.db.GetCollection(repositories.UserColl)
-	response := coll.DeleteOne(id)
+	filter := bson.M{"_id": id}
+	response := coll.DeleteOne(filter)
 	return response
 }
 
 func (c *Controller) CUpdateUser(id string, user *models.User) (models.Response) {
 	coll := c.db.GetCollection(repositories.UserColl)
-	response := coll.UpdateOne(bson.D{
-		{Key: "_id", Value: id},
-		{Key: "username", Value: user.Username},
-		{Key: "auth_id", Value: user.AuthId},
-		{Key: "created_at", Value: user.CreatedAt},
-		{Key: "active", Value: user.Active},
+	response := coll.UpdateOne(bson.M{
+		"_id": id,
+		"username": user.Username,
+		"auth_id": user.AuthId,
+		"created_at": user.CreatedAt,
+		"active": user.Active,
 	})
 	return response
 }

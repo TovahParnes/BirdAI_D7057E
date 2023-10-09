@@ -71,7 +71,7 @@ func ErrorForbidden(err string) models.Response{
 }
 
 func ErrorNotFoundInDatabase(err string) models.Response{
-	return ErrorToResponse(http.StatusNotFound, "Could not find any document with the given ID", err)
+	return ErrorToResponse(http.StatusNotFound, "Could not find any document in the database", err)
 }
 
 func ErrorDeleted(err string) models.Response{
@@ -80,5 +80,9 @@ func ErrorDeleted(err string) models.Response{
 
 func ErrorParams(err string) models.Response{
 	return ErrorToResponse(http.StatusBadRequest, "Could not parse parameters", err)
+}
+
+func ErrorCollectionNotFound(err string) models.Response{
+	return ErrorToResponse(http.StatusNotFound, "Could not find collection", err)
 }
 

@@ -1,24 +1,31 @@
-import {Component} from '@angular/core';
+import {Component, ViewChildren, QueryList} from '@angular/core';
 import {SocialAuthService, GoogleLoginProvider} from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
 import { AppComponent } from '../app.component';
-import { Card2Component } from '../card/card.component';
+import { CardComponent } from '../card/card.component';
 
 @Component({
-  selector: 'app-library',
-  templateUrl: './library.component.html',
-  styleUrls: ['./library.component.css']
+  selector: 'app-taken-images-page',
+  templateUrl: './taken-images-page.component.html',
+  styleUrls: ['./taken-images-page.component.css'],
 })
 
-export class LibraryComponent {
+export class TakenImagesPageComponent {
+
+  @ViewChildren(CardComponent)
+  cards!: QueryList<CardComponent>;
 
   cardlist = [
-    {title: 'Duck',imageSrc: 'assets/duck.jpg', date:'2023-10-05'},
-    {title: 'Budgie',imageSrc: 'assets/undulat.jpg', date:'2023-10-04'},
+    {title: 'Duck',imageSrc: 'assets/duck.jpg'},
+    {title: 'Kangaroo',imageSrc: 'assets/duck.jpg'},
+    {title: 'Elephant',imageSrc: 'assets/undulat.jpg'},
+    {title: 'Duck',imageSrc: 'assets/duck.jpg'},
+    {title: 'Kangaroo',imageSrc: 'assets/duck.jpg'},
+    {title: 'Elephant',imageSrc: 'assets/undulat.jpg'},
   ]
 
   constructor(
-    private router: Router, 
+    private router: Router,
     public mainApp: AppComponent,
     public socialAuthService: SocialAuthService) {
   }
@@ -54,5 +61,11 @@ export class LibraryComponent {
         imageName: encodeURIComponent(imageName),
       }
       });
+  }
+
+  sortCards() {
+    // const sortedCards = this.cards.toArray().sort((a, b) => a.title.localeCompare(b.title));
+    // this.cards.reset(sortedCards);
+    this.cardlist.sort((a, b) => a.title.localeCompare(b.title));
   }
 }

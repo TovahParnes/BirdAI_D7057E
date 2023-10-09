@@ -1,12 +1,14 @@
-<div class="center-nobg">
+<div class="center-nobg" if >
     <div>
         <img src="assets/birdAI-logo.svg" class="logo">
         <h1>BirdAI</h1>
     </div>
 
-    <div class = "center">
-        <button (click)="loginWithGoogle()" mat-raised-button class="google-login-btn">
-            Login using Google
-        </button> 
+    <div *ngIf="!triedLogIn && mainApp.user">
+        {{login()}}
+    </div>
+
+    <div class="login-button">
+        <asl-google-signin-button *ngIf="!mainApp.user" type='standard' size='medium' theme="filled_black"></asl-google-signin-button>
     </div>
 </div>

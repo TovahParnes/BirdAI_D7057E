@@ -2,20 +2,13 @@ import {Component} from '@angular/core';
 import {SocialAuthService, GoogleLoginProvider} from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
 import { AppComponent } from '../app.component';
-import { Card2Component } from '../card/card.component';
 
 @Component({
-  selector: 'app-library',
-  templateUrl: './library.component.html',
-  styleUrls: ['./library.component.css']
+  selector: 'app-profile-page',
+  templateUrl: './profile-page.component.html',
+  styleUrls: ['./profile-page.component.css']
 })
-
-export class LibraryComponent {
-
-  cardlist = [
-    {title: 'Duck',imageSrc: 'assets/duck.jpg', date:'2023-10-05'},
-    {title: 'Budgie',imageSrc: 'assets/undulat.jpg', date:'2023-10-04'},
-  ]
+export class ProfilePageComponent {
 
   constructor(
     private router: Router, 
@@ -34,7 +27,7 @@ export class LibraryComponent {
   navigateToTakenImages(): void {
     this.router.navigate(['takenImages']);
   }
-
+  
   navigateToLibrary(): void {
     this.router.navigate(['library']);
   }
@@ -45,14 +38,5 @@ export class LibraryComponent {
 
   toggleTheme(): void {
     //this.mainApp.switchDarkmodeSetting();
-  }
-
-  navigateToSpecies(imageId: string, imageName: string): void {
-    this.router.navigate(['species-page'], {
-      queryParams: {
-        imageId: encodeURIComponent(imageId),
-        imageName: encodeURIComponent(imageName),
-      }
-      });
   }
 }

@@ -50,7 +50,7 @@ type Media struct {
 	FileType string `bson:"file_type"`
 }
 
-// GetID for all types, to make them HandlerObjects
+// Functions for all types, to make them HandlerObjects
 
 func (u *User) GetId() string {
 	return u.Id
