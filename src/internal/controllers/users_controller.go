@@ -44,13 +44,10 @@ func (c *Controller) CListUsers() (models.Response) {
 	return utils.Response(users)
 }
 
-func (c *Controller) CDeleteUser(id string) (*models.User, error) {
+func (c *Controller) CDeleteUser(id string) (models.Response) {
 	coll := c.db.GetCollection(repositories.UserColl)
-	deletedUser, err := coll.DeleteOne(id)
-	if deletedUser != nil {
-		return deletedUser.(*models.User), err
-	}
-	return &models.User{}, err
+	response := coll.DeleteOne(id)
+	return response
 }
 
 func (c *Controller) CUpdateUser(user *models.User) (models.Response) {

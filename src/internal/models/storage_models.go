@@ -131,6 +131,6 @@ type IMongoCollection interface {
 	FindOne(id string) (Response)
 	FindAll() (Response)
 	UpdateOne(query bson.D) (Response)
-	DeleteOne(id string) (HandlerObject, error)
+	DeleteOne(id string) (Response)
 	CreateOne(object HandlerObject) (Response)
 }

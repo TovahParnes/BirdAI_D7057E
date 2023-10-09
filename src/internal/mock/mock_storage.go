@@ -3,7 +3,6 @@ package mock
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -90,15 +89,15 @@ func (m *mockCollection) UpdateOne(query bson.D) (models.Response) {
 	return utils.ErrorNotFoundInDatabase("User collection")
 }
 
-func (m *mockCollection) DeleteOne(id string) (models.HandlerObject, error) {
+func (m *mockCollection) DeleteOne(id string) (models.Response) {
 	//objectID, err := primitive.ObjectIDFromHex(id)
 	for i, one := range m.data {
 		if one.GetId() == id {
 			m.data = append(m.data[:i], m.data[i+1:]...)
-			return one, nil
+			return utils.Response(one)
 		}
 	}
-	return nil, errors.New("could not find")
+	return utils.ErrorNotFoundInDatabase("User collection")
 }
 
 func (m *mockCollection) CreateOne(object models.HandlerObject) (models.Response) {

@@ -78,22 +78,21 @@ func TestMockMongoCollection(t *testing.T) {
 	})
 
 	t.Run("Test UpdateOne collection success", func(t *testing.T) {
-		person, err := userColl.UpdateOne(bson.D{
+		response := userColl.UpdateOne(bson.D{
 			{"_id", user.Id},
 			{"username", "bird_changed"},
 			{"auth_id", user.AuthId},
 			{"created_at", user.CreatedAt},
 		})
-		require.Equal(t, "bird_changed", person.(*models.User).Username)
-		require.Nil(t, err)
-		user = person.(*models.User)
+		require.Equal(t, "bird_changed", response.Data.(*models.User).Username)
+		require.Nil(t, response.Data.(*models.Err))
 	})
 
 	t.Run("Test DeleteOne collection success", func(t *testing.T) {
-		person, err := userColl.DeleteOne(user.Id)
-		require.Equal(t, user, person)
-		require.Nil(t, err)
-		response := userColl.FindOne(user.Id)
+		response := userColl.DeleteOne(user.Id)
+		require.Equal(t, user, response.Data.(*models.User))
+		require.Nil(t, response.Data.(*models.Err))
+		response = userColl.FindOne(user.Id)
 		require.Nil(t, response.Data.(*models.User))
 	})
 }

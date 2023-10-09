@@ -5,8 +5,6 @@ package handlers
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
-	"fmt"
-	"net/http"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -195,19 +193,6 @@ func (h *Handler) DeleteUser(c *fiber.Ctx) error {
 	//	@Failure	404	{object}	models.Response{}
 	// if user not found
 
-	deletedUser, err := h.controller.CDeleteUser(id)
-	if err != nil {
-		return c.Status(http.StatusNotFound).JSON(models.Response{
-			Success: false,
-			Message: err.Error(),
-			Data:    nil,
-		})
-	}
-
-	//	@Success	200	{object}	models.Response{data=[]models.User}
-	return c.JSON(models.Response{
-		Success: true,
-		Message: fmt.Sprintf("User %s deleted successfully", deletedUser.Username),
-		Data:    nil,
-	})
+	response := h.controller.CDeleteUser(id)
+	return utils.ResponseToStatus(c, response)
 }
