@@ -21,7 +21,7 @@ definitions:
       username:
         type: string
     type: object
-host: localhost:4000
+host: localhost:3000
 info:
   contact:
     email: ??
@@ -66,6 +66,8 @@ paths:
           description: Service Unavailable
           schema:
             $ref: '#/definitions/models.ResponseHTTP'
+      security:
+      - Bearer: []
       summary: Create user
       tags:
       - users
@@ -78,6 +80,11 @@ paths:
       - description: User ID
         in: path
         name: id
+        required: true
+        type: string
+      - description: Authentication ID
+        in: header
+        name: Authid
         required: true
         type: string
       produces:
@@ -103,6 +110,8 @@ paths:
           description: Service Unavailable
           schema:
             $ref: '#/definitions/models.ResponseHTTP'
+      security:
+      - Bearer: []
       summary: Delete given user
       tags:
       - users
@@ -114,6 +123,11 @@ paths:
       - description: User ID
         in: path
         name: id
+        required: true
+        type: string
+      - description: Authentication ID
+        in: header
+        name: Authid
         required: true
         type: string
       produces:
@@ -142,6 +156,8 @@ paths:
           description: Service Unavailable
           schema:
             $ref: '#/definitions/models.ResponseHTTP'
+      security:
+      - Bearer: []
       summary: Get user by ID
       tags:
       - users
@@ -183,6 +199,8 @@ paths:
           description: Service Unavailable
           schema:
             $ref: '#/definitions/models.ResponseHTTP'
+      security:
+      - Bearer: []
       summary: Update given user
       tags:
       - users
@@ -199,6 +217,11 @@ paths:
       - description: Search parameter for user
         in: query
         name: search
+        type: string
+      - description: Authentication ID
+        in: header
+        name: Authid
+        required: true
         type: string
       produces:
       - application/json
@@ -222,6 +245,8 @@ paths:
           description: Service Unavailable
           schema:
             $ref: '#/definitions/models.ResponseHTTP'
+      security:
+      - Bearer: []
       summary: List all users of a specified set
       tags:
       - users
@@ -253,9 +278,17 @@ paths:
           description: Service Unavailable
           schema:
             $ref: '#/definitions/models.ResponseHTTP'
+      security:
+      - Bearer: []
       summary: Get current user
       tags:
       - users
 schemes:
 - http
+securityDefinitions:
+  Bearer:
+    description: '>- Enter the token with the `Bearer: ` prefix, e.g. "Bearer eyJhbGciOiJIUzI1NiJ9.e30.DXCaKJxPJq8JhXOZIN4yWdBwJ4sraVbwH9imDCHZPaA".'
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

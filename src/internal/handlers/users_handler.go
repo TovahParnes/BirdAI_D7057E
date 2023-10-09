@@ -16,11 +16,13 @@ import (
 // @Tags			users
 // @Accept			json
 // @Produce		json
-// @Param			id	path	string	true	"User ID"
+// @Param			id			path		string	true	"User ID"
+// @Param 			Authid 		header 		string 	true 	"Authentication ID"
 // @Success		200	{object}	models.ResponseHTTP{data=[]models.User}
 // @Failure		404	{object}	models.ResponseHTTP{}
 // @Failure		410	{object}	models.ResponseHTTP{}
 // @Failure		503	{object}	models.ResponseHTTP{}
+// @Security 	Bearer
 // @Router			/users/{id} [get]
 func (h *Handler) GetUserById(c *fiber.Ctx) error {
 	//id := c.Params("id")
@@ -54,12 +56,14 @@ func (h *Handler) GetUserById(c *fiber.Ctx) error {
 // @Description	List all users of a specified set
 // @Tags			users
 // @Accept			json
-// @Produce		json
-// @Param			set	query		int	false	"Set of users"
-// @Param			search	query	string	false	"Search parameter for user"
+// @Produce			json
+// @Param			set			query		int		false	"Set of users"
+// @Param			search		query		string	false	"Search parameter for user"
+// @Param 			Authid 		header 		string 	true 	"Authentication ID"
 // @Success		200	{object}	models.ResponseHTTP{data=[]models.User}
 // @Failure		401	{object}	models.ResponseHTTP{}
 // @Failure		503	{object}	models.ResponseHTTP{}
+// @Security 	Bearer
 // @Router			/users/list [get]
 func (h *Handler) ListUsers(c *fiber.Ctx) error {
 	authId := c.GetReqHeaders()["Authid"]
@@ -100,6 +104,7 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 // @Failure		400	{object}	models.ResponseHTTP{}
 // @Failure		401	{object}	models.ResponseHTTP{}
 // @Failure		503	{object}	models.ResponseHTTP{}
+// @Security 	Bearer
 // @Router			/users/ [post]
 func (h *Handler) Login(c *fiber.Ctx) error {
 	var user *models.User
@@ -143,6 +148,7 @@ func (h *Handler) Login(c *fiber.Ctx) error {
 // @Failure		404	{object}	models.ResponseHTTP{}
 // @Failure		410	{object}	models.ResponseHTTP{}
 // @Failure		503	{object}	models.ResponseHTTP{}
+// @Security 	Bearer
 // @Router			/users/me [get]
 func (h *Handler) GetUserMe(c *fiber.Ctx) error {
 
@@ -187,6 +193,7 @@ func (h *Handler) GetUserMe(c *fiber.Ctx) error {
 // @Failure		403	{object}	models.ResponseHTTP{}
 // @Failure		404	{object}	models.ResponseHTTP{}
 // @Failure		503	{object}	models.ResponseHTTP{}
+// @Security 	Bearer
 // @Router			/users/{id} [patch]
 func (h *Handler) UpdateUser(c *fiber.Ctx) error {
 	var user *models.User
@@ -238,12 +245,14 @@ func (h *Handler) UpdateUser(c *fiber.Ctx) error {
 // @Tags			users
 // @Accept			json
 // @Produce		json
-// @Param			id	path	string	true	"User ID"
+// @Param			id			path		string	true	"User ID"
+// @Param 			Authid 		header 		string 	true 	"Authentication ID"
 // @Success		200	{object}	models.ResponseHTTP{}
 // @Failure		401	{object}	models.ResponseHTTP{}
 // @Failure		403	{object}	models.ResponseHTTP{}
 // @Failure		404	{object}	models.ResponseHTTP{}
 // @Failure		503	{object}	models.ResponseHTTP{}
+// @Security 	Bearer
 // @Router			/users/{id} [delete]
 func (h *Handler) DeleteUser(c *fiber.Ctx) error {
 	id := c.Params("id")
