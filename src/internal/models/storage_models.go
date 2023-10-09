@@ -129,7 +129,7 @@ type MongoCollection struct {
 // IMongoCollection TODO: Update input when known what is needed
 type IMongoCollection interface {
 	FindOne(id string) (Response)
-	FindAll() ([]HandlerObject, error)
+	FindAll() (Response)
 	UpdateOne(query bson.D) (HandlerObject, error)
 	DeleteOne(id string) (HandlerObject, error)
 	CreateOne(object HandlerObject) (HandlerObject, error)

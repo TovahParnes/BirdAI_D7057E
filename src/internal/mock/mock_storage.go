@@ -44,8 +44,8 @@ func (m *mockCollection) FindOne(id string) (models.Response) {
 	return utils.ErrorNotFoundInDatabase("User collection")
 }
 
-func (m *mockCollection) FindAll() ([]models.HandlerObject, error) {
-	return m.data, nil
+func (m *mockCollection) FindAll() (models.Response) {
+	return utils.Response(m.data)
 }
 
 func (m *mockCollection) UpdateOne(query bson.D) (models.HandlerObject, error) {

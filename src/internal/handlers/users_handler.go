@@ -59,16 +59,9 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 	//	@Failure	404	{object}	models.Response{}
 	// if user not found
 
-	users, err := h.controller.CListUsers()
-	if err != nil {
-		return c.Status(http.StatusNotFound).JSON(models.Response{
-			Success: false,
-			Message: err.Error(),
-			Data:    nil,
-		})
-	}
+	response := h.controller.CListUsers()
 
-	return c.JSON(users)
+	return utils.ResponseToStatus(c, response)
 }
 
 // CreateUser is a function to create a new user
