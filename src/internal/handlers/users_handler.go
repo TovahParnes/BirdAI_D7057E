@@ -58,7 +58,6 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 	// if user not found
 
 	response := h.controller.CListUsers()
-
 	return utils.ResponseToStatus(c, response)
 }
 
