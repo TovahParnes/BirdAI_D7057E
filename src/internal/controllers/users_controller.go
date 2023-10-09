@@ -42,8 +42,8 @@ func (c *Controller) CListUsers() (models.Response) {
 		return response
 	}
 
-	for _, usersObject := range response.Data.([]models.HandlerObject) {
-		users = append(users, usersObject.(*models.User))
+	for _, usersObject := range response.Data.([]*models.User) {
+		users = append(users, usersObject)
 	}
 
 	return utils.Response(users)

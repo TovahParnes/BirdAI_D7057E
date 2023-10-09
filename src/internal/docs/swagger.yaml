@@ -32,7 +32,7 @@ definitions:
       username:
         type: string
     type: object
-host: localhost:4000
+host: localhost:3000
 info:
   contact:
     email: ??
