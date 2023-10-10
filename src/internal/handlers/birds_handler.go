@@ -11,7 +11,7 @@ import (
 //
 // @Summary		Get bird by ID
 // @Description	Get bird by ID
-// @Tags		birds
+// @Tags		Birds
 // @Accept		json
 // @Produce		json
 // @Param		id	path	string	true	"Bird ID"
@@ -30,7 +30,7 @@ func (h *Handler) GetBirdById(c *fiber.Ctx) error {
 //
 // @Summary		List all birds of a specified set and seach parameters
 // @Description	List all birds of a specified set and seach parameters
-// @Tags		birds
+// @Tags		Birds
 // @Accept		json
 // @Produce		json
 // @Param		set	query		int	false	"Set of birds"
@@ -64,8 +64,8 @@ func (h *Handler) ListBirds(c *fiber.Ctx) error {
 //
 // @Summary		Update given bird
 // @Description	Update given bird
-// @Tags			birds
-// @Accept			json
+// @Tags		Birds
+// @Accept		json
 // @Produce		json
 // @Param		id	path	string	true	"Bird ID"
 // @Param		bird	body		models.Bird	true	"bird"

@@ -33,7 +33,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "birds"
+                    "Birds"
                 ],
                 "summary": "List all birds of a specified set and seach parameters",
                 "parameters": [
@@ -127,7 +127,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "birds"
+                    "Birds"
                 ],
                 "summary": "Get bird by ID",
                 "parameters": [
@@ -235,7 +235,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "birds"
+                    "Birds"
                 ],
                 "summary": "Update given bird",
                 "parameters": [

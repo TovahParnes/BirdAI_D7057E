@@ -127,7 +127,7 @@ paths:
               type: object
       summary: Get bird by ID
       tags:
-      - birds
+      - Birds
     patch:
       consumes:
       - application/json
@@ -208,7 +208,7 @@ paths:
               type: object
       summary: Update given bird
       tags:
-      - birds
+      - Birds
   /birds/list:
     get:
       consumes:
@@ -261,7 +261,7 @@ paths:
               type: object
       summary: List all birds of a specified set and seach parameters
       tags:
-      - birds
+      - Birds
   /users/:
     post:
       consumes:

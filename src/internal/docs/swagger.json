@@ -30,7 +30,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "birds"
+                    "Birds"
                 ],
                 "summary": "List all birds of a specified set and seach parameters",
                 "parameters": [
@@ -124,7 +124,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "birds"
+                    "Birds"
                 ],
                 "summary": "Get bird by ID",
                 "parameters": [
@@ -232,7 +232,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "birds"
+                    "Birds"
                 ],
                 "summary": "Update given bird",
                 "parameters": [
