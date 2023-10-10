@@ -18,7 +18,7 @@ func Setup(ctx context.Context) (*fiber.App, error) {
 	handlers.New(app, db)
 
 	//these two lines needs to be there for swagger to fuction
-	docs.SwaggerInfo.Host = "localhost:" + os.Getenv("PORT")
+	docs.SwaggerInfo.Host = "127.0.0.1:" + os.Getenv("PORT")  //Needed to change from localhost to 127.0.0.1
 	app.Get("/swagger/*", swagger.HandlerDefault) // default
 
 	app.Get("/swagger/*", swagger.New(swagger.Config{ // custom
