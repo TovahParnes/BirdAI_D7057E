@@ -24,7 +24,6 @@ import (
 // @Router		/users/{id} [get]
 func (h *Handler) GetUserById(c *fiber.Ctx) error {
 	id := c.Params("id")
-
 	response := h.controller.CGetUserById(id)
 
 	return utils.ResponseToStatus(c, response)
@@ -62,10 +61,10 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 	return utils.ResponseToStatus(c, response)
 }
 
-// Login is a function to create a new user
+// Login is a function to login a user or create a new user
 //
-// @Summary		Create user
-// @Description	Create User
+// @Summary		Login a user
+// @Description	Login a user or create a new user if there is no existing user
 // @Tags			users
 // @Accept			json
 // @Produce		json
@@ -75,7 +74,7 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 // @Failure		401	{object}	models.Response{data=[]models.Err}
 // @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router			/users/ [post]
-func (h *Handler) CreateUser(c *fiber.Ctx) error {
+func (h *Handler) LoginUser(c *fiber.Ctx) error {
 
 	//	@Failure	401	{object}	models.Response{}
 	//parse auth header
@@ -97,7 +96,7 @@ func (h *Handler) CreateUser(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
 
-	response := h.controller.CCreateUser(user)
+	response := h.controller.CLoginUser(user)
 
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
@@ -122,10 +121,9 @@ func (h *Handler) GetUserMe(c *fiber.Ctx) error {
 
 	//	@Failure	401	{object}	models.Response{}
 	// Authenticate(jwt.token)
-	//id = h.controller.getIdFromAuthHeader(c)
-	tempId := "1"
+	authId := c.GetReqHeaders()["Authid"]
 
-	response := h.controller.CGetUserById(tempId)
+	response := h.controller.CGetUserById(authId)
 
 	return utils.ResponseToStatus(c, response)
 }

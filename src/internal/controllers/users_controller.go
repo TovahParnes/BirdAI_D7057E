@@ -24,7 +24,7 @@ func (c *Controller) CGetUserById(id string) (models.Response) {
 	return response
 }
 
-func (c *Controller) CCreateUser(user *models.User) (models.Response) {
+func (c *Controller) CLoginUser(user *models.User) (models.Response) {
 	coll := c.db.GetCollection(repositories.UserColl)
 	response := coll.CreateOne(user)
 	if utils.IsTypeError(response) {
