@@ -179,7 +179,7 @@ func (h *Handler) UpdateUser(c *fiber.Ctx) error {
 // @Router			/users/{id} [delete]
 func (h *Handler) DeleteUser(c *fiber.Ctx) error {
 	id := c.Params("id")
-	//authId := c.GetReqHeaders()["Authid"]
+	authId := c.GetReqHeaders()["Authid"]
 
 	//	@Failure	401	{object}	models.Response{}
 	// Authenticate(jwt.token)
@@ -193,6 +193,6 @@ func (h *Handler) DeleteUser(c *fiber.Ctx) error {
 	//	@Failure	404	{object}	models.Response{}
 	// if user not found
 
-	response := h.controller.CDeleteUser(id)
+	response := h.controller.CDeleteUser(id, authId)
 	return utils.ResponseToStatus(c, response)
 }

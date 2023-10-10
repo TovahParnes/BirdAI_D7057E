@@ -25,7 +25,7 @@ const docTemplate = `{
     "paths": {
         "/users/": {
             "post": {
-                "description": "Create User",
+                "description": "Login a user or create a new user if there is no existing user",
                 "consumes": [
                     "application/json"
                 ],
@@ -35,7 +35,7 @@ const docTemplate = `{
                 "tags": [
                     "users"
                 ],
-                "summary": "Create user",
+                "summary": "Login a user",
                 "parameters": [
                     {
                         "description": "user",

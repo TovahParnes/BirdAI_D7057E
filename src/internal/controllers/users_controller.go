@@ -25,11 +25,7 @@ func (c *Controller) CGetUserById(id string) (models.Response) {
 }
 
 func (c *Controller) CLoginUser(user *models.User) (models.Response) {
-	coll := c.db.GetCollection(repositories.UserColl)
-	response := coll.CreateOne(user)
-	if utils.IsTypeError(response) {
-		return response
-	}
+	response := c.auth.LoginUser(user)
 	return response
 }
 
@@ -49,9 +45,9 @@ func (c *Controller) CListUsers() (models.Response) {
 	return utils.Response(users)
 }
 
-func (c *Controller) CDeleteUser(id string) (models.Response) {
+func (c *Controller) CDeleteUser(id, authId string) (models.Response) {
 	coll := c.db.GetCollection(repositories.UserColl)
-	filter := bson.M{"_id": id}
+	filter := bson.M{"_id": id, "auth_id": authId}
 	response := coll.DeleteOne(filter)
 	return response
 }

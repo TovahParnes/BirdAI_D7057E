@@ -20,7 +20,7 @@ func NewAuthentication(userCollection repositories.IMongoCollection) Authenticat
 	}
 }
 
-func (l Authentication) LoginUser(user *models.User) (string, error) {
+func (l Authentication) LoginUser(user *models.User) (models.Response) {
 	// Create the Claims
 	claims := jwt.MapClaims{
 		"id": user.AuthId,
@@ -31,18 +31,18 @@ func (l Authentication) LoginUser(user *models.User) (string, error) {
 	// Generate encoded token and send it as response.
 	t, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
-		return "", err
+		return utils.ErrorParams(err.Error())
 	}
 	response := l.UserColl.FindOne(bson.M{"auth_id": t})
 	if utils.IsTypeError(response) {
 		user.AuthId = t
 		response = l.UserColl.CreateOne(user)
 		if utils.IsTypeError(response) {
-			return "", err
+			return response
 		}
-		return response.Data.(*models.User).Id, nil
+		return response
 	}
-	return response.Data.(*models.User).Id, nil
+	return response
 }
 
 func (l Authentication) CheckUser(authId string) (models.Response) {

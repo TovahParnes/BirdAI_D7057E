@@ -50,7 +50,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create User
+      description: Login a user or create a new user if there is no existing user
       parameters:
       - description: user
         in: body
@@ -105,7 +105,7 @@ paths:
                     $ref: '#/definitions/models.Err'
                   type: array
               type: object
-      summary: Create user
+      summary: Login a user
       tags:
       - users
   /users/{id}:

@@ -1,12 +1,7 @@
 package models
 
 import (
-	"context"
-	"log"
 	"time"
-
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 // Structs for documents in all collections
@@ -92,45 +87,4 @@ func (m *Media) SetCreatedAt() {
 type HandlerObject interface {
 	GetId() string
 	SetCreatedAt()
-}
-
-type MongoInstance struct {
-	Client      *mongo.Client
-	Db          *mongo.Database
-	Collections map[string]MongoCollection
-}
-
-func (m MongoInstance) GetCollection(name string) MongoCollection {
-	return m.Collections[name]
-}
-
-func (m MongoInstance) AddCollection(name string) {
-	m.Collections[name] = MongoCollection{Collection: m.Db.Collection(name)}
-}
-
-func (m MongoInstance) DisconnectDB() {
-	if m.Client != nil {
-		if err := m.Client.Disconnect(context.TODO()); err != nil {
-			log.Fatalf("Error disconnecting from MongoDB %s", err)
-		}
-	}
-}
-
-type IMongoInstance interface {
-	GetCollection(name string) IMongoCollection
-	AddCollection(name string)
-	DisconnectDB()
-}
-
-type MongoCollection struct {
-	Collection *mongo.Collection
-}
-
-// IMongoCollection TODO: Update input when known what is needed
-type IMongoCollection interface {
-	FindOne(id string) (Response)
-	FindAll() (Response)
-	UpdateOne(query bson.D) (Response)
-	DeleteOne(id string) (Response)
-	CreateOne(object HandlerObject) (Response)
 }
