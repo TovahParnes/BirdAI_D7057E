@@ -13,12 +13,10 @@ import (
 )
 
 func New(app *fiber.App, db repositories.IMongoInstance) {
-	app.Use(cors.New(cors.Config{
-		AllowOrigins: "*",
-	}))
-	app.Use(jwtware.New(jwtware.Config{
-		SigningKey: jwtware.SigningKey{Key: []byte(os.Getenv("JWT_SECRET"))},
-	}))
+	app.Use(cors.New())
+	//app.Use(jwtware.New(jwtware.Config{
+	//	SigningKey: jwtware.SigningKey{Key: []byte(os.Getenv("JWT_SECRET"))},
+	//}))
 	app.Use(logger.New(logger.Config{
 		Format:     "${cyan}[${time}] ${white}${pid} ${red}${status} ${blue}[${method}] ${white}${path}\n",
 		TimeFormat: "02-Jan-2006",
@@ -27,13 +25,14 @@ func New(app *fiber.App, db repositories.IMongoInstance) {
 
 	handler := NewHandler(db)
 
+	// Add the JWTProtected() method if JTW key is required.
 	usersRoute := app.Group("/users")
-	usersRoute.Get("/list", handler.ListUsers)
-	usersRoute.Get("/me", handler.GetUserMe)
-	usersRoute.Get("/:id", handler.GetUserById)
+	usersRoute.Get("/list", JWTProtected(), handler.ListUsers)
+	usersRoute.Get("/me", JWTProtected(), handler.GetUserMe)
+	usersRoute.Get("/:id", JWTProtected(), handler.GetUserById)
 	usersRoute.Post("/", handler.LoginUser)
-	usersRoute.Patch("/:id", handler.UpdateUser)
-	usersRoute.Delete("/:id", handler.DeleteUser)
+	usersRoute.Patch("/:id", JWTProtected(), handler.UpdateUser)
+	usersRoute.Delete("/:id", JWTProtected(), handler.DeleteUser)
 
 	birdsRoute := app.Group("/birds")
 	birdsRoute.Get("/list", handler.ListBirds)
@@ -47,4 +46,13 @@ func New(app *fiber.App, db repositories.IMongoInstance) {
 	postsRoute.Post("/", handler.CreatePost)
 	postsRoute.Patch("/:id", handler.UpdatePost)
 	postsRoute.Delete("/:id", handler.DeletePost)
+}
+
+func JWTProtected() func(*fiber.Ctx) error {
+	// Create config for JWT authentication middleware.
+	config := jwtware.Config{
+		SigningKey: jwtware.SigningKey{Key: []byte(os.Getenv("JWT_SECRET"))},
+	}
+
+	return jwtware.New(config)
 }

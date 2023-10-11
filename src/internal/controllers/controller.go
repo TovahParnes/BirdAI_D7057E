@@ -1,13 +1,11 @@
 package controllers
 
 import (
-	"birdai/src/internal/authentication"
 	"birdai/src/internal/repositories"
 )
 
 type Controller struct {
-	db   repositories.IMongoInstance
-	auth authentication.Authentication
+	db repositories.IMongoInstance
 }
 
 //type IController interface {
@@ -20,7 +18,6 @@ type Controller struct {
 
 func NewController(db repositories.IMongoInstance) Controller {
 	return Controller{
-		db:   db,
-		auth: authentication.NewAuthentication(db.GetCollection(repositories.UserColl)),
+		db: db,
 	}
 }

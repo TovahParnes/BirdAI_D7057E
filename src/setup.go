@@ -6,9 +6,9 @@ import (
 	"birdai/src/internal/mock"
 	"birdai/src/internal/repositories"
 	"context"
+	swagger "github.com/arsmn/fiber-swagger/v2"
 	"os"
 
-	swagger "github.com/arsmn/fiber-swagger/v2"
 	"github.com/gofiber/fiber/v2"
 )
 

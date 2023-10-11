@@ -10,16 +10,21 @@ import (
 	"github.com/joho/godotenv"
 )
 
-//	@title			BirdAI API
-//	@version		2.0
-//	@description	A server for BirdAI API, for managing users, admin, birds, posts and more.
-//	@termsOfService	http://swagger.io/terms/
+// @title			BirdAI API
+// @version		2.0
+// @description	A server for BirdAI API, for managing users, admin, birds, posts and more.
+// @termsOfService	http://swagger.io/terms/
 
-//	@contact.name	Tovah Parnes
-//	@contact.email	??
+// @contact.name	Tovah Parnes
+// @contact.email	??
 
-//	@license.name	MIT License
-//	@license.url	https://opensource.org/license/mit/
+// @license.name	MIT License
+// @license.url	https://opensource.org/license/mit/
+
+// @securityDefinitions.apikey Bearer
+// @in header
+// @name Authorization
+// @description >- Enter the token with the `Bearer: ` prefix, e.g. "Bearer eyJhbGciOiJIUzI1NiJ9.e30.DXCaKJxPJq8JhXOZIN4yWdBwJ4sraVbwH9imDCHZPaA".
 
 // @host		127.0.0.1:3000
 // @BasePath	/
