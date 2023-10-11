@@ -4,48 +4,29 @@ package handlers
 
 import (
 	"birdai/src/internal/models"
-	"fmt"
+	"birdai/src/internal/utils"
+
 	"github.com/gofiber/fiber/v2"
-	"net/http"
 )
 
 // GetUserById is a function to get a user by ID
 //
 // @Summary		Get user by ID
 // @Description	Get user by ID
-// @Tags			users
-// @Accept			json
+// @Tags		users
+// @Accept		json
 // @Produce		json
-// @Param			id	path	string	true	"User ID"
-// @Success		200	{object}	models.ResponseHTTP{data=[]models.User}
-// @Failure		404	{object}	models.ResponseHTTP{}
-// @Failure		410	{object}	models.ResponseHTTP{}
-// @Failure		503	{object}	models.ResponseHTTP{}
-// @Router			/users/{id} [get]
+// @Param		id	path	string	true	"User ID"
+// @Success		200	{object}	models.Response{data=[]models.User}
+// @Failure		404	{object}	models.Response{data=[]models.Err}
+// @Failure		410	{object}	models.Response{data=[]models.Err}
+// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Router		/users/{id} [get]
 func (h *Handler) GetUserById(c *fiber.Ctx) error {
-	//id := c.Params("id")
-	authId := c.GetReqHeaders()["Authid"]
-	user, err := h.controller.CGetUserById(authId)
+	id := c.Params("id")
+	response := h.controller.CGetUserById(id)
 
-	if err != nil {
-		return c.Status(http.StatusNotFound).JSON(models.ResponseHTTP{
-			Success: false,
-			Message: err.Error(),
-			Data:    nil,
-		})
-	}
-
-	//	@Failure	503	{object}	models.ResponseHTTP{}
-	// if no connection to db was established
-
-	//	@Failure	404	{object}	models.ResponseHTTP{}
-	// if user not found
-
-	// 	@Failure	410	{object}	models.ResponseHTTP{}
-	// if user was deleted
-
-	//	@Success	200	{object}	models.User{}
-	return c.JSON(user)
+	return utils.ResponseToStatus(c, response)
 }
 
 // ListUsers is a function to get a set of all users from database
@@ -57,78 +38,70 @@ func (h *Handler) GetUserById(c *fiber.Ctx) error {
 // @Produce		json
 // @Param			set	query		int	false	"Set of users"
 // @Param			search	query	string	false	"Search parameter for user"
-// @Success		200	{object}	models.ResponseHTTP{data=[]models.User}
-// @Failure		401	{object}	models.ResponseHTTP{}
-// @Failure		503	{object}	models.ResponseHTTP{}
+// @Success		200	{object}	models.Response{data=[]models.User}
+// @Failure		401	{object}	models.Response{data=[]models.Err}
+// @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router			/users/list [get]
 func (h *Handler) ListUsers(c *fiber.Ctx) error {
-	authId := c.GetReqHeaders()["Authid"]
+	//authId := c.GetReqHeaders()["Authid"]
 	//queries := c.Queries()
 	//set := queries["set"]
 	//search := queries["search"]
 
-	//	@Failure	401	{object}	models.ResponseHTTP{}
+	//	@Failure	401	{object}	models.Response{}
 	// Authenticate(jwt.token)
 
-	//	@Failure	503	{object}	models.ResponseHTTP{}
+	//	@Failure	503	{object}	models.Response{}
 	// if no connection to db was established
 
-	//	@Failure	404	{object}	models.ResponseHTTP{}
+	//	@Failure	404	{object}	models.Response{}
 	// if user not found
 
-	users, err := h.controller.CListUsers(authId)
-	if err != nil {
-		return c.Status(http.StatusNotFound).JSON(models.ResponseHTTP{
-			Success: false,
-			Message: err.Error(),
-			Data:    nil,
-		})
-	}
-
-	return c.JSON(users)
+	response := h.controller.CListUsers()
+	return utils.ResponseToStatus(c, response)
 }
 
-// Login is a function to create a new user
+// Login is a function to login a user or create a new user
 //
-// @Summary		Create user
-// @Description	Create User
+// @Summary		Login a user
+// @Description	Login a user or create a new user if there is no existing user
 // @Tags			users
 // @Accept			json
 // @Produce		json
 // @Param		set	body		models.User	true	"user"
-// @Success		201	{object}	models.ResponseHTTP{}
-// @Failure		400	{object}	models.ResponseHTTP{}
-// @Failure		401	{object}	models.ResponseHTTP{}
-// @Failure		503	{object}	models.ResponseHTTP{}
+// @Success		201	{object}	models.Response{data=[]models.Err}
+// @Failure		400	{object}	models.Response{data=[]models.Err}
+// @Failure		401	{object}	models.Response{data=[]models.Err}
+// @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router			/users/ [post]
-func (h *Handler) Login(c *fiber.Ctx) error {
+func (h *Handler) LoginUser(c *fiber.Ctx) error {
+
+	//	@Failure	401	{object}	models.Response{}
+	//parse auth header
+	/*
+	auth = h.controller.CAuthenticate(authHeader)
+	if !auth.data.success {
+		return c.Status(auth.StatusCode).JSON(auth)
+	}
+
+
+	response = h.controller.CLoginUser(auth.data)
+	*/
+
+
 	var user *models.User
-	if err := c.BodyParser(&user); err != nil {
-		//	@Failure	400	{object}	models.ResponseHTTP{}
-		return c.Status(http.StatusNotAcceptable).JSON(models.ResponseHTTP{
-			Success: false,
-			Message: err.Error(),
-			Data:    nil,
-		})
+	if err := c.BodyParser(&user);
+	err != nil {
+		//	@Failure	400	{object}	models.Response{}
+		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
 
-	//	@Failure	401	{object}	models.ResponseHTTP{}
-	// Authenticate(jwt.token)
+	response := h.controller.CLoginUser(user)
 
-	//	@Failure	503	{object}	models.ResponseHTTP{}
-	// 	if no connection to db was established
-	createdUser, err := h.controller.CLogin(user)
-	if err != nil {
-		return c.Status(http.StatusServiceUnavailable).JSON(models.ResponseHTTP{
-			Success: false,
-			Message: err.Error(),
-			Data:    nil,
-		})
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
 	}
-	//h.me = createdUser
-
-	//	@Success	201	{object}	models.User{}
-	return c.Status(http.StatusCreated).JSON(createdUser)
+	return utils.CreationResponseToStatus(c, response)
 }
 
 // GetUserMe is a function to get the current user from the databse
@@ -138,39 +111,21 @@ func (h *Handler) Login(c *fiber.Ctx) error {
 // @Tags			users
 // @Accept			json
 // @Produce		json
-// @Success		200	{object}	models.ResponseHTTP{}
-// @Failure		401	{object}	models.ResponseHTTP{}
-// @Failure		404	{object}	models.ResponseHTTP{}
-// @Failure		410	{object}	models.ResponseHTTP{}
-// @Failure		503	{object}	models.ResponseHTTP{}
+// @Success		200	{object}	models.Response{data=[]models.User}
+// @Failure		401	{object}	models.Response{data=[]models.Err}
+// @Failure		404	{object}	models.Response{data=[]models.Err}
+// @Failure		410	{object}	models.Response{data=[]models.Err}
+// @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router			/users/me [get]
 func (h *Handler) GetUserMe(c *fiber.Ctx) error {
 
-	//	@Failure	401	{object}	models.ResponseHTTP{}
+	//	@Failure	401	{object}	models.Response{}
 	// Authenticate(jwt.token)
+	authId := c.GetReqHeaders()["Authid"]
 
-	//	@Failure	503	{object}	models.ResponseHTTP{}
-	// if no connection to db was established
+	response := h.controller.CGetUserById(authId)
 
-	//	@Failure	404	{object}	models.ResponseHTTP{}
-	// if user not found
-
-	// 	@Failure	410	{object}	models.ResponseHTTP{}
-	// if user was deleted
-
-	//	@Success	200	{object}	models.ResponseHTTP{}
-	if h.me != nil {
-		return c.JSON(models.ResponseHTTP{
-			Success: true,
-			Message: fmt.Sprintf("Last saved person is: %s", h.me.Username),
-			Data:    nil,
-		})
-	}
-	return c.JSON(models.ResponseHTTP{
-		Success: false,
-		Message: fmt.Sprintf("You have not created a person yet"),
-		Data:    nil,
-	})
+	return utils.ResponseToStatus(c, response)
 }
 
 // UpdateUser is a function to update the given user from the databse
@@ -180,55 +135,32 @@ func (h *Handler) GetUserMe(c *fiber.Ctx) error {
 // @Tags			users
 // @Accept			json
 // @Produce		json
-// @Param		set	body		models.User	true	"user"
-// @Success		200	{object}	models.ResponseHTTP{}
-// @Failure		400	{object}	models.ResponseHTTP{}
-// @Failure		401	{object}	models.ResponseHTTP{}
-// @Failure		403	{object}	models.ResponseHTTP{}
-// @Failure		404	{object}	models.ResponseHTTP{}
-// @Failure		503	{object}	models.ResponseHTTP{}
+// @Param		id	path	string	true	"User ID"
+// @Param		user	body		models.User	true	"user"
+// @Success		200	{object}	models.Response{}
+// @Failure		400	{object}	models.Response{data=[]models.Err}
+// @Failure		401	{object}	models.Response{data=[]models.Err}
+// @Failure		403	{object}	models.Response{data=[]models.Err}
+// @Failure		404	{object}	models.Response{data=[]models.Err}
+// @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router			/users/{id} [patch]
 func (h *Handler) UpdateUser(c *fiber.Ctx) error {
-	var user *models.User
-	if err := c.BodyParser(&user); err != nil {
-		//	@Failure	400	{object}	models.ResponseHTTP{}
-		return c.Status(http.StatusNotAcceptable).JSON(models.ResponseHTTP{
-			Success: false,
-			Message: err.Error(),
-			Data:    nil,
-		})
-	}
-
-	//	@Failure	401	{object}	models.ResponseHTTP{}
+	//	@Failure	401	{object}	models.Response{}
 	// Authenticate(jwt.token)
 
-	//	@Failure		403	{object}	models.ResponseHTTP{}
-	// if user is not admin or user is not the same as the one being updated
-
-	//	@Failure		400	{object}	models.ResponseHTTP{}
-	// something with body is wrong/missing
-
-	//	@Failure	503	{object}	models.ResponseHTTP{}
-	// if no connection to db was established
-
-	//	@Failure	404	{object}	models.ResponseHTTP{}
-	// if user not found
-
-	updatedPerson, err := h.controller.CUpdateUser(user)
-	if err != nil {
-		return c.Status(http.StatusNotFound).JSON(models.ResponseHTTP{
-			Success: false,
-			Message: err.Error(),
-			Data:    nil,
-		})
+	id := c.Params("id")
+	var user *models.User
+	if err := c.BodyParser(&user); err != nil {
+		//	@Failure	400	{object}	models.Response{}
+		// something with body is wrong/missing
+		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
 
-	//	@Success	200	{object}	models.User{}
-	return c.JSON(models.ResponseHTTP{
-		Success: true,
-		Message: fmt.Sprintf("User %v updated successfully", updatedPerson.Username),
-		Data:    nil,
-	})
+	//	@Failure		403	{object}	models.Response{}
+	// if user is not admin or user is not the same as the one being updated
+
+	response := h.controller.CUpdateUser(id, user)
+	return utils.ResponseToStatus(c, response)
 }
 
 // DeleteUser is a function to update the given user from the database
@@ -239,41 +171,28 @@ func (h *Handler) UpdateUser(c *fiber.Ctx) error {
 // @Accept			json
 // @Produce		json
 // @Param			id	path	string	true	"User ID"
-// @Success		200	{object}	models.ResponseHTTP{}
-// @Failure		401	{object}	models.ResponseHTTP{}
-// @Failure		403	{object}	models.ResponseHTTP{}
-// @Failure		404	{object}	models.ResponseHTTP{}
-// @Failure		503	{object}	models.ResponseHTTP{}
+// @Success		200	{object}	models.Response{}
+// @Failure		401	{object}	models.Response{data=[]models.Err}
+// @Failure		403	{object}	models.Response{data=[]models.Err}
+// @Failure		404	{object}	models.Response{data=[]models.Err}
+// @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router			/users/{id} [delete]
 func (h *Handler) DeleteUser(c *fiber.Ctx) error {
 	id := c.Params("id")
 	authId := c.GetReqHeaders()["Authid"]
 
-	//	@Failure	401	{object}	models.ResponseHTTP{}
+	//	@Failure	401	{object}	models.Response{}
 	// Authenticate(jwt.token)
 
-	//	@Failure		403	{object}	models.ResponseHTTP{}
+	//	@Failure		403	{object}	models.Response{}
 	// if user is not admin or user is not the same as the one being updated
 
-	//	@Failure	503	{object}	models.ResponseHTTP{}
+	//	@Failure	503	{object}	models.Response{}
 	// if no connection to db was established
 
-	//	@Failure	404	{object}	models.ResponseHTTP{}
+	//	@Failure	404	{object}	models.Response{}
 	// if user not found
 
-	deletedUser, err := h.controller.CDeleteUser(id, authId)
-	if err != nil {
-		return c.Status(http.StatusNotFound).JSON(models.ResponseHTTP{
-			Success: false,
-			Message: err.Error(),
-			Data:    nil,
-		})
-	}
-
-	//	@Success	200	{object}	models.ResponseHTTP{data=[]models.User}
-	return c.JSON(models.ResponseHTTP{
-		Success: true,
-		Message: fmt.Sprintf("User %s deleted successfully", deletedUser.Username),
-		Data:    nil,
-	})
+	response := h.controller.CDeleteUser(id, authId)
+	return utils.ResponseToStatus(c, response)
 }

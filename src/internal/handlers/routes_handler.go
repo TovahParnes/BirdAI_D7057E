@@ -2,9 +2,11 @@ package handlers
 
 import (
 	"birdai/src/internal/repositories"
-	"os"
 
 	jwtware "github.com/gofiber/contrib/jwt"
+
+	"os"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -29,7 +31,7 @@ func New(app *fiber.App, db repositories.IMongoInstance) {
 	usersRoute.Get("/list", handler.ListUsers)
 	usersRoute.Get("/me", handler.GetUserMe)
 	usersRoute.Get("/:id", handler.GetUserById)
-	usersRoute.Post("/", handler.Login)
+	usersRoute.Post("/", handler.LoginUser)
 	usersRoute.Patch("/:id", handler.UpdateUser)
 	usersRoute.Delete("/:id", handler.DeleteUser)
 

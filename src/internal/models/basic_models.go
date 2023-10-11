@@ -4,12 +4,6 @@ type Token struct {
 	Token string `json:"token" form:"token"`
 }
 
-type ResponseHTTP struct {
-	Success bool        `json:"success"`
-	Data    interface{} `json:"data"`
-	Message string      `json:"message"`
-}
-
 type Response struct {
 	Timestamp string `json:"timestamp"`
 	Data interface{} `json:"data"`

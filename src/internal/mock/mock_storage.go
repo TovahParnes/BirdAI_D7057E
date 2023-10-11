@@ -3,8 +3,11 @@ package mock
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/repositories"
+	"birdai/src/internal/utils"
 	"errors"
 	"fmt"
+	"net/http"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -33,51 +36,53 @@ type mockCollection struct {
 	data []models.HandlerObject
 }
 
-func (m *mockCollection) FindOne(query bson.M) (models.HandlerObject, error) {
+func (m *mockCollection) FindOne(query bson.M) (models.Response) {
+
 	doc, err := bson.Marshal(query)
 	if err != nil {
-		return nil, errors.New("wrong format")
+		return utils.ErrorParams(err.Error())
 	}
+	//objectID, err := primitive.ObjectIDFromHex(id)
 	for _, one := range m.data {
 		switch one.(type) {
 		case *models.User:
 			var test *models.User
 			err = bson.Unmarshal(doc, &test)
 			if test.Id != "" && test.Id == one.(*models.User).Id || test.AuthId != "" && test.AuthId == one.(*models.User).AuthId {
-				return one, nil
+				return utils.Response(one)
 			}
 		case *models.Admin:
 			var test *models.Admin
 			err = bson.Unmarshal(doc, &test)
 			if test.Id != "" && test.Id == one.(*models.Admin).Id {
-				return one, nil
+				return utils.Response(one)
 			}
 		case *models.Bird:
 			var test *models.Bird
 			err = bson.Unmarshal(doc, &test)
 			if test.Id != "" && test.Id == one.(*models.Bird).Id {
-				return one, nil
+				return utils.Response(one)
 			}
 		case *models.Post:
 			var test *models.Post
 			err = bson.Unmarshal(doc, &test)
 			if test.Id != "" && test.Id == one.(*models.Post).Id {
-				return one, nil
+				return utils.Response(one)
 			}
 		case *models.Media:
 			var test *models.Media
 			err = bson.Unmarshal(doc, &test)
 			if test.Id != "" && test.Id == one.(*models.Media).Id {
-				return one, nil
+				return utils.Response(one)
 			}
 		}
 	}
-	return nil, errors.New("could not find")
+	return utils.ErrorNotFoundInDatabase("User collection")
 }
 
-func (m *mockCollection) FindAll() (interface{}, error) {
+func (m *mockCollection) FindAll() (models.Response) {
 	if len(m.data) == 0 {
-		return nil, errors.New("is empty")
+		return utils.ErrorNotFoundInDatabase("User collection")
 	}
 	switch m.data[0].(type) {
 	case *models.User:
@@ -85,40 +90,40 @@ func (m *mockCollection) FindAll() (interface{}, error) {
 		for _, ob := range m.data {
 			list = append(list, ob.(*models.User))
 		}
-		return list, nil
+		return utils.Response(list)
 	case *models.Admin:
 		var list []*models.Admin
 		for _, ob := range m.data {
 			list = append(list, ob.(*models.Admin))
 		}
-		return list, nil
+		return utils.Response(list)
 	case *models.Bird:
 		var list []*models.Bird
 		for _, ob := range m.data {
 			list = append(list, ob.(*models.Bird))
 		}
-		return list, nil
+		return utils.Response(list)
 	case *models.Post:
 		var list []*models.Post
 		for _, ob := range m.data {
 			list = append(list, ob.(*models.Post))
 		}
-		return list, nil
+		return utils.Response(list)
 	case *models.Media:
 		var list []*models.Media
 		for _, ob := range m.data {
 			list = append(list, ob.(*models.Media))
 		}
-		return list, nil
+		return utils.Response(list)
 	default:
-		return nil, errors.New("wrong model type")
+		return utils.ErrorToResponse(http.StatusBadRequest, "Wrong model", errors.New("Could not find objects").Error())
 	}
 }
 
-func (m *mockCollection) UpdateOne(query bson.M) (models.HandlerObject, error) {
+func (m *mockCollection) UpdateOne(query bson.M) (models.Response) {
 	doc, err := bson.Marshal(query)
 	if err != nil {
-		return nil, errors.New("wrong format")
+		return utils.ErrorToResponse(http.StatusBadRequest, "Could not update object", err.Error())
 	}
 	id := query["_id"]
 	for i, one := range m.data {
@@ -128,46 +133,46 @@ func (m *mockCollection) UpdateOne(query bson.M) (models.HandlerObject, error) {
 				var test *models.User
 				err = bson.Unmarshal(doc, &test)
 				m.data[i] = test
-				return test, err
+				return utils.Response(test)
 			case *models.Admin:
 				var test *models.Admin
 				err = bson.Unmarshal(doc, &test)
 				m.data[i] = test
-				return test, err
+				return utils.Response(test)
 			case *models.Bird:
 				var test *models.Bird
 				err = bson.Unmarshal(doc, &test)
 				m.data[i] = test
-				return test, err
+				return utils.Response(test)
 			case *models.Post:
 				var test *models.Post
 				err = bson.Unmarshal(doc, &test)
 				m.data[i] = test
-				return test, err
+				return utils.Response(test)
 			case *models.Media:
 				var test *models.Media
 				err = bson.Unmarshal(doc, &test)
 				m.data[i] = test
-				return test, err
+				return utils.Response(test)
 			}
 		}
 	}
 
-	return nil, errors.New("could not find")
+	return utils.ErrorNotFoundInDatabase("User collection")
 }
 
-func (m *mockCollection) DeleteOne(query bson.M) (models.HandlerObject, error) {
+func (m *mockCollection) DeleteOne(query bson.M) (models.Response) {
 	//objectID, err := primitive.ObjectIDFromHex(id)
 	for i, one := range m.data {
 		if one.GetId() == query["_id"] {
 			m.data = append(m.data[:i], m.data[i+1:]...)
-			return one, nil
+			return utils.Response(one)
 		}
 	}
-	return nil, errors.New("could not find")
+	return utils.ErrorNotFoundInDatabase("User collection")
 }
 
-func (m *mockCollection) CreateOne(object models.HandlerObject) (string, error) {
+func (m *mockCollection) CreateOne(object models.HandlerObject) (models.Response) {
 	var newObject models.HandlerObject
 	switch object.(type) {
 	case *models.User:
@@ -213,8 +218,8 @@ func (m *mockCollection) CreateOne(object models.HandlerObject) (string, error) 
 		}
 
 	default:
-		return "", nil
+		return utils.ErrorToResponse(http.StatusBadRequest, "Could not create object", "")
 	}
 	m.data = append(m.data, newObject)
-	return newObject.GetId(), nil
+	return utils.Response(newObject)
 }
