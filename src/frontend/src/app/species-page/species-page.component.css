@@ -12,53 +12,6 @@ div.scroll-container img {
   width: 56%;
 }
 
-.container {
-  text-align: left;
-  margin: 0 auto;
-  padding: 20px;
-  width: 40%;
-  background-color: #1E1E1E;
-  border-radius: 8px;
-  padding: 20px;
-  color: white;
-  overflow: hidden;
-}
-
-/* .navbar {
-  background-color: #242526;
-  height: 50px;
-  text-align: center;
-} */
-
-/* .icons {
-  text-align: center;
-  width: 50px;
-  height: 50px;
-} */
-
-.button {
-  background-color: #99E1D9;
-  color: black;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 5px;
-}
-
-.button:hover {
-  background-color: #88cbc3;
-  color: black; 
-}
-
-.buttonContainer {
-
-top: 40%;
-left: 10;
-transform: translateY(-50%);
-z-index: 1;
-}
-
 .prev,
 .next {
 cursor: pointer;
@@ -85,14 +38,6 @@ border-radius: 3px 0 0 3px;
 .next:hover {
 background-color: rgba(0, 0, 0, 0.8);
 }
-
-/* .image-container {
-position: relative;
-display: inline-block;
-display: flex;
-justify-content: center;
-align-items: center; 
-} */
 
 .image-container {
 position: relative;

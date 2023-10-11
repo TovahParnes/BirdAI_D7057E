@@ -47,11 +47,12 @@ export class LibraryComponent {
     //this.mainApp.switchDarkmodeSetting();
   }
 
-  navigateToSpecies(imageId: string, imageName: string): void {
+  navigateToSpecies(imageId: string, imageName: string, imageDate: string): void {
     this.router.navigate(['species-page'], {
       queryParams: {
         imageId: encodeURIComponent(imageId),
         imageName: encodeURIComponent(imageName),
+        imageDate: encodeURIComponent(imageDate),
       }
       });
   }

@@ -3,6 +3,7 @@ import {SocialAuthService, GoogleLoginProvider} from '@abacritt/angularx-social-
 import {Router, ActivatedRoute} from '@angular/router';
 import { AppComponent } from '../app.component';
 import { HttpClient } from '@angular/common/http';
+import { Location } from '@angular/common';
 
 interface ApiResponse {
   data: {  
@@ -24,6 +25,7 @@ interface ApiResponse {
 export class SpeciesPageComponent implements AfterViewInit{
   imageId!: string;
   imageName!: string;
+  imageDate!: string;
   responseData: ApiResponse | null = null;
   images: string[] = [];
 
@@ -34,12 +36,12 @@ export class SpeciesPageComponent implements AfterViewInit{
     private elRef: ElementRef,
     private http: HttpClient,
     private route: ActivatedRoute,
+    private location: Location,
     ) {
 
   }
 
   ngOnInit() {
-    // Make an HTTP GET request to the Swagger service's API
     this.http.get<ApiResponse>('http://localhost:4000/swagger/index.html').subscribe(data => {
       this.responseData = data;
       console.log(data);
@@ -47,6 +49,11 @@ export class SpeciesPageComponent implements AfterViewInit{
     this.route.queryParams.subscribe(params => {
       this.imageId = decodeURIComponent(params['imageId']);
       this.imageName = decodeURIComponent(params['imageName'])
+        this.imageDate = decodeURIComponent(params['imageDate'])
+        if (this.imageDate == "undefined"){
+          this.imageDate = "Not Found Yet"
+        }
+      
 
       this.images = [
         this.imageId,
@@ -102,13 +109,14 @@ export class SpeciesPageComponent implements AfterViewInit{
   updateButtonPosition() {
     const imageElement = this.elRef.nativeElement.querySelector('#slideshow-image');
     const buttonContainer = this.elRef.nativeElement.querySelector('.button-container');
-
-    // Adjust the left position of the button container based on the image width
     const imageWidth = imageElement.width;
     const buttonContainerWidth = buttonContainer.clientWidth;
     const leftPosition = (imageWidth - buttonContainerWidth) / 2 + 'px';
-
     buttonContainer.style.left = leftPosition;
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 
 }

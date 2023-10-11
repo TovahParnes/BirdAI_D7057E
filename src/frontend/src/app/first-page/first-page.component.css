@@ -1,0 +1,41 @@
+.center-nobg {
+    width: 600px;
+    justify-content: space-between;
+    text-align: center;
+    display: flex;
+
+  }
+
+  .logo {
+    margin-top: 5%;
+    width: fit-content;
+    height: 300px;
+    justify-content: center;
+  }
+
+  .textbox {
+    margin-top: 30%;
+    font-size: large;
+  }
+
+  .trybutton {
+    padding: 16px;
+    background-color: #2196f3;
+  }
+
+  .fpContainer {
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #242526;
+    border-radius: 7px;
+    padding: 20px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.16);
+  }
+
+  .fpImage {
+    width: 100;
+    height: 100;
+    object-fit: cover;
+  }

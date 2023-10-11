@@ -1,8 +1,9 @@
 .example-card {
     max-width: 200px;
     max-height: 400px;
-    display: flex; /* Use flexbox for card layout */
-    flex-direction: column; /* Stack card content vertically */
-    justify-content: space-between; /* Distribute content evenly vertically */
-    height: 100%; /* Fill available vertical space */
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between; 
+    height: 100%; 
+    cursor: pointer;
   }
