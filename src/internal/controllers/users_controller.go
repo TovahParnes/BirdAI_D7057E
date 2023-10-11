@@ -3,64 +3,63 @@ package controllers
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/repositories"
+	"birdai/src/internal/utils"
+
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func (c *Controller) CGetUserById(authId string) (*models.User, error) {
-	user, err := c.auth.CheckUser(authId)
-	if err != nil {
-		return &models.User{}, err
-	}
-	return user.(*models.User), err
-}
-
-func (c *Controller) CLogin(user *models.User) (string, error) {
-	authUser, err := c.auth.LoginUser(user)
-	if err != nil {
-		return "", err
-	}
-	return authUser, nil
-}
-
-func (c *Controller) CListUsers(authId string) ([]*models.User, error) {
-	_, err := c.auth.CheckUser(authId)
-	if err != nil {
-		return nil, err
-	}
+func (c *Controller) CGetUserById(id string) (models.Response) {
 	coll := c.db.GetCollection(repositories.UserColl)
-	inter, err := coll.FindAll()
-	users := inter.([]*models.User)
+	filter := bson.M{"_id": id}
+	response := coll.FindOne(filter)
 
-	return users, err
+	if utils.IsTypeError(response) {
+		return response
+	}
+
+	if utils.IsTypeUser(response) && response.Data.(models.User).Active == false {
+		return utils.ErrorDeleted("User collection")
+	}
+
+	return response
 }
 
-func (c *Controller) CDeleteUser(id, authId string) (*models.User, error) {
-	_, err := c.auth.CheckUser(authId)
-	if err != nil {
-		return nil, err
-	}
-	coll := c.db.GetCollection(repositories.UserColl)
-	deletedUser, err := coll.DeleteOne(bson.M{"_id": id})
-	if deletedUser != nil {
-		return deletedUser.(*models.User), err
-	}
-	return &models.User{}, err
+func (c *Controller) CLoginUser(user *models.User) (models.Response) {
+	response := c.auth.LoginUser(user)
+	return response
 }
 
-func (c *Controller) CUpdateUser(user *models.User) (*models.User, error) {
-	_, err := c.auth.CheckUser(user.AuthId)
-	if err != nil {
-		return nil, err
-	}
+func (c *Controller) CListUsers() (models.Response) {
 	coll := c.db.GetCollection(repositories.UserColl)
-	updatedUser, err := coll.UpdateOne(bson.M{
-		"_id":        user.Id,
-		"username":   user.Username,
-		"auth_id":    user.AuthId,
+	response := coll.FindAll()
+	users := []*models.User{}
+
+	if utils.IsTypeError(response) {
+		return response
+	}
+
+	for _, usersObject := range response.Data.([]*models.User) {
+		users = append(users, usersObject)
+	}
+
+	return utils.Response(users)
+}
+
+func (c *Controller) CDeleteUser(id, authId string) (models.Response) {
+	coll := c.db.GetCollection(repositories.UserColl)
+	filter := bson.M{"_id": id, "auth_id": authId}
+	response := coll.DeleteOne(filter)
+	return response
+}
+
+func (c *Controller) CUpdateUser(id string, user *models.User) (models.Response) {
+	coll := c.db.GetCollection(repositories.UserColl)
+	response := coll.UpdateOne(bson.M{
+		"_id": id,
+		"username": user.Username,
+		"auth_id": user.AuthId,
 		"created_at": user.CreatedAt,
+		"active": user.Active,
 	})
-	if updatedUser != nil {
-		return updatedUser.(*models.User), err
-	}
-	return &models.User{}, err
+	return response
 }

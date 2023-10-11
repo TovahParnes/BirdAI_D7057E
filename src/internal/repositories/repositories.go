@@ -2,7 +2,9 @@ package repositories
 
 import (
 	"birdai/src/internal/models"
+	"birdai/src/internal/utils"
 	"context"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -51,66 +53,66 @@ func AddAllCollections(m IMongoInstance) {
 // UpdateOne returns the updated document as a HandlerObject.
 // Input query should be of type bson.M with the id of the document to update
 // and all fields with the values that should be updated
-func (m *MongoCollection) UpdateOne(query bson.M) (models.HandlerObject, error) {
+func (m *MongoCollection) UpdateOne(query bson.M) (models.Response) {
 	filter := bson.M{
 		"_id": query["_id"],
 	}
 	delete(query, "_id")
 	update := bson.M{"$set": query}
 	result, err := m.Collection.UpdateOne(m.ctx, filter, update)
-	updated, err := m.FindOne(filter)
+	response := m.FindOne(filter)
 	if result.ModifiedCount != 1 {
-		return nil, err
+		return utils.ErrorToResponse(400, "Could not update object", err.Error())
 	}
-	return updated, err
+	return response
 }
 
 // DeleteOne returns the deleted document if it gets successfully deleted.
 // If the document was a user it will instead return the updated version of the document.
-func (m *MongoCollection) DeleteOne(query bson.M) (models.HandlerObject, error) {
+func (m *MongoCollection) DeleteOne(query bson.M) (models.Response) {
 	deleteQuery := bson.M{
 		"_id": query["_id"],
 	}
-	data, err := m.FindOne(deleteQuery)
-	if err != nil {
-		return nil, err
+	response := m.FindOne(deleteQuery)
+	if utils.IsTypeError(response) {
+		return response
 	}
-	switch data.(type) {
+	switch response.Data.(type) {
 	case *models.User:
 		update := bson.M{
 			"_id":      query["_id"],
 			"active":   false,
 			"username": "Deleted User",
 		}
-		updated, err := m.UpdateOne(update)
-		if err != nil {
-			return nil, err
+		response := m.UpdateOne(update)
+		if utils.IsTypeError(response) {
+			return utils.ErrorToResponse(400, "Could not delete object", response.Data.(models.Err).Description)
 		}
-		return updated, nil
+		return response
 	default:
 		one, err := m.Collection.DeleteOne(m.ctx, deleteQuery)
-		if one.DeletedCount != 1 {
-			return nil, err
+		if one.DeletedCount != 1 || err != nil{
+			return utils.ErrorToResponse(400, "Could not delete object", "")
 		}
-		return data, nil
+		return response
 	}
 }
 
 // CreateOne adds the object to the db.
 // Returns the id of the inserted document if successfully added.
-func (m *MongoCollection) CreateOne(object models.HandlerObject) (string, error) {
+func (m *MongoCollection) CreateOne(object models.HandlerObject) (models.Response) {
 	object.SetCreatedAt()
 	resId, err := m.Collection.InsertOne(m.ctx, object)
 	if err != nil {
-		return "", err
+		return utils.ErrorToResponse(400, "Could not create object", err.Error())
 	}
-	return resId.InsertedID.(string), nil
+	return utils.Response(resId.InsertedID.(string))
 }
 
 // TODO: Look if there is an easier way to handle the switch cases in both FindOne and FindAll
 
 // FindOne searches for one document from the current collection that matches the query.
-func (m *MongoCollection) FindOne(query bson.M) (models.HandlerObject, error) {
+func (m *MongoCollection) FindOne(query bson.M) (models.Response) {
 	collName := m.Collection.Name()
 	// There should be a way to make this code more compact as it is repeating the same thing
 	switch collName {
@@ -118,53 +120,53 @@ func (m *MongoCollection) FindOne(query bson.M) (models.HandlerObject, error) {
 		var result models.User
 		err := m.Collection.FindOne(m.ctx, query).Decode(&result)
 		if err != nil {
-			return nil, err
+			return utils.ErrorNotFoundInDatabase("User collection")
 		}
-		return &result, err
+		return utils.Response(&result)
 	case AdminColl:
 		var result models.Admin
 		err := m.Collection.FindOne(m.ctx, query).Decode(&result)
 		if err != nil {
-			return nil, err
+			return utils.ErrorNotFoundInDatabase("Admin collection")
 		}
-		return &result, err
+		return utils.Response(&result)
 	case BirdColl:
 		var result models.Bird
 		err := m.Collection.FindOne(m.ctx, query).Decode(&result)
 		if err != nil {
-			return nil, err
+			return utils.ErrorNotFoundInDatabase("Bird collection")
 		}
-		return &result, err
+		return utils.Response(&result)
 	case PostColl:
 		var result models.Post
 		err := m.Collection.FindOne(m.ctx, query).Decode(&result)
 		if err != nil {
-			return nil, err
+			return utils.ErrorNotFoundInDatabase("Post collection")
 		}
-		return &result, err
+		return utils.Response(&result)
 	case MediaColl:
 		var result models.Media
 		err := m.Collection.FindOne(m.ctx, query).Decode(&result)
 		if err != nil {
-			return nil, err
+			return utils.ErrorNotFoundInDatabase("Media collection")
 		}
-		return &result, err
+		return utils.Response(&result)
 	default:
 		// Collection name was not found
-		return nil, nil
+		return utils.ErrorCollectionNotFound("FindOne")
 	}
 }
 
 // FindAll returns all documents from the current collection.
 // Return will be of type interface{} and will need to be type asserted before use
-func (m *MongoCollection) FindAll() (interface{}, error) {
+func (m *MongoCollection) FindAll() (models.Response) {
 	findCursor, err := m.Collection.Find(m.ctx, bson.M{})
 	if err != nil {
-		return nil, err
+		return utils.ErrorNotFoundInDatabase("")
 	}
 	var results []bson.M
 	if err = findCursor.All(m.ctx, &results); err != nil {
-		return nil, err
+		return utils.ErrorNotFoundInDatabase("")
 	}
 	collName := m.Collection.Name()
 	// There should be a way to make this code more compact as it is repeating the same thing
@@ -176,11 +178,23 @@ func (m *MongoCollection) FindAll() (interface{}, error) {
 			bsonBody, _ := bson.Marshal(result)
 			err := bson.Unmarshal(bsonBody, &tempResult)
 			if err != nil {
-				return nil, err
+				return utils.ErrorNotFoundInDatabase("User collection")
 			}
 			resultStruct = append(resultStruct, tempResult)
 		}
-		return resultStruct, nil
+		return utils.Response(resultStruct)
+	case AdminColl:
+		var resultStruct []models.Admin
+		for _, result := range results {
+			var tempResult models.Admin
+			bsonBody, _ := bson.Marshal(result)
+			err := bson.Unmarshal(bsonBody, &tempResult)
+			if err != nil {
+				return utils.ErrorNotFoundInDatabase("Admin collection")
+			}
+			resultStruct = append(resultStruct, tempResult)
+		}
+		return utils.Response(resultStruct)
 	case BirdColl:
 		var resultStruct []models.Bird
 		for _, result := range results {
@@ -188,11 +202,11 @@ func (m *MongoCollection) FindAll() (interface{}, error) {
 			bsonBody, _ := bson.Marshal(result)
 			err := bson.Unmarshal(bsonBody, &tempResult)
 			if err != nil {
-				return nil, err
+				return utils.ErrorNotFoundInDatabase("Bird collection")
 			}
 			resultStruct = append(resultStruct, tempResult)
 		}
-		return resultStruct, nil
+		return utils.Response(resultStruct)
 	case PostColl:
 		var resultStruct []models.Post
 		for _, result := range results {
@@ -200,11 +214,11 @@ func (m *MongoCollection) FindAll() (interface{}, error) {
 			bsonBody, _ := bson.Marshal(result)
 			err := bson.Unmarshal(bsonBody, &tempResult)
 			if err != nil {
-				return nil, err
+				return utils.ErrorNotFoundInDatabase("Post collection")
 			}
 			resultStruct = append(resultStruct, tempResult)
 		}
-		return resultStruct, nil
+		return utils.Response(resultStruct)
 	case MediaColl:
 		var resultStruct []models.Media
 		for _, result := range results {
@@ -212,13 +226,13 @@ func (m *MongoCollection) FindAll() (interface{}, error) {
 			bsonBody, _ := bson.Marshal(result)
 			err := bson.Unmarshal(bsonBody, &tempResult)
 			if err != nil {
-				return nil, err
+				return utils.ErrorNotFoundInDatabase("Media collection")
 			}
 			resultStruct = append(resultStruct, tempResult)
 		}
-		return resultStruct, nil
+		return utils.Response(resultStruct)
 	default:
 		// Collection name was not found
-		return nil, nil
+		return utils.ErrorCollectionNotFound("FindAll")
 	}
 }
