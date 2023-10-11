@@ -1,9 +1,5 @@
 package models
 
-type Token struct {
-	Token string `json:"token" form:"token"`
-}
-
 type Response struct {
 	Timestamp string `json:"timestamp"`
 	Data interface{} `json:"data"`
