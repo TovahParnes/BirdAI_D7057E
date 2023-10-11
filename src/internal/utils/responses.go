@@ -86,3 +86,6 @@ func ErrorCollectionNotFound(err string) models.Response{
 	return ErrorToResponse(http.StatusNotFound, "Could not find collection", err)
 }
 
+func ErrorNotImplemented(err string) models.Response{
+	return ErrorToResponse(http.StatusNotImplemented, "Not implemented yet", err)
+}

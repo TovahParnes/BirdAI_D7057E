@@ -21,7 +21,7 @@ import (
 //	@license.name	MIT License
 //	@license.url	https://opensource.org/license/mit/
 
-// @host		localhost:3000
+// @host		127.0.0.1:3000
 // @BasePath	/
 // @schemes	http
 func main() {
@@ -30,6 +30,7 @@ func main() {
 		log.Fatalf("Failed to load env: %v", err)
 	}
 
+	
 	// get JWT secret variable
 	if err := godotenv.Load("secret/.env"); err != nil {
 		log.Fatalf("Failed to load secret env: %v", err)

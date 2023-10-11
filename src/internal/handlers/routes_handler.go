@@ -34,4 +34,9 @@ func New(app *fiber.App, db repositories.IMongoInstance) {
 	usersRoute.Post("/", handler.LoginUser)
 	usersRoute.Patch("/:id", handler.UpdateUser)
 	usersRoute.Delete("/:id", handler.DeleteUser)
+
+	birdsRoute := app.Group("/birds")
+	birdsRoute.Get("/list", handler.ListBirds)
+	birdsRoute.Get("/:id", handler.GetBirdById)
+	birdsRoute.Patch("/:id", handler.UpdateBird)
 }
