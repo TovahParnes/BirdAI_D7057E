@@ -3,9 +3,10 @@ package repositories
 import (
 	"birdai/src/internal/models"
 	"context"
+	"log"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"log"
 )
 
 var (
@@ -57,9 +58,9 @@ type MongoCollection struct {
 
 // IMongoCollection TODO: Update input when known what is needed
 type IMongoCollection interface {
-	UpdateOne(query bson.M) (models.HandlerObject, error)
-	DeleteOne(query bson.M) (models.HandlerObject, error)
-	CreateOne(object models.HandlerObject) (string, error)
-	FindOne(query bson.M) (models.HandlerObject, error)
-	FindAll() (interface{}, error)
+	UpdateOne(query bson.M) (models.Response)
+	DeleteOne(query bson.M) (models.Response)
+	CreateOne(object models.HandlerObject) (models.Response)
+	FindOne(query bson.M) (models.Response)
+	FindAll() (models.Response)
 }

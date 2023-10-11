@@ -3,9 +3,11 @@ package authentication
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/repositories"
+	"birdai/src/internal/utils"
+	"os"
+
 	"github.com/golang-jwt/jwt/v5"
 	"go.mongodb.org/mongo-driver/bson"
-	"os"
 )
 
 type Authentication struct {
@@ -18,7 +20,7 @@ func NewAuthentication(userCollection repositories.IMongoCollection) Authenticat
 	}
 }
 
-func (l Authentication) LoginUser(user *models.User) (string, error) {
+func (l Authentication) LoginUser(user *models.User) (models.Response) {
 	// Create the Claims
 	claims := jwt.MapClaims{
 		"id": user.AuthId,
@@ -29,21 +31,21 @@ func (l Authentication) LoginUser(user *models.User) (string, error) {
 	// Generate encoded token and send it as response.
 	t, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
-		return "", err
+		return utils.ErrorParams(err.Error())
 	}
-	foundUser, err := l.UserColl.FindOne(bson.M{"auth_id": t})
-	if err != nil {
+	response := l.UserColl.FindOne(bson.M{"auth_id": t})
+	if utils.IsTypeError(response) {
 		user.AuthId = t
-		createdUser, err := l.UserColl.CreateOne(user)
-		if err != nil {
-			return "", err
+		response = l.UserColl.CreateOne(user)
+		if utils.IsTypeError(response) {
+			return response
 		}
-		return createdUser, nil
+		return response
 	}
-	return foundUser.GetId(), nil
+	return response
 }
 
-func (l Authentication) CheckUser(authId string) (models.HandlerObject, error) {
+func (l Authentication) CheckUser(authId string) (models.Response) {
 	// Create the Claims
 	claims := jwt.MapClaims{
 		"id": authId,
@@ -54,7 +56,7 @@ func (l Authentication) CheckUser(authId string) (models.HandlerObject, error) {
 	// Generate encoded token and send it as response.
 	t, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
-		return nil, err
+		return utils.ErrorParams(err.Error())
 	}
 	return l.UserColl.FindOne(bson.M{"auth_id": t})
 }

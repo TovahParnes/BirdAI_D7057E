@@ -1,5 +1,18 @@
 basePath: /
 definitions:
+  models.Bird:
+    properties:
+      description:
+        type: string
+      id:
+        type: string
+      imageId:
+        type: string
+      name:
+        type: string
+      soundId:
+        type: string
+    type: object
   models.Err:
     properties:
       description:
@@ -36,14 +49,6 @@ definitions:
       timestamp:
         type: string
     type: object
-  models.ResponseHTTP:
-    properties:
-      data: {}
-      message:
-        type: string
-      success:
-        type: boolean
-    type: object
   models.User:
     properties:
       _id:
@@ -57,7 +62,7 @@ definitions:
       username:
         type: string
     type: object
-host: localhost:3000
+host: 127.0.0.1:3000
 info:
   contact:
     email: ??
@@ -71,6 +76,201 @@ info:
   title: BirdAI API
   version: "2.0"
 paths:
+  /birds/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get bird by ID
+      parameters:
+      - description: Bird ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Bird'
+                  type: array
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
+        "410":
+          description: Gone
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
+        "503":
+          description: Service Unavailable
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
+      summary: Get bird by ID
+      tags:
+      - Birds
+    patch:
+      consumes:
+      - application/json
+      description: Update given bird
+      parameters:
+      - description: Bird ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: bird
+        in: body
+        name: bird
+        required: true
+        schema:
+          $ref: '#/definitions/models.Bird'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
+        "503":
+          description: Service Unavailable
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
+      summary: Update given bird
+      tags:
+      - Birds
+  /birds/list:
+    get:
+      consumes:
+      - application/json
+      description: List all birds of a specified set and seach parameters
+      parameters:
+      - description: Set of birds
+        in: query
+        name: set
+        type: integer
+      - description: Search parameter for birds
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Bird'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
+        "503":
+          description: Service Unavailable
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
+      summary: List all birds of a specified set and seach parameters
+      tags:
+      - Birds
   /posts/:
     post:
       consumes:
@@ -389,7 +589,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create User
+      description: Login a user or create a new user if there is no existing user
       parameters:
       - description: user
         in: body
@@ -403,20 +603,48 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
-      summary: Create user
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
+      summary: Login a user
       tags:
       - users
   /users/{id}:
@@ -436,23 +664,51 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            $ref: '#/definitions/models.Response'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
       summary: Delete given user
       tags:
       - users
@@ -473,7 +729,7 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/models.ResponseHTTP'
+            - $ref: '#/definitions/models.Response'
             - properties:
                 data:
                   items:
@@ -483,15 +739,36 @@ paths:
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "410":
           description: Gone
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
       summary: Get user by ID
       tags:
       - users
@@ -500,9 +777,14 @@ paths:
       - application/json
       description: Update given user
       parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
       - description: user
         in: body
-        name: set
+        name: user
         required: true
         schema:
           $ref: '#/definitions/models.User'
@@ -512,27 +794,62 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            $ref: '#/definitions/models.Response'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
       summary: Update given user
       tags:
       - users
@@ -615,7 +932,7 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/models.ResponseHTTP'
+            - $ref: '#/definitions/models.Response'
             - properties:
                 data:
                   items:
@@ -625,11 +942,25 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
       summary: List all users of a specified set
       tags:
       - users
@@ -644,23 +975,58 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.User'
+                  type: array
+              type: object
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "410":
           description: Gone
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/models.ResponseHTTP'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
       summary: Get current user
       tags:
       - users

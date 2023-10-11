@@ -3,8 +3,10 @@ package mock_test
 import (
 	"birdai/src/internal/mock"
 	"birdai/src/internal/models"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"birdai/src/internal/utils"
 	"testing"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
@@ -45,66 +47,63 @@ func TestMockMongoCollection(t *testing.T) {
 		CreatedAt: "0",
 	}
 	t.Run("Test CreateOne collection success", func(t *testing.T) {
-		newId, err := userColl.CreateOne(user)
-		require.Nil(t, err)
-		filter := bson.M{"_id": newId}
-		newUser, err := userColl.FindOne(filter)
-		user = newUser.(*models.User)
-		require.NotNil(t, newUser)
-		require.Nil(t, err)
-		newId, err = userColl.CreateOne(user2)
-		require.Nil(t, err)
-		filter = bson.M{"_id": newId}
-		newUser, err = userColl.FindOne(filter)
-		user2 = newUser.(*models.User)
-		require.NotNil(t, newUser)
-		require.Nil(t, err)
+		response := userColl.CreateOne(user)
+		require.False(t, utils.IsTypeError(response))
+
+		filter := bson.M{"_id": response.Data.(*models.User).Id}
+		response = userColl.FindOne(filter)
+		require.NotNil(t, response.Data.(*models.User))
+
+		response = userColl.CreateOne(user2)
+		require.False(t, utils.IsTypeError(response))
+
+		filter = bson.M{"_id": response.Data.(*models.User).Id}
+		response = userColl.FindOne(filter)
 	})
 
 	t.Run("Test FindOne collection success", func(t *testing.T) {
 		filter := bson.M{"_id": user.Id}
-		person, err := userColl.FindOne(filter)
-		require.Equal(t, user, person)
-		require.Nil(t, err)
+		response := userColl.FindOne(filter)
+		require.Equal(t, user, response.Data)
+		require.False(t, utils.IsTypeError(response))
 
+	
 		filter = bson.M{"_id": user2.Id}
-		person, err = userColl.FindOne(filter)
-		require.Equal(t, user2, person)
-		require.Nil(t, err)
+		response = userColl.FindOne(filter)
+		require.Equal(t, user2, response.Data)
+		require.False(t, utils.IsTypeError(response))
 	})
 
 	t.Run("Test FindOne collection failure", func(t *testing.T) {
 		filter := bson.M{"_id": "testtest"}
-		person, err := userColl.FindOne(filter)
-		require.Nil(t, person)
-		require.NotNil(t, err)
+		response := userColl.FindOne(filter)
+		require.True(t, utils.IsTypeError(response))
+		require.False(t, utils.IsTypeUser(response))
 	})
 
 	t.Run("Test FindAll collection success", func(t *testing.T) {
-		persons, err := userColl.FindAll()
-		require.Equal(t, []models.HandlerObject{user, user2}, persons)
-		require.Nil(t, err)
+		response := userColl.FindAll()
+		require.Equal(t, []models.HandlerObject{user, user2}, response.Data.([]models.HandlerObject))
+		require.Nil(t, response.Data.(*models.Err))
 	})
 
 	t.Run("Test UpdateOne collection success", func(t *testing.T) {
-		person, err := userColl.UpdateOne(bson.M{
-			"_id":        user.Id,
-			"username":   "bird_changed",
-			"auth_id":    user.AuthId,
+		response := userColl.UpdateOne(bson.M{
+			"_id": user.Id,
+			"username": "bird_changed",
+			"auth_id": user.AuthId,
 			"created_at": user.CreatedAt,
 		})
-		require.Equal(t, "bird_changed", person.(*models.User).Username)
-		require.Nil(t, err)
-		user = person.(*models.User)
+		require.Equal(t, "bird_changed", response.Data.(*models.User).Username)
+		require.False(t, utils.IsTypeError(response))
 	})
 
 	t.Run("Test DeleteOne collection success", func(t *testing.T) {
 		filter := bson.M{"_id": user.Id}
-		person, err := userColl.DeleteOne(filter)
-		require.Equal(t, user, person)
-		require.Nil(t, err)
-		filter = bson.M{"_id": user.Id}
-		foundPerson, _ := userColl.FindOne(filter)
-		require.Nil(t, foundPerson)
+		response := userColl.DeleteOne(filter)
+		require.Equal(t, user, response.Data)
+		require.False(t, utils.IsTypeError(response))
+		response = userColl.FindOne(filter)
+		require.True(t, utils.IsTypeError(response))
 	})
 }
