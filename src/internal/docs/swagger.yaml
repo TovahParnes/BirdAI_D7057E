@@ -1,19 +1,24 @@
 basePath: /
 definitions:
-  models.Admin:
+  models.AdminInput:
+    properties:
+      access:
+        type: string
+      userId:
+        type: string
+    type: object
+  models.AdminOutput:
     properties:
       access:
         type: string
       id:
         type: string
-      userId:
-        type: string
+      user:
+        $ref: '#/definitions/models.UserOutput'
     type: object
-  models.Bird:
+  models.BirdInput:
     properties:
       description:
-        type: string
-      id:
         type: string
       imageId:
         type: string
@@ -21,6 +26,19 @@ definitions:
         type: string
       soundId:
         type: string
+    type: object
+  models.BirdOutput:
+    properties:
+      description:
+        type: string
+      id:
+        type: string
+      image:
+        $ref: '#/definitions/models.MediaOutput'
+      name:
+        type: string
+      sound:
+        $ref: '#/definitions/models.MediaOutput'
     type: object
   models.Err:
     properties:
@@ -35,13 +53,22 @@ definitions:
       status:
         type: integer
     type: object
-  models.Post:
+  models.MediaOutput:
+    properties:
+      data:
+        items:
+          type: integer
+        type: array
+      fileType:
+        type: string
+      id:
+        type: string
+    type: object
+  models.PostInput:
     properties:
       birdId:
         type: string
       createdAt:
-        type: string
-      id:
         type: string
       imageId:
         type: string
@@ -52,20 +79,42 @@ definitions:
       userId:
         type: string
     type: object
+  models.PostOutput:
+    properties:
+      bird:
+        $ref: '#/definitions/models.BirdOutput'
+      createdAt:
+        type: string
+      id:
+        type: string
+      image:
+        $ref: '#/definitions/models.MediaOutput'
+      location:
+        type: string
+      sound:
+        $ref: '#/definitions/models.MediaOutput'
+      user:
+        $ref: '#/definitions/models.UserOutput'
+    type: object
   models.Response:
     properties:
       data: {}
       timestamp:
         type: string
     type: object
-  models.User:
+  models.UserInput:
+    properties:
+      active:
+        type: boolean
+      user:
+        type: string
+    type: object
+  models.UserOutput:
     properties:
       _id:
         type: string
       active:
         type: boolean
-      authId:
-        type: string
       createdAt:
         type: string
       username:
@@ -96,7 +145,7 @@ paths:
         name: set
         required: true
         schema:
-          $ref: '#/definitions/models.Admin'
+          $ref: '#/definitions/models.AdminInput'
       produces:
       - application/json
       responses:
@@ -241,7 +290,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/models.Admin'
+                    $ref: '#/definitions/models.AdminOutput'
                   type: array
               type: object
         "403":
@@ -308,7 +357,7 @@ paths:
         name: admin
         required: true
         schema:
-          $ref: '#/definitions/models.Admin'
+          $ref: '#/definitions/models.AdminInput'
       produces:
       - application/json
       responses:
@@ -401,7 +450,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/models.Admin'
+                    $ref: '#/definitions/models.AdminOutput'
                   type: array
               type: object
         "401":
@@ -458,7 +507,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/models.Admin'
+                    $ref: '#/definitions/models.AdminOutput'
                   type: array
               type: object
         "401":
@@ -543,7 +592,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/models.Bird'
+                    $ref: '#/definitions/models.BirdOutput'
                   type: array
               type: object
         "404":
@@ -597,7 +646,7 @@ paths:
         name: bird
         required: true
         schema:
-          $ref: '#/definitions/models.Bird'
+          $ref: '#/definitions/models.BirdInput'
       produces:
       - application/json
       responses:
@@ -688,7 +737,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/models.Bird'
+                    $ref: '#/definitions/models.BirdOutput'
                   type: array
               type: object
         "401":
@@ -727,7 +776,7 @@ paths:
         name: set
         required: true
         schema:
-          $ref: '#/definitions/models.Post'
+          $ref: '#/definitions/models.PostInput'
       produces:
       - application/json
       responses:
@@ -857,7 +906,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/models.Post'
+                    $ref: '#/definitions/models.PostOutput'
                   type: array
               type: object
         "404":
@@ -911,7 +960,7 @@ paths:
         name: post
         required: true
         schema:
-          $ref: '#/definitions/models.Post'
+          $ref: '#/definitions/models.PostInput'
       produces:
       - application/json
       responses:
@@ -1002,7 +1051,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/models.Post'
+                    $ref: '#/definitions/models.PostOutput'
                   type: array
               type: object
         "401":
@@ -1041,7 +1090,7 @@ paths:
         name: set
         required: true
         schema:
-          $ref: '#/definitions/models.User'
+          $ref: '#/definitions/models.UserInput'
       produces:
       - application/json
       responses:
@@ -1178,7 +1227,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/models.User'
+                    $ref: '#/definitions/models.UserOutput'
                   type: array
               type: object
         "404":
@@ -1232,7 +1281,7 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/models.User'
+          $ref: '#/definitions/models.UserInput'
       produces:
       - application/json
       responses:
@@ -1328,7 +1377,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/models.Post'
+                    $ref: '#/definitions/models.PostOutput'
                   type: array
               type: object
         "401":
@@ -1381,7 +1430,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/models.User'
+                    $ref: '#/definitions/models.UserOutput'
                   type: array
               type: object
         "401":
@@ -1425,7 +1474,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/models.User'
+                    $ref: '#/definitions/models.UserOutput'
                   type: array
               type: object
         "401":

@@ -1,6 +1,6 @@
 package models
 
-type Bird struct {
+type BirdDB struct {
 	Id          string `bson:"_id"`
 	Name        string `bson:"name"`
 	Description string `bson:"description"`

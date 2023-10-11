@@ -45,34 +45,34 @@ func (m *mockCollection) FindOne(query bson.M) (models.Response) {
 	//objectID, err := primitive.ObjectIDFromHex(id)
 	for _, one := range m.data {
 		switch one.(type) {
-		case *models.User:
-			var test *models.User
+		case *models.UserDB:
+			var test *models.UserDB
 			err = bson.Unmarshal(doc, &test)
-			if test.Id != "" && test.Id == one.(*models.User).Id || test.AuthId != "" && test.AuthId == one.(*models.User).AuthId {
+			if test.Id != "" && test.Id == one.(*models.UserDB).Id || test.AuthId != "" && test.AuthId == one.(*models.UserDB).AuthId {
 				return utils.Response(one)
 			}
-		case *models.Admin:
-			var test *models.Admin
+		case *models.AdminDB:
+			var test *models.AdminDB
 			err = bson.Unmarshal(doc, &test)
-			if test.Id != "" && test.Id == one.(*models.Admin).Id {
+			if test.Id != "" && test.Id == one.(*models.AdminDB).Id {
 				return utils.Response(one)
 			}
-		case *models.Bird:
-			var test *models.Bird
+		case *models.BirdDB:
+			var test *models.BirdDB
 			err = bson.Unmarshal(doc, &test)
-			if test.Id != "" && test.Id == one.(*models.Bird).Id {
+			if test.Id != "" && test.Id == one.(*models.BirdDB).Id {
 				return utils.Response(one)
 			}
-		case *models.Post:
-			var test *models.Post
+		case *models.PostDB:
+			var test *models.PostDB
 			err = bson.Unmarshal(doc, &test)
-			if test.Id != "" && test.Id == one.(*models.Post).Id {
+			if test.Id != "" && test.Id == one.(*models.PostDB).Id {
 				return utils.Response(one)
 			}
-		case *models.Media:
-			var test *models.Media
+		case *models.MediaDB:
+			var test *models.MediaDB
 			err = bson.Unmarshal(doc, &test)
-			if test.Id != "" && test.Id == one.(*models.Media).Id {
+			if test.Id != "" && test.Id == one.(*models.MediaDB).Id {
 				return utils.Response(one)
 			}
 		}
@@ -82,37 +82,37 @@ func (m *mockCollection) FindOne(query bson.M) (models.Response) {
 
 func (m *mockCollection) FindAll() (models.Response) {
 	if len(m.data) == 0 {
-		return utils.ErrorNotFoundInDatabase("User collection")
+		return utils.ErrorNotFoundInDatabase("")
 	}
 	switch m.data[0].(type) {
-	case *models.User:
-		var list []*models.User
+	case *models.UserDB:
+		var list []*models.UserDB
 		for _, ob := range m.data {
-			list = append(list, ob.(*models.User))
+			list = append(list, ob.(*models.UserDB))
 		}
 		return utils.Response(list)
-	case *models.Admin:
-		var list []*models.Admin
+	case *models.AdminDB:
+		var list []*models.AdminDB
 		for _, ob := range m.data {
-			list = append(list, ob.(*models.Admin))
+			list = append(list, ob.(*models.AdminDB))
 		}
 		return utils.Response(list)
-	case *models.Bird:
-		var list []*models.Bird
+	case *models.BirdDB:
+		var list []*models.BirdDB
 		for _, ob := range m.data {
-			list = append(list, ob.(*models.Bird))
+			list = append(list, ob.(*models.BirdDB))
 		}
 		return utils.Response(list)
-	case *models.Post:
-		var list []*models.Post
+	case *models.PostDB:
+		var list []*models.PostDB
 		for _, ob := range m.data {
-			list = append(list, ob.(*models.Post))
+			list = append(list, ob.(*models.PostDB))
 		}
 		return utils.Response(list)
-	case *models.Media:
-		var list []*models.Media
+	case *models.MediaDB:
+		var list []*models.MediaDB
 		for _, ob := range m.data {
-			list = append(list, ob.(*models.Media))
+			list = append(list, ob.(*models.MediaDB))
 		}
 		return utils.Response(list)
 	default:
@@ -129,28 +129,28 @@ func (m *mockCollection) UpdateOne(query bson.M) (models.Response) {
 	for i, one := range m.data {
 		if one.GetId() == id {
 			switch one.(type) {
-			case *models.User:
-				var test *models.User
+			case *models.UserDB:
+				var test *models.UserDB
 				err = bson.Unmarshal(doc, &test)
 				m.data[i] = test
 				return utils.Response(test)
-			case *models.Admin:
-				var test *models.Admin
+			case *models.AdminDB:
+				var test *models.AdminDB
 				err = bson.Unmarshal(doc, &test)
 				m.data[i] = test
 				return utils.Response(test)
-			case *models.Bird:
-				var test *models.Bird
+			case *models.BirdDB:
+				var test *models.BirdDB
 				err = bson.Unmarshal(doc, &test)
 				m.data[i] = test
 				return utils.Response(test)
-			case *models.Post:
-				var test *models.Post
+			case *models.PostDB:
+				var test *models.PostDB
 				err = bson.Unmarshal(doc, &test)
 				m.data[i] = test
 				return utils.Response(test)
-			case *models.Media:
-				var test *models.Media
+			case *models.MediaDB:
+				var test *models.MediaDB
 				err = bson.Unmarshal(doc, &test)
 				m.data[i] = test
 				return utils.Response(test)
@@ -175,46 +175,46 @@ func (m *mockCollection) DeleteOne(query bson.M) (models.Response) {
 func (m *mockCollection) CreateOne(object models.HandlerObject) (models.Response) {
 	var newObject models.HandlerObject
 	switch object.(type) {
-	case *models.User:
-		newObject = &models.User{
+	case *models.UserDB:
+		newObject = &models.UserDB{
 			Id:       primitive.NewObjectID().Hex(),
-			Username: object.(*models.User).Username,
-			AuthId:   object.(*models.User).AuthId,
-			Active:   object.(*models.User).Active,
+			Username: object.(*models.UserDB).Username,
+			AuthId:   object.(*models.UserDB).AuthId,
+			Active:   object.(*models.UserDB).Active,
 		}
 		newObject.SetCreatedAt()
-	case *models.Admin:
-		newObject = &models.Admin{
+	case *models.AdminDB:
+		newObject = &models.AdminDB{
 			Id:     primitive.NewObjectID().Hex(),
-			UserId: object.(*models.Admin).UserId,
-			Access: object.(*models.Admin).Access,
+			UserId: object.(*models.AdminDB).UserId,
+			Access: object.(*models.AdminDB).Access,
 		}
 
-	case *models.Bird:
-		newObject = &models.Bird{
+	case *models.BirdDB:
+		newObject = &models.BirdDB{
 			Id:          primitive.NewObjectID().Hex(),
-			Name:        object.(*models.Bird).Name,
-			Description: object.(*models.Bird).Description,
-			ImageId:     object.(*models.Bird).ImageId,
-			SoundId:     object.(*models.Bird).SoundId,
+			Name:        object.(*models.BirdDB).Name,
+			Description: object.(*models.BirdDB).Description,
+			ImageId:     object.(*models.BirdDB).ImageId,
+			SoundId:     object.(*models.BirdDB).SoundId,
 		}
 
-	case *models.Post:
-		newObject = &models.Post{
+	case *models.PostDB:
+		newObject = &models.PostDB{
 			Id:       primitive.NewObjectID().Hex(),
-			UserId:   object.(*models.Post).UserId,
-			BirdId:   object.(*models.Post).BirdId,
-			Location: object.(*models.Post).Location,
-			ImageId:  object.(*models.Post).ImageId,
-			SoundId:  object.(*models.Post).SoundId,
+			UserId:   object.(*models.PostDB).UserId,
+			BirdId:   object.(*models.PostDB).BirdId,
+			Location: object.(*models.PostDB).Location,
+			ImageId:  object.(*models.PostDB).ImageId,
+			SoundId:  object.(*models.PostDB).SoundId,
 		}
 		newObject.SetCreatedAt()
 
-	case *models.Media:
-		newObject = &models.Media{
+	case *models.MediaDB:
+		newObject = &models.MediaDB{
 			Id:       primitive.NewObjectID().Hex(),
-			Data:     object.(*models.Media).Data,
-			FileType: object.(*models.Media).FileType,
+			Data:     object.(*models.MediaDB).Data,
+			FileType: object.(*models.MediaDB).FileType,
 		}
 
 	default:

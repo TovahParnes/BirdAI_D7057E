@@ -8,7 +8,7 @@ import (
 
 type Handler struct {
 	controller controllers.Controller
-	me         *models.User
+	me         *models.UserDB
 }
 
 func NewHandler(db repositories.IMongoInstance) Handler {

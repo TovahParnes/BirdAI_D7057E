@@ -17,7 +17,7 @@ import (
 // @Accept		json
 // @Produce		json
 // @Param		id	path	string	true	"User ID"
-// @Success		200	{object}	models.Response{data=[]models.User}
+// @Success		200	{object}	models.Response{data=[]models.UserOutput}
 // @Failure		404	{object}	models.Response{data=[]models.Err}
 // @Failure		410	{object}	models.Response{data=[]models.Err}
 // @Failure		503	{object}	models.Response{data=[]models.Err}
@@ -38,7 +38,7 @@ func (h *Handler) GetUserById(c *fiber.Ctx) error {
 // @Produce		json
 // @Param			set	query		int	false	"Set of users"
 // @Param			search	query	string	false	"Search parameter for user"
-// @Success		200	{object}	models.Response{data=[]models.User}
+// @Success		200	{object}	models.Response{data=[]models.UserOutput}
 // @Failure		401	{object}	models.Response{data=[]models.Err}
 // @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router			/users/list [get]
@@ -68,7 +68,7 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 // @Tags			users
 // @Accept			json
 // @Produce		json
-// @Param		set	body		models.User	true	"user"
+// @Param		set	body		models.UserInput	true	"user"
 // @Success		201	{object}	models.Response{data=[]models.Err}
 // @Failure		400	{object}	models.Response{data=[]models.Err}
 // @Failure		401	{object}	models.Response{data=[]models.Err}
@@ -89,7 +89,7 @@ func (h *Handler) LoginUser(c *fiber.Ctx) error {
 	*/
 
 
-	var user *models.User
+	var user *models.UserInput
 	if err := c.BodyParser(&user);
 	err != nil {
 		//	@Failure	400	{object}	models.Response{}
@@ -111,7 +111,7 @@ func (h *Handler) LoginUser(c *fiber.Ctx) error {
 // @Tags			users
 // @Accept			json
 // @Produce		json
-// @Success		200	{object}	models.Response{data=[]models.User}
+// @Success		200	{object}	models.Response{data=[]models.UserOutput}
 // @Failure		401	{object}	models.Response{data=[]models.Err}
 // @Failure		404	{object}	models.Response{data=[]models.Err}
 // @Failure		410	{object}	models.Response{data=[]models.Err}
@@ -136,7 +136,7 @@ func (h *Handler) GetUserMe(c *fiber.Ctx) error {
 // @Accept			json
 // @Produce		json
 // @Param		id	path	string	true	"User ID"
-// @Param		user	body		models.User	true	"user"
+// @Param		user	body		models.UserInput	true	"user"
 // @Success		200	{object}	models.Response{}
 // @Failure		400	{object}	models.Response{data=[]models.Err}
 // @Failure		401	{object}	models.Response{data=[]models.Err}
@@ -149,7 +149,7 @@ func (h *Handler) UpdateUser(c *fiber.Ctx) error {
 	// Authenticate(jwt.token)
 
 	id := c.Params("id")
-	var user *models.User
+	var user *models.UserInput
 	if err := c.BodyParser(&user); err != nil {
 		//	@Failure	400	{object}	models.Response{}
 		// something with body is wrong/missing

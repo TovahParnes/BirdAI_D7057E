@@ -20,10 +20,11 @@ func NewAuthentication(userCollection repositories.IMongoCollection) Authenticat
 	}
 }
 
-func (l Authentication) LoginUser(user *models.User) (models.Response) {
+func (l Authentication) LoginUser(user *models.UserInput) (models.Response) {
+	/*
 	// Create the Claims
 	claims := jwt.MapClaims{
-		"id": user.AuthId,
+		"id": authId,
 	}
 	// Create token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -43,6 +44,8 @@ func (l Authentication) LoginUser(user *models.User) (models.Response) {
 		return response
 	}
 	return response
+	*/
+	return utils.ErrorNotImplemented("LoginUser")
 }
 
 func (l Authentication) CheckUser(authId string) (models.Response) {

@@ -1,6 +1,6 @@
 package models
 
-type User struct {
+type UserDB struct {
 	Id        string `bson:"_id" json:"_id" form:"_id"`
 	Username  string `bson:"username" json:"username" form:"username"`
 	AuthId    string `bson:"auth_id" json:"authId" form:"authId"`
@@ -10,6 +10,7 @@ type User struct {
 
 type UserInput struct {
 	Username string `json:"user" bson:"username"`
+	Active    bool   `bson:"active"`
 }
 
 type UserOutput struct {

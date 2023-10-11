@@ -48,7 +48,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Admin"
+                            "$ref": "#/definitions/models.AdminInput"
                         }
                     }
                 ],
@@ -192,7 +192,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.Admin"
+                                                "$ref": "#/definitions/models.AdminOutput"
                                             }
                                         }
                                     }
@@ -298,7 +298,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.Admin"
+                                                "$ref": "#/definitions/models.AdminOutput"
                                             }
                                         }
                                     }
@@ -455,7 +455,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.Admin"
+                                                "$ref": "#/definitions/models.AdminOutput"
                                             }
                                         }
                                     }
@@ -699,7 +699,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Admin"
+                            "$ref": "#/definitions/models.AdminInput"
                         }
                     }
                 ],
@@ -859,7 +859,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.Bird"
+                                                "$ref": "#/definitions/models.BirdOutput"
                                             }
                                         }
                                     }
@@ -948,7 +948,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.Bird"
+                                                "$ref": "#/definitions/models.BirdOutput"
                                             }
                                         }
                                     }
@@ -1047,7 +1047,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Bird"
+                            "$ref": "#/definitions/models.BirdInput"
                         }
                     }
                 ],
@@ -1186,7 +1186,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Post"
+                            "$ref": "#/definitions/models.PostInput"
                         }
                     }
                 ],
@@ -1304,7 +1304,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.Post"
+                                                "$ref": "#/definitions/models.PostOutput"
                                             }
                                         }
                                     }
@@ -1393,7 +1393,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.Post"
+                                                "$ref": "#/definitions/models.PostOutput"
                                             }
                                         }
                                     }
@@ -1606,7 +1606,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Post"
+                            "$ref": "#/definitions/models.PostInput"
                         }
                     }
                 ],
@@ -1745,7 +1745,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/models.UserInput"
                         }
                     }
                 ],
@@ -1878,7 +1878,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.User"
+                                                "$ref": "#/definitions/models.UserOutput"
                                             }
                                         }
                                     }
@@ -1958,7 +1958,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.User"
+                                                "$ref": "#/definitions/models.UserOutput"
                                             }
                                         }
                                     }
@@ -2089,7 +2089,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.User"
+                                                "$ref": "#/definitions/models.UserOutput"
                                             }
                                         }
                                     }
@@ -2302,7 +2302,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/models.UserInput"
                         }
                     }
                 ],
@@ -2469,7 +2469,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.Post"
+                                                "$ref": "#/definitions/models.PostOutput"
                                             }
                                         }
                                     }
@@ -2524,7 +2524,18 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.Admin": {
+        "models.AdminInput": {
+            "type": "object",
+            "properties": {
+                "access": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.AdminOutput": {
             "type": "object",
             "properties": {
                 "access": {
@@ -2533,18 +2544,15 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
-                "userId": {
-                    "type": "string"
+                "user": {
+                    "$ref": "#/definitions/models.UserOutput"
                 }
             }
         },
-        "models.Bird": {
+        "models.BirdInput": {
             "type": "object",
             "properties": {
                 "description": {
-                    "type": "string"
-                },
-                "id": {
                     "type": "string"
                 },
                 "imageId": {
@@ -2555,6 +2563,26 @@ const docTemplate = `{
                 },
                 "soundId": {
                     "type": "string"
+                }
+            }
+        },
+        "models.BirdOutput": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image": {
+                    "$ref": "#/definitions/models.MediaOutput"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "sound": {
+                    "$ref": "#/definitions/models.MediaOutput"
                 }
             }
         },
@@ -2577,16 +2605,30 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Post": {
+        "models.MediaOutput": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "fileType": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.PostInput": {
             "type": "object",
             "properties": {
                 "birdId": {
                     "type": "string"
                 },
                 "createdAt": {
-                    "type": "string"
-                },
-                "id": {
                     "type": "string"
                 },
                 "imageId": {
@@ -2603,6 +2645,32 @@ const docTemplate = `{
                 }
             }
         },
+        "models.PostOutput": {
+            "type": "object",
+            "properties": {
+                "bird": {
+                    "$ref": "#/definitions/models.BirdOutput"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image": {
+                    "$ref": "#/definitions/models.MediaOutput"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "sound": {
+                    "$ref": "#/definitions/models.MediaOutput"
+                },
+                "user": {
+                    "$ref": "#/definitions/models.UserOutput"
+                }
+            }
+        },
         "models.Response": {
             "type": "object",
             "properties": {
@@ -2612,7 +2680,18 @@ const docTemplate = `{
                 }
             }
         },
-        "models.User": {
+        "models.UserInput": {
+            "type": "object",
+            "properties": {
+                "active": {
+                    "type": "boolean"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.UserOutput": {
             "type": "object",
             "properties": {
                 "_id": {
@@ -2620,9 +2699,6 @@ const docTemplate = `{
                 },
                 "active": {
                     "type": "boolean"
-                },
-                "authId": {
-                    "type": "string"
                 },
                 "createdAt": {
                     "type": "string"

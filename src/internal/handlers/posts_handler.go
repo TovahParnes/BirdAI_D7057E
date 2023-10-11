@@ -15,7 +15,7 @@ import (
 // @Accept		json
 // @Produce		json
 // @Param		id	path	string	true	"Post ID"
-// @Success		200	{object}	models.Response{data=[]models.Post}
+// @Success		200	{object}	models.Response{data=[]models.PostOutput}
 // @Failure		404	{object}	models.Response{data=[]models.Err}
 // @Failure		410	{object}	models.Response{data=[]models.Err}
 // @Failure		503	{object}	models.Response{data=[]models.Err}
@@ -37,7 +37,7 @@ func (h *Handler) GetPostById(c *fiber.Ctx) error {
 // @Produce		json
 // @Param		set	query		int	false	"Set of posts"
 // @Param		search	query	string	false	"Search parameter for post"
-// @Success		200	{object}	models.Response{data=[]models.Post}
+// @Success		200	{object}	models.Response{data=[]models.PostOutput}
 // @Failure		401	{object}	models.Response{data=[]models.Err}
 // @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router		/posts/list [get]
@@ -71,7 +71,7 @@ func (h *Handler) ListPosts(c *fiber.Ctx) error {
 // @Param		id	path	string	true	"User ID"
 // @Param		set	query		int	false	"Set of posts"
 // @Param		search	query	string	false	"Search parameter for post"
-// @Success		200	{object}	models.Response{data=[]models.Post}
+// @Success		200	{object}	models.Response{data=[]models.PostOutput}
 // @Failure		401	{object}	models.Response{data=[]models.Err}
 // @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router		/users/{id}/posts/list [get]
@@ -103,7 +103,7 @@ func (h *Handler) ListUsersPosts(c *fiber.Ctx) error {
 // @Tags		Posts
 // @Accept		json
 // @Produce		json
-// @Param		set	body		models.Post	true	"post"
+// @Param		set	body		models.PostInput	true	"post"
 // @Success		201	{object}	models.Response{}
 // @Failure		400	{object}	models.Response{data=[]models.Err}
 // @Failure		401	{object}	models.Response{data=[]models.Err}
@@ -111,7 +111,7 @@ func (h *Handler) ListUsersPosts(c *fiber.Ctx) error {
 // @Router		/posts/ [post]
 func (h *Handler) CreatePost(c *fiber.Ctx) error {
 	authId := c.GetReqHeaders()["Authid"]
-	var post *models.Post
+	var post *models.PostInput
 	if err := c.BodyParser(&post);
 	err != nil {
 		//	@Failure	400	{object}	models.Response{}
@@ -135,7 +135,7 @@ func (h *Handler) CreatePost(c *fiber.Ctx) error {
 // @Accept		json
 // @Produce		json
 // @Param		id	path	string	true	"post ID"
-// @Param		post	body		models.Post	true	"post"
+// @Param		post	body		models.PostInput	true	"post"
 // @Success		200	{object}	models.Response{}
 // @Failure		400	{object}	models.Response{data=[]models.Err}
 // @Failure		401	{object}	models.Response{data=[]models.Err}
@@ -147,7 +147,7 @@ func (h *Handler) UpdatePost(c *fiber.Ctx) error {
 	//authId := c.GetReqHeaders()["Authid"]
 	id := c.Params("id")
 	
-	var post *models.Post
+	var post *models.PostInput
 	if err := c.BodyParser(&post); err != nil {
 		//	@Failure	400	{object}	models.Response{}
 		// something with body is wrong/missing

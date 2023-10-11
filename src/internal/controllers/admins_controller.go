@@ -25,7 +25,7 @@ func (c *Controller) CListAdmins(set string, search string) (models.Response) {
 	return utils.ErrorNotImplemented("CListAdmins")
 }
 
-func (c *Controller) CCreateAdmin(authId string, admin *models.Admin) (models.Response) {
+func (c *Controller) CCreateAdmin(authId string, admin *models.AdminInput) (models.Response) {
 	/*
 	coll := c.db.GetCollection(repositories.AdminColl)
 	response := coll.CreateOne(admin)
@@ -34,7 +34,7 @@ func (c *Controller) CCreateAdmin(authId string, admin *models.Admin) (models.Re
 	return utils.ErrorNotImplemented("CCreateAdmin")
 }
 
-func (c *Controller) CUpdateAdmin(userId string, admin *models.Admin) (models.Response) {
+func (c *Controller) CUpdateAdmin(userId string, admin *models.AdminInput) (models.Response) {
 	/*
 	coll := c.db.GetCollection(repositories.UserColl)
 	response := coll.UpdateOne(bson.M{
@@ -63,7 +63,7 @@ func (c *Controller) CCheckLastSuperadmin() (models.Response) {
 		return response
 	}
 
-	admins := response.Data.([]models.Admin)
+	admins := response.Data.([]models.AdminOutput)
 	if len(admins) <= 1{
 		return utils.ErrorToResponse(http.StatusConflict, "Cannot delete last superadmin", "There must be at least one superadmin")
 	}

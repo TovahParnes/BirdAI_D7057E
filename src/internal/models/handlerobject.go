@@ -10,39 +10,39 @@ type HandlerObject interface {
 	SetCreatedAt()
 }
 
-func (u *User) GetId() string {
+func (u *UserDB) GetId() string {
 	return u.Id
 }
 
-func (a *Admin) GetId() string {
+func (a *AdminDB) GetId() string {
 	return a.Id
 }
 
-func (b *Bird) GetId() string {
+func (b *BirdDB) GetId() string {
 	return b.Id
 }
 
-func (p *Post) GetId() string {
+func (p *PostDB) GetId() string {
 	return p.Id
 }
 
-func (m *Media) GetId() string {
+func (m *MediaDB) GetId() string {
 	return m.Id
 }
 
-func (u *User) SetCreatedAt() {
+func (u *UserDB) SetCreatedAt() {
 	u.CreatedAt = time.Now().Format(time.RFC3339)
 }
 
-func (a *Admin) SetCreatedAt() {
+func (a *AdminDB) SetCreatedAt() {
 }
 
-func (b *Bird) SetCreatedAt() {
+func (b *BirdDB) SetCreatedAt() {
 }
 
-func (p *Post) SetCreatedAt() {
+func (p *PostDB) SetCreatedAt() {
 	p.CreatedAt = time.Now().Format(time.RFC3339)
 }
 
-func (m *Media) SetCreatedAt() {
+func (m *MediaDB) SetCreatedAt() {
 }
