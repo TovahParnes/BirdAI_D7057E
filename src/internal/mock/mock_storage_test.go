@@ -34,13 +34,13 @@ func TestMockMongoCollection(t *testing.T) {
 	mongoDB := mock.NewMockMongoInstance()
 	mongoDB.AddCollection(collName)
 	userColl := mongoDB.GetCollection(collName)
-	user := &models.User{
+	user := &models.UserDB{
 		Id:        primitive.ObjectID{byte(1)}.String(),
 		Username:  "bird1",
 		AuthId:    "123",
 		CreatedAt: "0",
 	}
-	user2 := &models.User{
+	user2 := &models.UserDB{
 		Id:        primitive.ObjectID{byte(2)}.String(),
 		Username:  "bird2",
 		AuthId:    "124",
@@ -50,14 +50,14 @@ func TestMockMongoCollection(t *testing.T) {
 		response := userColl.CreateOne(user)
 		require.False(t, utils.IsTypeError(response))
 
-		filter := bson.M{"_id": response.Data.(*models.User).Id}
+		filter := bson.M{"_id": response.Data.(*models.UserOutput).Id}
 		response = userColl.FindOne(filter)
-		require.NotNil(t, response.Data.(*models.User))
+		require.NotNil(t, response.Data.(*models.UserOutput))
 
 		response = userColl.CreateOne(user2)
 		require.False(t, utils.IsTypeError(response))
 
-		filter = bson.M{"_id": response.Data.(*models.User).Id}
+		filter = bson.M{"_id": response.Data.(*models.UserOutput).Id}
 		response = userColl.FindOne(filter)
 	})
 
@@ -78,7 +78,7 @@ func TestMockMongoCollection(t *testing.T) {
 		filter := bson.M{"_id": "testtest"}
 		response := userColl.FindOne(filter)
 		require.True(t, utils.IsTypeError(response))
-		require.False(t, utils.IsTypeUser(response))
+		require.False(t, utils.IsType(response, models.UserOutput{}))
 	})
 
 	t.Run("Test FindAll collection success", func(t *testing.T) {
@@ -90,11 +90,11 @@ func TestMockMongoCollection(t *testing.T) {
 	t.Run("Test UpdateOne collection success", func(t *testing.T) {
 		response := userColl.UpdateOne(bson.M{
 			"_id": user.Id,
-			"username": "bird_changed",
+			"username": "updated_name",
 			"auth_id": user.AuthId,
 			"created_at": user.CreatedAt,
 		})
-		require.Equal(t, "bird_changed", response.Data.(*models.User).Username)
+		require.Equal(t, "updated_name", response.Data.(*models.UserOutput).Username)
 		require.False(t, utils.IsTypeError(response))
 	})
 

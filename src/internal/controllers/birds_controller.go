@@ -24,11 +24,10 @@ func (c *Controller) CListBirds(set int, search string) (models.Response) {
 	return utils.ErrorNotImplemented("CGetBirdById")
 }
 
-func (c *Controller) CUpdateBird(id string, bird *models.Bird) (models.Response) {
+func (c *Controller) CUpdateBird(id string, bird *models.BirdInput) (models.Response) {
 	/*
 	coll := c.db.GetCollection(repositories.BirdColl)
 	response := coll.UpdateOne(bson.M{
-		"_id": id,
 		"name": bird.Name,
 		"description": bird.Description,
 		"image_id": bird.ImageId,

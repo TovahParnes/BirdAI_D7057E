@@ -15,7 +15,7 @@ import (
 // @Accept		json
 // @Produce		json
 // @Param		id	path	string	true	"Bird ID"
-// @Success		200	{object}	models.Response{data=[]models.Bird}
+// @Success		200	{object}	models.Response{data=[]models.BirdOutput}
 // @Failure		404	{object}	models.Response{data=[]models.Err}
 // @Failure		410	{object}	models.Response{data=[]models.Err}
 // @Failure		503	{object}	models.Response{data=[]models.Err}
@@ -35,7 +35,7 @@ func (h *Handler) GetBirdById(c *fiber.Ctx) error {
 // @Produce		json
 // @Param		set	query		int	false	"Set of birds"
 // @Param		search	query	string	false	"Search parameter for birds"
-// @Success		200	{object}	models.Response{data=[]models.Bird}
+// @Success		200	{object}	models.Response{data=[]models.BirdOutput}
 // @Failure		401	{object}	models.Response{data=[]models.Err}
 // @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router		/birds/list [get]
@@ -68,7 +68,7 @@ func (h *Handler) ListBirds(c *fiber.Ctx) error {
 // @Accept		json
 // @Produce		json
 // @Param		id	path	string	true	"Bird ID"
-// @Param		bird	body		models.Bird	true	"bird"
+// @Param		bird	body		models.BirdInput	true	"bird"
 // @Success		200	{object}	models.Response{}
 // @Failure		400	{object}	models.Response{data=[]models.Err}
 // @Failure		401	{object}	models.Response{data=[]models.Err}
@@ -81,7 +81,7 @@ func (h *Handler) UpdateBird(c *fiber.Ctx) error {
 	// Authenticate(jwt.token)
 
 	id := c.Params("id")
-	var bird *models.Bird
+	var bird *models.BirdInput
 	if err := c.BodyParser(&bird); err != nil {
 		//	@Failure	400	{object}	models.Response{}
 		// something with body is wrong/missing

@@ -1,17 +1,26 @@
 package models
 
-type UserReponse struct {
-	Id        string `json:"_id" form:"_id"`
-	AuthId    string `json:"authId" form:"authId"`
-	Username  string `json:"username" form:"username"`
-	CreatedAt string `json:"createdAt" form:"createdAt"`
+type UserDB struct {
+	Id        string `bson:"_id" json:"_id" form:"_id"`
+	Username  string `bson:"username" json:"username" form:"username"`
+	AuthId    string `bson:"auth_id" json:"authId" form:"authId"`
+	CreatedAt string `bson:"created_at" json:"createdAt" form:"createdAt"`
+	Active    bool   `bson:"active"`
 }
 
-type InputUser struct {
+type UserLogin struct {
+	Username  string `bson:"username" json:"username" form:"username"`
+	AuthId    string `bson:"auth_id" json:"authId" form:"authId"`
+}
+
+type UserInput struct {
 	Username string `json:"user" bson:"username"`
+	Active    bool   `bson:"active"`
 }
 
-type TokenUser struct {
-	Token
-	InputUser InputUser `json:"user" form:"user"`
+type UserOutput struct {
+	Id        string `bson:"_id" json:"_id" form:"_id"`
+	Username  string `bson:"username" json:"username" form:"username"`
+	CreatedAt string `bson:"created_at" json:"createdAt" form:"createdAt"`
+	Active    bool   `bson:"active"`
 }
