@@ -16,6 +16,8 @@ constructor(
     
   }
 
+  imgsize = 150
+
   navigateToLogin(){
     this.router.navigate(['Login']);
   }

@@ -15,6 +15,7 @@ import {LibraryComponent} from './library/library.component';
 import {TakenImagesPageComponent} from './taken-images-page/taken-images-page.component';
 import {SpeciesPageComponent} from './species-page/species-page.component';
 import {ProfilePageComponent} from './profile-page/profile-page.component';
+import { CardComponent, Card2Component } from './card/card.component';
 import { FirstPageComponent } from './first-page/first-page.component';
 
 // login authguard imports
@@ -28,9 +29,10 @@ import {MatStepperModule} from '@angular/material/stepper';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatCardModule} from '@angular/material/card';
-import { CardComponent, Card2Component } from './card/card.component';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatIconModule} from '@angular/material/icon';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+
 
 
 @NgModule({
@@ -51,10 +53,10 @@ import {MatIconModule} from '@angular/material/icon';
     HttpClientModule,
     RouterModule.forRoot([
       {path: 'login', component: LoginComponent},
-      {path: 'mainpage', component: MainPageComponent, }, //canActivate: [AuthGuardService]
+      {path: 'mainpage', component: MainPageComponent},
       {path: 'library', component: LibraryComponent, },
       {path: 'takenImages', component: TakenImagesPageComponent, },
-      {path: 'profile', component: ProfilePageComponent, },
+      {path: 'profile', component: ProfilePageComponent}, //canActivate: [AuthGuardService]
       {path: 'species-page', component: SpeciesPageComponent,},
       {path: 'first-page', component: FirstPageComponent,},
       {path: '**', component: LoginComponent},
@@ -71,8 +73,9 @@ import {MatIconModule} from '@angular/material/icon';
     MatRadioModule,
     MatFormFieldModule,
     MatCardModule,
-    MatButtonToggleModule,
     MatIconModule,
+    MatProgressSpinnerModule,
+    MatButtonToggleModule,
   ],
   exports:[
     RouterModule

@@ -3,6 +3,8 @@ import {SocialAuthService, GoogleLoginProvider} from '@abacritt/angularx-social-
 import {Router} from '@angular/router';
 import { AppComponent } from '../app.component';
 import { Card2Component } from '../card/card.component';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-library',
@@ -12,15 +14,20 @@ import { Card2Component } from '../card/card.component';
 
 export class LibraryComponent {
 
-  cardlist = [
-    {title: 'Duck',imageSrc: 'assets/duck.jpg', date:'2023-10-05'},
-    {title: 'Budgie',imageSrc: 'assets/undulat.jpg', date:'2023-10-04'},
-  ]
+  list1: any[] = [];
+  list2: any[] = [];
+  private jsonUrl = 'assets/data.json';
+
+  // cardlist = [
+  //   {title: 'Duck',imageSrc: 'assets/duck.jpg', date:'2023-10-05'},
+  //   {title: 'Budgie',imageSrc: 'assets/undulat.jpg', date:'2023-10-04'},
+  // ]
 
   constructor(
     private router: Router, 
     public mainApp: AppComponent,
-    public socialAuthService: SocialAuthService) {
+    public socialAuthService: SocialAuthService,
+    private http: HttpClient) {
   }
 
   logout(): void {
@@ -56,4 +63,16 @@ export class LibraryComponent {
       }
       });
   }
+
+  getData(): Observable<any[]> {
+    return this.http.get<any[]>(this.jsonUrl);
+  }
+
+  ngOnInit(): void {
+    this.getData().subscribe((response) => {
+      const data = response;
+      this.list1 = data.find((item) => 'list1' in item)?.list1 || [];
+    });
+  }
+
 }

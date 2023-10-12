@@ -1,45 +1,44 @@
-<p></p>
-<p></p>
-<div class="fpContainer">
-    <div class="center-nobg" style="margin: auto;">
-        <div style="left: 50px;">
+<div class="container2">
+    <!-- <div class="center-nobg"> -->
+
+        <div class="logo-container2">
             <img src="assets/birdAI-logo.svg" class="logo">
-            <h1>BirdAI</h1>
         </div>
-        <div class="textbox" >
-            Birdwatching has never been easier!
-            <p></p>
-            <button mat-icon-button color="primary" (click)="navigateToLogin()" style="width: 50%;">
-                login
-                <mat-icon>login</mat-icon>
+
+        <div class="items-container">
+
+            <div class="content-element" style="font-size: 40px;">Birdwatching has never been easier!</div>  
+
+            <div class="content-element">            
+                <button class="sign-up-with-google-button" (click)="navigateToLogin()">
+                <img src="assets/google-logo.png" style="width: 15px;"/>
+                Sign up with Google
             </button>
-        </div>
-    </div>
+            </div>
+            
+            <div class="image-row">
+                <div class="image">
+                    <img src="assets/promo.webp" [style.width.px]="imgsize" [style.height.px]="imgsize">
+                    <p style="font-size: small;">Take a picture of any bird</p>
+                </div>
 
-    <p style="height: 50px;"></p>
+                <mat-icon style="margin-top: -10%;">navigate_next</mat-icon>
 
-    <div class="center-nobg" style="margin: auto;">
-        <div>
-            <img src="assets/promo.webp" style="width: 200px; height: 200px; object-fit: cover;">
-            <p>Take a picture of any bird</p>
-        </div>
+                <div class="image">
+                    <img src="assets/upload.jpg" [style.width.px]="imgsize" [style.height.px]="imgsize">
+                    <p style="font-size: small;">Upload it to the BirdAI</p>
+                </div>
 
-        <div>
-            <mat-icon style="margin-top: 120%; padding: 20px;">navigate_next</mat-icon>
-            </div>  
-        <div>
-            <img src="assets/upload.jpg" style="width: 200px; height: 200px; object-fit: cover;">
-            <p>Upload it to the BirdAI</p>
-        </div>
+                <mat-icon style="margin-top: -10%;">navigate_next</mat-icon>
 
-        <div>
-        <mat-icon style="margin-top: 120%; padding: 20px;">navigate_next</mat-icon>
-        </div>  
-
-        <div>
-            <img src="assets/birddata.png" style="width: 200px; height: 200px; object-fit: cover;">
-            <p>Get back an identification and more</p>
+                <div class="image">
+                    <img src="assets/birddata.png" [style.width.px]="imgsize" [style.height.px]="imgsize">
+                    <p style="font-size: small; margin-top: -5px;">Get back an identification and many other interesting facts</p>
+                </div>
+                
+            </div>
         </div>
         
     </div>
-</div>
+
+    

@@ -87,8 +87,4 @@ export class MainPageComponent implements OnInit {
     this.form.reset();
     this.selectedImage = null;
   }
-
-  navigateToFirstPage() {
-    this.router.navigate(['first-page']);
-  }
 }
