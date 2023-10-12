@@ -43,20 +43,8 @@ func IsTypeError(response models.Response) bool {
 	return reflect.TypeOf(response.Data) == reflect.TypeOf(models.Err{})
 }
 
-func IsTypeUser(response models.Response) bool {
-	return reflect.TypeOf(response.Data) == reflect.TypeOf(models.User{})
-}
-
-func IsTypeBird(response models.Response) bool {
-	return reflect.TypeOf(response.Data) == reflect.TypeOf(models.Bird{})
-}
-
-func IsTypePost(response models.Response) bool {
-	return reflect.TypeOf(response.Data) == reflect.TypeOf(models.Post{})
-}
-
-func IsTypeAdmin(response models.Response) bool {
-	return reflect.TypeOf(response.Data) == reflect.TypeOf(models.Admin{})
+func IsType(response models.Response, data interface{}) bool {
+	return reflect.TypeOf(response.Data) == reflect.TypeOf(data)
 }
 
 

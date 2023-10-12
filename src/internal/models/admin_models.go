@@ -1,6 +1,6 @@
 package models
 
-type Admin struct {
+type AdminDB struct {
 	Id     string `bson:"_id"`
 	UserId string `bson:"user_id"`
 	Access string `bson:"access"`

@@ -1,6 +1,6 @@
 package models
 
-type Post struct {
+type PostDB struct {
 	Id        string `bson:"_id"`
 	UserId    string `bson:"user_id"`
 	BirdId    string `bson:"bird_id"`

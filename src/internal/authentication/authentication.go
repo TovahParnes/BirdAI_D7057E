@@ -4,10 +4,11 @@ import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/repositories"
 	"birdai/src/internal/utils"
+	"os"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 	"go.mongodb.org/mongo-driver/bson"
-	"os"
 )
 
 type Authentication struct {
@@ -20,7 +21,7 @@ func NewAuthentication(userCollection repositories.IMongoCollection) Authenticat
 	}
 }
 
-func (a *Authentication) LoginUser(user *models.User) models.Response {
+func (a *Authentication) LoginUser(user *models.UserLogin) models.Response {
 	// Create the Claims
 	claims := jwt.MapClaims{
 		"username": user.Username,
@@ -36,10 +37,11 @@ func (a *Authentication) LoginUser(user *models.User) models.Response {
 	}
 	response := a.UserColl.FindOne(bson.M{"auth_id": t})
 	if utils.IsTypeError(response) {
-		response = a.UserColl.CreateOne(user)
-		response.Data.(*models.User).AuthId = t
+		userDB := models.UserDB{Username: user.Username, AuthId: t, Active: true}
+		response = a.UserColl.CreateOne(&userDB)
+		//response.Data.(*models.UserOutput).AuthId = t
 	}
-	return utils.Response(response)
+	return response
 }
 
 //func (a *Authentication) Logout(c *fiber.Ctx) models.Response {
@@ -81,9 +83,10 @@ func (a *Authentication) CheckExpired(c *fiber.Ctx) models.Response {
 	//		return response
 	//	}
 	//}
-	return utils.Response(models.User{
+	return utils.Response(models.UserDB{
 		Username: claims["username"].(string),
 		AuthId:   claims["authId"].(string),
 		Active:   true,
 	})
 }
+

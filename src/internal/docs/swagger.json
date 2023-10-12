@@ -45,7 +45,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Admin"
+                            "$ref": "#/definitions/models.AdminInput"
                         }
                     }
                 ],
@@ -189,7 +189,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.Admin"
+                                                "$ref": "#/definitions/models.AdminOutput"
                                             }
                                         }
                                     }
@@ -295,7 +295,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.Admin"
+                                                "$ref": "#/definitions/models.AdminOutput"
                                             }
                                         }
                                     }
@@ -452,7 +452,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.Admin"
+                                                "$ref": "#/definitions/models.AdminOutput"
                                             }
                                         }
                                     }
@@ -696,7 +696,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Admin"
+                            "$ref": "#/definitions/models.AdminInput"
                         }
                     }
                 ],
@@ -856,7 +856,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.Bird"
+                                                "$ref": "#/definitions/models.BirdOutput"
                                             }
                                         }
                                     }
@@ -945,7 +945,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.Bird"
+                                                "$ref": "#/definitions/models.BirdOutput"
                                             }
                                         }
                                     }
@@ -1044,7 +1044,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Bird"
+                            "$ref": "#/definitions/models.BirdInput"
                         }
                     }
                 ],
@@ -1183,7 +1183,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Post"
+                            "$ref": "#/definitions/models.PostInput"
                         }
                     }
                 ],
@@ -1301,7 +1301,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.Post"
+                                                "$ref": "#/definitions/models.PostOutput"
                                             }
                                         }
                                     }
@@ -1390,7 +1390,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.Post"
+                                                "$ref": "#/definitions/models.PostOutput"
                                             }
                                         }
                                     }
@@ -1603,7 +1603,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Post"
+                            "$ref": "#/definitions/models.PostInput"
                         }
                     }
                 ],
@@ -1742,7 +1742,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/models.UserInput"
                         }
                     }
                 ],
@@ -1880,7 +1880,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.User"
+                                                "$ref": "#/definitions/models.UserOutput"
                                             }
                                         }
                                     }
@@ -1965,7 +1965,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.User"
+                                                "$ref": "#/definitions/models.UserOutput"
                                             }
                                         }
                                     }
@@ -2101,7 +2101,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.User"
+                                                "$ref": "#/definitions/models.UserOutput"
                                             }
                                         }
                                     }
@@ -2324,7 +2324,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/models.UserInput"
                         }
                     }
                 ],
@@ -2491,7 +2491,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.Post"
+                                                "$ref": "#/definitions/models.PostOutput"
                                             }
                                         }
                                     }
@@ -2546,7 +2546,18 @@
         }
     },
     "definitions": {
-        "models.Admin": {
+        "models.AdminInput": {
+            "type": "object",
+            "properties": {
+                "access": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.AdminOutput": {
             "type": "object",
             "properties": {
                 "access": {
@@ -2555,18 +2566,15 @@
                 "id": {
                     "type": "string"
                 },
-                "userId": {
-                    "type": "string"
+                "user": {
+                    "$ref": "#/definitions/models.UserOutput"
                 }
             }
         },
-        "models.Bird": {
+        "models.BirdInput": {
             "type": "object",
             "properties": {
                 "description": {
-                    "type": "string"
-                },
-                "id": {
                     "type": "string"
                 },
                 "imageId": {
@@ -2577,6 +2585,26 @@
                 },
                 "soundId": {
                     "type": "string"
+                }
+            }
+        },
+        "models.BirdOutput": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image": {
+                    "$ref": "#/definitions/models.MediaOutput"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "sound": {
+                    "$ref": "#/definitions/models.MediaOutput"
                 }
             }
         },
@@ -2599,16 +2627,30 @@
                 }
             }
         },
-        "models.Post": {
+        "models.MediaOutput": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "fileType": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.PostInput": {
             "type": "object",
             "properties": {
                 "birdId": {
                     "type": "string"
                 },
                 "createdAt": {
-                    "type": "string"
-                },
-                "id": {
                     "type": "string"
                 },
                 "imageId": {
@@ -2625,6 +2667,32 @@
                 }
             }
         },
+        "models.PostOutput": {
+            "type": "object",
+            "properties": {
+                "bird": {
+                    "$ref": "#/definitions/models.BirdOutput"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image": {
+                    "$ref": "#/definitions/models.MediaOutput"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "sound": {
+                    "$ref": "#/definitions/models.MediaOutput"
+                },
+                "user": {
+                    "$ref": "#/definitions/models.UserOutput"
+                }
+            }
+        },
         "models.Response": {
             "type": "object",
             "properties": {
@@ -2634,7 +2702,18 @@
                 }
             }
         },
-        "models.User": {
+        "models.UserInput": {
+            "type": "object",
+            "properties": {
+                "active": {
+                    "type": "boolean"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.UserOutput": {
             "type": "object",
             "properties": {
                 "_id": {
@@ -2642,9 +2721,6 @@
                 },
                 "active": {
                     "type": "boolean"
-                },
-                "authId": {
-                    "type": "string"
                 },
                 "createdAt": {
                     "type": "string"

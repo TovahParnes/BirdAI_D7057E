@@ -1,6 +1,6 @@
 package models
 
-type Media struct {
+type MediaDB struct {
 	Id       string `bson:"_id"`
 	Data     []byte `bson:"data"`
 	FileType string `bson:"file_type"`

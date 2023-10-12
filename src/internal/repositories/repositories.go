@@ -78,7 +78,7 @@ func (m *MongoCollection) DeleteOne(query bson.M) (models.Response) {
 		return response
 	}
 	switch response.Data.(type) {
-	case *models.User:
+	case *models.UserOutput, *models.UserInput, *models.UserDB:
 		update := bson.M{
 			"_id":      query["_id"],
 			"active":   false,
@@ -117,35 +117,35 @@ func (m *MongoCollection) FindOne(query bson.M) (models.Response) {
 	// There should be a way to make this code more compact as it is repeating the same thing
 	switch collName {
 	case UserColl:
-		var result models.User
+		var result models.UserOutput
 		err := m.Collection.FindOne(m.ctx, query).Decode(&result)
 		if err != nil {
 			return utils.ErrorNotFoundInDatabase("User collection")
 		}
 		return utils.Response(&result)
 	case AdminColl:
-		var result models.Admin
+		var result models.AdminOutput
 		err := m.Collection.FindOne(m.ctx, query).Decode(&result)
 		if err != nil {
 			return utils.ErrorNotFoundInDatabase("Admin collection")
 		}
 		return utils.Response(&result)
 	case BirdColl:
-		var result models.Bird
+		var result models.BirdOutput
 		err := m.Collection.FindOne(m.ctx, query).Decode(&result)
 		if err != nil {
 			return utils.ErrorNotFoundInDatabase("Bird collection")
 		}
 		return utils.Response(&result)
 	case PostColl:
-		var result models.Post
+		var result models.PostOutput
 		err := m.Collection.FindOne(m.ctx, query).Decode(&result)
 		if err != nil {
 			return utils.ErrorNotFoundInDatabase("Post collection")
 		}
 		return utils.Response(&result)
 	case MediaColl:
-		var result models.Media
+		var result models.MediaOutput
 		err := m.Collection.FindOne(m.ctx, query).Decode(&result)
 		if err != nil {
 			return utils.ErrorNotFoundInDatabase("Media collection")
@@ -172,9 +172,9 @@ func (m *MongoCollection) FindAll() (models.Response) {
 	// There should be a way to make this code more compact as it is repeating the same thing
 	switch collName {
 	case UserColl:
-		var resultStruct []models.User
+		var resultStruct []models.UserOutput
 		for _, result := range results {
-			var tempResult models.User
+			var tempResult models.UserOutput
 			bsonBody, _ := bson.Marshal(result)
 			err := bson.Unmarshal(bsonBody, &tempResult)
 			if err != nil {
@@ -184,9 +184,9 @@ func (m *MongoCollection) FindAll() (models.Response) {
 		}
 		return utils.Response(resultStruct)
 	case AdminColl:
-		var resultStruct []models.Admin
+		var resultStruct []models.AdminOutput
 		for _, result := range results {
-			var tempResult models.Admin
+			var tempResult models.AdminOutput
 			bsonBody, _ := bson.Marshal(result)
 			err := bson.Unmarshal(bsonBody, &tempResult)
 			if err != nil {
@@ -196,9 +196,9 @@ func (m *MongoCollection) FindAll() (models.Response) {
 		}
 		return utils.Response(resultStruct)
 	case BirdColl:
-		var resultStruct []models.Bird
+		var resultStruct []models.BirdOutput
 		for _, result := range results {
-			var tempResult models.Bird
+			var tempResult models.BirdOutput
 			bsonBody, _ := bson.Marshal(result)
 			err := bson.Unmarshal(bsonBody, &tempResult)
 			if err != nil {
@@ -208,9 +208,9 @@ func (m *MongoCollection) FindAll() (models.Response) {
 		}
 		return utils.Response(resultStruct)
 	case PostColl:
-		var resultStruct []models.Post
+		var resultStruct []models.PostOutput
 		for _, result := range results {
-			var tempResult models.Post
+			var tempResult models.PostOutput
 			bsonBody, _ := bson.Marshal(result)
 			err := bson.Unmarshal(bsonBody, &tempResult)
 			if err != nil {
@@ -220,9 +220,9 @@ func (m *MongoCollection) FindAll() (models.Response) {
 		}
 		return utils.Response(resultStruct)
 	case MediaColl:
-		var resultStruct []models.Media
+		var resultStruct []models.MediaOutput
 		for _, result := range results {
-			var tempResult models.Media
+			var tempResult models.MediaOutput
 			bsonBody, _ := bson.Marshal(result)
 			err := bson.Unmarshal(bsonBody, &tempResult)
 			if err != nil {
