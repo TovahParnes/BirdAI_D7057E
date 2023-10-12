@@ -109,6 +109,13 @@ definitions:
       user:
         type: string
     type: object
+  models.UserLogin:
+    properties:
+      authId:
+        type: string
+      username:
+        type: string
+    type: object
   models.UserOutput:
     properties:
       _id:
@@ -1090,7 +1097,7 @@ paths:
         name: set
         required: true
         schema:
-          $ref: '#/definitions/models.UserInput'
+          $ref: '#/definitions/models.UserLogin'
       produces:
       - application/json
       responses:

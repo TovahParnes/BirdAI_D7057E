@@ -1745,7 +1745,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.UserInput"
+                            "$ref": "#/definitions/models.UserLogin"
                         }
                     }
                 ],
@@ -2712,6 +2712,17 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.UserLogin": {
+            "type": "object",
+            "properties": {
+                "authId": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }
