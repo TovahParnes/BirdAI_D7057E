@@ -75,11 +75,7 @@ func IsValidMediaInput(post *models.MediaInput) models.Response {
 }
 
 func IsValidPostInput(post *models.PostInput) models.Response {
-	response := IsValidId(post.UserId)
-	if IsTypeError(response) {
-		return ErrorParams("Given user id is not a valid id")
-	}
-	response = IsValidId(post.BirdId)
+	response := IsValidId(post.BirdId)
 	if IsTypeError(response) {
 		return ErrorParams("Given bird id is not a valid id")
 	}

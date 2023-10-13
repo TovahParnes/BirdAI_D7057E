@@ -22,7 +22,12 @@ import (
 // @Router		/posts/{id} [get]
 func (h *Handler) GetPostById(c *fiber.Ctx) error {
 	id := c.Params("id")
-	response := h.controller.CGetPostById(id)
+	response := utils.IsValidId(id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
+	response = h.controller.CGetPostById(id)
 
 	return utils.ResponseToStatus(c, response)
 }
@@ -42,21 +47,20 @@ func (h *Handler) GetPostById(c *fiber.Ctx) error {
 // @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router		/posts/list [get]
 func (h *Handler) ListPosts(c *fiber.Ctx) error {
-	//authId := c.GetReqHeaders()["Authid"]
 	queries := c.Queries()
 	set := queries["set"]
+	response := utils.IsValidSet(&set)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
 	search := queries["search"]
+	response = utils.IsValidSearch(search)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
-	//	@Failure	401	{object}	models.Response{}
-	// Authenticate(jwt.token)
-
-	//	@Failure	503	{object}	models.Response{}
-	// if no connection to db was established
-
-	//	@Failure	404	{object}	models.Response{}
-	// if user not found
-
-	response := h.controller.CListPosts(set, search)
+	response = h.controller.CListPosts(set, search)
 	return utils.ResponseToStatus(c, response)
 }
 
@@ -76,22 +80,26 @@ func (h *Handler) ListPosts(c *fiber.Ctx) error {
 // @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router		/users/{id}/posts/list [get]
 func (h *Handler) ListUsersPosts(c *fiber.Ctx) error {
-	//authId := c.GetReqHeaders()["Authid"]
 	userId := c.Params("id")
+	response := utils.IsValidId(userId)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
 	queries := c.Queries()
 	set := queries["set"]
+	response = utils.IsValidSet(&set)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
 	search := queries["search"]
+	response = utils.IsValidSearch(search)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
-	//	@Failure	401	{object}	models.Response{}
-	// Authenticate(jwt.token)
-
-	//	@Failure	503	{object}	models.Response{}
-	// if no connection to db was established
-
-	//	@Failure	404	{object}	models.Response{}
-	// if post not found
-
-	response := h.controller.CListUsersPosts(userId, set, search)
+	response = h.controller.CListUsersPosts(userId, set, search)
 	return utils.ResponseToStatus(c, response)
 }
 
@@ -111,15 +119,24 @@ func (h *Handler) ListUsersPosts(c *fiber.Ctx) error {
 // @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router		/posts/ [post]
 func (h *Handler) CreatePost(c *fiber.Ctx) error {
-	authId := c.GetReqHeaders()["Authid"]
+	response := h.auth.CheckExpired(c)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	authId := response.Data.(models.UserDB).AuthId
+
 	var post *models.PostInput
 	if err := c.BodyParser(&post);
 	err != nil {
 		//	@Failure	400	{object}	models.Response{}
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
+	response = utils.IsValidPostInput(post)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
-	response := h.controller.CCreatePost(authId, post)
+	response = h.controller.CCreatePost(authId, post)
 
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
@@ -146,20 +163,30 @@ func (h *Handler) CreatePost(c *fiber.Ctx) error {
 // @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router		/posts/{id} [patch]
 func (h *Handler) UpdatePost(c *fiber.Ctx) error {
-	//authId := c.GetReqHeaders()["Authid"]
+	response := h.auth.CheckExpired(c)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
 	id := c.Params("id")
+	response = utils.IsValidId(id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 	
 	var post *models.PostInput
 	if err := c.BodyParser(&post); err != nil {
-		//	@Failure	400	{object}	models.Response{}
-		// something with body is wrong/missing
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
+	}
+	response = utils.IsValidPostInput(post)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
 	}
 
 	//	@Failure		403	{object}	models.Response{}
 	// if user is not admin or post is not the same as the one being updated
 
-	response := h.controller.CUpdatePost(id, post)
+	response = h.controller.CUpdatePost(id, post)
 	return utils.ResponseToStatus(c, response)
 }
 
@@ -179,21 +206,22 @@ func (h *Handler) UpdatePost(c *fiber.Ctx) error {
 // @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router		/posts/{id} [delete]
 func (h *Handler) DeletePost(c *fiber.Ctx) error {
-	id := c.Params("id")
-	authId := c.GetReqHeaders()["Authid"]
+	response := h.auth.CheckExpired(c)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	authId := response.Data.(models.UserDB).AuthId
 
-	//	@Failure	401	{object}	models.Response{}
-	// Authenticate(jwt.token)
+	id := c.Params("id")
+	response = utils.IsValidId(id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
 	//	@Failure		403	{object}	models.Response{}
 	// if user is not admin or user is not the same as the one being updated
 
-	//	@Failure	503	{object}	models.Response{}
-	// if no connection to db was established
 
-	//	@Failure	404	{object}	models.Response{}
-	// if user not found
-
-	response := h.controller.CDeletePost(id, authId)
+	response = h.controller.CDeletePost(id, authId)
 	return utils.ResponseToStatus(c, response)
 }
