@@ -67,6 +67,7 @@ func (h *Handler) ListBirds(c *fiber.Ctx) error {
 // @Tags		Birds
 // @Accept		json
 // @Produce		json
+// @Security 	Bearer
 // @Param		id	path	string	true	"Bird ID"
 // @Param		bird	body		models.BirdInput	true	"bird"
 // @Success		200	{object}	models.Response{}
@@ -75,7 +76,7 @@ func (h *Handler) ListBirds(c *fiber.Ctx) error {
 // @Failure		403	{object}	models.Response{data=[]models.Err}
 // @Failure		404	{object}	models.Response{data=[]models.Err}
 // @Failure		503	{object}	models.Response{data=[]models.Err}
-// @Router			/birds/{id} [patch]
+// @Router		/birds/{id} [patch]
 func (h *Handler) UpdateBird(c *fiber.Ctx) error {
 	//	@Failure	401	{object}	models.Response{}
 	// Authenticate(jwt.token)

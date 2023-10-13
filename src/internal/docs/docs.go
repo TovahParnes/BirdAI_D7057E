@@ -1022,6 +1022,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Update given bird",
                 "consumes": [
                     "application/json"
@@ -1168,6 +1173,11 @@ const docTemplate = `{
         },
         "/posts/": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Create a new post",
                 "consumes": [
                     "application/json"
@@ -1467,6 +1477,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete given post",
                 "consumes": [
                     "application/json"
@@ -1581,6 +1596,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Update given post",
                 "consumes": [
                     "application/json"
@@ -1735,7 +1755,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "Login a user",
                 "parameters": [
@@ -1839,11 +1859,6 @@ const docTemplate = `{
         },
         "/users/list": {
             "get": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "List all users of a specified set",
                 "consumes": [
                     "application/json"
@@ -1852,7 +1867,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "List all users of a specified set",
                 "parameters": [
@@ -1951,7 +1966,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "Get current user",
                 "responses": {
@@ -2065,11 +2080,6 @@ const docTemplate = `{
         },
         "/users/{id}": {
             "get": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "Get user by ID",
                 "consumes": [
                     "application/json"
@@ -2078,7 +2088,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "Get user by ID",
                 "parameters": [
@@ -2191,7 +2201,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "Delete given user",
                 "parameters": [
@@ -2310,7 +2320,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "Update given user",
                 "parameters": [

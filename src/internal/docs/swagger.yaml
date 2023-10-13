@@ -714,6 +714,8 @@ paths:
                     $ref: '#/definitions/models.Err'
                   type: array
               type: object
+      security:
+      - Bearer: []
       summary: Update given bird
       tags:
       - Birds
@@ -822,6 +824,8 @@ paths:
                     $ref: '#/definitions/models.Err'
                   type: array
               type: object
+      security:
+      - Bearer: []
       summary: Create a new post
       tags:
       - Posts
@@ -887,6 +891,8 @@ paths:
                     $ref: '#/definitions/models.Err'
                   type: array
               type: object
+      security:
+      - Bearer: []
       summary: Delete given post
       tags:
       - Posts
@@ -1028,6 +1034,8 @@ paths:
                     $ref: '#/definitions/models.Err'
                   type: array
               type: object
+      security:
+      - Bearer: []
       summary: Update given post
       tags:
       - Posts
@@ -1145,7 +1153,7 @@ paths:
               type: object
       summary: Login a user
       tags:
-      - users
+      - Users
   /users/{id}:
     delete:
       consumes:
@@ -1212,7 +1220,7 @@ paths:
       - Bearer: []
       summary: Delete given user
       tags:
-      - users
+      - Users
     get:
       consumes:
       - application/json
@@ -1270,11 +1278,9 @@ paths:
                     $ref: '#/definitions/models.Err'
                   type: array
               type: object
-      security:
-      - Bearer: []
       summary: Get user by ID
       tags:
-      - users
+      - Users
     patch:
       consumes:
       - application/json
@@ -1357,7 +1363,7 @@ paths:
       - Bearer: []
       summary: Update given user
       tags:
-      - users
+      - Users
   /users/{id}/posts/list:
     get:
       consumes:
@@ -1466,11 +1472,9 @@ paths:
                     $ref: '#/definitions/models.Err'
                   type: array
               type: object
-      security:
-      - Bearer: []
       summary: List all users of a specified set
       tags:
-      - users
+      - Users
   /users/me:
     get:
       consumes:
@@ -1538,7 +1542,7 @@ paths:
       - Bearer: []
       summary: Get current user
       tags:
-      - users
+      - Users
 schemes:
 - http
 securityDefinitions:
