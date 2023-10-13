@@ -15,10 +15,10 @@ import (
 // @Accept		json
 // @Produce		json
 // @Param		id	path	string	true	"Post ID"
-// @Success		200	{object}	models.Response{data=[]models.PostOutput}
-// @Failure		404	{object}	models.Response{data=[]models.Err}
-// @Failure		410	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Success		200	{object}	models.Response{data=models.PostOutput}
+// @Failure		404	{object}	models.Response{data=models.Err}
+// @Failure		410	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/posts/{id} [get]
 func (h *Handler) GetPostById(c *fiber.Ctx) error {
 	id := c.Params("id")
@@ -43,8 +43,8 @@ func (h *Handler) GetPostById(c *fiber.Ctx) error {
 // @Param		set	query		int	false	"Set of posts"
 // @Param		search	query	string	false	"Search parameter for post"
 // @Success		200	{object}	models.Response{data=[]models.PostOutput}
-// @Failure		401	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/posts/list [get]
 func (h *Handler) ListPosts(c *fiber.Ctx) error {
 	queries := c.Queries()
@@ -76,8 +76,8 @@ func (h *Handler) ListPosts(c *fiber.Ctx) error {
 // @Param		set	query		int	false	"Set of posts"
 // @Param		search	query	string	false	"Search parameter for post"
 // @Success		200	{object}	models.Response{data=[]models.PostOutput}
-// @Failure		401	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/users/{id}/posts/list [get]
 func (h *Handler) ListUsersPosts(c *fiber.Ctx) error {
 	userId := c.Params("id")
@@ -114,9 +114,9 @@ func (h *Handler) ListUsersPosts(c *fiber.Ctx) error {
 // @Security 	Bearer
 // @Param		post	body		models.PostInput	true	"post"
 // @Success		201	{object}	models.Response{}
-// @Failure		400	{object}	models.Response{data=[]models.Err}
-// @Failure		401	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Failure		400	{object}	models.Response{data=models.Err}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/posts/ [post]
 func (h *Handler) CreatePost(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)
@@ -156,11 +156,11 @@ func (h *Handler) CreatePost(c *fiber.Ctx) error {
 // @Param		id	path	string	true	"post ID"
 // @Param		post	body		models.PostInput	true	"post"
 // @Success		200	{object}	models.Response{}
-// @Failure		400	{object}	models.Response{data=[]models.Err}
-// @Failure		401	{object}	models.Response{data=[]models.Err}
-// @Failure		403	{object}	models.Response{data=[]models.Err}
-// @Failure		404	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Failure		400	{object}	models.Response{data=models.Err}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		403	{object}	models.Response{data=models.Err}
+// @Failure		404	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/posts/{id} [patch]
 func (h *Handler) UpdatePost(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)
@@ -200,10 +200,10 @@ func (h *Handler) UpdatePost(c *fiber.Ctx) error {
 // @Security 	Bearer
 // @Param		id	path	string	true	"Post ID"
 // @Success		200	{object}	models.Response{}
-// @Failure		401	{object}	models.Response{data=[]models.Err}
-// @Failure		403	{object}	models.Response{data=[]models.Err}
-// @Failure		404	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		403	{object}	models.Response{data=models.Err}
+// @Failure		404	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/posts/{id} [delete]
 func (h *Handler) DeletePost(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)

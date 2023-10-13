@@ -15,10 +15,10 @@ import (
 // @Accept		json
 // @Produce		json
 // @Param		id	path	string	true	"Bird ID"
-// @Success		200	{object}	models.Response{data=[]models.BirdOutput}
-// @Failure		404	{object}	models.Response{data=[]models.Err}
-// @Failure		410	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Success		200	{object}	models.Response{data=models.BirdOutput}
+// @Failure		404	{object}	models.Response{data=models.Err}
+// @Failure		410	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/birds/{id} [get]
 func (h *Handler) GetBirdById(c *fiber.Ctx) error {
 	id := c.Params("id")
@@ -41,8 +41,8 @@ func (h *Handler) GetBirdById(c *fiber.Ctx) error {
 // @Param		set	query		int	false	"Set of birds"
 // @Param		search	query	string	false	"Search parameter for birds"
 // @Success		200	{object}	models.Response{data=[]models.BirdOutput}
-// @Failure		401	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/birds/list [get]
 func (h *Handler) ListBirds(c *fiber.Ctx) error {
 
@@ -82,11 +82,11 @@ func (h *Handler) ListBirds(c *fiber.Ctx) error {
 // @Param		id	path	string	true	"Bird ID"
 // @Param		bird	body		models.BirdInput	true	"bird"
 // @Success		200	{object}	models.Response{}
-// @Failure		400	{object}	models.Response{data=[]models.Err}
-// @Failure		401	{object}	models.Response{data=[]models.Err}
-// @Failure		403	{object}	models.Response{data=[]models.Err}
-// @Failure		404	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Failure		400	{object}	models.Response{data=models.Err}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		403	{object}	models.Response{data=models.Err}
+// @Failure		404	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/birds/{id} [patch]
 func (h *Handler) UpdateBird(c *fiber.Ctx) error {
 response := h.auth.CheckExpired(c)

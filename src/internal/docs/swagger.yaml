@@ -914,9 +914,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.PostOutput'
-                  type: array
+                  $ref: '#/definitions/models.PostOutput'
               type: object
         "404":
           description: Not Found
@@ -925,9 +923,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "410":
           description: Gone
@@ -936,9 +932,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "503":
           description: Service Unavailable
@@ -947,9 +941,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
       summary: Get post by ID
       tags:
