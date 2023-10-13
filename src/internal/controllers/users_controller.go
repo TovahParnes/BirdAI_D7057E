@@ -24,7 +24,7 @@ func (c *Controller) CGetUserById(id string) models.Response {
 	return response
 }
 
-func (c *Controller) CListUsers() models.Response {
+func (c *Controller) CListUsers(set, search string) models.Response {
 	coll := c.db.GetCollection(repositories.UserColl)
 	response := coll.FindAll()
 	users := []*models.UserOutput{}
