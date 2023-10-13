@@ -16,8 +16,8 @@ func TestConnection(t *testing.T) {
 		if utils.IsTypeError(response) {
 			return
 		}
-		fmt.Println("Allting", response.Data.([]models.UserOutput))
-		fmt.Println("Första", response.Data.([]models.UserOutput)[0].Id)
+		fmt.Println("Allting", response.Data.([]models.UserDB))
+		fmt.Println("Första", response.Data.([]models.UserDB)[0].Id)
 
 		mi.DisconnectDB()
 	})

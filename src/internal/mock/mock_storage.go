@@ -36,7 +36,7 @@ type mockCollection struct {
 	data []models.HandlerObject
 }
 
-func (m *mockCollection) FindOne(query bson.M) (models.Response) {
+func (m *mockCollection) FindOne(query bson.M) models.Response {
 
 	doc, err := bson.Marshal(query)
 	if err != nil {
@@ -80,7 +80,7 @@ func (m *mockCollection) FindOne(query bson.M) (models.Response) {
 	return utils.ErrorNotFoundInDatabase("User collection")
 }
 
-func (m *mockCollection) FindAll() (models.Response) {
+func (m *mockCollection) FindAll() models.Response {
 	if len(m.data) == 0 {
 		return utils.ErrorNotFoundInDatabase("")
 	}
@@ -120,7 +120,7 @@ func (m *mockCollection) FindAll() (models.Response) {
 	}
 }
 
-func (m *mockCollection) UpdateOne(query bson.M) (models.Response) {
+func (m *mockCollection) UpdateOne(query bson.M) models.Response {
 	doc, err := bson.Marshal(query)
 	if err != nil {
 		return utils.ErrorToResponse(http.StatusBadRequest, "Could not update object", err.Error())
@@ -161,7 +161,7 @@ func (m *mockCollection) UpdateOne(query bson.M) (models.Response) {
 	return utils.ErrorNotFoundInDatabase("User collection")
 }
 
-func (m *mockCollection) DeleteOne(query bson.M) (models.Response) {
+func (m *mockCollection) DeleteOne(query bson.M) models.Response {
 	//objectID, err := primitive.ObjectIDFromHex(id)
 	for i, one := range m.data {
 		if one.GetId() == query["_id"] {
@@ -172,7 +172,7 @@ func (m *mockCollection) DeleteOne(query bson.M) (models.Response) {
 	return utils.ErrorNotFoundInDatabase("User collection")
 }
 
-func (m *mockCollection) CreateOne(object models.HandlerObject) (models.Response) {
+func (m *mockCollection) CreateOne(object models.HandlerObject) models.Response {
 	var newObject models.HandlerObject
 	switch object.(type) {
 	case *models.UserDB:

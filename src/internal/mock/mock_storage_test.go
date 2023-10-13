@@ -50,15 +50,18 @@ func TestMockMongoCollection(t *testing.T) {
 		response := userColl.CreateOne(user)
 		require.False(t, utils.IsTypeError(response))
 
-		filter := bson.M{"_id": response.Data.(*models.UserOutput).Id}
+		filter := bson.M{"_id": response.Data.(*models.UserDB).Id}
 		response = userColl.FindOne(filter)
-		require.NotNil(t, response.Data.(*models.UserOutput))
+		require.NotNil(t, response.Data.(*models.UserDB))
+		user = response.Data.(*models.UserDB)
 
 		response = userColl.CreateOne(user2)
 		require.False(t, utils.IsTypeError(response))
 
-		filter = bson.M{"_id": response.Data.(*models.UserOutput).Id}
+		filter = bson.M{"_id": response.Data.(*models.UserDB).Id}
 		response = userColl.FindOne(filter)
+		require.NotNil(t, response.Data.(*models.UserDB))
+		user2 = response.Data.(*models.UserDB)
 	})
 
 	t.Run("Test FindOne collection success", func(t *testing.T) {
@@ -67,7 +70,6 @@ func TestMockMongoCollection(t *testing.T) {
 		require.Equal(t, user, response.Data)
 		require.False(t, utils.IsTypeError(response))
 
-	
 		filter = bson.M{"_id": user2.Id}
 		response = userColl.FindOne(filter)
 		require.Equal(t, user2, response.Data)
@@ -78,24 +80,24 @@ func TestMockMongoCollection(t *testing.T) {
 		filter := bson.M{"_id": "testtest"}
 		response := userColl.FindOne(filter)
 		require.True(t, utils.IsTypeError(response))
-		require.False(t, utils.IsType(response, models.UserOutput{}))
+		require.False(t, utils.IsType(response, models.UserDB{}))
 	})
 
 	t.Run("Test FindAll collection success", func(t *testing.T) {
 		response := userColl.FindAll()
-		require.Equal(t, []models.HandlerObject{user, user2}, response.Data.([]models.HandlerObject))
-		require.Nil(t, response.Data.(*models.Err))
+		require.Equal(t, []*models.UserDB{user, user2}, response.Data)
 	})
 
 	t.Run("Test UpdateOne collection success", func(t *testing.T) {
 		response := userColl.UpdateOne(bson.M{
-			"_id": user.Id,
-			"username": "updated_name",
-			"auth_id": user.AuthId,
+			"_id":        user.Id,
+			"username":   "updated_name",
+			"auth_id":    user.AuthId,
 			"created_at": user.CreatedAt,
 		})
-		require.Equal(t, "updated_name", response.Data.(*models.UserOutput).Username)
+		require.Equal(t, "updated_name", response.Data.(*models.UserDB).Username)
 		require.False(t, utils.IsTypeError(response))
+		user = response.Data.(*models.UserDB)
 	})
 
 	t.Run("Test DeleteOne collection success", func(t *testing.T) {
