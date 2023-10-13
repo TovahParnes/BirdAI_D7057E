@@ -3,6 +3,7 @@ package handlers
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
+	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -23,8 +24,18 @@ import (
 // @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router		/admins/{id} [get]
 func (h *Handler) GetAdminById(c *fiber.Ctx) error {
+	response := h.auth.CheckExpired(c)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
 	id := c.Params("id")
-	response := h.controller.CGetAdminById(id)
+	response = utils.IsValidId(id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
+	response = h.controller.CGetAdminById(id)
 
 	return utils.ResponseToStatus(c, response)
 }
@@ -43,14 +54,15 @@ func (h *Handler) GetAdminById(c *fiber.Ctx) error {
 // @Failure		404	{object}	models.Response{data=[]models.Err}
 // @Failure		410	{object}	models.Response{data=[]models.Err}
 // @Failure		503	{object}	models.Response{data=[]models.Err}
-// @Router			/admins/me [get]
+// @Router		/admins/me [get]
 func (h *Handler) GetAdminMe(c *fiber.Ctx) error {
+	response := h.auth.CheckExpired(c)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	authId := response.Data.(models.UserDB).AuthId
 
-	//	@Failure	401	{object}	models.Response{}
-	// Authenticate(jwt.token)
-	authId := c.GetReqHeaders()["Authid"]
-
-	response := h.controller.CGetAdminById(authId)
+	response = h.controller.CGetAdminById(authId)
 
 	return utils.ResponseToStatus(c, response)
 }
@@ -71,21 +83,25 @@ func (h *Handler) GetAdminMe(c *fiber.Ctx) error {
 // @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router		/admins/list [get]
 func (h *Handler) ListAdmins(c *fiber.Ctx) error {
-	//authId := c.GetReqHeaders()["Authid"]
+	response := h.auth.CheckExpired(c)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	
 	queries := c.Queries()
 	set := queries["set"]
+	response = utils.IsValidSet(&set)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	fmt.Println("set: ", set)
 	search := queries["search"]
+	response = utils.IsValidSearch(search)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
-	//	@Failure	401	{object}	models.Response{}
-	// Authenticate(jwt.token)
-
-	//	@Failure	503	{object}	models.Response{}
-	// if no connection to db was established
-
-	//	@Failure	404	{object}	models.Response{}
-	// if admin not found
-
-	response := h.controller.CListAdmins(set, search)
+	response = h.controller.CListAdmins(set, search)
 	return utils.ResponseToStatus(c, response)
 }
 
@@ -97,7 +113,7 @@ func (h *Handler) ListAdmins(c *fiber.Ctx) error {
 // @Accept		json
 // @Produce		json
 // @Security	Bearer
-// @Param		set	body		models.AdminInput	true	"admin"
+// @Param		admin	body	models.AdminInput	true	"admin"
 // @Success		201	{object}	models.Response{}
 // @Failure		400	{object}	models.Response{data=[]models.Err}
 // @Failure		401	{object}	models.Response{data=[]models.Err}
@@ -105,15 +121,24 @@ func (h *Handler) ListAdmins(c *fiber.Ctx) error {
 // @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router		/admins/ [post]
 func (h *Handler) CreateAdmin(c *fiber.Ctx) error {
-	authId := c.GetReqHeaders()["Authid"]
+	response := h.auth.CheckExpired(c)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	authId := response.Data.(models.UserDB).AuthId
+
 	var admin *models.AdminInput
 	if err := c.BodyParser(&admin);
 	err != nil {
 		//	@Failure	400	{object}	models.Response{}
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
+	response = utils.IsValidAdminInput(admin)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
-	response := h.controller.CCreateAdmin(authId, admin)
+	response = h.controller.CCreateAdmin(authId, admin)
 
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
@@ -131,7 +156,7 @@ func (h *Handler) CreateAdmin(c *fiber.Ctx) error {
 // @Produce		json
 // @Security	Bearer
 // @Param		id	path	string	true	"admin ID"
-// @Param		admin	body		models.AdminInput	true	"admin"
+// @Param		admin	body	models.AdminInput	true	"admin"
 // @Success		200	{object}	models.Response{}
 // @Failure		400	{object}	models.Response{data=[]models.Err}
 // @Failure		401	{object}	models.Response{data=[]models.Err}
@@ -140,8 +165,16 @@ func (h *Handler) CreateAdmin(c *fiber.Ctx) error {
 // @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router			/admins/{id} [patch]
 func (h *Handler) UpdateAdmin(c *fiber.Ctx) error {
-	//authId := c.GetReqHeaders()["Authid"]
+	response := h.auth.CheckExpired(c)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	
 	id := c.Params("id")
+	response = utils.IsValidId(id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 	
 	var admin *models.AdminInput
 	if err := c.BodyParser(&admin); err != nil {
@@ -149,11 +182,15 @@ func (h *Handler) UpdateAdmin(c *fiber.Ctx) error {
 		// something with body is wrong/missing
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
+	response = utils.IsValidAdminInput(admin)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
 	//	@Failure		403	{object}	models.Response{}
-	// if user is not superAdmin or updating themselves
+	// if user is not superAdmin
 
-	response := h.controller.CUpdateAdmin(id, admin)
+	response = h.controller.CUpdateAdmin(id, admin)
 	return utils.ResponseToStatus(c, response)
 }
 
@@ -173,8 +210,16 @@ func (h *Handler) UpdateAdmin(c *fiber.Ctx) error {
 // @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router		/admins/{id} [delete]
 func (h *Handler) DeleteAdmin(c *fiber.Ctx) error {
+	response := h.auth.CheckExpired(c)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
 	id := c.Params("id")
-	//authId := c.GetReqHeaders()["Authid"]
+	response = utils.IsValidId(id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
 	//	@Failure	401	{object}	models.Response{}
 	// Authenticate(jwt.token)
@@ -188,7 +233,7 @@ func (h *Handler) DeleteAdmin(c *fiber.Ctx) error {
 	//	@Failure	404	{object}	models.Response{}
 	// if user not found
 
-	response := h.controller.CDeleteAdmin(id)
+	response = h.controller.CDeleteAdmin(id)
 	return utils.ResponseToStatus(c, response)
 }
 
