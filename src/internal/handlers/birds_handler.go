@@ -22,7 +22,12 @@ import (
 // @Router		/birds/{id} [get]
 func (h *Handler) GetBirdById(c *fiber.Ctx) error {
 	id := c.Params("id")
-	response := h.controller.CGetBirdById(id)
+	response := utils.IsValidId(id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
+	response = h.controller.CGetBirdById(id)
 	return utils.ResponseToStatus(c, response)
 }
 
@@ -47,16 +52,22 @@ func (h *Handler) ListBirds(c *fiber.Ctx) error {
 	//	@Failure	404	{object}	models.Response{}
 	// if birds not found
 	
-	/*
+	
 	queries := c.Queries()
 	set := queries["set"]
+	response := utils.IsValidSet(&set)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
 	search := queries["search"]
+	response = utils.IsValidSearch(search)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
-
-	response := h.controller.CListBirds(set, search)
+	response = h.controller.CListBirds(set, search)
 	return utils.ResponseToStatus(c, response)
-	*/
-	return utils.ResponseToStatus(c, utils.ErrorNotImplemented("GetListBirds"))
 }
 
 
@@ -78,20 +89,29 @@ func (h *Handler) ListBirds(c *fiber.Ctx) error {
 // @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Router		/birds/{id} [patch]
 func (h *Handler) UpdateBird(c *fiber.Ctx) error {
-	//	@Failure	401	{object}	models.Response{}
-	// Authenticate(jwt.token)
+response := h.auth.CheckExpired(c)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
 	id := c.Params("id")
+	response = utils.IsValidId(id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
 	var bird *models.BirdInput
 	if err := c.BodyParser(&bird); err != nil {
-		//	@Failure	400	{object}	models.Response{}
-		// something with body is wrong/missing
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
+	}
+	response = utils.IsValidBirdInput(bird)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
 	}
 
 	//	@Failure		403	{object}	models.Response{}
-	// if user is not admin or user is not the same as the one being updated
+	// if user is not admin
 
-	response := h.controller.CUpdateBird(id, bird)
+	response = h.controller.CUpdateBird(id, bird)
 	return utils.ResponseToStatus(c, response)
 }
