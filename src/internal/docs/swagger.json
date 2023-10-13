@@ -1398,10 +1398,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.PostOutput"
-                                            }
+                                            "$ref": "#/definitions/models.PostOutput"
                                         }
                                     }
                                 }
@@ -1419,10 +1416,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1440,10 +1434,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }
@@ -1461,10 +1452,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Err"
                                         }
                                     }
                                 }

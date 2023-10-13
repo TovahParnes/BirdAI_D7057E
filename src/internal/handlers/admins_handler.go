@@ -17,11 +17,11 @@ import (
 // @Produce		json
 // @Security	Bearer
 // @Param		id	path	string	true	"Admin ID"
-// @Success		200	{object}	models.Response{data=[]models.AdminOutput}
-// @Failure		403	{object}	models.Response{data=[]models.Err}
-// @Failure		404	{object}	models.Response{data=[]models.Err}
-// @Failure		410	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Success		200	{object}	models.Response{data=models.AdminOutput}
+// @Failure		403	{object}	models.Response{data=models.Err}
+// @Failure		404	{object}	models.Response{data=models.Err}
+// @Failure		410	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/admins/{id} [get]
 func (h *Handler) GetAdminById(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)
@@ -48,12 +48,12 @@ func (h *Handler) GetAdminById(c *fiber.Ctx) error {
 // @Accept		json
 // @Produce		json
 // @Security	Bearer
-// @Success		200	{object}	models.Response{data=[]models.AdminOutput}
-// @Failure		401	{object}	models.Response{data=[]models.Err}
-// @Failure		403	{object}	models.Response{data=[]models.Err}
-// @Failure		404	{object}	models.Response{data=[]models.Err}
-// @Failure		410	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Success		200	{object}	models.Response{data=models.AdminOutput}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		403	{object}	models.Response{data=models.Err}
+// @Failure		404	{object}	models.Response{data=models.Err}
+// @Failure		410	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/admins/me [get]
 func (h *Handler) GetAdminMe(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)
@@ -78,9 +78,9 @@ func (h *Handler) GetAdminMe(c *fiber.Ctx) error {
 // @Param		set	query		int	false	"Set of admins"
 // @Param		search	query	string	false	"Search parameter for admin"
 // @Success		200	{object}	models.Response{data=[]models.AdminOutput}
-// @Failure		403	{object}	models.Response{data=[]models.Err}
-// @Failure		401	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Failure		403	{object}	models.Response{data=models.Err}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/admins/list [get]
 func (h *Handler) ListAdmins(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)
@@ -115,10 +115,10 @@ func (h *Handler) ListAdmins(c *fiber.Ctx) error {
 // @Security	Bearer
 // @Param		admin	body	models.AdminInput	true	"admin"
 // @Success		201	{object}	models.Response{}
-// @Failure		400	{object}	models.Response{data=[]models.Err}
-// @Failure		401	{object}	models.Response{data=[]models.Err}
-// @Failure		403	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Failure		400	{object}	models.Response{data=models.Err}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		403	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/admins/ [post]
 func (h *Handler) CreateAdmin(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)
@@ -158,11 +158,11 @@ func (h *Handler) CreateAdmin(c *fiber.Ctx) error {
 // @Param		id	path	string	true	"admin ID"
 // @Param		admin	body	models.AdminInput	true	"admin"
 // @Success		200	{object}	models.Response{}
-// @Failure		400	{object}	models.Response{data=[]models.Err}
-// @Failure		401	{object}	models.Response{data=[]models.Err}
-// @Failure		403	{object}	models.Response{data=[]models.Err}
-// @Failure		404	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Failure		400	{object}	models.Response{data=models.Err}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		403	{object}	models.Response{data=models.Err}
+// @Failure		404	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
 // @Router			/admins/{id} [patch]
 func (h *Handler) UpdateAdmin(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)
@@ -204,10 +204,10 @@ func (h *Handler) UpdateAdmin(c *fiber.Ctx) error {
 // @Security	Bearer
 // @Param		id	path	string	true	"Admin ID"
 // @Success		200	{object}	models.Response{}
-// @Failure		401	{object}	models.Response{data=[]models.Err}
-// @Failure		403	{object}	models.Response{data=[]models.Err}
-// @Failure		404	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		403	{object}	models.Response{data=models.Err}
+// @Failure		404	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/admins/{id} [delete]
 func (h *Handler) DeleteAdmin(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)
