@@ -104,7 +104,7 @@ func (h *Handler) ListUsersPosts(c *fiber.Ctx) error {
 // @Accept		json
 // @Produce		json
 // @Security 	Bearer
-// @Param		set	body		models.PostInput	true	"post"
+// @Param		post	body		models.PostInput	true	"post"
 // @Success		201	{object}	models.Response{}
 // @Failure		400	{object}	models.Response{data=[]models.Err}
 // @Failure		401	{object}	models.Response{data=[]models.Err}

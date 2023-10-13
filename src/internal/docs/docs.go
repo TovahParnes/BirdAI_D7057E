@@ -44,7 +44,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "admin",
-                        "name": "set",
+                        "name": "admin",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -1192,7 +1192,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "post",
-                        "name": "set",
+                        "name": "post",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -1761,7 +1761,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "user",
-                        "name": "set",
+                        "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {

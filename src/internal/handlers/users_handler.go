@@ -82,7 +82,7 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 // @Tags		Users
 // @Accept		json
 // @Produce		json
-// @Param		set	body		models.UserLogin	true	"user"
+// @Param		user	body		models.UserLogin	true	"user"
 // @Success		201	{object}	models.Response{data=[]models.Err}
 // @Failure		400	{object}	models.Response{data=[]models.Err}
 // @Failure		401	{object}	models.Response{data=[]models.Err}

@@ -147,7 +147,7 @@ paths:
       parameters:
       - description: admin
         in: body
-        name: set
+        name: admin
         required: true
         schema:
           $ref: '#/definitions/models.AdminInput'
@@ -780,7 +780,7 @@ paths:
       parameters:
       - description: post
         in: body
-        name: set
+        name: post
         required: true
         schema:
           $ref: '#/definitions/models.PostInput'
@@ -1100,7 +1100,7 @@ paths:
       parameters:
       - description: user
         in: body
-        name: set
+        name: user
         required: true
         schema:
           $ref: '#/definitions/models.UserLogin'
