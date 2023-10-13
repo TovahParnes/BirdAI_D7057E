@@ -74,8 +74,6 @@ definitions:
         type: string
       soundId:
         type: string
-      userId:
-        type: string
     type: object
   models.PostOutput:
     properties:

@@ -2671,9 +2671,6 @@ const docTemplate = `{
                 },
                 "soundId": {
                     "type": "string"
-                },
-                "userId": {
-                    "type": "string"
                 }
             }
         },

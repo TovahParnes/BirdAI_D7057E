@@ -33,8 +33,9 @@ func (c *Controller) CListUsersPosts(userId string, set string, search string) (
 	return utils.ErrorNotImplemented("CListUsersPosts")
 }
 
-func (c *Controller) CCreatePost(authId string, post *models.PostInput) (models.Response) {
+func (c *Controller) CCreatePost(authId string, postInput *models.PostInput) (models.Response) {
 	/*
+	post := models.PostInputToPostCreate(postInput, authId)
 	coll := c.db.GetCollection(repositories.PostColl)
 	response := coll.CreateOne(post)
 	return response
