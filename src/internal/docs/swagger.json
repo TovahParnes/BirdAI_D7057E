@@ -1019,6 +1019,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Update given bird",
                 "consumes": [
                     "application/json"
@@ -1165,6 +1170,11 @@
         },
         "/posts/": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Create a new post",
                 "consumes": [
                     "application/json"
@@ -1464,6 +1474,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete given post",
                 "consumes": [
                     "application/json"
@@ -1578,6 +1593,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Update given post",
                 "consumes": [
                     "application/json"
@@ -1732,7 +1752,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "Login a user",
                 "parameters": [
@@ -1836,11 +1856,6 @@
         },
         "/users/list": {
             "get": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "List all users of a specified set",
                 "consumes": [
                     "application/json"
@@ -1849,7 +1864,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "List all users of a specified set",
                 "parameters": [
@@ -1948,7 +1963,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "Get current user",
                 "responses": {
@@ -2062,11 +2077,6 @@
         },
         "/users/{id}": {
             "get": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "Get user by ID",
                 "consumes": [
                     "application/json"
@@ -2075,7 +2085,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "Get user by ID",
                 "parameters": [
@@ -2188,7 +2198,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "Delete given user",
                 "parameters": [
@@ -2307,7 +2317,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "Update given user",
                 "parameters": [
