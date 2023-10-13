@@ -59,7 +59,10 @@ func IsValidBirdInput(bird *models.BirdInput) models.Response {
 	}
 	response = IsValidId(bird.SoundId)
 	if IsTypeError(response) {
-		return response
+		return ErrorParams("Given sound id is not a valid id")
+	}
+	if containsSpecialCharacters(bird.Name) {
+		return ErrorParams("Name must not contain special characters")
 	}
 	return Response(nil)
 }
