@@ -2653,9 +2653,6 @@ const docTemplate = `{
                 "birdId": {
                     "type": "string"
                 },
-                "createdAt": {
-                    "type": "string"
-                },
                 "imageId": {
                     "type": "string"
                 },
