@@ -33,8 +33,8 @@ func (c *Controller) CListUsers() models.Response {
 		return response
 	}
 
-	for _, usersObject := range response.Data.([]*models.UserOutput) {
-		users = append(users, usersObject)
+	for _, usersObject := range response.Data.([]*models.UserDB) {
+		users = append(users, UserDBToOutput(usersObject))
 	}
 
 	return utils.Response(users)
@@ -47,12 +47,21 @@ func (c *Controller) CDeleteUser(id, authId string) models.Response {
 	return response
 }
 
-func (c *Controller) CUpdateUser(id string, user *models.UserInput) (models.Response) {
+func (c *Controller) CUpdateUser(id string, user *models.UserInput) models.Response {
 	coll := c.db.GetCollection(repositories.UserColl)
 	response := coll.UpdateOne(bson.M{
-		"_id": id,
+		"_id":      id,
 		"username": user.Username,
-		"active": user.Active,
+		"active":   user.Active,
 	})
 	return response
+}
+
+func UserDBToOutput(db *models.UserDB) *models.UserOutput {
+	return &models.UserOutput{
+		Id:        db.Id,
+		Username:  db.Username,
+		CreatedAt: db.CreatedAt,
+		Active:    db.Active,
+	}
 }

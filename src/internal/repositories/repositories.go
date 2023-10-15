@@ -53,7 +53,7 @@ func AddAllCollections(m IMongoInstance) {
 // UpdateOne returns the updated document as a HandlerObject.
 // Input query should be of type bson.M with the id of the document to update
 // and all fields with the values that should be updated
-func (m *MongoCollection) UpdateOne(query bson.M) (models.Response) {
+func (m *MongoCollection) UpdateOne(query bson.M) models.Response {
 	filter := bson.M{
 		"_id": query["_id"],
 	}
@@ -69,7 +69,7 @@ func (m *MongoCollection) UpdateOne(query bson.M) (models.Response) {
 
 // DeleteOne returns the deleted document if it gets successfully deleted.
 // If the document was a user it will instead return the updated version of the document.
-func (m *MongoCollection) DeleteOne(query bson.M) (models.Response) {
+func (m *MongoCollection) DeleteOne(query bson.M) models.Response {
 	deleteQuery := bson.M{
 		"_id": query["_id"],
 	}
@@ -78,7 +78,7 @@ func (m *MongoCollection) DeleteOne(query bson.M) (models.Response) {
 		return response
 	}
 	switch response.Data.(type) {
-	case *models.UserOutput, *models.UserInput, *models.UserDB:
+	case *models.UserDB:
 		update := bson.M{
 			"_id":      query["_id"],
 			"active":   false,
@@ -91,7 +91,7 @@ func (m *MongoCollection) DeleteOne(query bson.M) (models.Response) {
 		return response
 	default:
 		one, err := m.Collection.DeleteOne(m.ctx, deleteQuery)
-		if one.DeletedCount != 1 || err != nil{
+		if one.DeletedCount != 1 || err != nil {
 			return utils.ErrorToResponse(400, "Could not delete object", "")
 		}
 		return response
@@ -100,7 +100,7 @@ func (m *MongoCollection) DeleteOne(query bson.M) (models.Response) {
 
 // CreateOne adds the object to the db.
 // Returns the id of the inserted document if successfully added.
-func (m *MongoCollection) CreateOne(object models.HandlerObject) (models.Response) {
+func (m *MongoCollection) CreateOne(object models.HandlerObject) models.Response {
 	object.SetCreatedAt()
 	resId, err := m.Collection.InsertOne(m.ctx, object)
 	if err != nil {
@@ -112,12 +112,12 @@ func (m *MongoCollection) CreateOne(object models.HandlerObject) (models.Respons
 // TODO: Look if there is an easier way to handle the switch cases in both FindOne and FindAll
 
 // FindOne searches for one document from the current collection that matches the query.
-func (m *MongoCollection) FindOne(query bson.M) (models.Response) {
+func (m *MongoCollection) FindOne(query bson.M) models.Response {
 	collName := m.Collection.Name()
 	// There should be a way to make this code more compact as it is repeating the same thing
 	switch collName {
 	case UserColl:
-		var result models.UserOutput
+		var result models.UserDB
 		err := m.Collection.FindOne(m.ctx, query).Decode(&result)
 		if err != nil {
 			return utils.ErrorNotFoundInDatabase("User collection")
@@ -159,7 +159,7 @@ func (m *MongoCollection) FindOne(query bson.M) (models.Response) {
 
 // FindAll returns all documents from the current collection.
 // Return will be of type interface{} and will need to be type asserted before use
-func (m *MongoCollection) FindAll() (models.Response) {
+func (m *MongoCollection) FindAll() models.Response {
 	findCursor, err := m.Collection.Find(m.ctx, bson.M{})
 	if err != nil {
 		return utils.ErrorNotFoundInDatabase("")
@@ -172,9 +172,9 @@ func (m *MongoCollection) FindAll() (models.Response) {
 	// There should be a way to make this code more compact as it is repeating the same thing
 	switch collName {
 	case UserColl:
-		var resultStruct []models.UserOutput
+		var resultStruct []models.UserDB
 		for _, result := range results {
-			var tempResult models.UserOutput
+			var tempResult models.UserDB
 			bsonBody, _ := bson.Marshal(result)
 			err := bson.Unmarshal(bsonBody, &tempResult)
 			if err != nil {
