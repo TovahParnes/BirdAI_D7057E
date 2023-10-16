@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-<mat-card class="example-card">
-    <mat-card-header>
-      <mat-card-title>{{ title }}</mat-card-title>
-=======
 <mat-card class="example-card" (mouseenter)="changeTextColor('#2196f3')" (mouseleave)="changeTextColor('white')">
     <mat-card-header>
       <mat-card-title [style.color]=textColor>{{ title }}</mat-card-title>
->>>>>>> 3af6c42 (Fix new homepage form and update theme colors)
       <p></p>
     </mat-card-header>
     <img mat-card-image [src]="imageSrc" alt="Card Image">
