@@ -29,11 +29,6 @@ func (h *Handler) GetUserById(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	response = h.auth.CheckExpired(c)
-	if utils.IsTypeError(response) {
-		return utils.ResponseToStatus(c, response)
-	}
-
 	response = h.controller.CGetUserById(id)
 
 	return utils.ResponseToStatus(c, response)
@@ -62,11 +57,6 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 
 	search := queries["search"]
 	response = utils.IsValidSearch(search)
-	if utils.IsTypeError(response) {
-		return utils.ResponseToStatus(c, response)
-	}
-
-	response = h.auth.CheckExpired(c)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
