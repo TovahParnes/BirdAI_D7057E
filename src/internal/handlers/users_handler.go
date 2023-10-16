@@ -139,12 +139,11 @@ func (h *Handler) GetUserMe(c *fiber.Ctx) error {
 // @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/users/{id} [patch]
 func (h *Handler) UpdateUser(c *fiber.Ctx) error {
-	//	@Failure	401	{object}	models.Response{}
-	// Authenticate(jwt.token)
 	response := h.auth.CheckExpired(c)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
+	authId := response.Data.(models.UserDB).AuthId
 
 	id := c.Params("id")
 	response = utils.IsValidId(id)
@@ -154,8 +153,6 @@ func (h *Handler) UpdateUser(c *fiber.Ctx) error {
 
 	var user *models.UserInput
 	if err := c.BodyParser(&user); err != nil {
-		//	@Failure	400	{object}	models.Response{}
-		// something with body is wrong/missing
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
 	response = utils.IsValidUserInput(user)
@@ -163,8 +160,10 @@ func (h *Handler) UpdateUser(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	//	@Failure		403	{object}	models.Response{}
-	// if user is not admin or user is not the same as the one being updated
+	response = h.controller.CIsCurrentUserOrAdmin(authId, id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
 	response = h.controller.CUpdateUser(id, user)
 	return utils.ResponseToStatus(c, response)
@@ -196,9 +195,12 @@ func (h *Handler) DeleteUser(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
+	authId := response.Data.(models.UserDB).AuthId
 
-	//	@Failure		403	{object}	models.Response{}
-	// if user is not admin or user is not the same as the one being updated
+	response = h.controller.CIsCurrentUserOrAdmin(authId, id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
 	response = h.controller.CDeleteUser(id, response.Data.(models.UserDB).AuthId)
 	return utils.ResponseToStatus(c, response)
