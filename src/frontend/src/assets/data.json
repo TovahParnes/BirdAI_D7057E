@@ -1,0 +1,17 @@
+[
+    {"list1": [    
+        {"title": "Duck", "image": "assets/duck.jpg", "date": "2023-10-05" },
+        {"title": "Budgie","image": "assets/undulat.jpg", "date":"2023-10-04"}
+    ]},
+  
+    {"list2":[
+        {"title": "Duck", "image": "assets/duck.jpg", "date": "2023-10-05" },
+        {"title": "Budgie","image": "assets/undulat.jpg", "date":"2023-10-04"},
+        {"title": "Kangaroo", "image": "assets/duck.jpg", "date": "2023-10-05" },
+        {"title": "Elephant","image": "assets/undulat.jpg", "date":"2023-10-04"},
+        {"title": "Duck", "image": "assets/duck.jpg", "date": "2023-10-05" },
+        {"title": "Budgie","image": "assets/undulat.jpg", "date":"2023-10-04"},
+        {"title": "Kangaroo", "image": "assets/duck.jpg", "date": "2023-10-05" },
+        {"title": "Elephant","image": "assets/undulat.jpg", "date":"2023-10-04"}
+    ]}
+]

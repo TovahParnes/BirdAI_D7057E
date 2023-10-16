@@ -7,8 +7,8 @@
 
     <div class="nav-buttons">
         <button class="nav-button" (click)="navigateToHome()"><span class="material-symbols-outlined">home</span></button>
-        <button class="nav-button" (click)="navigateToTakenImages()"><span class="material-symbols-outlined">image</span></button>
-        <button class="selected-nav-button" (click)="navigateToLibrary()"><span class="material-symbols-outlined">grid_view</span></button>  
+        <button class="selected-nav-button" (click)="navigateToLibrary()"><span class="material-symbols-outlined">image</span></button>
+        <button class="nav-button" (click)="navigateToTakenImages()"><span class="material-symbols-outlined">grid_view</span></button> 
     </div>
 
     <div class="profile">
@@ -30,38 +30,21 @@
      of presented folders should be changed to make the viewing of folder easier for the user. -->
 
 <body>
-        <div *ngFor="let card of cardlist">
+        <!-- <div *ngFor="let card of cardlist">
             <p></p>
-            <a target="_blank" (click)="navigateToSpecies(card.imageSrc, card.title)">
+            <a target="_blank" (click)="navigateToSpecies(card.imageSrc, card.title, card.date)">
             <app-card2 title={{card.title}} imageSrc={{card.imageSrc}} date={{card.date}}></app-card2>
         </a>
-        </div>
+        </div> -->
 
-    <!-- <div class="container">
-        <div class="desc" style="display: flex;justify-content: space-between;">
-        <p style="flex: 1;">Duck</p>
-        <p style="flex: 1; text-align: right;">2023/09/06</p>
-        </div>
-        <div class="gallery">
-            <a target="_blank" (click)="navigateToSpecies()">
-            <img src="assets/duck.jpg" alt="Duck" style="width: 50%;">
+        
+        <div *ngFor="let item of list1">
+            <p></p>
+            <a target="_blank" (click)="navigateToSpecies(item.image, item.title, item.date)">
+            <app-card2 title={{item.title}} imageSrc={{item.image}} date={{item.date}}></app-card2>
         </a>
         </div>
-    </div>
-
-    <p></p>
-
-    <div class="container">
-        <div class="desc" style="display: flex;justify-content: space-between;">
-        <p style="flex: 1;">Budgie</p>
-        <p style="flex: 1; text-align: right;">2023/09/06</p>
-        </div>
-        <div class="gallery">
-            <a target="_blank" href="assets/undulat.jpg">
-            <img src="assets/undulat.jpg" alt="Duck" style="width: 50%;">
-        </a>
-        </div>
-    </div> -->
+                
 
 </body>
 

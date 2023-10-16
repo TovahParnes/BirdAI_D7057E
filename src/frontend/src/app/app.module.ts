@@ -15,7 +15,10 @@ import {LibraryComponent} from './library/library.component';
 import {TakenImagesPageComponent} from './taken-images-page/taken-images-page.component';
 import {SpeciesPageComponent} from './species-page/species-page.component';
 import {ProfilePageComponent} from './profile-page/profile-page.component';
-import {CardComponent, Card2Component} from './card/card.component';
+
+import { CardComponent, Card2Component } from './card/card.component';
+import { FirstPageComponent } from './first-page/first-page.component';
+
 
 // login authguard imports
 import {GoogleLoginProvider, GoogleSigninButtonModule, SocialLoginModule, SocialAuthServiceConfig} from '@abacritt/angularx-social-login';
@@ -31,6 +34,9 @@ import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+
+
 
 @NgModule({
   declarations: [
@@ -43,6 +49,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     ProfilePageComponent,
     CardComponent,
     Card2Component,
+    FirstPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -52,8 +59,11 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
       {path: 'mainpage', component: MainPageComponent},
       {path: 'library', component: LibraryComponent, },
       {path: 'takenImages', component: TakenImagesPageComponent, },
-      {path: 'profile', component: ProfilePageComponent},  //canActivate: [AuthGuardService]
+
+      {path: 'profile', component: ProfilePageComponent}, //canActivate: [AuthGuardService]
+
       {path: 'species-page', component: SpeciesPageComponent,},
+      {path: 'first-page', component: FirstPageComponent,},
       {path: '**', component: LoginComponent},
     ]),
     BrowserAnimationsModule,
@@ -70,6 +80,9 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     MatCardModule,
     MatIconModule,
     MatProgressSpinnerModule,
+
+    MatButtonToggleModule,
+
   ],
   exports:[
     RouterModule

@@ -7,8 +7,8 @@
   
     <div class="nav-buttons">
       <button class="nav-button" (click)="navigateToHome()"><span class="material-symbols-outlined">home</span></button>
-      <button class="nav-button" (click)="navigateToTakenImages()"><span class="material-symbols-outlined">image</span></button>
-      <button class="selected-nav-button" (click)="navigateToLibrary()"><span class="material-symbols-outlined">grid_view</span></button>  
+      <button class="selected-nav-button" (click)="navigateToLibrary()"><span class="material-symbols-outlined">image</span></button>
+      <button class="nav-button" (click)="navigateToTakenImages()"><span class="material-symbols-outlined">grid_view</span></button> 
 </div>
 
 <div class="profile">
@@ -30,12 +30,16 @@
 
 <p></p>
 
-<div class="container">
-    <!-- <a class="prev" (click)="moveToLibrary()">❮Library</a> -->
-    <div class="desc" style="display: flex;justify-content: space-between;">
-        <p style="flex: 1;">{{imageName}}</p>
-        <p style="flex: 1; text-align: right;">2023/09/06</p>
+<button mat-icon-button color="primary" (click)="goBack()" style="display: flex; left: 22.5%;">
+  <mat-icon>arrow_circle_left</mat-icon>
+</button>
+
+<div class="container" style="text-align: left;">
+    <div style="display: flex;justify-content: space-between;">
+        <p style="flex: 1 textalign=left;">{{imageName}}</p>
+        <p style="flex: 1; text-align: right;">{{imageDate}}</p>
     </div>
+    
     <p></p>
 
         <div class="image-container">
@@ -46,14 +50,6 @@
             <a class="next" (click)="nextImage()">❯</a>
         </div>
         <p></p>
-
-    <!-- <div class="scroll-container">
-        <img src="assets/undulat.jpg" alt="duck_1">
-        <img src="assets/duck.jpg" alt="duck_2">
-        <img src="assets/duck.jpg" alt="duck_3">
-        <img src="assets/duck.jpg" alt="duck_4">
-        
-    </div> -->
     Info: <br>
     Lorem Ipsum is simply dummy text of the printing and typesetting industry.
     Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 

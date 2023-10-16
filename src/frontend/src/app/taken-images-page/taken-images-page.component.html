@@ -7,8 +7,8 @@
 
     <div class="nav-buttons">
         <button class="nav-button" (click)="navigateToHome()"><span class="material-symbols-outlined">home</span></button>
-        <button class="selected-nav-button" (click)="navigateToTakenImages()"><span class="material-symbols-outlined">image</span></button>
-        <button class="nav-button" (click)="navigateToLibrary()"><span class="material-symbols-outlined">grid_view</span></button>  
+        <button class="nav-button" (click)="navigateToLibrary()"><span class="material-symbols-outlined">image</span></button>
+        <button class="selected-nav-button" (click)="navigateToTakenImages()"><span class="material-symbols-outlined">grid_view</span></button>  
     </div>
 
     <div class="profile">
@@ -25,26 +25,50 @@
 
 <p></p>
 
-<div class="card-container">
-<button (click)="sortCards()">Sort by Name</button>
-</div>
+<div class="container">
 
-<p></p>
-
-<div class="card-container">
-  <div *ngFor="let card of cardlist">
-    <a target="_blank" (click)="navigateToSpecies(card.imageSrc, card.title)">
-    <app-card title={{card.title}} imageSrc={{card.imageSrc}}></app-card>
-  </a>
+  <div class="card-container">
+    <mat-button-toggle-group multiple>
+      <mat-button-toggle (click)="sortCards()" style="background-color: #2196f3;">Alphabetical order</mat-button-toggle>
+      <mat-button-toggle (click)="toggleFound()" [style.background-color]="color">Sort by Found</mat-button-toggle>
+    </mat-button-toggle-group>
+    <div>
+      <p style="font-size: smaller; margin-top: 1px;">Name:</p>
+    <select #selectElement (change)="filterCards(selectElement.value)">
+      <option value="">All</option>
+      <ng-container *ngFor="let letter of alphabet">
+        <option [value]="letter">{{ letter }}</option>
+      </ng-container>
+    </select>
   </div>
-</div>
+    <div>
+      <p style="font-size: smaller;margin-top: 1px;">Species:</p>
+      <select #selectElement>
+        <option value="birds">Birds</option>
+        <option value="other">Other Species</option>
+      </select>
+    </div>
+  </div>
 
-<!-- <div class="card-container">
-  <app-card title="Duck" imageSrc="assets/duck.jpg"></app-card>
-  <app-card title="Kangaroo" imageSrc="assets/undulat.jpg"></app-card>
-  <app-card title="Elephant" imageSrc="assets/duck.jpg"></app-card>
-  <app-card title="Tiger" imageSrc="assets/duck.jpg"></app-card>
-  <app-card title="Cricket" imageSrc="assets/duck.jpg"></app-card>
-  <app-card title="Spider" imageSrc="assets/duck.jpg"></app-card>
-</div> -->
+  <p></p>
+
+  <!-- <div class="card-container">
+    <div *ngFor="let card of cardlist">
+      <a target="_blank" (click)="navigateToSpecies(card.imageSrc, card.title)">
+      <app-card title={{card.title}} imageSrc={{card.imageSrc}}></app-card>
+      </a>
+    </div>
+  </div> -->
+
+  <p></p>
+
+  <div class="card-container">
+    <div *ngFor="let item of cardlist">
+      <a target="_blank" (click)="navigateToSpecies(item.image, item.title)">
+        <app-card title={{item.title}} imageSrc={{item.image}}></app-card>
+        </a>
+    </div>
+  </div>
+
+</div>
       
