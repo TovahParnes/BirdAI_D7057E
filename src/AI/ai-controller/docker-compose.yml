@@ -1,0 +1,24 @@
+version: "3"
+services:
+  kademliaNodes:
+    image: fake_backend:latest # Make sure your Docker image has this name.
+    stdin_open: true
+    tty: true
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 10s
+#    networks:
+#      - kademlia_network
+
+#networks:
+#  kademlia_network:
+#    name: kademlia_network
+#    ipam:
+#      config:
+#        - subnet: 172.40.0.0/16
+#          gateway: 172.40.0.1
