@@ -15,8 +15,10 @@ import {LibraryComponent} from './library/library.component';
 import {TakenImagesPageComponent} from './taken-images-page/taken-images-page.component';
 import {SpeciesPageComponent} from './species-page/species-page.component';
 import {ProfilePageComponent} from './profile-page/profile-page.component';
+
 import { CardComponent, Card2Component } from './card/card.component';
 import { FirstPageComponent } from './first-page/first-page.component';
+
 
 // login authguard imports
 import {GoogleLoginProvider, GoogleSigninButtonModule, SocialLoginModule, SocialAuthServiceConfig} from '@abacritt/angularx-social-login';
@@ -31,6 +33,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 
@@ -56,7 +59,9 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
       {path: 'mainpage', component: MainPageComponent},
       {path: 'library', component: LibraryComponent, },
       {path: 'takenImages', component: TakenImagesPageComponent, },
+
       {path: 'profile', component: ProfilePageComponent}, //canActivate: [AuthGuardService]
+
       {path: 'species-page', component: SpeciesPageComponent,},
       {path: 'first-page', component: FirstPageComponent,},
       {path: '**', component: LoginComponent},
@@ -75,7 +80,9 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     MatCardModule,
     MatIconModule,
     MatProgressSpinnerModule,
+
     MatButtonToggleModule,
+
   ],
   exports:[
     RouterModule

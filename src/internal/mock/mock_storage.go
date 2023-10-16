@@ -2,17 +2,21 @@ package mock
 
 import (
 	"birdai/src/internal/models"
+	"birdai/src/internal/repositories"
+	"birdai/src/internal/utils"
 	"errors"
 	"fmt"
+	"net/http"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type MockMongoInstance struct {
-	Collections map[string]models.IMongoCollection
+	Collections map[string]repositories.IMongoCollection
 }
 
-func (m MockMongoInstance) GetCollection(name string) models.IMongoCollection {
+func (m MockMongoInstance) GetCollection(name string) repositories.IMongoCollection {
 	return m.Collections[name]
 }
 
@@ -24,128 +28,198 @@ func (m MockMongoInstance) DisconnectDB() {
 	fmt.Println("Disconnected")
 }
 
-func NewMockMongoInstance() models.IMongoInstance {
-	return MockMongoInstance{map[string]models.IMongoCollection{}}
+func NewMockMongoInstance() repositories.IMongoInstance {
+	return MockMongoInstance{map[string]repositories.IMongoCollection{}}
 }
 
 type mockCollection struct {
 	data []models.HandlerObject
 }
 
-func (m *mockCollection) FindOne(id string) (models.HandlerObject, error) {
-	//objectID, err := primitive.ObjectIDFromHex(id)
-	for _, one := range m.data {
-		if one.GetId() == id {
-			return one, nil
-		}
-	}
-	return nil, errors.New("could not find")
-}
+func (m *mockCollection) FindOne(query bson.M) models.Response {
 
-func (m *mockCollection) FindAll() ([]models.HandlerObject, error) {
-	return m.data, nil
-}
-
-func (m *mockCollection) UpdateOne(query bson.D) (models.HandlerObject, error) {
 	doc, err := bson.Marshal(query)
 	if err != nil {
-		return nil, errors.New("wrong format")
+		return utils.ErrorParams(err.Error())
 	}
-	id := query[0].Value
+	//objectID, err := primitive.ObjectIDFromHex(id)
+	for _, one := range m.data {
+		switch one.(type) {
+		case *models.UserDB:
+			var test *models.UserDB
+			err = bson.Unmarshal(doc, &test)
+			if test.Id != "" && test.Id == one.(*models.UserDB).Id || test.AuthId != "" && test.AuthId == one.(*models.UserDB).AuthId {
+				return utils.Response(one)
+			}
+		case *models.AdminDB:
+			var test *models.AdminDB
+			err = bson.Unmarshal(doc, &test)
+			if test.Id != "" && test.Id == one.(*models.AdminDB).Id {
+				return utils.Response(one)
+			}
+		case *models.BirdDB:
+			var test *models.BirdDB
+			err = bson.Unmarshal(doc, &test)
+			if test.Id != "" && test.Id == one.(*models.BirdDB).Id {
+				return utils.Response(one)
+			}
+		case *models.PostDB:
+			var test *models.PostDB
+			err = bson.Unmarshal(doc, &test)
+			if test.Id != "" && test.Id == one.(*models.PostDB).Id {
+				return utils.Response(one)
+			}
+		case *models.MediaDB:
+			var test *models.MediaDB
+			err = bson.Unmarshal(doc, &test)
+			if test.Id != "" && test.Id == one.(*models.MediaDB).Id {
+				return utils.Response(one)
+			}
+		}
+	}
+	return utils.ErrorNotFoundInDatabase("User collection")
+}
+
+func (m *mockCollection) FindAll() models.Response {
+	if len(m.data) == 0 {
+		return utils.ErrorNotFoundInDatabase("")
+	}
+	switch m.data[0].(type) {
+	case *models.UserDB:
+		var list []*models.UserDB
+		for _, ob := range m.data {
+			list = append(list, ob.(*models.UserDB))
+		}
+		return utils.Response(list)
+	case *models.AdminDB:
+		var list []*models.AdminDB
+		for _, ob := range m.data {
+			list = append(list, ob.(*models.AdminDB))
+		}
+		return utils.Response(list)
+	case *models.BirdDB:
+		var list []*models.BirdDB
+		for _, ob := range m.data {
+			list = append(list, ob.(*models.BirdDB))
+		}
+		return utils.Response(list)
+	case *models.PostDB:
+		var list []*models.PostDB
+		for _, ob := range m.data {
+			list = append(list, ob.(*models.PostDB))
+		}
+		return utils.Response(list)
+	case *models.MediaDB:
+		var list []*models.MediaDB
+		for _, ob := range m.data {
+			list = append(list, ob.(*models.MediaDB))
+		}
+		return utils.Response(list)
+	default:
+		return utils.ErrorToResponse(http.StatusBadRequest, "Wrong model", errors.New("Could not find objects").Error())
+	}
+}
+
+func (m *mockCollection) UpdateOne(query bson.M) models.Response {
+	doc, err := bson.Marshal(query)
+	if err != nil {
+		return utils.ErrorToResponse(http.StatusBadRequest, "Could not update object", err.Error())
+	}
+	id := query["_id"]
 	for i, one := range m.data {
 		if one.GetId() == id {
 			switch one.(type) {
-			case *models.User:
-				var test *models.User
+			case *models.UserDB:
+				var test *models.UserDB
 				err = bson.Unmarshal(doc, &test)
 				m.data[i] = test
-				return test, err
-			case *models.Admin:
-				var test *models.Admin
+				return utils.Response(test)
+			case *models.AdminDB:
+				var test *models.AdminDB
 				err = bson.Unmarshal(doc, &test)
 				m.data[i] = test
-				return test, err
-			case *models.Bird:
-				var test *models.Bird
+				return utils.Response(test)
+			case *models.BirdDB:
+				var test *models.BirdDB
 				err = bson.Unmarshal(doc, &test)
 				m.data[i] = test
-				return test, err
-			case *models.Post:
-				var test *models.Post
+				return utils.Response(test)
+			case *models.PostDB:
+				var test *models.PostDB
 				err = bson.Unmarshal(doc, &test)
 				m.data[i] = test
-				return test, err
-			case *models.Media:
-				var test *models.Media
+				return utils.Response(test)
+			case *models.MediaDB:
+				var test *models.MediaDB
 				err = bson.Unmarshal(doc, &test)
 				m.data[i] = test
-				return test, err
+				return utils.Response(test)
 			}
 		}
 	}
 
-	return nil, errors.New("could not find")
+	return utils.ErrorNotFoundInDatabase("User collection")
 }
 
-func (m *mockCollection) DeleteOne(id string) (models.HandlerObject, error) {
+func (m *mockCollection) DeleteOne(query bson.M) models.Response {
 	//objectID, err := primitive.ObjectIDFromHex(id)
 	for i, one := range m.data {
-		if one.GetId() == id {
+		if one.GetId() == query["_id"] {
 			m.data = append(m.data[:i], m.data[i+1:]...)
-			return one, nil
+			return utils.Response(one)
 		}
 	}
-	return nil, errors.New("could not find")
+	return utils.ErrorNotFoundInDatabase("User collection")
 }
 
-func (m *mockCollection) CreateOne(object models.HandlerObject) (models.HandlerObject, error) {
+func (m *mockCollection) CreateOne(object models.HandlerObject) models.Response {
 	var newObject models.HandlerObject
 	switch object.(type) {
-	case *models.User:
-		newObject = &models.User{
+	case *models.UserDB:
+		newObject = &models.UserDB{
 			Id:       primitive.NewObjectID().Hex(),
-			Username: object.(*models.User).Username,
-			AuthId:   object.(*models.User).AuthId,
-			Active:   object.(*models.User).Active,
+			Username: object.(*models.UserDB).Username,
+			AuthId:   object.(*models.UserDB).AuthId,
+			Active:   object.(*models.UserDB).Active,
 		}
 		newObject.SetCreatedAt()
-	case *models.Admin:
-		newObject = &models.Admin{
+	case *models.AdminDB:
+		newObject = &models.AdminDB{
 			Id:     primitive.NewObjectID().Hex(),
-			UserId: object.(*models.Admin).UserId,
-			Access: object.(*models.Admin).Access,
+			UserId: object.(*models.AdminDB).UserId,
+			Access: object.(*models.AdminDB).Access,
 		}
 
-	case *models.Bird:
-		newObject = &models.Bird{
+	case *models.BirdDB:
+		newObject = &models.BirdDB{
 			Id:          primitive.NewObjectID().Hex(),
-			Name:        object.(*models.Bird).Name,
-			Description: object.(*models.Bird).Description,
-			ImageId:     object.(*models.Bird).ImageId,
-			SoundId:     object.(*models.Bird).SoundId,
+			Name:        object.(*models.BirdDB).Name,
+			Description: object.(*models.BirdDB).Description,
+			ImageId:     object.(*models.BirdDB).ImageId,
+			SoundId:     object.(*models.BirdDB).SoundId,
 		}
 
-	case *models.Post:
-		newObject = &models.Post{
+	case *models.PostDB:
+		newObject = &models.PostDB{
 			Id:       primitive.NewObjectID().Hex(),
-			UserId:   object.(*models.Post).UserId,
-			BirdId:   object.(*models.Post).BirdId,
-			Location: object.(*models.Post).Location,
-			ImageId:  object.(*models.Post).ImageId,
-			SoundId:  object.(*models.Post).SoundId,
+			UserId:   object.(*models.PostDB).UserId,
+			BirdId:   object.(*models.PostDB).BirdId,
+			Location: object.(*models.PostDB).Location,
+			ImageId:  object.(*models.PostDB).ImageId,
+			SoundId:  object.(*models.PostDB).SoundId,
 		}
 		newObject.SetCreatedAt()
 
-	case *models.Media:
-		newObject = &models.Media{
+	case *models.MediaDB:
+		newObject = &models.MediaDB{
 			Id:       primitive.NewObjectID().Hex(),
-			Data:     object.(*models.Media).Data,
-			FileType: object.(*models.Media).FileType,
+			Data:     object.(*models.MediaDB).Data,
+			FileType: object.(*models.MediaDB).FileType,
 		}
 
 	default:
-		return nil, nil
+		return utils.ErrorToResponse(http.StatusBadRequest, "Could not create object", "")
 	}
 	m.data = append(m.data, newObject)
-	return newObject, nil
+	return utils.Response(newObject)
 }

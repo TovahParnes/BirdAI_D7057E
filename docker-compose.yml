@@ -1,14 +1,19 @@
 version: "3"
 services:
   bird_ai:
-    image: ${REPOSITORY}:latest # Make sure your Docker image has this name.
+    image: ${REPOSITORY}:latest
+    #image: bird_ai # for running local build aka "make build"
+    container_name: bird_ai
     build: .
+    env_file:
+      - compose/.env
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "8080:3030"
 
   mongodb:
     image: mongo:7.0.1
+    container_name: mongodb
     restart: unless-stopped
     ports:
       - '27017:27017'
