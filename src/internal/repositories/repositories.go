@@ -4,10 +4,11 @@ import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
 	"context"
+	"time"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"time"
 )
 
 // TODO: Create a login for Db

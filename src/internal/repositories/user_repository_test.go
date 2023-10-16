@@ -4,12 +4,13 @@ import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/repositories"
 	"birdai/src/internal/utils"
+	"testing"
+
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"golang.org/x/net/context"
-	"testing"
 )
 
 // TestRepository functions
@@ -73,7 +74,6 @@ func TestUserRepository(t *testing.T) {
 
 	t.Run("Test UpdateOne", func(t *testing.T) {
 		updateUser := models.UserInput{
-			Id:       testUser1.Id,
 			Username: "Test User 1 is the best!!",
 		}
 		response := userColl.UpdateUser(updateUser)
