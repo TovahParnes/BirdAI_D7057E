@@ -7,12 +7,14 @@
 | -------- |------------------|
 | Backend  | `src/internal`   |
 | Frontend | `src/frontend`   |
+|    Ai    | `src/AI`         |
 
 # Creating and launching the AI Containers automatically
 Create and launch all images/containers
 ```
 navigate to BirdAI_D7057E\src\AI
-
+```
+```
 docker-compose build
 docker-compose up
 ```
@@ -20,11 +22,11 @@ docker-compose up
 ```
 navigate to BirdAI_D7057E\src\AI
 ```
-Create shared image
+Create shared requirements image
 ```
 docker build -t shared-requirements-image .
 ```
-Create network
+Create the network
 ```
 docker network create my_network
 ```
