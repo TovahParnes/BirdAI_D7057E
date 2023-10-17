@@ -1613,7 +1613,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/models.Err"
+                                            "$ref": "#/definitions/models.UserDB"
                                         }
                                     }
                                 }
@@ -2459,6 +2459,26 @@ const docTemplate = `{
             "properties": {
                 "data": {},
                 "timestamp": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.UserDB": {
+            "type": "object",
+            "properties": {
+                "_id": {
+                    "type": "string"
+                },
+                "active": {
+                    "type": "boolean"
+                },
+                "authId": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }

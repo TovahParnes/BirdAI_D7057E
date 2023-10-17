@@ -3,7 +3,6 @@ package handlers
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
-	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -94,7 +93,6 @@ func (h *Handler) ListAdmins(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-	fmt.Println("set: ", set)
 	search := queries["search"]
 	response = utils.IsValidSearch(search)
 	if utils.IsTypeError(response) {

@@ -24,3 +24,12 @@ type UserOutput struct {
 	CreatedAt string `bson:"created_at" json:"createdAt" form:"createdAt"`
 	Active    bool   `bson:"active"`
 }
+
+func UserDBToOutput(db *UserDB) *UserOutput {
+	return &UserOutput{
+		Id:        db.Id,
+		Username:  db.Username,
+		CreatedAt: db.CreatedAt,
+		Active:    db.Active,
+	}
+}

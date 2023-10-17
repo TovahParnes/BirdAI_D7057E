@@ -98,6 +98,19 @@ definitions:
       timestamp:
         type: string
     type: object
+  models.UserDB:
+    properties:
+      _id:
+        type: string
+      active:
+        type: boolean
+      authId:
+        type: string
+      createdAt:
+        type: string
+      username:
+        type: string
+    type: object
   models.UserInput:
     properties:
       active:
@@ -1000,7 +1013,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/models.Err'
+                  $ref: '#/definitions/models.UserDB'
               type: object
         "400":
           description: Bad Request

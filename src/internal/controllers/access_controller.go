@@ -3,15 +3,16 @@ package controllers
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
+	"net/http"
 )
 
 func (c *Controller) CIsAdmin(authId string) models.Response {
-	response := c.CGetUserById(authId)
+	response := c.CGetUserByAuthId(authId)
 	if utils.IsTypeError(response) {
 		return response
 	}
-
-	response = c.CGetAdminById(response.Data.(*models.UserOutput).Id)
+	/*
+	response = c.CGetAdminById(response.Data.(*models.UserDB).Id)
 	if utils.IsTypeError(response) {
 		return response
 	}
@@ -21,10 +22,8 @@ func (c *Controller) CIsAdmin(authId string) models.Response {
 	}
 
 	return utils.ErrorForbidden("User is not admin")
-}
-
-func CGetUserByAuthId(authId string) {
-	panic("unimplemented")
+	*/
+	return utils.Response("TODO: Is admin")
 }
 
 func (c *Controller) CIsSuperAdmin(authId string) models.Response {
@@ -33,7 +32,8 @@ func (c *Controller) CIsSuperAdmin(authId string) models.Response {
 		return response
 	}
 
-	response = c.CGetAdminById(response.Data.(*models.UserOutput).Id)
+	/*
+	response = c.CGetAdminById(response.Data.(*models.UserDB).Id)
 	if utils.IsTypeError(response) {
 		return response
 	}
@@ -43,6 +43,8 @@ func (c *Controller) CIsSuperAdmin(authId string) models.Response {
 	}
 	
 	return utils.ErrorForbidden("User is not superadmin")
+	*/
+	return utils.Response("TODO: Is superadmin")
 }
 
 func (c *Controller) CIsPostsUser(authId string, postId string) models.Response {
@@ -50,7 +52,7 @@ func (c *Controller) CIsPostsUser(authId string, postId string) models.Response 
 	if utils.IsTypeError(response) {
 		return response
 	}
-	userId := response.Data.(*models.UserOutput).Id
+	userId := response.Data.(*models.UserDB).Id
 
 	response = c.CGetPostById(postId)
 	if utils.IsTypeError(response) {
@@ -70,7 +72,7 @@ func (c *Controller) CIsCurrentUser(authId string, userId string) models.Respons
 		return response
 	}
 
-	if (response.Data.(*models.UserOutput).Id == userId) {
+	if (response.Data.(*models.UserDB).Id == userId) {
 		return utils.Response("Is current user")
 	}
 
@@ -96,17 +98,17 @@ func (c *Controller) CIsPostsUserOrAdmin(authId string, userId string) models.Re
 }
 
 func (c *Controller) CIsCurrentUserOrAdmin(authId string, userId string) models.Response {
-	CurrentUserResponse := c.CIsCurrentUser(authId, userId)
-	if utils.IsTypeError(CurrentUserResponse) {
-		return CurrentUserResponse
+	currentUserResponse := c.CIsCurrentUser(authId, userId)
+	if currentUserResponse.Data.(models.Err).StatusCode != http.StatusForbidden{
+		return currentUserResponse
 	}
 
 	adminRresponse := c.CIsAdmin(authId)
-	if utils.IsTypeError(adminRresponse) {
+	if adminRresponse.Data.(models.Err).StatusCode != http.StatusForbidden{
 		return adminRresponse
 	}
 
-	if utils.IsType(CurrentUserResponse, models.UserOutput{}) || utils.IsType(adminRresponse, models.AdminOutput{}) {
+	if !utils.IsTypeError(currentUserResponse) || !utils.IsTypeError(adminRresponse) {
 		return utils.Response("Is current user or admin")
 	}
 
