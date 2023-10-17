@@ -11,16 +11,19 @@
 
 # Creating and launching the AI Containers automatically
 Create and launch all images/containers
+navigate to
 ```
-navigate to BirdAI_D7057E\src\AI
+ ..\BirdAI_D7057E\src\AI
 ```
 ```
 docker-compose build
 docker-compose up
 ```
 # Creating and launching the AI Containers manually
+navigate to
 ```
-navigate to BirdAI_D7057E\src\AI
+ ..\BirdAI_D7057E\src\AI
+```
 ```
 Create shared requirements image
 ```
