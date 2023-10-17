@@ -24,7 +24,6 @@ navigate to
 ```
  ..\BirdAI_D7057E\src\AI
 ```
-```
 Create shared requirements image
 ```
 docker build -t shared-requirements-image .
