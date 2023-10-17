@@ -7,7 +7,7 @@
 | -------- |------------------|
 | Backend  | `src/internal`   |
 | Frontend | `src/frontend`   |
-|    Ai    | `src/AI`         |
+|    AI    | `src/AI`         |
 
 # Creating and launching the AI Containers automatically
 Create and launch all images/containers
