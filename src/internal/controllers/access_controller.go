@@ -99,12 +99,12 @@ func (c *Controller) CIsPostsUserOrAdmin(authId string, userId string) models.Re
 
 func (c *Controller) CIsCurrentUserOrAdmin(authId string, userId string) models.Response {
 	currentUserResponse := c.CIsCurrentUser(authId, userId)
-	if currentUserResponse.Data.(models.Err).StatusCode != http.StatusForbidden{
+	if utils.IsTypeError(currentUserResponse) && currentUserResponse.Data.(models.Err).StatusCode != http.StatusForbidden{
 		return currentUserResponse
 	}
 
 	adminRresponse := c.CIsAdmin(authId)
-	if adminRresponse.Data.(models.Err).StatusCode != http.StatusForbidden{
+	if utils.IsTypeError(adminRresponse) && adminRresponse.Data.(models.Err).StatusCode != http.StatusForbidden{
 		return adminRresponse
 	}
 

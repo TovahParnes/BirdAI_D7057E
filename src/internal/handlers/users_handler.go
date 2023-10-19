@@ -185,23 +185,23 @@ func (h *Handler) UpdateUser(c *fiber.Ctx) error {
 // @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/users/{id} [delete]
 func (h *Handler) DeleteUser(c *fiber.Ctx) error {
-	id := c.Params("id")
-	response := utils.IsValidId(id)
-	if utils.IsTypeError(response) {
-		return utils.ResponseToStatus(c, response)
-	}
-
-	response = h.auth.CheckExpired(c)
+	response := h.auth.CheckExpired(c)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
 	authId := response.Data.(models.UserDB).AuthId
+
+	id := c.Params("id")
+	response = utils.IsValidId(id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
 	response = h.controller.CIsCurrentUserOrAdmin(authId, id)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	response = h.controller.CDeleteUser(id, response.Data.(models.UserDB).AuthId)
+	response = h.controller.CDeleteUser(id, authId)
 	return utils.ResponseToStatus(c, response)
 }
