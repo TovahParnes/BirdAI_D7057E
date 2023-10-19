@@ -123,7 +123,7 @@ func (h *Handler) CreatePost(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-	authId := response.Data.(models.UserDB).AuthId
+	curUserId := response.Data.(models.UserDB).Id
 
 	var post *models.PostInput
 	if err := c.BodyParser(&post);
@@ -136,7 +136,7 @@ func (h *Handler) CreatePost(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	response = h.controller.CCreatePost(authId, post)
+	response = h.controller.CCreatePost(curUserId, post)
 
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
@@ -167,7 +167,7 @@ func (h *Handler) UpdatePost(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-	authId := response.Data.(models.UserDB).AuthId
+	curUserId := response.Data.(models.UserDB).Id
 	
 	id := c.Params("id")
 	response = utils.IsValidId(id)
@@ -175,7 +175,7 @@ func (h *Handler) UpdatePost(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	response = h.controller.CIsPostsUserOrAdmin(authId, id)
+	response = h.controller.CIsPostsUserOrAdmin(curUserId, id)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
@@ -216,7 +216,7 @@ func (h *Handler) DeletePost(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-	authId := response.Data.(models.UserDB).AuthId
+	curUserId := response.Data.(models.UserDB).Id
 
 	id := c.Params("id")
 	response = utils.IsValidId(id)
@@ -224,11 +224,11 @@ func (h *Handler) DeletePost(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	response = h.controller.CIsPostsUserOrAdmin(authId, id)
+	response = h.controller.CIsPostsUserOrAdmin(curUserId, id)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	response = h.controller.CDeletePost(id, authId)
+	response = h.controller.CDeletePost(id)
 	return utils.ResponseToStatus(c, response)
 }

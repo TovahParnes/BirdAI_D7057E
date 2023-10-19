@@ -25,7 +25,7 @@ func (c *Controller) CListAdmins(set string, search string) (models.Response) {
 	return utils.ErrorNotImplemented("CListAdmins")
 }
 
-func (c *Controller) CCreateAdmin(authId string, admin *models.AdminInput) (models.Response) {
+func (c *Controller) CCreateAdmin(userId string, admin *models.AdminInput) (models.Response) {
 	/*
 	coll := c.db.GetCollection(repositories.AdminColl)
 	response := coll.CreateOne(admin)

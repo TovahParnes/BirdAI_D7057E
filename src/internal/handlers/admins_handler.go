@@ -27,7 +27,7 @@ func (h *Handler) GetAdminById(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-	authId := response.Data.(models.UserDB).AuthId
+	curUserId := response.Data.(models.UserDB).Id
 
 	id := c.Params("id")
 	response = utils.IsValidId(id)
@@ -35,7 +35,7 @@ func (h *Handler) GetAdminById(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	response = h.controller.CIsSuperAdmin(authId)
+	response = h.controller.CIsSuperAdmin(curUserId)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
@@ -65,14 +65,14 @@ func (h *Handler) GetAdminMe(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-	authId := response.Data.(models.UserDB).AuthId
+	curUserId := response.Data.(models.UserDB).Id
 
-	response = h.controller.CIsSuperAdmin(authId)
+	response = h.controller.CIsSuperAdmin(curUserId)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	response = h.controller.CGetAdminById(authId)
+	response = h.controller.CGetAdminById(curUserId)
 
 	return utils.ResponseToStatus(c, response)
 }
@@ -97,9 +97,9 @@ func (h *Handler) ListAdmins(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-	authId := response.Data.(models.UserDB).AuthId
+	curUserId := response.Data.(models.UserDB).Id
 
-	response = h.controller.CIsSuperAdmin(authId)
+	response = h.controller.CIsSuperAdmin(curUserId)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
@@ -140,9 +140,9 @@ func (h *Handler) CreateAdmin(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-	authId := response.Data.(models.UserDB).AuthId
+	curUserId := response.Data.(models.UserDB).Id
 
-	response = h.controller.CIsSuperAdmin(authId)
+	response = h.controller.CIsSuperAdmin(curUserId)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
@@ -158,7 +158,7 @@ func (h *Handler) CreateAdmin(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	response = h.controller.CCreateAdmin(authId, admin)
+	response = h.controller.CCreateAdmin(curUserId, admin)
 
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
@@ -189,9 +189,9 @@ func (h *Handler) UpdateAdmin(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-	authId := response.Data.(models.UserDB).AuthId
+	curUserId := response.Data.(models.UserDB).Id
 
-	response = h.controller.CIsSuperAdmin(authId)
+	response = h.controller.CIsSuperAdmin(curUserId)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
@@ -237,7 +237,7 @@ func (h *Handler) DeleteAdmin(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-	authId := response.Data.(models.UserDB).AuthId
+	curUserId := response.Data.(models.UserDB).Id
 
 	id := c.Params("id")
 	response = utils.IsValidId(id)
@@ -245,7 +245,7 @@ func (h *Handler) DeleteAdmin(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	response = h.controller.CIsCurrentUserOrSuperAdmin(authId, id)
+	response = h.controller.CIsCurrentUserOrSuperAdmin(curUserId, id)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}

@@ -93,9 +93,9 @@ response := h.auth.CheckExpired(c)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-	authId := response.Data.(models.UserDB).AuthId
+	curUserId := response.Data.(models.UserDB).Id
 
-	response = h.controller.CIsAdmin(authId)
+	response = h.controller.CIsAdmin(curUserId)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}

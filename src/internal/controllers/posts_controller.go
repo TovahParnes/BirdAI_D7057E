@@ -33,7 +33,7 @@ func (c *Controller) CListUsersPosts(userId string, set string, search string) (
 	return utils.ErrorNotImplemented("CListUsersPosts")
 }
 
-func (c *Controller) CCreatePost(authId string, postInput *models.PostInput) (models.Response) {
+func (c *Controller) CCreatePost(userId string, postInput *models.PostInput) (models.Response) {
 	/*
 	post := models.PostInputToPostCreate(postInput, authId)
 	coll := c.db.GetCollection(repositories.PostColl)
@@ -60,10 +60,10 @@ func (c *Controller) CUpdatePost(userId string, post *models.PostInput) (models.
 	return utils.ErrorNotImplemented("CUpdatePost")
 }
 
-func (c *Controller) CDeletePost(id, authId string) (models.Response) {
+func (c *Controller) CDeletePost(id string) (models.Response) {
 	/*
 	coll := c.db.GetCollection(repositories.PostColl)
-	filter := bson.M{"_id": id, "user_id": authId}
+	filter := bson.M{"_id": id}
 	response := coll.DeleteOne(filter)
 	return response
 	*/

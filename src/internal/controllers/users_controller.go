@@ -56,9 +56,9 @@ func (c *Controller) CListUsers(set, search string) models.Response {
 	return utils.Response(users)
 }
 
-func (c *Controller) CDeleteUser(id, authId string) models.Response {
+func (c *Controller) CDeleteUser(id string) models.Response {
 	coll := c.db.GetCollection(repositories.UserColl)
-	filter := bson.M{"_id": id, "auth_id": authId}
+	filter := bson.M{"_id": id}
 	response := coll.DeleteOne(filter)
 	return response
 }

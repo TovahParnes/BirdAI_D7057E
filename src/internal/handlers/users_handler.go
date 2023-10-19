@@ -117,6 +117,12 @@ func (h *Handler) GetUserMe(c *fiber.Ctx) error {
 	//	@Failure	401	{object}	models.Response{}
 	// Authenticate(jwt.token)
 	response := h.auth.CheckExpired(c)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	userId := response.Data.(models.UserDB).Id
+
+	response = h.controller.CGetUserById(userId)
 
 	return utils.ResponseToStatus(c, response)
 }
@@ -143,10 +149,15 @@ func (h *Handler) UpdateUser(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-	authId := response.Data.(models.UserDB).AuthId
+	curUserId := response.Data.(models.UserDB).Id
 
 	id := c.Params("id")
 	response = utils.IsValidId(id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
+	response = h.controller.CIsCurrentUserOrAdmin(curUserId, id)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
@@ -156,11 +167,6 @@ func (h *Handler) UpdateUser(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
 	response = utils.IsValidUserInput(user)
-	if utils.IsTypeError(response) {
-		return utils.ResponseToStatus(c, response)
-	}
-
-	response = h.controller.CIsCurrentUserOrAdmin(authId, id)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
@@ -189,7 +195,7 @@ func (h *Handler) DeleteUser(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-	authId := response.Data.(models.UserDB).AuthId
+	curUserId := response.Data.(models.UserDB).Id
 
 	id := c.Params("id")
 	response = utils.IsValidId(id)
@@ -197,11 +203,11 @@ func (h *Handler) DeleteUser(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	response = h.controller.CIsCurrentUserOrAdmin(authId, id)
+	response = h.controller.CIsCurrentUserOrAdmin(curUserId, id)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	response = h.controller.CDeleteUser(id, authId)
+	response = h.controller.CDeleteUser(id)
 	return utils.ResponseToStatus(c, response)
 }
