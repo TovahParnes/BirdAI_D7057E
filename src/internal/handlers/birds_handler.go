@@ -93,6 +93,12 @@ response := h.auth.CheckExpired(c)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
+	authId := response.Data.(models.UserDB).AuthId
+
+	response = h.controller.CIsAdmin(authId)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
 	id := c.Params("id")
 	response = utils.IsValidId(id)

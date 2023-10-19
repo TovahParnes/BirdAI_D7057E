@@ -79,22 +79,24 @@ func (c *Controller) CIsCurrentUser(authId string, userId string) models.Respons
 	return utils.ErrorForbidden("User is not current user")
 }
 
-func (c *Controller) CIsPostsUserOrAdmin(authId string, userId string) models.Response {
-	postResponse := c.CIsPostsUser(authId, userId)
-	if utils.IsTypeError(postResponse) {
+func (c *Controller) CIsPostsUserOrAdmin(authId string, postId string) models.Response {
+	postResponse := c.CIsPostsUser(authId, postId)
+	if utils.IsTypeError(postResponse) && postResponse.Data.(models.Err).StatusCode != http.StatusForbidden {
 		return postResponse
+	}
+	if !utils.IsTypeError(postResponse) {
+		return utils.Response("Is posts user")
 	}
 
 	adminRresponse := c.CIsAdmin(authId)
-	if utils.IsTypeError(adminRresponse) {
+	if utils.IsTypeError(adminRresponse) && adminRresponse.Data.(models.Err).StatusCode != http.StatusForbidden  {
 		return adminRresponse
 	}
-
-	if utils.IsType(postResponse, models.PostOutput{}) || utils.IsType(adminRresponse, models.AdminOutput{}) {
-		return utils.Response("Is posts user or admin")
+	if !utils.IsTypeError(adminRresponse) {
+		return utils.Response("Is admin")
 	}
 
-	return utils.ErrorForbidden("User is not current user")
+	return utils.ErrorForbidden("User is not posts user or admin")
 }
 
 func (c *Controller) CIsCurrentUserOrAdmin(authId string, userId string) models.Response {
@@ -102,15 +104,37 @@ func (c *Controller) CIsCurrentUserOrAdmin(authId string, userId string) models.
 	if utils.IsTypeError(currentUserResponse) && currentUserResponse.Data.(models.Err).StatusCode != http.StatusForbidden{
 		return currentUserResponse
 	}
+	if !utils.IsTypeError(currentUserResponse) {
+		return utils.Response("Is current user")
+	}
 
 	adminRresponse := c.CIsAdmin(authId)
 	if utils.IsTypeError(adminRresponse) && adminRresponse.Data.(models.Err).StatusCode != http.StatusForbidden{
 		return adminRresponse
 	}
-
-	if !utils.IsTypeError(currentUserResponse) || !utils.IsTypeError(adminRresponse) {
-		return utils.Response("Is current user or admin")
+	if !utils.IsTypeError(adminRresponse) {
+		return utils.Response("Is admin")
 	}
 
 	return utils.ErrorForbidden("User is not current user or admin")
+}
+
+func (c *Controller) CIsCurrentUserOrSuperAdmin(authId string, userId string) models.Response {
+	currentUserResponse := c.CIsCurrentUser(authId, userId)
+	if utils.IsTypeError(currentUserResponse) && currentUserResponse.Data.(models.Err).StatusCode != http.StatusForbidden{
+		return currentUserResponse
+	}
+	if !utils.IsTypeError(currentUserResponse) {
+		return utils.Response("Is current user")
+	}
+
+	superAdminRresponse := c.CIsSuperAdmin(authId)
+	if utils.IsTypeError(superAdminRresponse) && superAdminRresponse.Data.(models.Err).StatusCode != http.StatusForbidden{
+		return superAdminRresponse
+	}
+	if !utils.IsTypeError(superAdminRresponse) {
+		return utils.Response("Is superadmin")
+	}
+
+	return utils.ErrorForbidden("User is not current user or superadmin")
 }
