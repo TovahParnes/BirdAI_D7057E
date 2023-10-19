@@ -27,9 +27,15 @@ func (h *Handler) GetAdminById(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
+	authId := response.Data.(models.UserDB).AuthId
 
 	id := c.Params("id")
 	response = utils.IsValidId(id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
+	response = h.controller.CIsSuperAdmin(authId)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
@@ -61,6 +67,11 @@ func (h *Handler) GetAdminMe(c *fiber.Ctx) error {
 	}
 	authId := response.Data.(models.UserDB).AuthId
 
+	response = h.controller.CIsSuperAdmin(authId)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
 	response = h.controller.CGetAdminById(authId)
 
 	return utils.ResponseToStatus(c, response)
@@ -83,6 +94,12 @@ func (h *Handler) GetAdminMe(c *fiber.Ctx) error {
 // @Router		/admins/list [get]
 func (h *Handler) ListAdmins(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	authId := response.Data.(models.UserDB).AuthId
+
+	response = h.controller.CIsSuperAdmin(authId)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
@@ -124,6 +141,11 @@ func (h *Handler) CreateAdmin(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 	authId := response.Data.(models.UserDB).AuthId
+
+	response = h.controller.CIsSuperAdmin(authId)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
 	var admin *models.AdminInput
 	if err := c.BodyParser(&admin);
@@ -167,6 +189,12 @@ func (h *Handler) UpdateAdmin(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
+	authId := response.Data.(models.UserDB).AuthId
+
+	response = h.controller.CIsSuperAdmin(authId)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 	
 	id := c.Params("id")
 	response = utils.IsValidId(id)
@@ -184,9 +212,6 @@ func (h *Handler) UpdateAdmin(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-
-	//	@Failure		403	{object}	models.Response{}
-	// if user is not superAdmin
 
 	response = h.controller.CUpdateAdmin(id, admin)
 	return utils.ResponseToStatus(c, response)
@@ -212,6 +237,7 @@ func (h *Handler) DeleteAdmin(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
+	authId := response.Data.(models.UserDB).AuthId
 
 	id := c.Params("id")
 	response = utils.IsValidId(id)
@@ -219,17 +245,10 @@ func (h *Handler) DeleteAdmin(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	//	@Failure	401	{object}	models.Response{}
-	// Authenticate(jwt.token)
-
-	//	@Failure		403	{object}	models.Response{}
-	// if user is not admin or user is not the same as the one being updated
-
-	//	@Failure	503	{object}	models.Response{}
-	// if no connection to db was established
-
-	//	@Failure	404	{object}	models.Response{}
-	// if user not found
+	response = h.controller.CIsCurrentUserOrSuperAdmin(authId, id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
 	response = h.controller.CDeleteAdmin(id)
 	return utils.ResponseToStatus(c, response)

@@ -167,9 +167,15 @@ func (h *Handler) UpdatePost(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-
+	authId := response.Data.(models.UserDB).AuthId
+	
 	id := c.Params("id")
 	response = utils.IsValidId(id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
+	response = h.controller.CIsPostsUserOrAdmin(authId, id)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
@@ -218,9 +224,10 @@ func (h *Handler) DeletePost(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	//	@Failure		403	{object}	models.Response{}
-	// if user is not admin or user is not the same as the one being updated
-
+	response = h.controller.CIsPostsUserOrAdmin(authId, id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
 	response = h.controller.CDeletePost(id, authId)
 	return utils.ResponseToStatus(c, response)
