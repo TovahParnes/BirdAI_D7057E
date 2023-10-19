@@ -121,7 +121,7 @@ def delete_images(path):
             
 def run_classification(_image):
 
-    predict_image(image_path=_image, rotations=0)
+    predict_image(_image, rotations=0)
     _images = crop_images(path="boxes/", target_size=(224, 224))
 
     if len(_images) > 0:

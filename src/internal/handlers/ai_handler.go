@@ -12,11 +12,11 @@ import (
 //
 // @Summary		Analyze image
 // @Description	Send in an image to get a response of which type of bird it is
-// @Tags		ai
+// @Tags		AI
 // @Accept		json
 // @Produce		json
 // @Param		set	body		models.MediaInput	true	"picture"
-// @Success		201	{object}	models.Response{data=models.Analyze}
+// @Success		201	{object}	models.Response{data=models.AnalyzeResponse}
 // @Failure		400	{object}	models.Response{data=[]models.Err}
 // @Failure		401	{object}	models.Response{data=[]models.Err}
 // @Failure		503	{object}	models.Response{data=[]models.Err}
@@ -24,10 +24,10 @@ import (
 // @Router		/ai/inputimage [post]
 func (h *Handler) ImagePrediction(c *fiber.Ctx) error {
 
-	//response := h.auth.CheckExpired(c)
-	//if utils.IsTypeError(response) {
-	//	return utils.ResponseToStatus(c, response)
-	//}
+	response := h.auth.CheckExpired(c)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
 	var picture *models.MediaInput
 	if err := c.BodyParser(&picture); err != nil {
@@ -41,17 +41,11 @@ func (h *Handler) ImagePrediction(c *fiber.Ctx) error {
 		fmt.Print(err.Error())
 	}
 
-	prediction := models.Analyze{
-		Accuracy: "0.8",
-		Name:     "Skata",
-		BirdId:   "333333",
-		Picture: models.MediaDB{
-			Id:       "123123",
-			Data:     string(dat),
-			FileType: "JPG",
-		},
-	}
-	response := utils.Response(prediction)
+	aiBirds := h.controller.RequestAnalyze(string(dat))
+
+	aiResponse := h.controller.AiListToResponse(aiBirds, dat)
+
+	response = utils.Response(aiResponse)
 
 	return utils.CreationResponseToStatus(c, response)
 }

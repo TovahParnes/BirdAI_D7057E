@@ -3,3 +3,6 @@
 .DS_Store
 # ---Frontend---
 
+# ---AI---
+
+src/AI/classification_model/mobilenet_model.keras

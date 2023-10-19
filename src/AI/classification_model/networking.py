@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from PIL import Image
 import io
 import numpy as np
+import json
 
 import classification
 
@@ -37,4 +38,20 @@ def process_image():
 
     _pos = int(np.argmax(_result, axis=-1)[0])
 
-    return jsonify({'message': 'Image successfully received and processed', 'pos': _pos})
+    _label = get_label_from_position(_pos)
+    return jsonify({'message': 'Image successfully received and processed', 'label': _label})
+
+def get_label_from_position(_position):
+
+    _labels = load_json_file("labels.json")
+    _entry = _labels[str(_position)]
+
+    if _entry is not None:
+        return _entry
+    else:
+        print("Entry", str(_position), "not found in the dictionary")
+
+def load_json_file(_filename):
+    with open(_filename, 'r') as json_file:
+        _labels = json.load(json_file)
+        return _labels
