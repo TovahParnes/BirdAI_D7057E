@@ -148,8 +148,7 @@ func (h *Handler) CreateAdmin(c *fiber.Ctx) error {
 	}
 
 	var admin *models.AdminInput
-	if err := c.BodyParser(&admin);
-	err != nil {
+	if err := c.BodyParser(&admin); err != nil {
 		//	@Failure	400	{object}	models.Response{}
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
@@ -165,7 +164,6 @@ func (h *Handler) CreateAdmin(c *fiber.Ctx) error {
 	}
 	return utils.CreationResponseToStatus(c, response)
 }
-
 
 // UpdateAdmin is a function to update the given admin from the databse
 //
@@ -253,5 +251,3 @@ func (h *Handler) DeleteAdmin(c *fiber.Ctx) error {
 	response = h.controller.CDeleteAdmin(id)
 	return utils.ResponseToStatus(c, response)
 }
-
-

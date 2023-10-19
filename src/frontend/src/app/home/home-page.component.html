@@ -81,6 +81,13 @@
   </mat-vertical-stepper>
 </mat-card>
 
+<div *ngIf="analyzed" >
+  <img id="ItemPreview" src={{analyzed.data.picture.data}}>
+  <p>Name: {{analyzed.data.name}}</p>
+  <p>Accuracy: {{analyzed.data.accuracy}}</p>
+
+</div>
+
 <p></p>
 
 <div #loading style="height: 1000px;">

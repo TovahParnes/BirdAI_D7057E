@@ -55,6 +55,9 @@ func New(app *fiber.App, db repositories.IMongoInstance) {
 	adminRoute.Patch("/:id", JWTProtected(), handler.UpdateAdmin)
 	adminRoute.Delete("/:id", JWTProtected(), handler.DeleteAdmin)
 
+	aiRoute := app.Group("/ai")
+	aiRoute.Post("/inputimage", handler.ImagePrediction)
+
 }
 
 func JWTProtected() func(*fiber.Ctx) error {

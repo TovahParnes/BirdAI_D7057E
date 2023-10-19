@@ -32,7 +32,6 @@ func (h *Handler) GetPostById(c *fiber.Ctx) error {
 	return utils.ResponseToStatus(c, response)
 }
 
-
 // ListPosts is a function to get a set of all posts from database
 //
 // @Summary		List all posts of a specified set
@@ -63,7 +62,6 @@ func (h *Handler) ListPosts(c *fiber.Ctx) error {
 	response = h.controller.CListPosts(set, search)
 	return utils.ResponseToStatus(c, response)
 }
-
 
 // ListUsersPosts is a function to get a set of all posts from a given user from database
 //
@@ -103,7 +101,6 @@ func (h *Handler) ListUsersPosts(c *fiber.Ctx) error {
 	return utils.ResponseToStatus(c, response)
 }
 
-
 // CreatePost is a function to create a new post
 //
 // @Summary		Create a new post
@@ -126,8 +123,7 @@ func (h *Handler) CreatePost(c *fiber.Ctx) error {
 	curUserId := response.Data.(models.UserDB).Id
 
 	var post *models.PostInput
-	if err := c.BodyParser(&post);
-	err != nil {
+	if err := c.BodyParser(&post); err != nil {
 		//	@Failure	400	{object}	models.Response{}
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
@@ -143,7 +139,6 @@ func (h *Handler) CreatePost(c *fiber.Ctx) error {
 	}
 	return utils.CreationResponseToStatus(c, response)
 }
-
 
 // UpdatePost is a function to update the given post from the databse
 //

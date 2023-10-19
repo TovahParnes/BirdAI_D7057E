@@ -6,10 +6,8 @@ export const environment = {
   production: false,
   companyEmail: "Bird.AI@outlook.com",
 
-  loginURL: "localhost:4000/users",
-  identifyRequestURL: "localhost:4000",
-
-  secret: "492aa87ff2efcabc17273c061ee2913f5bdcfe256080dc824d3a8e6a4c575816c7c246061fdb648bce5cfd0ded0af1bebb8f83be2de3dc78086a9a0d3c45ade2"
+  loginURL: "http://localhost:4000/users",
+  identifyRequestURL: "http://localhost:3000",
   };
   
   /*
