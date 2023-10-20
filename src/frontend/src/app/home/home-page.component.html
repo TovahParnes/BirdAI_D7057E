@@ -91,9 +91,18 @@
 </mat-card>
 
 
+
 <p></p>
 
 <app-bottominfo></app-bottominfo>
+
+<div *ngIf="analyzed" >
+  <img id="ItemPreview" src={{analyzed.data.picture.data}}>
+  <p>Name: {{analyzed.data.name}}</p>
+  <p>Accuracy: {{analyzed.data.accuracy}}</p>
+
+</div>
+
 
 <p></p>
 

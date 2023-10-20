@@ -4,23 +4,34 @@ import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
 	"context"
-
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"time"
 )
 
 // TODO: Create a login for Db
-const dbName = "birdai"
-const mongoURI = "mongodb://localhost:27017"
+//const DBName = "birdai"
+//const MongoURI = "mongodb://localhost:27017"
 
 // Connect Connects to the db
 //
 // TODO: Check if connection needs any configurations
 //
-// TODO: Will be moved to other file
-func Connect() (IMongoInstance, error) {
-	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(mongoURI))
+// TODO: Might be moved to other file
+
+func Connect(dbName, mongoURI string) (IMongoInstance, error) {
+	opts := options.Client()
+	opts.ApplyURI(mongoURI)
+	opts.SetConnectTimeout(10 * time.Second)
+	client, err := mongo.Connect(context.TODO(), opts)
+	if err != nil {
+		return nil, err
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 11*time.Second)
+	defer cancel()
+	// Ping to check the connection
+	err = client.Ping(ctx, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +73,11 @@ func (m *MongoCollection) UpdateOne(query bson.M) models.Response {
 	result, err := m.Collection.UpdateOne(m.ctx, filter, update)
 	response := m.FindOne(filter)
 	if result.ModifiedCount != 1 {
-		return utils.ErrorToResponse(400, "Could not update object", err.Error())
+		// Needs to check if there is an error, if not the update was a "success" but there was no change needed
+		if err != nil {
+			return utils.ErrorToResponse(400, "Could not update object", err.Error())
+		}
+		return utils.ErrorToResponse(400, "Could not update object", "No change compared to current document")
 	}
 	return response
 }
@@ -70,6 +85,8 @@ func (m *MongoCollection) UpdateOne(query bson.M) models.Response {
 // DeleteOne returns the deleted document if it gets successfully deleted.
 // If the document was a user it will instead return the updated version of the document.
 func (m *MongoCollection) DeleteOne(query bson.M) models.Response {
+	// Safety check so we don't remove based on other than ID
+	// Should probably be moved to case specific
 	deleteQuery := bson.M{
 		"_id": query["_id"],
 	}
@@ -114,41 +131,40 @@ func (m *MongoCollection) CreateOne(object models.HandlerObject) models.Response
 // FindOne searches for one document from the current collection that matches the query.
 func (m *MongoCollection) FindOne(query bson.M) models.Response {
 	collName := m.Collection.Name()
-	// There should be a way to make this code more compact as it is repeating the same thing
 	switch collName {
 	case UserColl:
 		var result models.UserDB
 		err := m.Collection.FindOne(m.ctx, query).Decode(&result)
 		if err != nil {
-			return utils.ErrorNotFoundInDatabase("User collection")
+			return utils.ErrorNotFoundInDatabase("User Collection")
 		}
 		return utils.Response(&result)
 	case AdminColl:
-		var result models.AdminOutput
+		var result models.AdminDB
 		err := m.Collection.FindOne(m.ctx, query).Decode(&result)
 		if err != nil {
-			return utils.ErrorNotFoundInDatabase("Admin collection")
+			return utils.ErrorNotFoundInDatabase("Admin Collection")
 		}
 		return utils.Response(&result)
 	case BirdColl:
-		var result models.BirdOutput
+		var result models.BirdDB
 		err := m.Collection.FindOne(m.ctx, query).Decode(&result)
 		if err != nil {
-			return utils.ErrorNotFoundInDatabase("Bird collection")
+			return utils.ErrorNotFoundInDatabase("Bird Collection")
 		}
 		return utils.Response(&result)
 	case PostColl:
-		var result models.PostOutput
+		var result models.PostDB
 		err := m.Collection.FindOne(m.ctx, query).Decode(&result)
 		if err != nil {
-			return utils.ErrorNotFoundInDatabase("Post collection")
+			return utils.ErrorNotFoundInDatabase("Post Collection")
 		}
 		return utils.Response(&result)
 	case MediaColl:
-		var result models.MediaOutput
+		var result models.MediaDB
 		err := m.Collection.FindOne(m.ctx, query).Decode(&result)
 		if err != nil {
-			return utils.ErrorNotFoundInDatabase("Media collection")
+			return utils.ErrorNotFoundInDatabase("Media Collection")
 		}
 		return utils.Response(&result)
 	default:
@@ -157,10 +173,15 @@ func (m *MongoCollection) FindOne(query bson.M) models.Response {
 	}
 }
 
-// FindAll returns all documents from the current collection.
+// FindAll returns all documents from the current Collection that matches the filter.
+// The input limit will limit how many documents will be returned
+// The input skip will skip the first n results
 // Return will be of type interface{} and will need to be type asserted before use
-func (m *MongoCollection) FindAll() models.Response {
-	findCursor, err := m.Collection.Find(m.ctx, bson.M{})
+func (m *MongoCollection) FindAll(filter bson.M, limit int, skip int) models.Response {
+	findOptions := options.Find()
+	findOptions.SetSkip(int64(skip))
+	findOptions.SetLimit(int64(limit))
+	findCursor, err := m.Collection.Find(m.ctx, filter, findOptions)
 	if err != nil {
 		return utils.ErrorNotFoundInDatabase("")
 	}
@@ -178,55 +199,55 @@ func (m *MongoCollection) FindAll() models.Response {
 			bsonBody, _ := bson.Marshal(result)
 			err := bson.Unmarshal(bsonBody, &tempResult)
 			if err != nil {
-				return utils.ErrorNotFoundInDatabase("User collection")
+				return utils.ErrorNotFoundInDatabase("User Collection")
 			}
 			resultStruct = append(resultStruct, tempResult)
 		}
 		return utils.Response(resultStruct)
 	case AdminColl:
-		var resultStruct []models.AdminOutput
+		var resultStruct []models.AdminDB
 		for _, result := range results {
-			var tempResult models.AdminOutput
+			var tempResult models.AdminDB
 			bsonBody, _ := bson.Marshal(result)
 			err := bson.Unmarshal(bsonBody, &tempResult)
 			if err != nil {
-				return utils.ErrorNotFoundInDatabase("Admin collection")
+				return utils.ErrorNotFoundInDatabase("Admin Collection")
 			}
 			resultStruct = append(resultStruct, tempResult)
 		}
 		return utils.Response(resultStruct)
 	case BirdColl:
-		var resultStruct []models.BirdOutput
+		var resultStruct []models.BirdDB
 		for _, result := range results {
-			var tempResult models.BirdOutput
+			var tempResult models.BirdDB
 			bsonBody, _ := bson.Marshal(result)
 			err := bson.Unmarshal(bsonBody, &tempResult)
 			if err != nil {
-				return utils.ErrorNotFoundInDatabase("Bird collection")
+				return utils.ErrorNotFoundInDatabase("Bird Collection")
 			}
 			resultStruct = append(resultStruct, tempResult)
 		}
 		return utils.Response(resultStruct)
 	case PostColl:
-		var resultStruct []models.PostOutput
+		var resultStruct []models.PostDB
 		for _, result := range results {
-			var tempResult models.PostOutput
+			var tempResult models.PostDB
 			bsonBody, _ := bson.Marshal(result)
 			err := bson.Unmarshal(bsonBody, &tempResult)
 			if err != nil {
-				return utils.ErrorNotFoundInDatabase("Post collection")
+				return utils.ErrorNotFoundInDatabase("Post Collection")
 			}
 			resultStruct = append(resultStruct, tempResult)
 		}
 		return utils.Response(resultStruct)
 	case MediaColl:
-		var resultStruct []models.MediaOutput
+		var resultStruct []models.MediaDB
 		for _, result := range results {
-			var tempResult models.MediaOutput
+			var tempResult models.MediaDB
 			bsonBody, _ := bson.Marshal(result)
 			err := bson.Unmarshal(bsonBody, &tempResult)
 			if err != nil {
-				return utils.ErrorNotFoundInDatabase("Media collection")
+				return utils.ErrorNotFoundInDatabase("Media Collection")
 			}
 			resultStruct = append(resultStruct, tempResult)
 		}

@@ -17,6 +17,11 @@ var (
 	MediaColl = "media"
 )
 
+// SetSize TODO: Should probably be moved to some general file instead of repository specific
+var (
+	SetSize = 10
+)
+
 // TODO: Add custom error variables
 var (
 // ParseError = errors.New("")
@@ -58,9 +63,9 @@ type MongoCollection struct {
 
 // IMongoCollection TODO: Update input when known what is needed
 type IMongoCollection interface {
-	UpdateOne(query bson.M) (models.Response)
-	DeleteOne(query bson.M) (models.Response)
-	CreateOne(object models.HandlerObject) (models.Response)
-	FindOne(query bson.M) (models.Response)
-	FindAll() (models.Response)
+	UpdateOne(query bson.M) models.Response
+	DeleteOne(query bson.M) models.Response
+	CreateOne(object models.HandlerObject) models.Response
+	FindOne(query bson.M) models.Response
+	FindAll(filter bson.M, limit int, skip int) models.Response
 }

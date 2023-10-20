@@ -107,8 +107,7 @@ func (h *Handler) ListAdmins(c *fiber.Ctx) error {
 func (h *Handler) CreateAdmin(c *fiber.Ctx) error {
 	authId := c.GetReqHeaders()["Authid"]
 	var admin *models.AdminInput
-	if err := c.BodyParser(&admin);
-	err != nil {
+	if err := c.BodyParser(&admin); err != nil {
 		//	@Failure	400	{object}	models.Response{}
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
@@ -120,7 +119,6 @@ func (h *Handler) CreateAdmin(c *fiber.Ctx) error {
 	}
 	return utils.CreationResponseToStatus(c, response)
 }
-
 
 // UpdateAdmin is a function to update the given admin from the databse
 //
@@ -142,7 +140,7 @@ func (h *Handler) CreateAdmin(c *fiber.Ctx) error {
 func (h *Handler) UpdateAdmin(c *fiber.Ctx) error {
 	//authId := c.GetReqHeaders()["Authid"]
 	id := c.Params("id")
-	
+
 	var admin *models.AdminInput
 	if err := c.BodyParser(&admin); err != nil {
 		//	@Failure	400	{object}	models.Response{}
@@ -191,5 +189,3 @@ func (h *Handler) DeleteAdmin(c *fiber.Ctx) error {
 	response := h.controller.CDeleteAdmin(id)
 	return utils.ResponseToStatus(c, response)
 }
-
-

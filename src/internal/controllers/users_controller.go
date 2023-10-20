@@ -26,7 +26,7 @@ func (c *Controller) CGetUserById(id string) models.Response {
 
 func (c *Controller) CListUsers() models.Response {
 	coll := c.db.GetCollection(repositories.UserColl)
-	response := coll.FindAll()
+	response := coll.FindAll(bson.M{}, 0, 0)
 	users := []*models.UserOutput{}
 
 	if utils.IsTypeError(response) {

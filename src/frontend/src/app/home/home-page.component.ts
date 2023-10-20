@@ -1,11 +1,13 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
+import {AnalyzeResponse} from 'src/assets/components/components';
 import {AppComponent} from '../app.component';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { MatStepper } from '@angular/material/stepper';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
+import { NgOptimizedImage } from '@angular/common'
 
 
 @Component({
@@ -25,6 +27,7 @@ export class MainPageComponent implements OnInit {
 
   data: any;
   dataImg: any;
+  analyzed: AnalyzeResponse | null = null;
 
 
   constructor(
@@ -32,8 +35,7 @@ export class MainPageComponent implements OnInit {
     public mainApp: AppComponent,
     public socialAuthService: SocialAuthService,
     private formBuilder: FormBuilder,
-    private httpClient: HttpClient) {
-
+    private http: HttpClient) {
   }
 
   ngOnInit() {
@@ -62,20 +64,24 @@ export class MainPageComponent implements OnInit {
     this.selectedImage = null;
   }
 
+  postImage(): Observable<AnalyzeResponse> {
+    //console.log(header);
+    const body = {'data': `${this.selectedImage}`, 'fileType': "JPG"};
+    return this.http.post<AnalyzeResponse>(environment.identifyRequestURL+"/ai/inputimage", body)
+  }
+
   onSubmit(el: HTMLElement) {
     this.isLoading = true;
 
-    const header = {'Authorization': `Bearer ${environment.secret}`};
-    const body = {'img': `${this.selectedImage}`};
-    this.httpClient.post<any>(environment.identifyRequestURL, body, { headers: header })
-    .subscribe(
-      () => {
+    this.postImage().subscribe(
+      (response: AnalyzeResponse) => {
         console.log("Succesfully sent data");
+        console.log(response.data);
         this.form.reset();
         this.dataImg = this.selectedImage;
         this.selectedImage = null;
         el.scrollIntoView();
-
+        this.analyzed = response;
         
       },
       err => { 

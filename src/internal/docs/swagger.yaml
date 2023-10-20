@@ -53,6 +53,13 @@ definitions:
       status:
         type: integer
     type: object
+  models.MediaInput:
+    properties:
+      data:
+        type: string
+      fileType:
+        type: string
+    type: object
   models.MediaOutput:
     properties:
       data:
@@ -104,6 +111,8 @@ definitions:
     type: object
   models.UserInput:
     properties:
+      _id:
+        type: string
       active:
         type: boolean
       user:
@@ -577,6 +586,70 @@ paths:
       summary: Get current admin
       tags:
       - Admins
+  /ai/inputimage:
+    post:
+      consumes:
+      - application/json
+      description: Send in an image to get a response of which type of bird it is
+      parameters:
+      - description: picture
+        in: body
+        name: set
+        required: true
+        schema:
+          $ref: '#/definitions/models.MediaInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
+        "503":
+          description: Service Unavailable
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Err'
+                  type: array
+              type: object
+      security:
+      - Bearer: []
+      summary: Analyze image
+      tags:
+      - ai
   /birds/{id}:
     get:
       consumes:
