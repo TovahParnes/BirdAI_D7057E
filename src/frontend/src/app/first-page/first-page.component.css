@@ -5,29 +5,37 @@
     height: 300px;  
   }
   
-  .sign-up-with-google-button {
-    background-color: white;
-    color: black;
-    font-weight: bold;
-    padding: 10px;
-    border-radius: 5px;
-    border-color: white;
+
+  .sign-up-with-google-button {  
+    position: relative; 
+    width: 200px; 
+    height: 50px; 
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    border: none;
+    cursor: pointer;
+    background-color: #121212;
+    top: 0;
+    left: 0;
+    
   }
 
   .container2 {
     display: flex;
-    height: 100vh; /* Make the container take up the full viewport height */
+    height: 100vh; 
   }
 
   .logo-container2 {
-    flex: 1; /* Make the logo take up half of the width */
-    background: #336699; /* Add a background color for the logo */
+    flex: 2; 
+    background: #336699; 
     display: flex;
-    align-items: center; /* Vertically align the content */
-    justify-content: center; /* Horizontally align the content */
-    color: white; /* Text color for the logo */
-    font-size: 24px; /* Font size for the logo */
-    order: 1; /* Set the order to 1 to place the logo on the left */
+    flex-direction:column; 
+    align-items: center; 
+    justify-content: center; 
+    color: white;
+    font-size: 24px;
+    order: 1; 
   }
 
   .items-container {
@@ -55,4 +63,19 @@
   .image {
     flex: 1; 
     text-align: center;
+
+  }
+
+  .solid-line {
+    border: none; 
+    border-top: 2px solid white; 
+    margin: 10px 0; 
+    width: 98%;
+    text-align: center;
+  }
+
+  .text-container {
+    height: 80px; 
+    overflow: hidden; 
+    font-size: small;
   }

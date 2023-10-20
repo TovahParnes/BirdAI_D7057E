@@ -1,3 +1,4 @@
+
 import {Component} from '@angular/core';
 import {GoogleLoginProvider, SocialAuthService} from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
@@ -50,3 +51,4 @@ export class LoginComponent {
     this.triedLogIn = true;
   }
 }
+

@@ -1,42 +1,102 @@
 <div class="container2">
-    <!-- <div class="center-nobg"> -->
 
+    
         <div class="logo-container2">
-            <img src="assets/birdAI-logo.svg" class="logo">
+            <img src="assets/birdAI-logo.svg" class="logo">  
+
+            
+            <hr class="solid-line">
+
+            <div class="image-row">
+                <div class="image">
+                    <img src="assets/promo.png" [style.width.px]="imgsize" [style.height.px]="imgsize">
+                    <div class="text-container">
+                        Take a picture of any bird
+                    </div>
+                    
+                </div>
+
+                <mat-icon style="margin-top: -10%;">navigate_next</mat-icon>
+
+                <div class="image">
+                    <img src="assets/upload.png" [style.width.px]="imgsize" [style.height.px]="imgsize">
+                    <div class="text-container"> 
+                        Upload it to the BirdAI
+                    </div>
+                   
+                </div>
+
+                <mat-icon style="margin-top: -10%;">navigate_next</mat-icon>
+
+                <div class="image">
+                    <img src="assets/chartbird.png" [style.width.px]="imgsize" [style.height.px]="imgsize">
+                    <div class="text-container">
+                        Get back an identification and many other interesting facts
+                    </div>
+                </div>
+                
+            </div>
+
         </div>
 
         <div class="items-container">
 
-            <div class="content-element" style="font-size: 40px;">Birdwatching has never been easier!</div>  
+            <div class="content-element" style="font-size: 40px; margin-top: -20%;">Birdwatching has never been easier!</div>  
 
-            <div class="content-element">            
-                <button class="sign-up-with-google-button" (click)="navigateToLogin()">
-                <img src="assets/google-logo.png" style="width: 15px;"/>
-                Sign up with Google
+            <p style="height: 10px;"></p>
+
+            <div class="content-element" style="font-size: 20px; margin-right: 0%;">Try BirdAI today</div>
+
+            <p style="height: 30px;"></p>
+
+            <p>Login to your google account</p>
+
+            <div class="content-element" style="font-family: sans-serif;">            
+                <button class="sign-up-with-google-button" (click)="navigateToLogin()" style="background-image: url('assets/loginbutton.png');">
+                <!-- <img src="assets/loginbutton.png" style="width: 200px;vertical-align: middle;"/> -->
+                
             </button>
             </div>
+
             
-            <div class="image-row">
+            <!-- <p style="height: 30px;"></p>
+            <hr class="solid-line"> -->
+            
+
+            <!-- <div class="image-row">
                 <div class="image">
-                    <img src="assets/promo.webp" [style.width.px]="imgsize" [style.height.px]="imgsize">
-                    <p style="font-size: small;">Take a picture of any bird</p>
+                    <img src="assets/promo.png" [style.width.px]="imgsize" [style.height.px]="imgsize">
+                    <div class="text-container">
+                        Take a picture of any bird
+                    </div>
+                    
+
                 </div>
 
                 <mat-icon style="margin-top: -10%;">navigate_next</mat-icon>
 
                 <div class="image">
-                    <img src="assets/upload.jpg" [style.width.px]="imgsize" [style.height.px]="imgsize">
-                    <p style="font-size: small;">Upload it to the BirdAI</p>
+
+                    <img src="assets/upload.png" [style.width.px]="imgsize" [style.height.px]="imgsize">
+                    <div class="text-container"> 
+                        Upload it to the BirdAI
+                    </div>
+                   
+
                 </div>
 
                 <mat-icon style="margin-top: -10%;">navigate_next</mat-icon>
 
                 <div class="image">
-                    <img src="assets/birddata.png" [style.width.px]="imgsize" [style.height.px]="imgsize">
-                    <p style="font-size: small; margin-top: -5px;">Get back an identification and many other interesting facts</p>
+
+                    <img src="assets/chartbird.png" [style.width.px]="imgsize" [style.height.px]="imgsize">
+                    <div class="text-container">
+                        Get back an identification and many other interesting facts
+                    </div>
                 </div>
                 
-            </div>
+            </div> -->
+
         </div>
         
     </div>

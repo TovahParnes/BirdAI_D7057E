@@ -4,12 +4,13 @@ html, body {
     height: 100%;
     color-scheme: dark;
     scroll-behavior: smooth;
-    
 }
 
 body {
     margin: 0;
+
     font-family: Roboto, "Helvetica Neue", sans-serif;
+
 }
 
 .card {
@@ -50,9 +51,7 @@ button:hover {
     height: 50px; /* Adjust the height as needed */
     position: sticky;
     z-index: 1000;
-
     top: 0px;
-    z-index: 1000;
 }
 
 .nav-logo {
@@ -157,4 +156,3 @@ button:hover {
     display: flex;
     justify-content: center;
 }
-

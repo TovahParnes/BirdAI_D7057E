@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { NgOptimizedImage } from '@angular/common'
 
+
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
@@ -27,6 +28,7 @@ export class MainPageComponent implements OnInit {
   data: any;
   dataImg: any;
   analyzed: AnalyzeResponse | null = null;
+
 
   constructor(
     private router: Router, 
@@ -89,7 +91,3 @@ export class MainPageComponent implements OnInit {
     this.isLoading = false
   }
 }
-
-
-
-

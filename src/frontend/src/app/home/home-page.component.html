@@ -8,8 +8,8 @@
   <div class="nav-buttons">
 
     <button class="selected-nav-button" (click)="mainApp.navigateToHome()"><span class="material-symbols-outlined">home</span></button>
-    <button class="nav-button" (click)="mainApp.navigateToTakenImages()"><span class="material-symbols-outlined">image</span></button>
-    <button class="nav-button" (click)="mainApp.navigateToLibrary()"><span class="material-symbols-outlined">grid_view</span></button>  
+    <button class="nav-button" (click)="mainApp.navigateToLibrary()"><span class="material-symbols-outlined">image</span></button>
+    <button class="nav-button" (click)="mainApp.navigateToTakenImages()"><span class="material-symbols-outlined">grid_view</span></button>  
 
   </div>
 
@@ -18,14 +18,20 @@
       <img src="{{socialUser.photoUrl}}" width="40px" height="40px" style="border-radius: 50%;">
     </button> 
     <ul class="sub-menu">
+
       <!-- <mat-slide-toggle [(ngModel)]="mainApp.isDark">Darkmode</mat-slide-toggle><br> -->
       <button mat-raised-button (click)="mainApp.navigateToProfilePage()">Profile</button><br> <!-- {{socialUser.name}}<span class="material-symbols-outlined">chevron_right</span> -->
       <button mat-raised-button (click)="mainApp.logout()">Logout</button>
+
     </ul>
   </div>
 </div>
 
 <p></p>
+
+<div style="text-align: center; font-size: 32px">
+  Home
+</div>
 
 <mat-card class="card">
   <h1 style="margin-top: 0px;">Welcome to Bird AI</h1>
@@ -37,6 +43,8 @@
 <mat-card class="card">
   
   <mat-vertical-stepper>
+
+
     <form [formGroup]="form">
 
     <mat-step>
@@ -62,6 +70,7 @@
         <div style="padding-top: 6px">
           <button mat-button matStepperPrevious style="margin-right: 6px;">Back</button>
             <button mat-raised-button color="primary" type="button" (click)="onSubmit(loading)" [disabled]="!selectedImage">Submit</button>
+
         </div>
 
     </mat-step>
@@ -81,12 +90,19 @@
   </mat-vertical-stepper>
 </mat-card>
 
+
+
+<p></p>
+
+<app-bottominfo></app-bottominfo>
+
 <div *ngIf="analyzed" >
   <img id="ItemPreview" src={{analyzed.data.picture.data}}>
   <p>Name: {{analyzed.data.name}}</p>
   <p>Accuracy: {{analyzed.data.accuracy}}</p>
 
 </div>
+
 
 <p></p>
 
@@ -97,4 +113,5 @@
   <mat-card *ngIf="data != null" class="card">
   </mat-card>
 </div>
+
 

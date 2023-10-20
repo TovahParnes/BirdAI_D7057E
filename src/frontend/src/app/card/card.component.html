@@ -1,6 +1,6 @@
-<mat-card class="example-card">
+<mat-card class="example-card" (mouseenter)="changeTextColor('#2196f3')" (mouseleave)="changeTextColor('white')">
     <mat-card-header>
-      <mat-card-title>{{ title }}</mat-card-title>
+      <mat-card-title [style.color]=textColor>{{ title }}</mat-card-title>
       <p></p>
     </mat-card-header>
     <img mat-card-image [src]="imageSrc" alt="Card Image">

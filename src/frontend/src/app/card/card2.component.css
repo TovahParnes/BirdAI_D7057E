@@ -2,7 +2,9 @@
     text-align: center;
     margin: 0 auto;
     padding: 20px;
-    width: 40%;
+
+    width: 50%;
+
     background-color: #1E1E1E;
     border-radius: 8px;
     padding: 20px;
@@ -17,9 +19,11 @@ div.gallery {
     
 }
   
-div.gallery:hover {
+
+/* div.gallery:hover {
     border: 1px solid #777;
-}
+} */
+
   
 div.gallery img {
     width: 100%;
