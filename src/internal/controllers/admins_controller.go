@@ -25,7 +25,7 @@ func (c *Controller) CListAdmins(set string, search string) (models.Response) {
 	return utils.ErrorNotImplemented("CListAdmins")
 }
 
-func (c *Controller) CCreateAdmin(authId string, admin *models.AdminInput) (models.Response) {
+func (c *Controller) CCreateAdmin(userId string, admin *models.AdminInput) (models.Response) {
 	/*
 	coll := c.db.GetCollection(repositories.AdminColl)
 	response := coll.CreateOne(admin)
@@ -35,6 +35,8 @@ func (c *Controller) CCreateAdmin(authId string, admin *models.AdminInput) (mode
 }
 
 func (c *Controller) CUpdateAdmin(userId string, admin *models.AdminInput) (models.Response) {
+	//check if updating last superadmin to admin
+
 	/*
 	coll := c.db.GetCollection(repositories.UserColl)
 	response := coll.UpdateOne(bson.M{
@@ -44,6 +46,8 @@ func (c *Controller) CUpdateAdmin(userId string, admin *models.AdminInput) (mode
 	})
 	return response
 	*/
+
+	
 	return utils.ErrorNotImplemented("CUpdateAdmin")
 }
 
@@ -58,7 +62,7 @@ func (c *Controller) CDeleteAdmin(id string) (models.Response) {
 }
 
 func (c *Controller) CCheckLastSuperadmin() (models.Response) {
-	response := c.CListAdmins("1", "Access: superAdmin")
+	response := c.CListAdmins("1", "Access: superadmin")
 	if utils.IsTypeError(response) {
 		return response
 	}

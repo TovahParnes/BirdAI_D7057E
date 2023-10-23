@@ -13,22 +13,22 @@ import (
 //
 // @Summary		Get user by ID
 // @Description	Get user by ID
-// @Tags		users
+// @Tags		Users
 // @Accept		json
 // @Produce		json
 // @Param		id	path	string	true	"User ID"
-// @Success		200	{object}	models.Response{data=[]models.UserOutput}
-// @Failure		404	{object}	models.Response{data=[]models.Err}
-// @Failure		410	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
-// @Security 	Bearer
+// @Success		200	{object}	models.Response{data=models.UserOutput}
+// @Failure		404	{object}	models.Response{data=models.Err}
+// @Failure		410	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/users/{id} [get]
 func (h *Handler) GetUserById(c *fiber.Ctx) error {
 	id := c.Params("id")
-	response := h.auth.CheckExpired(c)
+	response := utils.IsValidId(id)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
+
 	response = h.controller.CGetUserById(id)
 
 	return utils.ResponseToStatus(c, response)
@@ -38,36 +38,30 @@ func (h *Handler) GetUserById(c *fiber.Ctx) error {
 //
 // @Summary		List all users of a specified set
 // @Description	List all users of a specified set
-// @Tags			users
-// @Accept			json
+// @Tags		Users
+// @Accept		json
 // @Produce		json
-// @Param			set	query		int	false	"Set of users"
-// @Param			search	query	string	false	"Search parameter for user"
+// @Param		set	query		int	false	"Set of users"
+// @Param		search	query	string	false	"Search parameter for user"
 // @Success		200	{object}	models.Response{data=[]models.UserOutput}
-// @Failure		401	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
-// @Security 	Bearer
-// @Router			/users/list [get]
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
+// @Router		/users/list [get]
 func (h *Handler) ListUsers(c *fiber.Ctx) error {
-	//authId := c.GetReqHeaders()["Authid"]
-	//queries := c.Queries()
-	//set := queries["set"]
-	//search := queries["search"]
-
-	//	@Failure	401	{object}	models.Response{}
-	// Authenticate(jwt.token)
-	response := h.auth.CheckExpired(c)
+	queries := c.Queries()
+	set := queries["set"]
+	response := utils.IsValidSet(&set)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	//	@Failure	503	{object}	models.Response{}
-	// if no connection to db was established
+	search := queries["search"]
+	response = utils.IsValidSearch(search)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
-	//	@Failure	404	{object}	models.Response{}
-	// if user not found
-
-	response = h.controller.CListUsers()
+	response = h.controller.CListUsers(set, search)
 	return utils.ResponseToStatus(c, response)
 }
 
@@ -75,37 +69,28 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 //
 // @Summary		Login a user
 // @Description	Login a user or create a new user if there is no existing user
-// @Tags		users
+// @Tags		Users
 // @Accept		json
 // @Produce		json
-// @Param		set	body		models.UserLogin	true	"user"
-// @Success		201	{object}	models.Response{data=[]models.Err}
-// @Failure		400	{object}	models.Response{data=[]models.Err}
-// @Failure		401	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
-// @Router			/users/ [post]
+// @Param		user	body		models.UserLogin	true	"user"
+// @Success		201	{object}	models.Response{data=models.UserDB}
+// @Failure		400	{object}	models.Response{data=models.Err}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
+// @Router		/users/ [post]
 func (h *Handler) LoginUser(c *fiber.Ctx) error {
-
-	//	@Failure	401	{object}	models.Response{}
-	//parse auth header
-	/*
-		auth = h.controller.CAuthenticate(authHeader)
-		if !auth.data.success {
-			return c.Status(auth.StatusCode).JSON(auth)
-		}
-
-
-		response = h.controller.CLoginUser(auth.data)
-	*/
-
 	var user *models.UserLogin
 	if err := c.BodyParser(&user);
 	err != nil {
 		//	@Failure	400	{object}	models.Response{}
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
+	response := utils.IsValidUserLogin(user)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
-	response := h.auth.LoginUser(user)
+	response = h.auth.LoginUser(user)
 
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
@@ -117,21 +102,27 @@ func (h *Handler) LoginUser(c *fiber.Ctx) error {
 //
 // @Summary		Get current user
 // @Description	Get current user
-// @Tags		users
+// @Tags		Users
 // @Accept		json
 // @Produce		json
-// @Success		200	{object}	models.Response{data=[]models.UserOutput}
-// @Failure		401	{object}	models.Response{data=[]models.Err}
-// @Failure		404	{object}	models.Response{data=[]models.Err}
-// @Failure		410	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Security 	Bearer
-// @Router			/users/me [get]
+// @Success		200	{object}	models.Response{data=models.UserOutput}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		404	{object}	models.Response{data=models.Err}
+// @Failure		410	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
+// @Router		/users/me [get]
 func (h *Handler) GetUserMe(c *fiber.Ctx) error {
 
 	//	@Failure	401	{object}	models.Response{}
 	// Authenticate(jwt.token)
 	response := h.auth.CheckExpired(c)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	userId := response.Data.(models.UserDB).Id
+
+	response = h.controller.CGetUserById(userId)
 
 	return utils.ResponseToStatus(c, response)
 }
@@ -140,37 +131,45 @@ func (h *Handler) GetUserMe(c *fiber.Ctx) error {
 //
 // @Summary		Update given user
 // @Description	Update given user
-// @Tags		users
+// @Tags		Users
 // @Accept		json
 // @Produce		json
+// @Security 	Bearer
 // @Param		id	path	string	true	"User ID"
 // @Param		user	body		models.UserInput	true	"user"
 // @Success		200	{object}	models.Response{}
-// @Failure		400	{object}	models.Response{data=[]models.Err}
-// @Failure		401	{object}	models.Response{data=[]models.Err}
-// @Failure		403	{object}	models.Response{data=[]models.Err}
-// @Failure		404	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
-// @Security 	Bearer
-// @Router			/users/{id} [patch]
+// @Failure		400	{object}	models.Response{data=models.Err}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		403	{object}	models.Response{data=models.Err}
+// @Failure		404	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
+// @Router		/users/{id} [patch]
 func (h *Handler) UpdateUser(c *fiber.Ctx) error {
-	//	@Failure	401	{object}	models.Response{}
-	// Authenticate(jwt.token)
 	response := h.auth.CheckExpired(c)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
+	curUserId := response.Data.(models.UserDB).Id
 
 	id := c.Params("id")
-	var user *models.UserInput
-	if err := c.BodyParser(&user); err != nil {
-		//	@Failure	400	{object}	models.Response{}
-		// something with body is wrong/missing
-		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
+	response = utils.IsValidId(id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
 	}
 
-	//	@Failure		403	{object}	models.Response{}
-	// if user is not admin or user is not the same as the one being updated
+	response = h.controller.CIsCurrentUserOrAdmin(curUserId, id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
+	var user *models.UserInput
+	if err := c.BodyParser(&user); err != nil {
+		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
+	}
+	response = utils.IsValidUserInput(user)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
 	response = h.controller.CUpdateUser(id, user)
 	return utils.ResponseToStatus(c, response)
@@ -180,36 +179,35 @@ func (h *Handler) UpdateUser(c *fiber.Ctx) error {
 //
 // @Summary		Delete given user
 // @Description	Delete given user
-// @Tags			users
-// @Accept			json
-// @Produce			json
-// @Param			id			path		string	true	"User ID"
-// @Success		200	{object}	models.Response{}
-// @Failure		401	{object}	models.Response{data=[]models.Err}
-// @Failure		403	{object}	models.Response{data=[]models.Err}
-// @Failure		404	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Tags		Users
+// @Accept		json
+// @Produce		json
 // @Security 	Bearer
-// @Router			/users/{id} [delete]
+// @Param		id			path		string	true	"User ID"
+// @Success		200	{object}	models.Response{}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		403	{object}	models.Response{data=models.Err}
+// @Failure		404	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
+// @Router		/users/{id} [delete]
 func (h *Handler) DeleteUser(c *fiber.Ctx) error {
-	id := c.Params("id")
-
-	//	@Failure	401	{object}	models.Response{}
-	// Authenticate(jwt.token)
 	response := h.auth.CheckExpired(c)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
+	curUserId := response.Data.(models.UserDB).Id
 
-	//	@Failure		403	{object}	models.Response{}
-	// if user is not admin or user is not the same as the one being updated
+	id := c.Params("id")
+	response = utils.IsValidId(id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
-	//	@Failure	503	{object}	models.Response{}
-	// if no connection to db was established
+	response = h.controller.CIsCurrentUserOrAdmin(curUserId, id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
-	//	@Failure	404	{object}	models.Response{}
-	// if user not found
-
-	response = h.controller.CDeleteUser(id, response.Data.(models.UserDB).AuthId)
+	response = h.controller.CDeleteUser(id)
 	return utils.ResponseToStatus(c, response)
 }

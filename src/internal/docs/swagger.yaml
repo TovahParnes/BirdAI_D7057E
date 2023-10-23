@@ -75,15 +75,11 @@ definitions:
     properties:
       birdId:
         type: string
-      createdAt:
-        type: string
       imageId:
         type: string
       location:
         type: string
       soundId:
-        type: string
-      userId:
         type: string
     type: object
   models.PostOutput:
@@ -107,6 +103,19 @@ definitions:
     properties:
       data: {}
       timestamp:
+        type: string
+    type: object
+  models.UserDB:
+    properties:
+      _id:
+        type: string
+      active:
+        type: boolean
+      authId:
+        type: string
+      createdAt:
+        type: string
+      username:
         type: string
     type: object
   models.UserInput:
@@ -158,7 +167,7 @@ paths:
       parameters:
       - description: admin
         in: body
-        name: set
+        name: admin
         required: true
         schema:
           $ref: '#/definitions/models.AdminInput'
@@ -176,9 +185,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "401":
           description: Unauthorized
@@ -187,9 +194,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "403":
           description: Forbidden
@@ -198,9 +203,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "503":
           description: Service Unavailable
@@ -209,9 +212,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
       security:
       - Bearer: []
@@ -243,9 +244,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "403":
           description: Forbidden
@@ -254,9 +253,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "404":
           description: Not Found
@@ -265,9 +262,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "503":
           description: Service Unavailable
@@ -276,9 +271,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
       security:
       - Bearer: []
@@ -305,9 +298,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.AdminOutput'
-                  type: array
+                  $ref: '#/definitions/models.AdminOutput'
               type: object
         "403":
           description: Forbidden
@@ -316,9 +307,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "404":
           description: Not Found
@@ -327,9 +316,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "410":
           description: Gone
@@ -338,9 +325,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "503":
           description: Service Unavailable
@@ -349,9 +334,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
       security:
       - Bearer: []
@@ -388,9 +371,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "401":
           description: Unauthorized
@@ -399,9 +380,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "403":
           description: Forbidden
@@ -410,9 +389,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "404":
           description: Not Found
@@ -421,9 +398,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "503":
           description: Service Unavailable
@@ -432,9 +407,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
       security:
       - Bearer: []
@@ -476,9 +449,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "403":
           description: Forbidden
@@ -487,9 +458,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "503":
           description: Service Unavailable
@@ -498,9 +467,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
       security:
       - Bearer: []
@@ -522,9 +489,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.AdminOutput'
-                  type: array
+                  $ref: '#/definitions/models.AdminOutput'
               type: object
         "401":
           description: Unauthorized
@@ -533,9 +498,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "403":
           description: Forbidden
@@ -544,9 +507,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "404":
           description: Not Found
@@ -555,9 +516,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "410":
           description: Gone
@@ -566,9 +525,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "503":
           description: Service Unavailable
@@ -577,9 +534,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
       security:
       - Bearer: []
@@ -671,9 +626,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.BirdOutput'
-                  type: array
+                  $ref: '#/definitions/models.BirdOutput'
               type: object
         "404":
           description: Not Found
@@ -682,9 +635,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "410":
           description: Gone
@@ -693,9 +644,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "503":
           description: Service Unavailable
@@ -704,9 +653,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
       summary: Get bird by ID
       tags:
@@ -741,9 +688,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "401":
           description: Unauthorized
@@ -752,9 +697,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "403":
           description: Forbidden
@@ -763,9 +706,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "404":
           description: Not Found
@@ -774,9 +715,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "503":
           description: Service Unavailable
@@ -785,10 +724,10 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
+      security:
+      - Bearer: []
       summary: Update given bird
       tags:
       - Birds
@@ -827,9 +766,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "503":
           description: Service Unavailable
@@ -838,9 +775,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
       summary: List all birds of a specified set and seach parameters
       tags:
@@ -853,7 +788,7 @@ paths:
       parameters:
       - description: post
         in: body
-        name: set
+        name: post
         required: true
         schema:
           $ref: '#/definitions/models.PostInput'
@@ -871,9 +806,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "401":
           description: Unauthorized
@@ -882,9 +815,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "503":
           description: Service Unavailable
@@ -893,10 +824,10 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
+      security:
+      - Bearer: []
       summary: Create a new post
       tags:
       - Posts
@@ -925,9 +856,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "403":
           description: Forbidden
@@ -936,9 +865,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "404":
           description: Not Found
@@ -947,9 +874,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "503":
           description: Service Unavailable
@@ -958,10 +883,10 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
+      security:
+      - Bearer: []
       summary: Delete given post
       tags:
       - Posts
@@ -985,9 +910,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.PostOutput'
-                  type: array
+                  $ref: '#/definitions/models.PostOutput'
               type: object
         "404":
           description: Not Found
@@ -996,9 +919,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "410":
           description: Gone
@@ -1007,9 +928,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "503":
           description: Service Unavailable
@@ -1018,9 +937,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
       summary: Get post by ID
       tags:
@@ -1055,9 +972,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "401":
           description: Unauthorized
@@ -1066,9 +981,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "403":
           description: Forbidden
@@ -1077,9 +990,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "404":
           description: Not Found
@@ -1088,9 +999,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "503":
           description: Service Unavailable
@@ -1099,10 +1008,10 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
+      security:
+      - Bearer: []
       summary: Update given post
       tags:
       - Posts
@@ -1141,9 +1050,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "503":
           description: Service Unavailable
@@ -1152,9 +1059,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
       summary: List all posts of a specified set
       tags:
@@ -1167,7 +1072,7 @@ paths:
       parameters:
       - description: user
         in: body
-        name: set
+        name: user
         required: true
         schema:
           $ref: '#/definitions/models.UserLogin'
@@ -1181,9 +1086,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.UserDB'
               type: object
         "400":
           description: Bad Request
@@ -1192,9 +1095,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "401":
           description: Unauthorized
@@ -1203,9 +1104,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "503":
           description: Service Unavailable
@@ -1214,13 +1113,11 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
       summary: Login a user
       tags:
-      - users
+      - Users
   /users/{id}:
     delete:
       consumes:
@@ -1246,9 +1143,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "403":
           description: Forbidden
@@ -1257,9 +1152,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "404":
           description: Not Found
@@ -1268,9 +1161,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "503":
           description: Service Unavailable
@@ -1279,15 +1170,13 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
       security:
       - Bearer: []
       summary: Delete given user
       tags:
-      - users
+      - Users
     get:
       consumes:
       - application/json
@@ -1308,9 +1197,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.UserOutput'
-                  type: array
+                  $ref: '#/definitions/models.UserOutput'
               type: object
         "404":
           description: Not Found
@@ -1319,9 +1206,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "410":
           description: Gone
@@ -1330,9 +1215,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "503":
           description: Service Unavailable
@@ -1341,15 +1224,11 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
-      security:
-      - Bearer: []
       summary: Get user by ID
       tags:
-      - users
+      - Users
     patch:
       consumes:
       - application/json
@@ -1380,9 +1259,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "401":
           description: Unauthorized
@@ -1391,9 +1268,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "403":
           description: Forbidden
@@ -1402,9 +1277,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "404":
           description: Not Found
@@ -1413,9 +1286,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "503":
           description: Service Unavailable
@@ -1424,15 +1295,13 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
       security:
       - Bearer: []
       summary: Update given user
       tags:
-      - users
+      - Users
   /users/{id}/posts/list:
     get:
       consumes:
@@ -1473,9 +1342,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "503":
           description: Service Unavailable
@@ -1484,9 +1351,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
       summary: List all posts of a specified set
       tags:
@@ -1526,9 +1391,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "503":
           description: Service Unavailable
@@ -1537,15 +1400,11 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
-      security:
-      - Bearer: []
       summary: List all users of a specified set
       tags:
-      - users
+      - Users
   /users/me:
     get:
       consumes:
@@ -1561,9 +1420,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.UserOutput'
-                  type: array
+                  $ref: '#/definitions/models.UserOutput'
               type: object
         "401":
           description: Unauthorized
@@ -1572,9 +1429,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "404":
           description: Not Found
@@ -1583,9 +1438,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "410":
           description: Gone
@@ -1594,9 +1447,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
         "503":
           description: Service Unavailable
@@ -1605,15 +1456,13 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Err'
               type: object
       security:
       - Bearer: []
       summary: Get current user
       tags:
-      - users
+      - Users
 schemes:
 - http
 securityDefinitions:

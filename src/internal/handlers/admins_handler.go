@@ -16,15 +16,31 @@ import (
 // @Produce		json
 // @Security	Bearer
 // @Param		id	path	string	true	"Admin ID"
-// @Success		200	{object}	models.Response{data=[]models.AdminOutput}
-// @Failure		403	{object}	models.Response{data=[]models.Err}
-// @Failure		404	{object}	models.Response{data=[]models.Err}
-// @Failure		410	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Success		200	{object}	models.Response{data=models.AdminOutput}
+// @Failure		403	{object}	models.Response{data=models.Err}
+// @Failure		404	{object}	models.Response{data=models.Err}
+// @Failure		410	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/admins/{id} [get]
 func (h *Handler) GetAdminById(c *fiber.Ctx) error {
+	response := h.auth.CheckExpired(c)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	curUserId := response.Data.(models.UserDB).Id
+
 	id := c.Params("id")
-	response := h.controller.CGetAdminById(id)
+	response = utils.IsValidId(id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
+	response = h.controller.CIsSuperAdmin(curUserId)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
+	response = h.controller.CGetAdminById(id)
 
 	return utils.ResponseToStatus(c, response)
 }
@@ -37,20 +53,26 @@ func (h *Handler) GetAdminById(c *fiber.Ctx) error {
 // @Accept		json
 // @Produce		json
 // @Security	Bearer
-// @Success		200	{object}	models.Response{data=[]models.AdminOutput}
-// @Failure		401	{object}	models.Response{data=[]models.Err}
-// @Failure		403	{object}	models.Response{data=[]models.Err}
-// @Failure		404	{object}	models.Response{data=[]models.Err}
-// @Failure		410	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
-// @Router			/admins/me [get]
+// @Success		200	{object}	models.Response{data=models.AdminOutput}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		403	{object}	models.Response{data=models.Err}
+// @Failure		404	{object}	models.Response{data=models.Err}
+// @Failure		410	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
+// @Router		/admins/me [get]
 func (h *Handler) GetAdminMe(c *fiber.Ctx) error {
+	response := h.auth.CheckExpired(c)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	curUserId := response.Data.(models.UserDB).Id
 
-	//	@Failure	401	{object}	models.Response{}
-	// Authenticate(jwt.token)
-	authId := c.GetReqHeaders()["Authid"]
+	response = h.controller.CIsSuperAdmin(curUserId)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
-	response := h.controller.CGetAdminById(authId)
+	response = h.controller.CGetAdminById(curUserId)
 
 	return utils.ResponseToStatus(c, response)
 }
@@ -66,26 +88,35 @@ func (h *Handler) GetAdminMe(c *fiber.Ctx) error {
 // @Param		set	query		int	false	"Set of admins"
 // @Param		search	query	string	false	"Search parameter for admin"
 // @Success		200	{object}	models.Response{data=[]models.AdminOutput}
-// @Failure		403	{object}	models.Response{data=[]models.Err}
-// @Failure		401	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Failure		403	{object}	models.Response{data=models.Err}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/admins/list [get]
 func (h *Handler) ListAdmins(c *fiber.Ctx) error {
-	//authId := c.GetReqHeaders()["Authid"]
+	response := h.auth.CheckExpired(c)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	curUserId := response.Data.(models.UserDB).Id
+
+	response = h.controller.CIsSuperAdmin(curUserId)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	
 	queries := c.Queries()
 	set := queries["set"]
+	response = utils.IsValidSet(&set)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 	search := queries["search"]
+	response = utils.IsValidSearch(search)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
-	//	@Failure	401	{object}	models.Response{}
-	// Authenticate(jwt.token)
-
-	//	@Failure	503	{object}	models.Response{}
-	// if no connection to db was established
-
-	//	@Failure	404	{object}	models.Response{}
-	// if admin not found
-
-	response := h.controller.CListAdmins(set, search)
+	response = h.controller.CListAdmins(set, search)
 	return utils.ResponseToStatus(c, response)
 }
 
@@ -97,22 +128,36 @@ func (h *Handler) ListAdmins(c *fiber.Ctx) error {
 // @Accept		json
 // @Produce		json
 // @Security	Bearer
-// @Param		set	body		models.AdminInput	true	"admin"
+// @Param		admin	body	models.AdminInput	true	"admin"
 // @Success		201	{object}	models.Response{}
-// @Failure		400	{object}	models.Response{data=[]models.Err}
-// @Failure		401	{object}	models.Response{data=[]models.Err}
-// @Failure		403	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Failure		400	{object}	models.Response{data=models.Err}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		403	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/admins/ [post]
 func (h *Handler) CreateAdmin(c *fiber.Ctx) error {
-	authId := c.GetReqHeaders()["Authid"]
+	response := h.auth.CheckExpired(c)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	curUserId := response.Data.(models.UserDB).Id
+
+	response = h.controller.CIsSuperAdmin(curUserId)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
 	var admin *models.AdminInput
 	if err := c.BodyParser(&admin); err != nil {
 		//	@Failure	400	{object}	models.Response{}
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
+	response = utils.IsValidAdminInput(admin)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
-	response := h.controller.CCreateAdmin(authId, admin)
+	response = h.controller.CCreateAdmin(curUserId, admin)
 
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
@@ -129,29 +174,44 @@ func (h *Handler) CreateAdmin(c *fiber.Ctx) error {
 // @Produce		json
 // @Security	Bearer
 // @Param		id	path	string	true	"admin ID"
-// @Param		admin	body		models.AdminInput	true	"admin"
+// @Param		admin	body	models.AdminInput	true	"admin"
 // @Success		200	{object}	models.Response{}
-// @Failure		400	{object}	models.Response{data=[]models.Err}
-// @Failure		401	{object}	models.Response{data=[]models.Err}
-// @Failure		403	{object}	models.Response{data=[]models.Err}
-// @Failure		404	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Failure		400	{object}	models.Response{data=models.Err}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		403	{object}	models.Response{data=models.Err}
+// @Failure		404	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
 // @Router			/admins/{id} [patch]
 func (h *Handler) UpdateAdmin(c *fiber.Ctx) error {
-	//authId := c.GetReqHeaders()["Authid"]
-	id := c.Params("id")
+	response := h.auth.CheckExpired(c)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	curUserId := response.Data.(models.UserDB).Id
 
+	response = h.controller.CIsSuperAdmin(curUserId)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	
+	id := c.Params("id")
+	response = utils.IsValidId(id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	
 	var admin *models.AdminInput
 	if err := c.BodyParser(&admin); err != nil {
 		//	@Failure	400	{object}	models.Response{}
 		// something with body is wrong/missing
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
+	response = utils.IsValidAdminInput(admin)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
-	//	@Failure		403	{object}	models.Response{}
-	// if user is not superAdmin or updating themselves
-
-	response := h.controller.CUpdateAdmin(id, admin)
+	response = h.controller.CUpdateAdmin(id, admin)
 	return utils.ResponseToStatus(c, response)
 }
 
@@ -165,27 +225,29 @@ func (h *Handler) UpdateAdmin(c *fiber.Ctx) error {
 // @Security	Bearer
 // @Param		id	path	string	true	"Admin ID"
 // @Success		200	{object}	models.Response{}
-// @Failure		401	{object}	models.Response{data=[]models.Err}
-// @Failure		403	{object}	models.Response{data=[]models.Err}
-// @Failure		404	{object}	models.Response{data=[]models.Err}
-// @Failure		503	{object}	models.Response{data=[]models.Err}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		403	{object}	models.Response{data=models.Err}
+// @Failure		404	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/admins/{id} [delete]
 func (h *Handler) DeleteAdmin(c *fiber.Ctx) error {
+	response := h.auth.CheckExpired(c)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	curUserId := response.Data.(models.UserDB).Id
+
 	id := c.Params("id")
-	//authId := c.GetReqHeaders()["Authid"]
+	response = utils.IsValidId(id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
-	//	@Failure	401	{object}	models.Response{}
-	// Authenticate(jwt.token)
+	response = h.controller.CIsCurrentUserOrSuperAdmin(curUserId, id)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
 
-	//	@Failure		403	{object}	models.Response{}
-	// if user is not admin or user is not the same as the one being updated
-
-	//	@Failure	503	{object}	models.Response{}
-	// if no connection to db was established
-
-	//	@Failure	404	{object}	models.Response{}
-	// if user not found
-
-	response := h.controller.CDeleteAdmin(id)
+	response = h.controller.CDeleteAdmin(id)
 	return utils.ResponseToStatus(c, response)
 }

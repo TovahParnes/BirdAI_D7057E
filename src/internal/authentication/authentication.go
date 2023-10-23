@@ -4,6 +4,7 @@ import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/repositories"
 	"birdai/src/internal/utils"
+	"net/http"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
@@ -22,8 +23,20 @@ func NewAuthentication(userCollection repositories.IMongoCollection) Authenticat
 }
 
 func (a *Authentication) LoginUser(user *models.UserLogin) models.Response {
+	response := a.UserColl.FindOne(bson.M{"auth_id": user.AuthId})
+	if response.Data.(models.Err).StatusCode != http.StatusNotFound {
+		return response
+	}
+
+	userDB := models.UserDB{Username: user.Username, AuthId: user.AuthId, Active: true}
+	createdResponse := a.UserColl.CreateOne(&userDB)
+	if utils.IsTypeError(createdResponse) {
+		return createdResponse
+	}
+	
 	// Create the Claims
 	claims := jwt.MapClaims{
+		"_id": createdResponse.Data.(*models.UserDB).Id,
 		"username": user.Username,
 		"authId":   user.AuthId,
 	}
@@ -35,13 +48,13 @@ func (a *Authentication) LoginUser(user *models.UserLogin) models.Response {
 	if err != nil {
 		return utils.ErrorParams(err.Error())
 	}
-	response := a.UserColl.FindOne(bson.M{"auth_id": t})
-	if utils.IsTypeError(response) {
-		userDB := models.UserDB{Username: user.Username, AuthId: t, Active: true}
-		response = a.UserColl.CreateOne(&userDB)
-		//response.Data.(*models.UserOutput).AuthId = t
-	}
-	return response
+	
+	// Change authId to token in response
+	var UserCopy models.UserDB
+	UserCopy = *createdResponse.Data.(*models.UserDB)
+	UserCopy.AuthId = t
+
+	return utils.Response(UserCopy)
 }
 
 //func (a *Authentication) Logout(c *fiber.Ctx) models.Response {
@@ -84,6 +97,7 @@ func (a *Authentication) CheckExpired(c *fiber.Ctx) models.Response {
 	//	}
 	//}
 	return utils.Response(models.UserDB{
+		Id : claims["_id"].(string),
 		Username: claims["username"].(string),
 		AuthId:   claims["authId"].(string),
 		Active:   true,
