@@ -101,11 +101,7 @@ func IsValidUserInput(user *models.UserInput) models.Response {
 }
 
 func IsValidUserLogin(user *models.UserLogin) models.Response {
-	response := IsValidId(user.AuthId)
-	if IsTypeError(response) {
-		return ErrorParams("Given auth id is not a valid id")
-	}
-	response = isValidName(user.Username)
+	response := isValidName(user.Username)
 	if IsTypeError(response) {
 		return response
 	}
