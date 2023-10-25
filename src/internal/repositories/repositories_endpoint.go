@@ -1,8 +1,9 @@
 package repositories
 
-type Endpoints struct {
-	User  UserEndpoints
-	Post  PostEndpoints
-	Bird  BirdEndpoints
-	Media MediaEndpoints
+type RepositoryEndpoints struct {
+	User  UserRepository
+	Post  PostRepository
+	Bird  BirdRepository
+	Media MediaRepository
+	Admin AdminRepository
 }

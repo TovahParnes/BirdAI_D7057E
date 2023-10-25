@@ -17,7 +17,8 @@ func TestMediaRepository(t *testing.T) {
 	mi, err := repositories.Connect("testDB", "mongodb://localhost:27017")
 	require.Nil(t, err)
 	mi.AddCollection(repositories.MediaColl)
-	mediaColl := repositories.MediaEndpoints{Collection: mi.GetCollection(repositories.MediaColl)}
+	mediaColl := repositories.MediaRepository{}
+	mediaColl.SetCollection(mi.GetCollection(repositories.MediaColl))
 
 	testMedia := &models.MediaDB{
 		Data:     "123",

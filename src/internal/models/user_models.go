@@ -9,13 +9,14 @@ type UserDB struct {
 }
 
 type UserLogin struct {
-	Username  string `bson:"username" json:"username" form:"username"`
-	AuthId    string `bson:"auth_id" json:"authId" form:"authId"`
+	Username string `bson:"username" json:"username" form:"username"`
+	AuthId   string `bson:"auth_id" json:"authId" form:"authId"`
 }
 
 type UserInput struct {
+	Id       string `bson:"_id"`
 	Username string `json:"user" bson:"username"`
-	Active    bool   `bson:"active"`
+	Active   bool   `bson:"active"`
 }
 
 type UserOutput struct {

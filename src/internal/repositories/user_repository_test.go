@@ -18,7 +18,8 @@ func TestUserRepository(t *testing.T) {
 	mi, err := repositories.Connect("testDB", "mongodb://localhost:27017")
 	require.Nil(t, err)
 	mi.AddCollection(repositories.UserColl)
-	userColl := repositories.UserEndpoints{Collection: mi.GetCollection(repositories.UserColl)}
+	userColl := repositories.UserRepository{}
+	userColl.SetCollection(mi.GetCollection(repositories.UserColl))
 
 	testUser1 := &models.UserDB{
 		Username: "test User 1",
@@ -74,6 +75,7 @@ func TestUserRepository(t *testing.T) {
 
 	t.Run("Test UpdateOne", func(t *testing.T) {
 		updateUser := models.UserInput{
+			Id:       testUser1.Id,
 			Username: "Test User 1 is the best!!",
 		}
 		response := userColl.UpdateUser(updateUser)
