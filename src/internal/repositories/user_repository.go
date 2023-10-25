@@ -33,7 +33,6 @@ func (u UserEndpoints) CreateUser(user models.UserDB) models.Response {
 }
 
 // TODO: Fix ToBson and FromBson on structs for easier handling of bson to struct and back
-// Check with team which error to throw at line 39 and 46
 
 // UpdateUser updates the user with the specified changes and returns a response
 // containing the updated user.
