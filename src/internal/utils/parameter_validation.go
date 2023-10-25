@@ -16,11 +16,11 @@ func IsValidId(id string) models.Response {
 	return Response(nil)
 }
 
-func IsValidSet(set string) models.Response {
-	if len(set) == 0 {
-		set = "0"
+func IsValidSet(set *string) models.Response {
+	if len(*set) == 0 {
+		*set = "0"
 	}
-	setInt, err := strconv.Atoi(set); 
+	setInt, err := strconv.Atoi(*set)
 	if err != nil {
 		return ErrorParams("Given set is not a valid set, must be int")
 	}

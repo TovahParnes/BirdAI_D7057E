@@ -4,7 +4,6 @@ import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/repositories"
 	"birdai/src/internal/utils"
-
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -31,19 +30,26 @@ func (c *Controller) CListPosts(set int, search string) models.Response {
 	}
 
 	for _, postsObject := range response.Data.([]models.PostDB) {
-		posts = append(posts, PostDBToOutput(c.db, postsObject))
+		o := PostDBToOutput(c.db, postsObject)
+		if o == nil {
+			return utils.ErrorNotFoundInDatabase("post collection")
+		}
+		posts = append(posts, o)
 	}
 
 	return utils.Response(posts)
 }
 
-func (c *Controller) CListUsersPosts(userId string, set int, search string) models.Response {
+func (c *Controller) CListUsersPosts(userId string, set int) models.Response {
 	filter := bson.M{"user_id": userId}
 	//birdColl := c.db.GetCollection(repositories.BirdColl)
 	response := c.db.Post.ListPosts(filter, set)
 	output := []*models.PostOutput{}
 	for _, post := range response.Data.([]models.PostDB) {
 		postOutput := PostDBToOutput(c.db, post)
+		if postOutput == nil {
+			return utils.ErrorNotFoundInDatabase("post collection")
+		}
 		output = append(output, postOutput)
 	}
 	return utils.Response(output)
@@ -87,6 +93,9 @@ func (c *Controller) CDeletePost(id string) models.Response {
 
 func PostDBToOutput(db repositories.RepositoryEndpoints, post models.PostDB) *models.PostOutput {
 	user := db.User.GetUserById(post.UserId)
+	if utils.IsTypeError(user) {
+		return nil
+	}
 	userOutput := models.UserOutput{
 		Id:        user.Data.(*models.UserDB).Id,
 		Username:  user.Data.(*models.UserDB).Username,
@@ -122,6 +131,9 @@ func PostDBToOutput(db repositories.RepositoryEndpoints, post models.PostDB) *mo
 	}
 
 	userImage := db.Media.GetMediaById(post.MediaId)
+	if utils.IsTypeError(userImage) {
+		return nil
+	}
 	userImageOutput := models.MediaOutput{
 		Id:       userImage.Data.(*models.MediaDB).Id,
 		Data:     []byte(userImage.Data.(*models.MediaDB).Data),

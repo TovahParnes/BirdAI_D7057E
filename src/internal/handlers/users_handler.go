@@ -5,7 +5,6 @@ package handlers
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
-
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -50,7 +49,7 @@ func (h *Handler) GetUserById(c *fiber.Ctx) error {
 func (h *Handler) ListUsers(c *fiber.Ctx) error {
 	queries := c.Queries()
 	set := queries["set"]
-	response := utils.IsValidSet(set)
+	response := utils.IsValidSet(&set)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
@@ -61,7 +60,6 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-
 	response = h.controller.CListUsers(setInt)
 	return utils.ResponseToStatus(c, response)
 }
