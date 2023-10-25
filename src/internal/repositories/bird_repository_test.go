@@ -18,7 +18,8 @@ func TestBirdRepository(t *testing.T) {
 	mi, err := repositories.Connect("testDB", "mongodb://localhost:27017")
 	require.Nil(t, err)
 	mi.AddCollection(repositories.BirdColl)
-	birdColl := repositories.BirdEndpoints{Collection: mi.GetCollection(repositories.BirdColl)}
+	birdColl := repositories.BirdRepository{}
+	birdColl.SetCollection(mi.GetCollection(repositories.BirdColl))
 
 	testBird1 := &models.BirdDB{
 		Name:        "Bird 1",
@@ -96,10 +97,10 @@ func TestBirdRepository(t *testing.T) {
 		require.True(t, utils.IsTypeError(response))
 
 	})
-	mi.DisconnectDB()
 
 	// Need to delete everything from testDB
 	t.Cleanup(func() {
+		mi.DisconnectDB()
 		client, _ := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://localhost:27017"))
 		if err != nil {
 			return

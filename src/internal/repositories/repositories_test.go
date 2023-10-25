@@ -115,20 +115,22 @@ func TestRepository(t *testing.T) {
 		require.False(t, utils.IsTypeError(response))
 		require.Equal(t, testBird, response.Data.(*models.BirdDB))
 	})
-	mi.DisconnectDB()
 
 	// Need to delete everything from testDB
-	client, _ := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://localhost:27017"))
-	if err != nil {
-		return
-	}
-	db := client.Database("testDB")
-	_, err = db.Collection(repositories.BirdColl).DeleteMany(context.TODO(), bson.M{})
-	if err != nil {
-		return
-	}
-	_, err = db.Collection(repositories.UserColl).DeleteMany(context.TODO(), bson.M{})
-	if err != nil {
-		return
-	}
+	t.Cleanup(func() {
+		mi.DisconnectDB()
+		client, _ := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://localhost:27017"))
+		if err != nil {
+			return
+		}
+		db := client.Database("testDB")
+		_, err = db.Collection(repositories.BirdColl).DeleteMany(context.TODO(), bson.M{})
+		if err != nil {
+			return
+		}
+		_, err = db.Collection(repositories.UserColl).DeleteMany(context.TODO(), bson.M{})
+		if err != nil {
+			return
+		}
+	})
 }

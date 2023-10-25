@@ -13,11 +13,12 @@ import (
 	"testing"
 )
 
-func TestPostEndpoints(t *testing.T) {
+func TestPostRepository(t *testing.T) {
 	mi, err := repositories.Connect("testDB", "mongodb://localhost:27017")
 	require.Nil(t, err)
 	mi.AddCollection(repositories.PostColl)
-	postColl := repositories.PostEndpoints{Collection: mi.GetCollection(repositories.PostColl)}
+	postColl := repositories.PostRepository{}
+	postColl.SetCollection(mi.GetCollection(repositories.PostColl))
 
 	testPost1 := &models.PostDB{
 		UserId:   primitive.NewObjectID().Hex(),
