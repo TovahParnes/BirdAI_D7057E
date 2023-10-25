@@ -16,6 +16,17 @@ definitions:
       user:
         $ref: '#/definitions/models.UserOutput'
     type: object
+  models.Analyze:
+    properties:
+      accuracy:
+        type: string
+      birdId:
+        type: string
+      name:
+        type: string
+      picture:
+        $ref: '#/definitions/models.MediaDB'
+    type: object
   models.BirdInput:
     properties:
       description:
@@ -53,6 +64,15 @@ definitions:
       status:
         type: integer
     type: object
+  models.MediaDB:
+    properties:
+      _id:
+        type: string
+      data:
+        type: string
+      fileType:
+        type: string
+    type: object
   models.MediaInput:
     properties:
       data:
@@ -71,16 +91,29 @@ definitions:
       id:
         type: string
     type: object
+  models.PostDB:
+    properties:
+      birdId:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      location:
+        type: string
+      mediaId:
+        type: string
+      userId:
+        type: string
+    type: object
   models.PostInput:
     properties:
       birdId:
         type: string
-      imageId:
-        type: string
       location:
         type: string
-      soundId:
-        type: string
+      media:
+        $ref: '#/definitions/models.MediaInput'
     type: object
   models.PostOutput:
     properties:
@@ -90,14 +123,12 @@ definitions:
         type: string
       id:
         type: string
-      image:
-        $ref: '#/definitions/models.MediaOutput'
       location:
         type: string
-      sound:
-        $ref: '#/definitions/models.MediaOutput'
       user:
         $ref: '#/definitions/models.UserOutput'
+      userMedia:
+        $ref: '#/definitions/models.MediaOutput'
     type: object
   models.Response:
     properties:
@@ -120,8 +151,6 @@ definitions:
     type: object
   models.UserInput:
     properties:
-      _id:
-        type: string
       active:
         type: boolean
       user:
@@ -563,9 +592,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Analyze'
               type: object
         "400":
           description: Bad Request
@@ -798,7 +825,12 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/models.Response'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.PostDB'
+              type: object
         "400":
           description: Bad Request
           schema:
