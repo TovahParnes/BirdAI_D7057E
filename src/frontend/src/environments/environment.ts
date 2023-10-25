@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   companyEmail: "Bird.AI@outlook.com",
 
-  loginURL: "http://localhost:4000/users",
+  loginURL: "http://localhost:3000/users",
   identifyRequestURL: "http://localhost:3000",
   };
   

@@ -1,10 +1,12 @@
 import {Component, ViewChildren, QueryList} from '@angular/core';
-import {SocialAuthService, GoogleLoginProvider} from '@abacritt/angularx-social-login';
+import {SocialAuthService, GoogleLoginProvider, SocialUser} from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
 import { AppComponent } from '../app.component';
 import { CardComponent } from '../card/card.component';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import {User,UserResponse} from 'src/assets/components/components';
 
 @Component({
   selector: 'app-taken-images-page',
@@ -47,6 +49,11 @@ export class TakenImagesPageComponent {
     private http: HttpClient,
     ) {
   }
+  user: SocialUser = new SocialUser;
+  userMe!: User
+  loggedIn: boolean = false;
+  secret: string = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoSWQiOiJzdHJpbmciLCJ1c2VybmFtZSI6InN0cmluZyJ9.cVENCSr6dIuKnVgijgauLbAYj9gdGnwFLbfsxGicSHA'
+  
 
   logout(): void {
     this.socialAuthService.signOut().then(() => this.router.navigate(['login']));
@@ -114,12 +121,38 @@ export class TakenImagesPageComponent {
     return this.http.get<any[]>(this.jsonUrl);
   }
 
+  // getBackendData() {
+  //   return this.http.get<any[]>(environment.identifyRequestURL+"/birds/list", this.userMe._id)
+  // }
+
+  getCurrentUser(token: string){
+    const header = {
+      'Authorization': `Bearer ${token}`
+    }
+    return this.http.get<UserResponse>(environment.identifyRequestURL+"/users/me",{ headers: header })
+  }
+
   ngOnInit(): void {
+    this.socialAuthService.authState.subscribe((user) => {
+    this.user = user;
+    this.loggedIn = (user != null);
+  }),
     this.getData().subscribe((response) => {
       const data = response;
       this.cardlist = data.find((item) => 'list2' in item)?.list2 || [];
       this.foundlist = data.find((item) => 'list1' in item)?.list1 || [];
       this.backupCards = this.cardlist
+      const userMe = this.getCurrentUser(this.secret).subscribe(
+        (response: UserResponse) => {
+          console.log("Succesfully sent data");
+          console.log(response.data);
+          this.userMe = response.data;
+        },
+        err => { 
+          console.error("Failed at getting userMe:" + err); 
+        }
+      )
+      console.log(userMe)
     });
   }
 }

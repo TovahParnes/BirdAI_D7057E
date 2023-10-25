@@ -94,24 +94,26 @@
 
 <p></p>
 
-<app-bottominfo></app-bottominfo>
-
 <div *ngIf="analyzed" >
-  <img id="ItemPreview" src={{analyzed.data.picture.data}}>
-  <p>Name: {{analyzed.data.name}}</p>
-  <p>Accuracy: {{analyzed.data.accuracy}}</p>
-
+  <mat-card class="card" style="text-align: center;">
+    <!-- <img id="ItemPreview" src={{analyzed.data.picture.data}}> -->
+    <img id="ItemPreview" src="{{jsonlist.list3[1].image}}" width="100%">
+    <p>Name: {{analyzed.data.name}}</p>
+    <p>Accuracy: {{analyzed.data.accuracy}}</p>
+  </mat-card>
 </div>
 
 
 <p></p>
 
-<div #loading style="height: 1000px;">
+<div #loading style="height: 100px;">
   <div *ngIf="isLoading" style="height: 100%; z-index: 1000; position: fixed; top: 0px; width: 100%; background-color:  #4242425b;">
     <mat-spinner style="margin: auto; top: 40%;"></mat-spinner>
   </div>
   <mat-card *ngIf="data != null" class="card">
   </mat-card>
 </div>
+
+<app-bottominfo></app-bottominfo>
 
 

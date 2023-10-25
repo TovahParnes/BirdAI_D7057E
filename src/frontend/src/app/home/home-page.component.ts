@@ -8,7 +8,22 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { NgOptimizedImage } from '@angular/common'
+import jsonData from '../../assets/data.json';
 
+interface list3 {
+  list3:{   
+    //dataitem: dataitem  
+    title: string;
+    image: string;
+    accuracy: string;
+  }[]
+}
+
+interface dataitem {
+  title: string;
+  image: string;
+  accuracy: string;
+}
 
 @Component({
   selector: 'app-home-page',
@@ -24,6 +39,11 @@ export class MainPageComponent implements OnInit {
   form!: FormGroup;
   selectedImage: any;
   isLoading: boolean = false;
+  print =""
+  element!: dataitem
+  dummyitem: dataitem = {title:'test',image:'test',accuracy:'test'}
+  jsonlist = jsonData[2] as list3;
+  //jsonlist: list3 ={ list3: [{dataitem: this.dummyitem},]}
 
   data: any;
   dataImg: any;
@@ -47,6 +67,7 @@ export class MainPageComponent implements OnInit {
     this.form = this.formBuilder.group({
       option: new FormControl(), // Initialize with a default value
     });
+    this.getJsonData();
   }
 
   onFileSelected(event: any) {
@@ -67,7 +88,7 @@ export class MainPageComponent implements OnInit {
   postImage(): Observable<AnalyzeResponse> {
     //console.log(header);
     const body = {'data': `${this.selectedImage}`, 'fileType': "JPG"};
-    return this.http.post<AnalyzeResponse>(environment.identifyRequestURL+"/ai/inputimage", body)
+    return this.http.post<AnalyzeResponse>(environment.identifyRequestURL+"/ai/inputimage", body);
   }
 
   onSubmit(el: HTMLElement) {
@@ -82,7 +103,7 @@ export class MainPageComponent implements OnInit {
         this.selectedImage = null;
         el.scrollIntoView();
         this.analyzed = response;
-        
+        this.addNewBird(this.analyzed.data.name, this.analyzed.data.picture.data, this.analyzed.data.accuracy);
       },
       err => { 
         console.error("Failed at sending data:" + err); 
@@ -90,4 +111,23 @@ export class MainPageComponent implements OnInit {
     );
     this.isLoading = false
   }
+
+  //AddnewBird sparar temporärt i jsonlist, detta skulle kunna skickas mellan sidorna
+  addNewBird(name: string, imageUrl:string, accuracy:string){
+    //const newitem : { dataitem: dataitem } = {dataitem: {"title": name, "image": imageUrl, "accuracy": accuracy} };
+    const newitem = {"title": name, "image": imageUrl, "accuracy": accuracy}
+    this.jsonlist.list3.push(newitem)
+    //this.jsonlist.list3.push(newitem)
+
+  }
+
+  //exempel på hur det ifrån json
+  getJsonData(){
+    // if (this.jsonlist) {
+    //   this.element = this.jsonlist.list3[1].dataitem;
+    // }
+    this.element = this.jsonlist.list3[1]
+  }
+
+
 }
