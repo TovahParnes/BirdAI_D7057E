@@ -92,16 +92,18 @@ func TestUserRepository(t *testing.T) {
 		require.Equal(t, testUser1, response.Data.(*models.UserDB))
 
 	})
-	mi.DisconnectDB()
 
 	// Need to delete everything from testDB
-	client, _ := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://localhost:27017"))
-	if err != nil {
-		return
-	}
-	db := client.Database("testDB")
-	_, err = db.Collection(repositories.UserColl).DeleteMany(context.TODO(), bson.M{})
-	if err != nil {
-		return
-	}
+	t.Cleanup(func() {
+		mi.DisconnectDB()
+		client, _ := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://localhost:27017"))
+		if err != nil {
+			return
+		}
+		db := client.Database("testDB")
+		_, err = db.Collection(repositories.UserColl).DeleteMany(context.TODO(), bson.M{})
+		if err != nil {
+			return
+		}
+	})
 }

@@ -9,6 +9,7 @@ type BirdDB struct {
 }
 
 type BirdInput struct {
+	Id          string `bson:"_id"`
 	Name        string `bson:"name"`
 	Description string `bson:"description"`
 	ImageId     string `bson:"image_id"`
@@ -16,9 +17,9 @@ type BirdInput struct {
 }
 
 type BirdOutput struct {
-	Id          string `bson:"_id"`
-	Name        string `bson:"name"`
-	Description string `bson:"description"`
-	Image     	MediaOutput `bson:"image"`
-	Sound     	MediaOutput `bson:"sound"`
+	Id          string      `bson:"_id"`
+	Name        string      `bson:"name"`
+	Description string      `bson:"description"`
+	Image       MediaOutput `bson:"image"`
+	Sound       MediaOutput `bson:"sound"`
 }
