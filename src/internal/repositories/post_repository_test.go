@@ -24,16 +24,14 @@ func TestPostRepository(t *testing.T) {
 		UserId:   primitive.NewObjectID().Hex(),
 		BirdId:   primitive.NewObjectID().Hex(),
 		Location: "TestLocation",
-		ImageId:  primitive.NewObjectID().Hex(),
-		SoundId:  primitive.NewObjectID().Hex(),
+		MediaId:  primitive.NewObjectID().Hex(),
 	}
 
 	testPost2 := &models.PostDB{
 		UserId:   primitive.NewObjectID().Hex(),
 		BirdId:   primitive.NewObjectID().Hex(),
 		Location: "TestLocation",
-		ImageId:  primitive.NewObjectID().Hex(),
-		SoundId:  primitive.NewObjectID().Hex(),
+		MediaId:  primitive.NewObjectID().Hex(),
 	}
 
 	t.Run("Test CreatePost", func(t *testing.T) {

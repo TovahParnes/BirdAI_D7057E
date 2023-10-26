@@ -2571,6 +2571,9 @@ const docTemplate = `{
         "models.MediaOutput": {
             "type": "object",
             "properties": {
+                "_id": {
+                    "type": "string"
+                },
                 "data": {
                     "type": "array",
                     "items": {
@@ -2578,9 +2581,6 @@ const docTemplate = `{
                     }
                 },
                 "fileType": {
-                    "type": "string"
-                },
-                "id": {
                     "type": "string"
                 }
             }
@@ -2611,6 +2611,9 @@ const docTemplate = `{
         "models.PostInput": {
             "type": "object",
             "properties": {
+                "_id": {
+                    "type": "string"
+                },
                 "birdId": {
                     "type": "string"
                 },
@@ -2625,13 +2628,13 @@ const docTemplate = `{
         "models.PostOutput": {
             "type": "object",
             "properties": {
+                "_id": {
+                    "type": "string"
+                },
                 "bird": {
                     "$ref": "#/definitions/models.BirdOutput"
                 },
                 "createdAt": {
-                    "type": "string"
-                },
-                "id": {
                     "type": "string"
                 },
                 "location": {

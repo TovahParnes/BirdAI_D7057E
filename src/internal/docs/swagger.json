@@ -2568,6 +2568,9 @@
         "models.MediaOutput": {
             "type": "object",
             "properties": {
+                "_id": {
+                    "type": "string"
+                },
                 "data": {
                     "type": "array",
                     "items": {
@@ -2575,9 +2578,6 @@
                     }
                 },
                 "fileType": {
-                    "type": "string"
-                },
-                "id": {
                     "type": "string"
                 }
             }
@@ -2608,6 +2608,9 @@
         "models.PostInput": {
             "type": "object",
             "properties": {
+                "_id": {
+                    "type": "string"
+                },
                 "birdId": {
                     "type": "string"
                 },
@@ -2622,13 +2625,13 @@
         "models.PostOutput": {
             "type": "object",
             "properties": {
+                "_id": {
+                    "type": "string"
+                },
                 "bird": {
                     "$ref": "#/definitions/models.BirdOutput"
                 },
                 "createdAt": {
-                    "type": "string"
-                },
-                "id": {
                     "type": "string"
                 },
                 "location": {

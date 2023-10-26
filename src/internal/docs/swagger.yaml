@@ -86,13 +86,13 @@ definitions:
     type: object
   models.MediaOutput:
     properties:
+      _id:
+        type: string
       data:
         items:
           type: integer
         type: array
       fileType:
-        type: string
-      id:
         type: string
     type: object
   models.PostDB:
@@ -112,6 +112,8 @@ definitions:
     type: object
   models.PostInput:
     properties:
+      _id:
+        type: string
       birdId:
         type: string
       location:
@@ -121,11 +123,11 @@ definitions:
     type: object
   models.PostOutput:
     properties:
+      _id:
+        type: string
       bird:
         $ref: '#/definitions/models.BirdOutput'
       createdAt:
-        type: string
-      id:
         type: string
       location:
         type: string
