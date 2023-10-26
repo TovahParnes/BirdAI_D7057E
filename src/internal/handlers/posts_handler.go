@@ -49,7 +49,7 @@ func (h *Handler) GetPostById(c *fiber.Ctx) error {
 func (h *Handler) ListPosts(c *fiber.Ctx) error {
 	queries := c.Queries()
 	set := queries["set"]
-	response := utils.IsValidSet(&set)
+	response := utils.IsValidSet(set)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
@@ -87,7 +87,7 @@ func (h *Handler) ListUsersPosts(c *fiber.Ctx) error {
 
 	queries := c.Queries()
 	set := queries["set"]
-	response = utils.IsValidSet(&set)
+	response = utils.IsValidSet(set)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}

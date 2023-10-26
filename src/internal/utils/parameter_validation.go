@@ -16,15 +16,15 @@ func IsValidId(id string) models.Response {
 	return Response(nil)
 }
 
-func IsValidSet(set *string) models.Response {
-	if len(*set) == 0 {
-		*set = "1"
+func IsValidSet(set string) models.Response {
+	if len(set) == 0 {
+		set = "1"
 	}
-	_, err := strconv.Atoi(*set)
+	setInt, err := strconv.Atoi(set); 
 	if err != nil {
 		return ErrorParams("Given set is not a valid set, must be int")
 	}
-	return Response(nil)
+	return Response(setInt)
 }
 
 func IsValidSearch(search string) models.Response {

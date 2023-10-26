@@ -51,7 +51,7 @@ func (h *Handler) GetUserById(c *fiber.Ctx) error {
 func (h *Handler) ListUsers(c *fiber.Ctx) error {
 	queries := c.Queries()
 	set := queries["set"]
-	response := utils.IsValidSet(&set)
+	response := utils.IsValidSet(set)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
