@@ -2445,6 +2445,9 @@ const docTemplate = `{
                 "access": {
                     "type": "string"
                 },
+                "id": {
+                    "type": "string"
+                },
                 "userId": {
                     "type": "string"
                 }
@@ -2485,6 +2488,9 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "description": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "string"
                 },
                 "imageId": {
@@ -2673,6 +2679,9 @@ const docTemplate = `{
             "properties": {
                 "active": {
                     "type": "boolean"
+                },
+                "id": {
+                    "type": "string"
                 },
                 "user": {
                     "type": "string"

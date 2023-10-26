@@ -4,6 +4,8 @@ definitions:
     properties:
       access:
         type: string
+      id:
+        type: string
       userId:
         type: string
     type: object
@@ -30,6 +32,8 @@ definitions:
   models.BirdInput:
     properties:
       description:
+        type: string
+      id:
         type: string
       imageId:
         type: string
@@ -153,6 +157,8 @@ definitions:
     properties:
       active:
         type: boolean
+      id:
+        type: string
       user:
         type: string
     type: object
