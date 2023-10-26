@@ -30,7 +30,7 @@ export class AppComponent {
 
   constructor(
     private router: Router,
-    private authService: SocialAuthService) { }
+    public authService: SocialAuthService) { }
 
   ngOnInit() {
     this.authService.authState.subscribe((user) => {
@@ -39,27 +39,4 @@ export class AppComponent {
       localStorage.setItem('id_token', user.idToken);
     });
   }
-
-  logout(): void {
-    this.authService.signOut().then(() => this.router.navigate(['login']));
-  }
-
-  navigateToHome(): void {
-    this.router.navigate(['mainpage']);
-  }
-
-  navigateToTakenImages(): void {
-    this.router.navigate(['takenImages']);
-  }
-
-  navigateToLibrary(): void {
-    this.router.navigate(['library']);
-  }
-
-  navigateToProfilePage(): void {
-    this.router.navigate(['profile']);
-  }
-
-
-
 }

@@ -7,13 +7,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./first-page.component.css']
 
 })
+
 export class FirstPageComponent {
 
-constructor(
-    private router: Router,
-
-  ){
-    
+  constructor(
+    private router: Router) {
   }
 
   imgsize = 150

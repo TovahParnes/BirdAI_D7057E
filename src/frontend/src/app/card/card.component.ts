@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.css']
 })
+
 export class CardComponent {
   @Input()
   title!: string;
@@ -19,15 +20,15 @@ export class CardComponent {
   changeTextColor(color: string) {
     this.textColor = color;
   }
-
-
 }
+
 
 @Component({
   selector: 'app-card2',
   templateUrl: './card2.component.html',
   styleUrls: ['./card2.component.css']
 })
+
 export class Card2Component {
   @Input()
   title!: string;
@@ -43,17 +44,19 @@ export class Card2Component {
     this.textColor = color;
   }
 }
+
+
 @Component({
   selector: 'app-bottominfo',
   templateUrl: './bottominfo.component.html',
   styleUrls: ['./bottominfo.component.css']
 })
+
 export class BottomInfoComponent{
   constructor(
-    private router: Router,
-  ){
-
+    private router: Router){
   }
+  
   navigateToAbout(){
     this.router.navigate(['about']);
   }
