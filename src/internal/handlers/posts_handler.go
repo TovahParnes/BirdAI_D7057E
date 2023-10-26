@@ -59,8 +59,11 @@ func (h *Handler) ListPosts(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-
-	response = h.controller.CListPosts(set, search)
+	setInt, err := strconv.Atoi(set)
+	if err != nil {
+		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
+	}
+	response = h.controller.CListPosts(setInt, search)
 	return utils.ResponseToStatus(c, response)
 }
 

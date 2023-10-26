@@ -25,13 +25,19 @@ func (a *Authentication) LoginUser(user *models.UserLogin) models.Response {
 	response := a.UserColl.GetUserByAuthId(user.AuthId)
 	// Check if data is type error
 	if utils.IsType(response, models.Err{}) {
-		if response.Data.(models.Err).StatusCode != http.StatusNotFound {
+		if response.Data.(models.Err).StatusCode == http.StatusNotFound {
 			userDB := &models.UserDB{Username: user.Username, AuthId: user.AuthId, Active: true}
 			response = a.UserColl.CreateUser(*userDB)
 			if utils.IsTypeError(response) {
 				return response
 			}
+		} else {
+			return response
 		}
+	}
+	response = a.UserColl.GetUserByAuthId(user.AuthId)
+	if !response.Data.(*models.UserDB).Active {
+		return utils.ErrorDeleted(response.Data.(*models.UserDB).Username)
 	}
 
 	// Create the Claims
