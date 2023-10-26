@@ -18,7 +18,7 @@ func IsValidId(id string) models.Response {
 
 func IsValidSet(set string) models.Response {
 	if len(set) == 0 {
-		set = "1"
+		set = "0"
 	}
 	setInt, err := strconv.Atoi(set); 
 	if err != nil {

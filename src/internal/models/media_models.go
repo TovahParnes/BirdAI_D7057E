@@ -17,7 +17,7 @@ type MediaOutput struct {
 	FileType string `bson:"file_type"`
 }
 
-func MediaDBToOutput(db MediaDB) *MediaOutput {
+func MediaDBToOutput(db *MediaDB) *MediaOutput {
 	return &MediaOutput{
 		Id:       db.Id,
 		Data:     []byte(db.Data),
