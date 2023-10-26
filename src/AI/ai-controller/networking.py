@@ -1,75 +1,104 @@
 import os
-from flask import Flask, request, jsonify
+
+import numpy as np
+from flask import Flask, request, jsonify, json
 import requests
+from PIL import Image
+import PIL
 
 app = Flask(__name__)
-_receiver_port = 80
+_receiver_port = 3500
+
+detection_model_ip = "172.18.0.2"
+detection_model_port = "3501"
+
+classification_model_ip = "172.18.0.3"
+classification_model_port = "3502"
 
 
 def listen():
     app.run(host='0.0.0.0', port=_receiver_port)
 
 
-def send_image(_ip, _port):
-    # Specify the URL of the Flask server
-    url = 'http://' + _ip + ':' + _port + '/upload'
+@app.route('/evaluate_image')
+def evaluate_image():
 
-    # Open and read the image file
-    with open('image.jpg', 'rb') as file:
-        files = {'image': ('image.jpg', file, 'image/jpeg')}
-        response = requests.post(url, files=files)
+    data = request.get_json()
+    images = data.get('media')
 
-    # Check the response from the server
-    if response.status_code == 200:
-        print("Image received.")
-        return response
-    else:
-        print(f'Error: {response.status_code}')
-    return None
+    # TODO: Convert to PIL Image.
 
+    im1 = Image.open(r"image.jpg")
 
-def send_to_classification(_ip, _port, _image_data):
-    url = 'http://' + _ip + ':' + _port + '/upload'
+    _result_image = send_image_to_detection(im1, detection_model_ip, detection_model_port)
+    _result = send_image_to_classification(_result_image, classification_model_ip, classification_model_port)
 
-    print(_image_data)
+    print(_result)
 
-    response = requests.post(url, json=_image_data)
+    birds = {
+        "bird1": {"name": "test-Sparrow", "accuracy": 0.95},
+        "bird2": {"name": "test-Robin", "accuracy": 0.92},
+        "bird3": {"name": "test-Eagle", "accuracy": 0.98},
+        "bird4": {"name": "test-Owl", "accuracy": 0.89}
+    }
 
-    # Check the response status code
-    if response.status_code == 200:
-        print('Image to classification data back is:', response.json())
-    else:
-        print(f'Image to classification data, Message request failed - {response.status_code}.')
+    bird = {
+        "name": "test-Sparrow",
+        "accuracy": 0.95
+    }
 
+    # Determine the next bird number
+    next_bird_number = len(birds) + 1
+    new_bird_key = f"bird{next_bird_number}"
 
-def send_message(_ip, _port, _route):
-    url = "http://" + _ip + ":" + _port + "/" + _route
-    payload = {"message": "Hello, receiver!"}
-    response = requests.post(url, json=payload)
+    # Add a new bird
+    birds[new_bird_key] = {"name": "New-Bird", "accuracy": 0.91}
 
-    # Check the response status code
-    if response.status_code == 200:
-        print('Send message response:', response.json())
-    else:
-        print(f'Message request failed - {response.status_code}.')
+    json_structure = json.dumps({"birds": birds}, indent=4)
+
+    # print(json_structure)
+    return json_structure
 
 
-# Define a route that responds with a string
-@app.route('/test_response')
-def test_response():
-    return "Hello from AI Controller!"
+def send_image_to_classification(_img, _ip, _port):     # Returns a PIL image.
+    url = f'http://{_ip}:{_port}/process_image'
+
+    # Send a POST request with the image data
+    response = requests.post(url, json=convertPILToJSON(_img))
+
+    _result = response.json()['pos']
+
+    return _result
 
 
-@app.route('/upload', methods=['POST'])
-def upload_image():
-    if 'image' not in request.files:
-        return jsonify({'error': 'No image provided'})
+def send_image_to_detection(_img, _ip, _port):     # Returns a PIL image.
+    url = f'http://{_ip}:{_port}/process_image'
 
-    file = request.files['image']
-    if file.filename == '':
-        return jsonify({'error': 'No selected file'})
+    # Send a POST request with the image data
+    response = requests.post(url, json=convertPILToJSON(_img))
 
-    if file:
-        # Save the uploaded image to a folder (e.g., 'uploads')
-        file.save(os.path.join('uploads', file.filename))
-        return jsonify({'message': 'Image successfully uploaded'})
+    _image_data = response.json()['image_data']
+
+    # Create a byte array from the pixel data
+    pixel_bytes = bytes([value for pixel in _image_data for value in pixel])
+
+    # Create a PIL image from the pixel data
+    image = Image.frombytes('RGB', (224, 224), pixel_bytes)
+
+    return image
+
+
+def convertPILToJSON(_image):
+
+    # Convert the image data to a list of pixel values
+    pixel_data = list(_image.getdata())
+
+    # Create a dictionary with image data
+    image_info = {
+        "width": _image.width,
+        "height": _image.height,
+        "mode": _image.mode,
+        "pixels": pixel_data
+    }
+
+    return image_info
