@@ -9,15 +9,16 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 // page components imports
 import {AppComponent} from './app.component';
+import {AboutComponent} from './about/about.component';
 import {LoginComponent} from './login/login.component';
 import {MainPageComponent} from './home/home-page.component';
 import {LibraryComponent} from './library/library.component';
 import {TakenImagesPageComponent} from './taken-images-page/taken-images-page.component';
 import {SpeciesPageComponent} from './species-page/species-page.component';
 import {ProfilePageComponent} from './profile-page/profile-page.component';
-
-import { CardComponent, Card2Component, BottomInfoComponent} from './card/card.component';
-import { FirstPageComponent } from './first-page/first-page.component';
+import {NavbarComponent} from './navbar/navbar.component';
+import {CardComponent, Card2Component, BottomInfoComponent} from './card/card.component';
+import {FirstPageComponent} from './first-page/first-page.component';
 
 
 // login authguard imports
@@ -33,9 +34,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import { AboutComponent } from './about/about.component';
 
 
 
@@ -51,7 +50,7 @@ import { AboutComponent } from './about/about.component';
     ProfilePageComponent,
     CardComponent,
     Card2Component,
-
+    NavbarComponent,
     BottomInfoComponent,
     FirstPageComponent,
     AboutComponent,

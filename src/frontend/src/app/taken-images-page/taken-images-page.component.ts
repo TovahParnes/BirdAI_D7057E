@@ -48,30 +48,6 @@ export class TakenImagesPageComponent {
     ) {
   }
 
-  logout(): void {
-    this.socialAuthService.signOut().then(() => this.router.navigate(['login']));
-  }
-
-  navigateToHome(): void {
-    this.router.navigate(['mainpage']);
-  }
-
-  navigateToTakenImages(): void {
-    this.router.navigate(['takenImages']);
-  }
-
-  navigateToLibrary(): void {
-    this.router.navigate(['library']);
-  }
-
-  navigateToProfilePage(): void {
-    this.router.navigate(['profile']);
-  }
-
-  toggleTheme(): void {
-    //this.mainApp.switchDarkmodeSetting();
-  }
-
   navigateToSpecies(imageId: string, imageName: string): void {
     this.router.navigate(['species-page'], {
       queryParams: {
