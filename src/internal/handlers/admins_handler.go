@@ -110,13 +110,15 @@ func (h *Handler) ListAdmins(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
+	setInt := response.Data.(int)
+
 	search := queries["search"]
 	response = utils.IsValidSearch(search)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	response = h.controller.CListAdmins(set, search)
+	response = h.controller.CListAdmins(setInt, search)
 	return utils.ResponseToStatus(c, response)
 }
 

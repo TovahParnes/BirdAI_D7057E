@@ -16,7 +16,7 @@ func (c *Controller) CGetAdminById(id string) (models.Response) {
 	return utils.ErrorNotImplemented("CGetAdminById")
 }
 
-func (c *Controller) CListAdmins(set string, search string) (models.Response) {
+func (c *Controller) CListAdmins(set int, search string) (models.Response) {
 	/*
 	coll := c.db.GetCollection(repositories.AdminColl)
 	response := coll.FindAll()
@@ -62,7 +62,7 @@ func (c *Controller) CDeleteAdmin(id string) (models.Response) {
 }
 
 func (c *Controller) CCheckLastSuperadmin() (models.Response) {
-	response := c.CListAdmins("1", "Access: superadmin")
+	response := c.CListAdmins(0, "Access: superadmin")
 	if utils.IsTypeError(response) {
 		return response
 	}

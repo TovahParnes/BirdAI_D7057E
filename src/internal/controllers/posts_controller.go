@@ -4,6 +4,7 @@ import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/repositories"
 	"birdai/src/internal/utils"
+
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -36,7 +37,7 @@ func (c *Controller) CListPosts(set int, search string) models.Response {
 	return utils.Response(posts)
 }
 
-func (c *Controller) CListUsersPosts(userId string, set int) models.Response {
+func (c *Controller) CListUsersPosts(userId string, set int, search string) models.Response {
 	filter := bson.M{"user_id": userId}
 	//birdColl := c.db.GetCollection(repositories.BirdColl)
 	response := c.db.Post.ListPosts(filter, set)

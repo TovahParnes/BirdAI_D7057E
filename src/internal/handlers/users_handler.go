@@ -5,7 +5,6 @@ package handlers
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
-	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -55,16 +54,14 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
+	setInt := response.Data.(int)
 
 	search := queries["search"]
 	response = utils.IsValidSearch(search)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-	setInt, err := strconv.Atoi(set)
-	if err != nil {
-		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
-	}
+
 	response = h.controller.CListUsers(setInt)
 	return utils.ResponseToStatus(c, response)
 }
