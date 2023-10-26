@@ -47,8 +47,7 @@ display: inline-block;
 display: flex;
 justify-content: center;
 align-items: center; 
-width: 500px; 
-height: 200px; 
+max-width: 70%;
 overflow: hidden; 
 margin: auto;
 z-index: 500;
@@ -59,4 +58,15 @@ max-width: 100%;
 max-height: 100%; 
 display: block; 
 margin: auto; 
+}
+
+.goBackButton {
+  position: absolute;
+  top: 0;
+  left: 20%;
+  transform: translateX(-50%);
+}
+
+.group{
+  position: relative;
 }

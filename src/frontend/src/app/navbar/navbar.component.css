@@ -103,11 +103,13 @@
   
   .tooltip .tooltiptext {
     visibility: hidden;
-    background-color: rgba(255, 255, 255, 0.664);
-    color: black;
+    font-size: small;
+    background-color: rgba(255, 255, 255, 0.7);
+    color: rgba(0, 0, 0, 0.9);
     text-align: center;
     border-radius: 6px;
-    padding: 5px 5px;
+    padding: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 
     top: 110%;
     left: 50%;
@@ -120,4 +122,5 @@
   
   .tooltip:hover .tooltiptext {
     visibility: visible;
+    transition-delay: 0.2s;
   }

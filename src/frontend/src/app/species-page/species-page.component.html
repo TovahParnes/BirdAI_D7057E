@@ -5,41 +5,38 @@
     needs to be fetched from backend dynamically.
 -->
 
-<p></p>
 
-<button mat-icon-button color="primary" (click)="goBack()" style="display: flex; left: 22.5%;">
+<div class="group">
+  <button mat-fab class="goBackButton" color="primary" (click)="goBack()"><mat-icon>keyboard_arrow_left</mat-icon></button>
 
-  <mat-icon style=" font-size: 42px; overflow: visible; margin-top: -30%;">arrow_circle_left</mat-icon>
+  <mat-card class="card" id="info">
+      <div style="display: flex; justify-content: space-between;">
+          <p style="flex: 1; text-align: left;">{{imageName}}</p>
+          <p style="flex: 1; text-align: right;">{{imageDate}}</p>
+      </div>
+      
+      <p></p>
 
-</button>
+          <div class="image-container">
+              <img [src]="currentImage" alt="Slideshow Image" class="fit-image" id="Slideshow-image">
+          </div>
+          <div class="buttonContainer">        
+              <a class="prev" (click)="prevImage()">❮</a>
+              <a class="next" (click)="nextImage()">❯</a>
+          </div>
+          <p></p>
+      Info: <br>
+      Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+      Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+      when an unknown printer took a galley of type and scrambled it to make a type 
+      specimen book. It has survived not only five centuries, but also the leap into 
+      electronic typesetting, remaining essentially unchanged. It was popularised in 
+      the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
+      and more recently with desktop publishing software like Aldus PageMaker including 
+      versions of Lorem Ipsum.
+      <div class="container" style="text-align: center;"> Common regions: <img src="assets/map.png" style="width: 100%;"></div>
 
-<div class="container" style="text-align: left;">
-    <div style="display: flex;justify-content: space-between;">
-        <p style="flex: 1 textalign=left;">{{imageName}}</p>
-        <p style="flex: 1; text-align: right;">{{imageDate}}</p>
-    </div>
-    
-    <p></p>
-
-        <div class="image-container">
-            <img [src]="currentImage" alt="Slideshow Image" class="fit-image" id="Slideshow-image">
-        </div>
-        <div class="buttonContainer">        
-            <a class="prev" (click)="prevImage()">❮</a>
-            <a class="next" (click)="nextImage()">❯</a>
-        </div>
-        <p></p>
-    Info: <br>
-    Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-    when an unknown printer took a galley of type and scrambled it to make a type 
-    specimen book. It has survived not only five centuries, but also the leap into 
-    electronic typesetting, remaining essentially unchanged. It was popularised in 
-    the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-    and more recently with desktop publishing software like Aldus PageMaker including 
-    versions of Lorem Ipsum.
-    <div class="container" style="text-align: center;"> Common regions: <img src="assets/map.png" style="width: 100%;"></div>
-
+  </mat-card>
 </div>
 
 <app-bottominfo></app-bottominfo>
