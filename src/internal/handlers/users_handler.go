@@ -50,10 +50,11 @@ func (h *Handler) GetUserById(c *fiber.Ctx) error {
 func (h *Handler) ListUsers(c *fiber.Ctx) error {
 	queries := c.Queries()
 	set := queries["set"]
-	response := utils.IsValidSet(&set)
+	response := utils.IsValidSet(set)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
+	setInt := response.Data.(int)
 
 	search := queries["search"]
 	response = utils.IsValidSearch(search)
@@ -61,7 +62,7 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	response = h.controller.CListUsers(set, search)
+	response = h.controller.CListUsers(setInt)
 	return utils.ResponseToStatus(c, response)
 }
 
@@ -80,8 +81,7 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 // @Router		/users/ [post]
 func (h *Handler) LoginUser(c *fiber.Ctx) error {
 	var user *models.UserLogin
-	if err := c.BodyParser(&user);
-	err != nil {
+	if err := c.BodyParser(&user); err != nil {
 		//	@Failure	400	{object}	models.Response{}
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}

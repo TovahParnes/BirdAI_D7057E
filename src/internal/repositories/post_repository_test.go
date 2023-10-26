@@ -5,12 +5,13 @@ import (
 	"birdai/src/internal/repositories"
 	"birdai/src/internal/utils"
 	"context"
+	"testing"
+
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"testing"
 )
 
 func TestPostRepository(t *testing.T) {
@@ -24,16 +25,14 @@ func TestPostRepository(t *testing.T) {
 		UserId:   primitive.NewObjectID().Hex(),
 		BirdId:   primitive.NewObjectID().Hex(),
 		Location: "TestLocation",
-		ImageId:  primitive.NewObjectID().Hex(),
-		SoundId:  primitive.NewObjectID().Hex(),
+		MediaId:  primitive.NewObjectID().Hex(),
 	}
 
 	testPost2 := &models.PostDB{
 		UserId:   primitive.NewObjectID().Hex(),
 		BirdId:   primitive.NewObjectID().Hex(),
 		Location: "TestLocation",
-		ImageId:  primitive.NewObjectID().Hex(),
-		SoundId:  primitive.NewObjectID().Hex(),
+		MediaId:  primitive.NewObjectID().Hex(),
 	}
 
 	t.Run("Test CreatePost", func(t *testing.T) {
@@ -69,7 +68,7 @@ func TestPostRepository(t *testing.T) {
 
 	t.Run("Test UpdatePost", func(t *testing.T) {
 		updatePost := models.PostInput{
-			Id:       testPost1.Id,
+			//Id:       testPost1.Id,
 			Location: "Location update",
 		}
 		response := postColl.UpdatePost(updatePost)

@@ -12,7 +12,15 @@ type MediaInput struct {
 }
 
 type MediaOutput struct {
-	Id       string `bson:"_id"`
-	Data     []byte `bson:"data"`
-	FileType string `bson:"file_type"`
+	Id       string `bson:"_id" json:"_id" form:"_id"`
+	Data     []byte `bson:"data" json:"data" form:"data"`
+	FileType string `bson:"file_type" json:"fileType" form:"fileType"`
+}
+
+func MediaDBToOutput(db *MediaDB) *MediaOutput {
+	return &MediaOutput{
+		Id:       db.Id,
+		Data:     []byte(db.Data),
+		FileType: db.FileType,
+	}
 }

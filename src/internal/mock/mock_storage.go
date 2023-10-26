@@ -205,8 +205,7 @@ func (m *mockCollection) CreateOne(object models.HandlerObject) models.Response 
 			UserId:   object.(*models.PostDB).UserId,
 			BirdId:   object.(*models.PostDB).BirdId,
 			Location: object.(*models.PostDB).Location,
-			ImageId:  object.(*models.PostDB).ImageId,
-			SoundId:  object.(*models.PostDB).SoundId,
+			MediaId:  object.(*models.PostDB).MediaId,
 		}
 		newObject.SetCreatedAt()
 

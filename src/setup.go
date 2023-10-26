@@ -14,7 +14,10 @@ import (
 
 func Setup(ctx context.Context) (*fiber.App, error) {
 	app := fiber.New()
-	db := InitMockDB()
+	db, err := repositories.SetupRepositories()
+	if err != nil {
+		return nil, err
+	}
 	handlers.New(app, db)
 
 	//these two lines needs to be there for swagger to fuction

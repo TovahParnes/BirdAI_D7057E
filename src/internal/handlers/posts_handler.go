@@ -48,18 +48,19 @@ func (h *Handler) GetPostById(c *fiber.Ctx) error {
 func (h *Handler) ListPosts(c *fiber.Ctx) error {
 	queries := c.Queries()
 	set := queries["set"]
-	response := utils.IsValidSet(&set)
+	response := utils.IsValidSet(set)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
+	setInt := response.Data.(int)
 
 	search := queries["search"]
 	response = utils.IsValidSearch(search)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-
-	response = h.controller.CListPosts(set, search)
+	
+	response = h.controller.CListPosts(setInt, search)
 	return utils.ResponseToStatus(c, response)
 }
 
@@ -86,10 +87,11 @@ func (h *Handler) ListUsersPosts(c *fiber.Ctx) error {
 
 	queries := c.Queries()
 	set := queries["set"]
-	response = utils.IsValidSet(&set)
+	response = utils.IsValidSet(set)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
+	setInt := response.Data.(int)
 
 	search := queries["search"]
 	response = utils.IsValidSearch(search)
@@ -97,7 +99,7 @@ func (h *Handler) ListUsersPosts(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	response = h.controller.CListUsersPosts(userId, set, search)
+	response = h.controller.CListUsersPosts(userId, setInt, search)
 	return utils.ResponseToStatus(c, response)
 }
 
@@ -110,7 +112,7 @@ func (h *Handler) ListUsersPosts(c *fiber.Ctx) error {
 // @Produce		json
 // @Security 	Bearer
 // @Param		post	body		models.PostInput	true	"post"
-// @Success		201	{object}	models.Response{}
+// @Success		201	{object}	models.Response{data=models.PostDB}
 // @Failure		400	{object}	models.Response{data=models.Err}
 // @Failure		401	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
@@ -163,7 +165,7 @@ func (h *Handler) UpdatePost(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 	curUserId := response.Data.(models.UserDB).Id
-	
+
 	id := c.Params("id")
 	response = utils.IsValidId(id)
 	if utils.IsTypeError(response) {
@@ -174,7 +176,7 @@ func (h *Handler) UpdatePost(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-	
+
 	var post *models.PostInput
 	if err := c.BodyParser(&post); err != nil {
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))

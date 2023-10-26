@@ -8,7 +8,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-
 func IsValidId(id string) models.Response {
 	_, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -17,15 +16,15 @@ func IsValidId(id string) models.Response {
 	return Response(nil)
 }
 
-func IsValidSet(set *string) models.Response {
-	if len(*set) == 0 {
-		*set = "1"
+func IsValidSet(set string) models.Response {
+	if len(set) == 0 {
+		set = "0"
 	}
-	_, err := strconv.Atoi(*set); 
+	setInt, err := strconv.Atoi(set); 
 	if err != nil {
 		return ErrorParams("Given set is not a valid set, must be int")
 	}
-	return Response(nil)
+	return Response(setInt)
 }
 
 func IsValidSearch(search string) models.Response {
@@ -47,10 +46,10 @@ func IsValidAdminInput(admin *models.AdminInput) models.Response {
 }
 
 func IsValidBirdInput(bird *models.BirdInput) models.Response {
-	if bird.Name == ""{
+	if bird.Name == "" {
 		return ErrorParams("Name is empty")
 	}
-	if bird.Description == ""{
+	if bird.Description == "" {
 		return ErrorParams("Description is empty")
 	}
 	response := IsValidId(bird.ImageId)
@@ -82,14 +81,14 @@ func IsValidPostInput(post *models.PostInput) models.Response {
 
 	//TODO validate location?
 
-	response = IsValidId(post.ImageId)
-	if IsTypeError(response) {
-		return ErrorParams("Given image id is not a valid id")
-	}
-	response = IsValidId(post.SoundId)
-	if IsTypeError(response) {
-		return ErrorParams("Given sound id is not a valid id")
-	}
+	//response = IsValidId(post.ImageId)
+	//if IsTypeError(response) {
+	//	return ErrorParams("Given image id is not a valid id")
+	//}
+	//response = IsValidId(post.SoundId)
+	//if IsTypeError(response) {
+	//	return ErrorParams("Given sound id is not a valid id")
+	//}
 	return Response(nil)
 }
 
@@ -109,13 +108,11 @@ func IsValidUserLogin(user *models.UserLogin) models.Response {
 	return Response(nil)
 }
 
-
-
 func isValidName(name string) models.Response {
-	if name == ""{
+	if name == "" {
 		return ErrorParams("Name is empty")
 	}
-	if len(name) <6 || len(name) > 20 {
+	if len(name) < 6 || len(name) > 20 {
 		return ErrorParams("Name must be between 6 and 20 characters")
 	}
 	if containsSpecialCharacters(name) {
@@ -126,11 +123,10 @@ func isValidName(name string) models.Response {
 
 func containsSpecialCharacters(str string) bool {
 	f := func(r rune) bool {
-        return r < 'A' || r > 'z'
+		return r < 'A' || r > 'z'
 	}
 	if strings.IndexFunc(str, f) != -1 {
-        return true
-    }
+		return true
+	}
 	return false
 }
-

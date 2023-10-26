@@ -16,7 +16,7 @@ import (
 // @Accept		json
 // @Produce		json
 // @Param		set	body		models.MediaInput	true	"picture"
-// @Success		201	{object}	models.Response{data=[]models.Err}
+// @Success		201	{object}	models.Response{data=models.Analyze}
 // @Failure		400	{object}	models.Response{data=[]models.Err}
 // @Failure		401	{object}	models.Response{data=[]models.Err}
 // @Failure		503	{object}	models.Response{data=[]models.Err}
@@ -44,6 +44,7 @@ func (h *Handler) ImagePrediction(c *fiber.Ctx) error {
 	prediction := models.Analyze{
 		Accuracy: "0.8",
 		Name:     "Skata",
+		BirdId:   "333333",
 		Picture: models.MediaDB{
 			Id:       "123123",
 			Data:     string(dat),

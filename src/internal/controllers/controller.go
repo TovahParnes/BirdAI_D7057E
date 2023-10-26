@@ -5,18 +5,10 @@ import (
 )
 
 type Controller struct {
-	db repositories.IMongoInstance
+	db repositories.RepositoryEndpoints
 }
 
-//type IController interface {
-//	CGetUserById(authId string) (*models.User, error)
-//	CLogin(user *models.User) (*models.User, error)
-//	CListUsers(authId string) ([]*models.User, error)
-//	CDeleteUser(id, authId string) (*models.User, error)
-//	CUpdateUser(user *models.User) (*models.User, error)
-//}
-
-func NewController(db repositories.IMongoInstance) Controller {
+func NewController(db repositories.RepositoryEndpoints) Controller {
 	return Controller{
 		db: db,
 	}

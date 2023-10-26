@@ -778,10 +778,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.Err"
-                                            }
+                                            "$ref": "#/definitions/models.Analyze"
                                         }
                                     }
                                 }
@@ -1207,7 +1204,19 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.PostDB"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -2436,6 +2445,9 @@ const docTemplate = `{
                 "access": {
                     "type": "string"
                 },
+                "id": {
+                    "type": "string"
+                },
                 "userId": {
                     "type": "string"
                 }
@@ -2455,10 +2467,30 @@ const docTemplate = `{
                 }
             }
         },
+        "models.Analyze": {
+            "type": "object",
+            "properties": {
+                "accuracy": {
+                    "type": "string"
+                },
+                "birdId": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "picture": {
+                    "$ref": "#/definitions/models.MediaDB"
+                }
+            }
+        },
         "models.BirdInput": {
             "type": "object",
             "properties": {
                 "description": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "string"
                 },
                 "imageId": {
@@ -2511,6 +2543,20 @@ const docTemplate = `{
                 }
             }
         },
+        "models.MediaDB": {
+            "type": "object",
+            "properties": {
+                "_id": {
+                    "type": "string"
+                },
+                "data": {
+                    "type": "string"
+                },
+                "fileType": {
+                    "type": "string"
+                }
+            }
+        },
         "models.MediaInput": {
             "type": "object",
             "properties": {
@@ -2525,6 +2571,9 @@ const docTemplate = `{
         "models.MediaOutput": {
             "type": "object",
             "properties": {
+                "_id": {
+                    "type": "string"
+                },
                 "data": {
                     "type": "array",
                     "items": {
@@ -2533,34 +2582,14 @@ const docTemplate = `{
                 },
                 "fileType": {
                     "type": "string"
-                },
-                "id": {
-                    "type": "string"
                 }
             }
         },
-        "models.PostInput": {
+        "models.PostDB": {
             "type": "object",
             "properties": {
                 "birdId": {
                     "type": "string"
-                },
-                "imageId": {
-                    "type": "string"
-                },
-                "location": {
-                    "type": "string"
-                },
-                "soundId": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.PostOutput": {
-            "type": "object",
-            "properties": {
-                "bird": {
-                    "$ref": "#/definitions/models.BirdOutput"
                 },
                 "createdAt": {
                     "type": "string"
@@ -2568,17 +2597,54 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
-                "image": {
-                    "$ref": "#/definitions/models.MediaOutput"
+                "location": {
+                    "type": "string"
+                },
+                "mediaId": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.PostInput": {
+            "type": "object",
+            "properties": {
+                "_id": {
+                    "type": "string"
+                },
+                "birdId": {
+                    "type": "string"
                 },
                 "location": {
                     "type": "string"
                 },
-                "sound": {
-                    "$ref": "#/definitions/models.MediaOutput"
+                "media": {
+                    "$ref": "#/definitions/models.MediaInput"
+                }
+            }
+        },
+        "models.PostOutput": {
+            "type": "object",
+            "properties": {
+                "_id": {
+                    "type": "string"
+                },
+                "bird": {
+                    "$ref": "#/definitions/models.BirdOutput"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
                 },
                 "user": {
                     "$ref": "#/definitions/models.UserOutput"
+                },
+                "userMedia": {
+                    "$ref": "#/definitions/models.MediaOutput"
                 }
             }
         },
@@ -2614,11 +2680,11 @@ const docTemplate = `{
         "models.UserInput": {
             "type": "object",
             "properties": {
-                "_id": {
-                    "type": "string"
-                },
                 "active": {
                     "type": "boolean"
+                },
+                "id": {
+                    "type": "string"
                 },
                 "user": {
                     "type": "string"

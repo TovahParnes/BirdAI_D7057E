@@ -9,34 +9,40 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
-	"go.mongodb.org/mongo-driver/bson"
 )
 
 type Authentication struct {
-	UserColl repositories.IMongoCollection
+	UserColl repositories.UserRepository
 }
 
-func NewAuthentication(userCollection repositories.IMongoCollection) Authentication {
+func NewAuthentication(userCollection repositories.UserRepository) Authentication {
 	return Authentication{
 		UserColl: userCollection,
 	}
 }
 
 func (a *Authentication) LoginUser(user *models.UserLogin) models.Response {
-	response := a.UserColl.FindOne(bson.M{"auth_id": user.AuthId})
-	if response.Data.(models.Err).StatusCode != http.StatusNotFound {
-		return response
+	response := a.UserColl.GetUserByAuthId(user.AuthId)
+	// Check if data is type error
+	if utils.IsType(response, models.Err{}) {
+		if response.Data.(models.Err).StatusCode == http.StatusNotFound {
+			userDB := &models.UserDB{Username: user.Username, AuthId: user.AuthId, Active: true}
+			response = a.UserColl.CreateUser(*userDB)
+			if utils.IsTypeError(response) {
+				return response
+			}
+		} else {
+			return response
+		}
+	}
+	response = a.UserColl.GetUserByAuthId(user.AuthId)
+	if !response.Data.(*models.UserDB).Active {
+		return utils.ErrorDeleted(response.Data.(*models.UserDB).Username)
 	}
 
-	userDB := models.UserDB{Username: user.Username, AuthId: user.AuthId, Active: true}
-	createdResponse := a.UserColl.CreateOne(&userDB)
-	if utils.IsTypeError(createdResponse) {
-		return createdResponse
-	}
-	
 	// Create the Claims
 	claims := jwt.MapClaims{
-		"_id": createdResponse.Data.(*models.UserDB).Id,
+		"_id":      response.Data.(*models.UserDB).Id,
 		"username": user.Username,
 		"authId":   user.AuthId,
 	}
@@ -48,10 +54,10 @@ func (a *Authentication) LoginUser(user *models.UserLogin) models.Response {
 	if err != nil {
 		return utils.ErrorParams(err.Error())
 	}
-	
+
 	// Change authId to token in response
 	var UserCopy models.UserDB
-	UserCopy = *createdResponse.Data.(*models.UserDB)
+	UserCopy = *response.Data.(*models.UserDB)
 	UserCopy.AuthId = t
 
 	return utils.Response(UserCopy)
@@ -97,10 +103,9 @@ func (a *Authentication) CheckExpired(c *fiber.Ctx) models.Response {
 	//	}
 	//}
 	return utils.Response(models.UserDB{
-		Id : claims["_id"].(string),
+		Id:       claims["_id"].(string),
 		Username: claims["username"].(string),
 		AuthId:   claims["authId"].(string),
 		Active:   true,
 	})
 }
-
