@@ -3,6 +3,7 @@ package handlers
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -97,7 +98,11 @@ func (h *Handler) ListUsersPosts(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	response = h.controller.CListUsersPosts(userId, set, search)
+	setInt, err := strconv.Atoi(set)
+	if err != nil {
+		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
+	}
+	response = h.controller.CListUsersPosts(userId, setInt)
 	return utils.ResponseToStatus(c, response)
 }
 

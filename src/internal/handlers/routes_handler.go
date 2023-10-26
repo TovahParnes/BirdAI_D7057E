@@ -12,7 +12,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
-func New(app *fiber.App, db repositories.IMongoInstance) {
+func New(app *fiber.App, db repositories.RepositoryEndpoints) {
 	app.Use(cors.New())
 	//app.Use(jwtware.New(jwtware.Config{
 	//	SigningKey: jwtware.SigningKey{Key: []byte(os.Getenv("JWT_SECRET"))},

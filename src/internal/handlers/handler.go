@@ -11,9 +11,9 @@ type Handler struct {
 	auth       authentication.Authentication
 }
 
-func NewHandler(db repositories.IMongoInstance) Handler {
+func NewHandler(db repositories.RepositoryEndpoints) Handler {
 	return Handler{
 		controller: controllers.NewController(db),
-		auth:       authentication.NewAuthentication(db.GetCollection(repositories.UserColl)),
+		auth:       authentication.NewAuthentication(db.User),
 	}
 }

@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"birdai/src/internal/models"
-	"birdai/src/internal/repositories"
 	"birdai/src/internal/utils"
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -26,16 +25,13 @@ func (c *Controller) CListPosts(set string, search string) models.Response {
 	return utils.ErrorNotImplemented("CListPosts")
 }
 
-func (c *Controller) CListUsersPosts(userId string, set string, search string) models.Response {
+func (c *Controller) CListUsersPosts(userId string, set int) models.Response {
 	filter := bson.M{"_id": userId}
-	postColl := c.db.GetCollection(repositories.PostColl)
-	mediaColl := c.db.GetCollection(repositories.MediaColl)
-	userColl := c.db.GetCollection(repositories.UserColl)
 	//birdColl := c.db.GetCollection(repositories.BirdColl)
-	response := postColl.FindAll(filter, 0, 0)
+	response := c.db.Post.ListPosts(filter, set)
 	output := []models.PostOutput{}
 	for _, post := range response.Data.([]*models.PostDB) {
-		user := userColl.FindOne(bson.M{"_id": post.UserId})
+		user := c.db.User.GetUserById(post.UserId)
 		userOutput := models.UserOutput{
 			Id:        user.Data.(*models.UserDB).Id,
 			Username:  user.Data.(*models.UserDB).Username,
@@ -70,7 +66,7 @@ func (c *Controller) CListUsersPosts(userId string, set string, search string) m
 			Description: "Cool test bird",
 		}
 
-		userImage := mediaColl.FindOne(bson.M{"_id": post.MediaId})
+		userImage := c.db.Media.GetMediaById(post.MediaId)
 		userImageOutput := models.MediaOutput{
 			Id:       userImage.Data.(*models.MediaDB).Id,
 			Data:     []byte(userImage.Data.(*models.MediaDB).Data),
@@ -90,12 +86,11 @@ func (c *Controller) CListUsersPosts(userId string, set string, search string) m
 }
 
 func (c *Controller) CCreatePost(userId string, postInput *models.PostInput) models.Response {
-	mediaColl := c.db.GetCollection(repositories.MediaColl)
 	media := &models.MediaDB{
 		Data:     postInput.Media.Data,
 		FileType: postInput.Media.FileType,
 	}
-	response := mediaColl.CreateOne(media)
+	response := c.db.Media.CreateMedia(*media)
 	if utils.IsTypeError(response) {
 		return response
 	}
@@ -105,8 +100,7 @@ func (c *Controller) CCreatePost(userId string, postInput *models.PostInput) mod
 		Location: postInput.Location,
 		MediaId:  response.Data.(*models.MediaDB).Id,
 	}
-	postColl := c.db.GetCollection(repositories.PostColl)
-	response = postColl.CreateOne(post)
+	response = c.db.Post.CreatePost(*post)
 	return response
 }
 

@@ -2,16 +2,13 @@ package controllers
 
 import (
 	"birdai/src/internal/models"
-	"birdai/src/internal/repositories"
 	"birdai/src/internal/utils"
 
 	"go.mongodb.org/mongo-driver/bson"
 )
 
 func (c *Controller) CGetUserById(id string) models.Response {
-	coll := c.db.GetCollection(repositories.UserColl)
-	filter := bson.M{"_id": id}
-	response := coll.FindOne(filter)
+	response := c.db.User.GetUserById(id)
 
 	if utils.IsTypeError(response) {
 		return response
@@ -25,9 +22,7 @@ func (c *Controller) CGetUserById(id string) models.Response {
 }
 
 func (c *Controller) CGetUserByAuthId(authId string) models.Response {
-	coll := c.db.GetCollection(repositories.UserColl)
-	filter := bson.M{"auth_id": authId}
-	response := coll.FindOne(filter)
+	response := c.db.User.GetUserByAuthId(authId)
 
 	if utils.IsTypeError(response) {
 		return response
@@ -40,16 +35,15 @@ func (c *Controller) CGetUserByAuthId(authId string) models.Response {
 	return response
 }
 
-func (c *Controller) CListUsers(set, search string) models.Response {
-	coll := c.db.GetCollection(repositories.UserColl)
-	response := coll.FindAll(bson.M{}, 0, 0)
+func (c *Controller) CListUsers(set int) models.Response {
+	response := c.db.User.ListUsers(bson.M{}, set)
 	users := []*models.UserOutput{}
 
 	if utils.IsTypeError(response) {
 		return response
 	}
 
-	for _, usersObject := range response.Data.([]*models.UserDB) {
+	for _, usersObject := range response.Data.([]models.UserDB) {
 		users = append(users, models.UserDBToOutput(usersObject))
 	}
 
@@ -57,18 +51,11 @@ func (c *Controller) CListUsers(set, search string) models.Response {
 }
 
 func (c *Controller) CDeleteUser(id string) models.Response {
-	coll := c.db.GetCollection(repositories.UserColl)
-	filter := bson.M{"_id": id}
-	response := coll.DeleteOne(filter)
-	return response
+	return c.db.User.DeleteUser(id)
 }
 
 func (c *Controller) CUpdateUser(id string, user *models.UserInput) models.Response {
-	coll := c.db.GetCollection(repositories.UserColl)
-	response := coll.UpdateOne(bson.M{
-		"_id":      id,
-		"username": user.Username,
-		"active":   user.Active,
-	})
+	user.Id = id
+	response := c.db.User.UpdateUser(*user)
 	return response
 }

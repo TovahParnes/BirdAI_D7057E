@@ -26,7 +26,7 @@ type UserOutput struct {
 	Active    bool   `bson:"active"`
 }
 
-func UserDBToOutput(db *UserDB) *UserOutput {
+func UserDBToOutput(db UserDB) *UserOutput {
 	return &UserOutput{
 		Id:        db.Id,
 		Username:  db.Username,
