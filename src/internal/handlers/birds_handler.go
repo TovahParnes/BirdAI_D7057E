@@ -51,11 +51,10 @@ func (h *Handler) ListBirds(c *fiber.Ctx) error {
 
 	//	@Failure	404	{object}	models.Response{}
 	// if birds not found
-	
-	
+
 	queries := c.Queries()
 	set := queries["set"]
-	response := utils.IsValidSet(set)
+	response := utils.IsValidSet(&set)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
@@ -70,7 +69,6 @@ func (h *Handler) ListBirds(c *fiber.Ctx) error {
 	response = h.controller.CListBirds(setInt, search)
 	return utils.ResponseToStatus(c, response)
 }
-
 
 // UpdateBird is a function to update the given bird from the databse
 //
@@ -90,7 +88,7 @@ func (h *Handler) ListBirds(c *fiber.Ctx) error {
 // @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/birds/{id} [patch]
 func (h *Handler) UpdateBird(c *fiber.Ctx) error {
-response := h.auth.CheckExpired(c)
+	response := h.auth.CheckExpired(c)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
