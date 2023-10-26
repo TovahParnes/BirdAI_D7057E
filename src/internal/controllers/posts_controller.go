@@ -26,11 +26,11 @@ func (c *Controller) CListPosts(set string, search string) models.Response {
 }
 
 func (c *Controller) CListUsersPosts(userId string, set int) models.Response {
-	filter := bson.M{"_id": userId}
+	filter := bson.M{"user_id": userId}
 	//birdColl := c.db.GetCollection(repositories.BirdColl)
 	response := c.db.Post.ListPosts(filter, set)
 	output := []models.PostOutput{}
-	for _, post := range response.Data.([]*models.PostDB) {
+	for _, post := range response.Data.([]models.PostDB) {
 		user := c.db.User.GetUserById(post.UserId)
 		userOutput := models.UserOutput{
 			Id:        user.Data.(*models.UserDB).Id,
@@ -98,7 +98,7 @@ func (c *Controller) CCreatePost(userId string, postInput *models.PostInput) mod
 		UserId:   userId,
 		BirdId:   postInput.BirdId,
 		Location: postInput.Location,
-		MediaId:  response.Data.(*models.MediaDB).Id,
+		MediaId:  response.Data.(string),
 	}
 	response = c.db.Post.CreatePost(*post)
 	return response
