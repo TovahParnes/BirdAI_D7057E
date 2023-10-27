@@ -6,6 +6,7 @@ import { AppComponent } from '../app.component';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { UserResponse } from 'src/assets/components/components';
 
 @Component({
   selector: 'app-login',
@@ -23,32 +24,31 @@ export class LoginComponent {
   
   public triedLogIn = false;
 
-  postLoggedInUser(token: string): Observable<any> {
-    const header = {
-      'Authorization': `Bearer ${token}`
-    };
+  postLoggedInUser(): Observable<UserResponse> {
+    //const username = "fabianwidell"
+    const username = `${this.mainApp.user.name}`.replace(/[\s!@#$%^&*()_+{}\[\]:;<>,.?~\\|/`'"-]/g, '')
     const body = {
-      'username': `${this.mainApp.user.name}`,'authId': `${this.mainApp.user.id}`
+      'username': username,'authId': `${this.mainApp.user.id}`
     };
-    return this.httpClient.post<any>(environment.loginURL, body, { headers: header });
+    console.log(body);
+    return this.httpClient.post<UserResponse>(environment.identifyRequestURL+"/users", body);
   }
-
 
   login(): void {
     console.log(this.mainApp.user);
-    this.router.navigate(['mainpage']); // TODO-REMOVE
-
-    // this.postLoggedInUser("environment.secret")
-    // .subscribe(
-    //   () => {
-    //     console.log("logged in");
-    //     this.router.navigate(['mainpage']);
-    //   },
-    //   err => {
-    //     console.error("Could not login:" + err);
-    //   }
-    // );
+    this.postLoggedInUser()
+    .subscribe(
+      (userResponse: UserResponse) => {
+        console.log("logged in");
+        console.log(userResponse);
+        localStorage.setItem("auth",userResponse.data.authId);
+        console.log(localStorage.getItem("auth"));
+        this.router.navigate(['mainpage']);
+      },
+      err => {
+        console.error("Could not login:" + err);
+      }
+    );
     this.triedLogIn = true;
   }
 }
-
