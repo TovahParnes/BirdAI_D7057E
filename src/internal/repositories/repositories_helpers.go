@@ -22,11 +22,6 @@ var (
 	SetSize = 10
 )
 
-// TODO: Add custom error variables
-var (
-// ParseError = errors.New("")
-)
-
 // MongoInstance Instance of Mongo
 type MongoInstance struct {
 	Client      *mongo.Client
@@ -61,7 +56,6 @@ type MongoCollection struct {
 	ctx        context.Context
 }
 
-// IMongoCollection TODO: Update input when known what is needed
 type IMongoCollection interface {
 	UpdateOne(query bson.M) models.Response
 	DeleteOne(query bson.M) models.Response

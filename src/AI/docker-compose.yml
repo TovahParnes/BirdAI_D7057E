@@ -1,0 +1,32 @@
+version: '3'
+services:
+  service1:
+    build:
+      context: ./ai-controller
+      dockerfile: Dockerfile
+    image: ai-controller-image
+    container_name: ai-controller
+    depends_on:
+      - shared-requirements-image
+  service2:
+    build:
+      context: ./classification_model
+      dockerfile: Dockerfile
+    image: classification_model-image
+    container_name: classification_model
+    depends_on:
+      - shared-requirements-image
+  service3:
+    build:
+      context: ./detection_model
+      dockerfile: Dockerfile
+    image: detection_model-image
+    container_name: detection_model
+    depends_on:
+      - shared-requirements-image
+  shared-requirements-image:
+    build:
+      dockerfile: Dockerfile
+    image: shared-requirements-image
+networks:
+  ai_network:

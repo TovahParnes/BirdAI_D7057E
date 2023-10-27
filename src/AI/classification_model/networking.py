@@ -1,75 +1,40 @@
 from flask import Flask, request, jsonify
 from PIL import Image
 import io
-import base64
 import numpy as np
-
 
 import classification
 
 app = Flask(__name__)
-_receiver_port = 80
+_receiver_port = 3502
 
 
 def listen():
     app.run(host='0.0.0.0', port=_receiver_port)
 
 
-@app.route('/upload', methods=['POST'])
-def upload_image():
+@app.route('/process_image', methods=['POST'])
+def process_image():
+    data = request.get_json()
 
-    try:
-        _model = classification.load_model()
-    except:
-        return jsonify({'error': 'Loading model failed.'})
+    width = data["width"]
+    height = data["height"]
+    mode = data["mode"]
+    pixels = [value for pixel in data["pixels"] for value in pixel]
 
-    try:
-        data = request.get_json()
-    except:
-        return jsonify({'error': 'failed to get data from response.'})
+    # Create a byte array from the pixel data
+    pixel_bytes = bytes(pixels)
 
-    try:
-        image_data = data.get('image_data')
-        if image_data is None:
-            raise ValueError('Failed to get image_data from JSON data.')
-    except Exception as e:
-        error_msg = str(e)
-        return jsonify({'error': error_msg})
+    # Create a PIL image from the pixel data
+    _image = Image.frombytes(mode, (width, height), pixel_bytes)
 
-    if image_data is not None:
-        try:
-            # Decode base64 to obtain binary image data
-            image_bytes = base64.b64decode(image_data)
-        except:
-            return jsonify({'error': 'Decoding of data failed'})
+    _image.show()
 
-        try:
-            # Create a PIL Image from the binary data
-            image = Image.open(io.BytesIO(image_bytes))
-        except:
-            return jsonify({'error': 'Failed to convert data to Image.'})
+    _image = np.array(_image)  # Convert the image to a NumPy array
+    _image = _image.reshape((1,) + _image.shape)  # Reshape the image to have a batch dimension
 
-        try:
-            image = image.resize((224, 224))  # Resize the image to your target size
-            image = np.array(image)  # Convert the image to a NumPy array
-            image = image.reshape((1,) + image.shape)  # Reshape the image to have a batch dimension
-        except:
-            return jsonify({'error': 'Reshaping the image failed.'})
+    _result = classification.predict(classification.load_model(), _image)
 
-        try:
-            # Assuming classification.predict() takes an image object as its argument
-            prediction = classification.predict(classification.load_model(), image)
-        except:
-            return jsonify({'error': 'Failed during classification'})
+    _pos = int(np.argmax(_result, axis=-1)[0])
 
-        try:
-            # Map class index to category label
-            pos = int(np.argmax(prediction, axis=-1)[0])
-            msg = "Image received and processed successfully with position: ", pos
-            return jsonify({'message': msg})
-        except:
-            print("Failed during return message composing")
-            return jsonify({'error': 'Failed during return message composing'})
-
-    else:
-        return jsonify({'error': 'No image_data found in the request'})
+    return jsonify({'message': 'Image successfully received and processed', 'pos': _pos})

@@ -6,43 +6,21 @@ type PostDB struct {
 	BirdId    string `bson:"bird_id"`
 	CreatedAt string `bson:"created_at"`
 	Location  string `bson:"location"`
-	ImageId   string `bson:"image_id"`
-	SoundId   string `bson:"sound_id"`
+	MediaId   string `bson:"media_id"`
 }
 
 type PostInput struct {
-	Id       string `bson:"_id"`
-	UserId   string `bson:"user_id"`
-	BirdId   string `bson:"bird_id"`
-	Location string `bson:"location"`
-	ImageId  string `bson:"image_id"`
-	SoundId  string `bson:"sound_id"`
-}
-
-type PostCreate struct {
-	UserId   string `bson:"user_id"`
-	BirdId   string `bson:"bird_id"`
-	Location string `bson:"location"`
-	ImageId  string `bson:"image_id"`
-	SoundId  string `bson:"sound_id"`
+	Id       string     `bson:"_id" json:"_id" form:"_id"`
+	BirdId   string     `bson:"bird_id" json:"birdId" form:"birdId"`
+	Location string     `bson:"location" json:"location" form:"location"`
+	Media    MediaInput `bson:"media" json:"media" form:"media"`
 }
 
 type PostOutput struct {
-	Id        string      `bson:"_id"`
-	User      UserOutput  `bson:"user"`
-	Bird      BirdOutput  `bson:"bird"`
-	CreatedAt string      `bson:"created_at"`
-	Location  string      `bson:"location"`
-	Image     MediaOutput `bson:"image"`
-	Sound     MediaOutput `bson:"sound"`
-}
-
-func PostInputToPostCreate(post *PostInput, userId string) *PostCreate {
-	return &PostCreate{
-		UserId:   userId,
-		BirdId:   post.BirdId,
-		Location: post.Location,
-		ImageId:  post.ImageId,
-		SoundId:  post.SoundId,
-	}
+	Id        string      `bson:"_id" json:"_id" form:"_id"`
+	User      UserOutput  `bson:"user" json:"user" form:"user"`
+	Bird      BirdOutput  `bson:"bird" json:"bird" form:"bird"`
+	CreatedAt string      `bson:"created_at" json:"createdAt" form:"createdAt"`
+	Location  string      `bson:"location" json:"location" form:"location"`
+	UserMedia MediaOutput `bson:"user_media" json:"userMedia" form:"userMedia"`
 }

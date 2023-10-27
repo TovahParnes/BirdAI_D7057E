@@ -103,20 +103,22 @@ func (h *Handler) ListAdmins(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-	
+
 	queries := c.Queries()
 	set := queries["set"]
 	response = utils.IsValidSet(&set)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
+	setInt := response.Data.(int)
+
 	search := queries["search"]
 	response = utils.IsValidSearch(search)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	response = h.controller.CListAdmins(set, search)
+	response = h.controller.CListAdmins(setInt, search)
 	return utils.ResponseToStatus(c, response)
 }
 
@@ -193,13 +195,13 @@ func (h *Handler) UpdateAdmin(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-	
+
 	id := c.Params("id")
 	response = utils.IsValidId(id)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-	
+
 	var admin *models.AdminInput
 	if err := c.BodyParser(&admin); err != nil {
 		//	@Failure	400	{object}	models.Response{}

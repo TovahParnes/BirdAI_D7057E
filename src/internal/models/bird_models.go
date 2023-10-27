@@ -23,3 +23,13 @@ type BirdOutput struct {
 	Image       MediaOutput `bson:"image"`
 	Sound       MediaOutput `bson:"sound"`
 }
+
+func BirdDBToOutput(db *BirdDB, image *MediaOutput, sound *MediaOutput) *BirdOutput {
+	return &BirdOutput{
+		Id:          db.Id,
+		Name:        db.Name,
+		Description: db.Description,
+		Image:       *image,
+		Sound:       *sound,
+	}
+}

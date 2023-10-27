@@ -1,37 +1,4 @@
-<div class="navbar" *ngIf="socialAuthService.authState | async as socialUser">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
-
-  <div class="nav-logo">
-    <img src="../assets/birdAI-logo.svg" width="40px" height="40px">
-  </div>
-
-  <div class="nav-buttons">
-
-    <button class="selected-nav-button" (click)="mainApp.navigateToHome()"><span class="material-symbols-outlined">home</span></button>
-    <button class="nav-button" (click)="mainApp.navigateToLibrary()"><span class="material-symbols-outlined">image</span></button>
-    <button class="nav-button" (click)="mainApp.navigateToTakenImages()"><span class="material-symbols-outlined">grid_view</span></button>  
-
-  </div>
-
-  <div class="profile">
-    <button class="profile-button" tabindex="0">
-      <img src="{{socialUser.photoUrl}}" width="40px" height="40px" style="border-radius: 50%;">
-    </button> 
-    <ul class="sub-menu">
-
-      <!-- <mat-slide-toggle [(ngModel)]="mainApp.isDark">Darkmode</mat-slide-toggle><br> -->
-      <button mat-raised-button (click)="mainApp.navigateToProfilePage()">Profile</button><br> <!-- {{socialUser.name}}<span class="material-symbols-outlined">chevron_right</span> -->
-      <button mat-raised-button (click)="mainApp.logout()">Logout</button>
-
-    </ul>
-  </div>
-</div>
-
-<p></p>
-
-<div style="text-align: center; font-size: 32px">
-  Home
-</div>
+<app-navbar firstSelected="true" secondSelected="false" thirdSelected="false"></app-navbar>
 
 <mat-card class="card">
   <h1 style="margin-top: 0px;">Welcome to Bird AI</h1>

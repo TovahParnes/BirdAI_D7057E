@@ -1,85 +1,25 @@
-<div class="navbar" *ngIf="socialAuthService.authState | async as socialUser">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+<app-navbar firstSelected="false" secondSelected="true" thirdSelected="false"></app-navbar>
 
-    <div class="nav-logo">
-        <img src="../assets/birdAI-logo.svg" width="40px" height="40px">
-    </div>
+<!-- 
+  The display elements for the folders need to get the images, names & dates dynamically from the backend in a
+  loop generating all or a set amount with the user needing to scroll to fetch more folders. size and format 
+  of presented folders should be changed to make the viewing of folder easier for the user. 
+-->
 
-    <div class="nav-buttons">
-        <button class="nav-button" (click)="navigateToHome()"><span class="material-symbols-outlined">home</span></button>
-        <button class="nav-button" (click)="navigateToLibrary()"><span class="material-symbols-outlined">image</span></button>
-        <button class="selected-nav-button" (click)="navigateToTakenImages()"><span class="material-symbols-outlined">grid_view</span></button>  
-    </div>
-
-    <div class="profile">
-        <button class="profile-button" tabindex="0">
-        <img src="{{socialUser.photoUrl}}" width="40px" height="40px" style="border-radius: 50%;">
-        </button> 
-        <ul class="sub-menu">
-        <p>{{socialUser.name}}</p>
-        <button class="sub-menu-button" mat-raised-button (click)="logout()">Settings</button>
-        <button class="sub-menu-button" mat-raised-button (click)="logout()">Logout</button>
-        </ul>
-    </div>
-</div>
-
-<p></p>
-
-
-<div style="text-align: center; font-size: 32px">
-  General Library
-</div>
-
-<p></p>
-
-<div class="container">
-
-  <div class="card-container">
-    <mat-button-toggle-group multiple>
-      <mat-button-toggle (click)="sortCards()" style="background-color: #2196f3;">Alphabetical order</mat-button-toggle>
-      <mat-button-toggle (click)="toggleFound()" [style.background-color]="color">Sort by Found</mat-button-toggle>
-    </mat-button-toggle-group>
-    <div>
-      <p style="font-size: smaller; margin-top: 1px;">Name:</p>
-    <select #selectElement (change)="filterCards(selectElement.value)">
-      <option value="">All</option>
-      <ng-container *ngFor="let letter of alphabet">
-        <option [value]="letter">{{ letter }}</option>
-      </ng-container>
-    </select>
-  </div>
-    <div>
-      <p style="font-size: smaller;margin-top: 1px;">Species:</p>
-      <select #selectElement>
-        <option value="birds">Birds</option>
-        <option value="other">Other Species</option>
-      </select>
-    </div>
-  </div>
-
+<!-- 
+<div *ngFor="let card of cardlist">
   <p></p>
-
-  <!-- <div class="card-container">
-    <div *ngFor="let card of cardlist">
-      <a target="_blank" (click)="navigateToSpecies(card.imageSrc, card.title)">
-      <app-card title={{card.title}} imageSrc={{card.imageSrc}}></app-card>
-      </a>
-    </div>
-  </div> -->
-
-  <p></p>
-
-  <div class="card-container">
-    <div *ngFor="let item of cardlist">
-      <a target="_blank" (click)="navigateToSpecies(item.image, item.title)">
-        <app-card title={{item.title}} imageSrc={{item.image}}></app-card>
-        </a>
-    </div>
-  </div>
-
+  <a target="_blank" (click)="navigateToSpecies(card.imageSrc, card.title, card.date)">
+    <app-card2 title={{card.title}} imageSrc={{card.imageSrc}} date={{card.date}}></app-card2>
+  </a>
 </div>
+-->
 
-
+<div *ngFor="let item of list1">
+    <p></p>
+    <a target="_blank" (click)="navigateToSpecies(item.image, item.title, item.date)">
+      <app-card2 title={{item.title}} imageSrc={{item.image}} date={{item.date}}></app-card2>
+    </a>
+</div>
+        
 <app-bottominfo></app-bottominfo>
-
-      

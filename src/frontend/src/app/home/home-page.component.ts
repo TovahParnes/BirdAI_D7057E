@@ -32,8 +32,6 @@ interface AnalyzedBird {
 
 export class MainPageComponent implements OnInit {
 
-  user: SocialUser = new SocialUser;
-  loggedIn: boolean = false;
   isLinear = false;
   form!: FormGroup;
   selectedImage: any;
@@ -58,11 +56,6 @@ export class MainPageComponent implements OnInit {
   }
 
   ngOnInit() {
-      this.socialAuthService.authState.subscribe((user) => {
-      this.user = user;
-      this.loggedIn = (user != null);
-    }),
-
     this.form = this.formBuilder.group({
       option: new FormControl(), // Initialize with a default value
     });

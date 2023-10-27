@@ -5,34 +5,34 @@ import (
 	"birdai/src/internal/repositories"
 	"birdai/src/internal/utils"
 	"context"
+	"testing"
+
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"testing"
 )
 
-func TestPostEndpoints(t *testing.T) {
+func TestPostRepository(t *testing.T) {
 	mi, err := repositories.Connect("testDB", "mongodb://localhost:27017")
 	require.Nil(t, err)
 	mi.AddCollection(repositories.PostColl)
-	postColl := repositories.PostEndpoints{Collection: mi.GetCollection(repositories.PostColl)}
+	postColl := repositories.PostRepository{}
+	postColl.SetCollection(mi.GetCollection(repositories.PostColl))
 
 	testPost1 := &models.PostDB{
 		UserId:   primitive.NewObjectID().Hex(),
 		BirdId:   primitive.NewObjectID().Hex(),
 		Location: "TestLocation",
-		ImageId:  primitive.NewObjectID().Hex(),
-		SoundId:  primitive.NewObjectID().Hex(),
+		MediaId:  primitive.NewObjectID().Hex(),
 	}
 
 	testPost2 := &models.PostDB{
 		UserId:   primitive.NewObjectID().Hex(),
 		BirdId:   primitive.NewObjectID().Hex(),
 		Location: "TestLocation",
-		ImageId:  primitive.NewObjectID().Hex(),
-		SoundId:  primitive.NewObjectID().Hex(),
+		MediaId:  primitive.NewObjectID().Hex(),
 	}
 
 	t.Run("Test CreatePost", func(t *testing.T) {
@@ -68,7 +68,7 @@ func TestPostEndpoints(t *testing.T) {
 
 	t.Run("Test UpdatePost", func(t *testing.T) {
 		updatePost := models.PostInput{
-			Id:       testPost1.Id,
+			//Id:       testPost1.Id,
 			Location: "Location update",
 		}
 		response := postColl.UpdatePost(updatePost)

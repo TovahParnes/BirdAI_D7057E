@@ -1,0 +1,48 @@
+<div class="navbar" *ngIf="socialAuthService.authState | async as socialUser">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+  
+    <div class="nav-logo">
+      <img (click)="navigateToHome()" src="../assets/birdAI-logo.svg" width="40px" height="40px">
+    </div>
+  
+    <div class="nav-buttons">
+        <div class="tooltip">
+            <button *ngIf="firstSelected; else firstNotSelected" class="selected-nav-button" (click)="navigateToHome()"><span class="material-symbols-outlined">home</span></button>
+            <ng-template #firstNotSelected>
+                <button class="nav-button" (click)="navigateToHome()"><span class="material-symbols-outlined">home</span></button>
+            </ng-template>
+            <span class="tooltiptext">Home</span>
+        </div>
+
+        <div class="tooltip">
+            <button *ngIf="secondSelected; else secondNotSelected" class="selected-nav-button" (click)="navigateToTakenImages()"><span class="material-symbols-outlined">image</span></button>
+            <ng-template #secondNotSelected>
+                <button class="nav-button" (click)="navigateToTakenImages()"><span class="material-symbols-outlined">image</span></button>
+            </ng-template>
+            <span class="tooltiptext">Images</span>
+        </div>
+
+        <div class="tooltip">
+            <button *ngIf="thirdSelected; else thirdNotSelected" class="selected-nav-button" (click)="navigateToLibrary()"><span class="material-symbols-outlined">grid_view</span></button>  
+            <ng-template #thirdNotSelected>
+                <button class="nav-button" (click)="navigateToLibrary()"><span class="material-symbols-outlined">grid_view</span></button>  
+            </ng-template>
+            <span class="tooltiptext">Library</span>
+        </div>
+
+    </div>
+  
+    <div class="profile">
+      <button class="profile-button" tabindex="0">
+        <img src="{{socialUser.photoUrl}}" width="40px" height="40px" style="border-radius: 50%;">
+      </button> 
+      <ul class="sub-menu">
+  
+        <!-- <mat-slide-toggle [(ngModel)]="mainApp.isDark">Darkmode</mat-slide-toggle><br> -->
+        <button mat-raised-button (click)="navigateToProfilePage()">Profile</button><br> <!-- {{socialUser.name}}<span class="material-symbols-outlined">chevron_right</span> -->
+        <button mat-raised-button (click)="logout()">Logout</button>
+  
+      </ul>
+    </div>
+</div>
+<p></p>

@@ -4,6 +4,8 @@ definitions:
     properties:
       access:
         type: string
+      id:
+        type: string
       userId:
         type: string
     type: object
@@ -16,9 +18,22 @@ definitions:
       user:
         $ref: '#/definitions/models.UserOutput'
     type: object
+  models.Analyze:
+    properties:
+      accuracy:
+        type: string
+      birdId:
+        type: string
+      name:
+        type: string
+      picture:
+        $ref: '#/definitions/models.MediaDB'
+    type: object
   models.BirdInput:
     properties:
       description:
+        type: string
+      id:
         type: string
       imageId:
         type: string
@@ -53,6 +68,15 @@ definitions:
       status:
         type: integer
     type: object
+  models.MediaDB:
+    properties:
+      _id:
+        type: string
+      data:
+        type: string
+      fileType:
+        type: string
+    type: object
   models.MediaInput:
     properties:
       data:
@@ -62,42 +86,55 @@ definitions:
     type: object
   models.MediaOutput:
     properties:
+      _id:
+        type: string
       data:
         items:
           type: integer
         type: array
       fileType:
         type: string
-      id:
-        type: string
     type: object
-  models.PostInput:
+  models.PostDB:
     properties:
       birdId:
         type: string
-      imageId:
-        type: string
-      location:
-        type: string
-      soundId:
-        type: string
-    type: object
-  models.PostOutput:
-    properties:
-      bird:
-        $ref: '#/definitions/models.BirdOutput'
       createdAt:
         type: string
       id:
         type: string
-      image:
-        $ref: '#/definitions/models.MediaOutput'
       location:
         type: string
-      sound:
-        $ref: '#/definitions/models.MediaOutput'
+      mediaId:
+        type: string
+      userId:
+        type: string
+    type: object
+  models.PostInput:
+    properties:
+      _id:
+        type: string
+      birdId:
+        type: string
+      location:
+        type: string
+      media:
+        $ref: '#/definitions/models.MediaInput'
+    type: object
+  models.PostOutput:
+    properties:
+      _id:
+        type: string
+      bird:
+        $ref: '#/definitions/models.BirdOutput'
+      createdAt:
+        type: string
+      location:
+        type: string
       user:
         $ref: '#/definitions/models.UserOutput'
+      userMedia:
+        $ref: '#/definitions/models.MediaOutput'
     type: object
   models.Response:
     properties:
@@ -120,10 +157,10 @@ definitions:
     type: object
   models.UserInput:
     properties:
-      _id:
-        type: string
       active:
         type: boolean
+      id:
+        type: string
       user:
         type: string
     type: object
@@ -563,9 +600,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/models.Err'
-                  type: array
+                  $ref: '#/definitions/models.Analyze'
               type: object
         "400":
           description: Bad Request
@@ -798,7 +833,12 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/models.Response'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.PostDB'
+              type: object
         "400":
           description: Bad Request
           schema:

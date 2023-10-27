@@ -62,30 +62,6 @@ export class SpeciesPageComponent implements AfterViewInit{
     });
   }
 
-  navigateToHome(): void {
-    this.router.navigate(['mainpage']);
-  }
-
-  navigateToTakenImages(): void {
-    this.router.navigate(['takenImages']);
-  }
-
-  navigateToLibrary(): void {
-    this.router.navigate(['library']);
-  }
-
-  navigateToProfilePage(): void {
-    this.router.navigate(['profile']);
-  }
-
-  logout(): void {
-    this.socialAuthService.signOut().then(() => this.router.navigate(['login']));
-  }
-
-  toggleTheme(): void {
-    //this.mainApp.switchDarkmodeSetting();
-  }
-
   currentImageIndex = 0;
 
   ngAfterViewInit() {

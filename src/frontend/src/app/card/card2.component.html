@@ -1,10 +1,9 @@
-
-    <div class="container" (mouseenter)="changeTextColor('#2196f3')" (mouseleave)="changeTextColor('white')">
-        <div class="desc" style="display: flex;justify-content: space-between;" [style.color]=textColor>
-        <p style="flex: 1;">{{title}}</p>
-        <p style="flex: 1; text-align: right;">{{date}}</p>
-        </div>
-        <div class="gallery">
-            <img mat-card-image [src]="imageSrc" alt="Duck" style="width: 50%;">
-        </div>
+<mat-card class="card" (mouseenter)="changeTextColor('#2196f3')" (mouseleave)="changeTextColor('white')">
+    <div class="desc" style="display: flex;justify-content: space-between;" [style.color]=textColor>
+    <p style="flex: 1;">{{title}}</p>
+    <p style="flex: 1; text-align: right;">{{date}}</p>
     </div>
+    <div class="gallery">
+        <img mat-card-image [src]="imageSrc" alt="Duck" style="width: 50%;">
+    </div>
+</mat-card>
