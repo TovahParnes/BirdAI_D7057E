@@ -10,16 +10,15 @@ import { Observable } from 'rxjs';
 import { NgOptimizedImage } from '@angular/common'
 import jsonData from '../../assets/data.json';
 
-interface list3 {
+interface UserBirdList {
   list3:{   
-    //dataitem: dataitem  
     title: string;
     image: string;
     accuracy: string;
   }[]
 }
 
-interface dataitem {
+interface AnalyzedBird {
   title: string;
   image: string;
   accuracy: string;
@@ -40,10 +39,9 @@ export class MainPageComponent implements OnInit {
   selectedImage: any;
   isLoading: boolean = false;
   print =""
-  element!: dataitem
-  dummyitem: dataitem = {title:'test',image:'test',accuracy:'test'}
-  jsonlist = jsonData[2] as list3;
-  //jsonlist: list3 ={ list3: [{dataitem: this.dummyitem},]}
+  element!: AnalyzedBird
+  dummyitem: AnalyzedBird = {title:'test',image:'test',accuracy:'test'}
+  jsonlist = jsonData[2] as UserBirdList;
 
   data: any;
   dataImg: any;

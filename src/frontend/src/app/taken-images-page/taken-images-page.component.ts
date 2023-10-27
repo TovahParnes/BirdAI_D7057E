@@ -49,10 +49,9 @@ export class TakenImagesPageComponent {
     private http: HttpClient,
     ) {
   }
-  user: SocialUser = new SocialUser;
   userMe!: LoginUser;
   userList!: listOutput;
-  loggedIn: boolean = false;
+
   
 
   logout(): void {
@@ -133,10 +132,6 @@ export class TakenImagesPageComponent {
   }
 
   ngOnInit(): void {
-    this.socialAuthService.authState.subscribe((user) => {
-    this.user = user;
-    this.loggedIn = (user != null);
-  }),
     this.getData().subscribe((response) => {
       const data = response;
       this.cardlist = data.find((item) => 'list2' in item)?.list2 || [];
