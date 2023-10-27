@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
-import {AnalyzeResponse} from 'src/assets/components/components';
+import {AnalyzeResponse, Post, PostData} from 'src/assets/components/components';
 import {AppComponent} from '../app.component';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -48,6 +48,7 @@ export class MainPageComponent implements OnInit {
   data: any;
   dataImg: any;
   analyzed: AnalyzeResponse | null = null;
+  toggle = true;
 
 
   constructor(
@@ -68,6 +69,7 @@ export class MainPageComponent implements OnInit {
       option: new FormControl(), // Initialize with a default value
     });
     this.getJsonData();
+    console.log(localStorage.getItem("auth"));
   }
 
   onFileSelected(event: any) {
@@ -109,25 +111,59 @@ export class MainPageComponent implements OnInit {
         console.error("Failed at sending data:" + err); 
       }
     );
-    this.isLoading = false
+    this.isLoading = false;
+    this.toggle = true;
   }
 
   //AddnewBird sparar temporärt i jsonlist, detta skulle kunna skickas mellan sidorna
   addNewBird(name: string, imageUrl:string, accuracy:string){
-    //const newitem : { dataitem: dataitem } = {dataitem: {"title": name, "image": imageUrl, "accuracy": accuracy} };
     const newitem = {"title": name, "image": imageUrl, "accuracy": accuracy}
     this.jsonlist.list3.push(newitem)
-    //this.jsonlist.list3.push(newitem)
 
   }
 
-  //exempel på hur det ifrån json
   getJsonData(){
-    // if (this.jsonlist) {
-    //   this.element = this.jsonlist.list3[1].dataitem;
-    // }
     this.element = this.jsonlist.list3[1]
   }
 
+  togglePreview(){
+    if(this.toggle){
+      this.toggle = false;
+    }else{
+      this.toggle = true;
+    }
+  }
 
+  sendPost(token:string) {
+      if (this.analyzed){
+      const header = {
+        'Authorization': `Bearer ${token}`
+      };
+      const postdata = {'birdId': this.analyzed.data.name, 'imageId': this.analyzed.data.picture.data, 'location': "no", 'soundId':"no"};
+      console.log(postdata);
+      return this.http.post<PostData>(environment.identifyRequestURL+"/posts",postdata,{ headers: header });
+      }else{
+        return null
+      }
+  }
+//createPost fungerar ej pga bad request error (fel på strukt skickad) dock svårt att testa pga swagger 
+//kraschar varje gång jag ska skicka den på localhosten
+  createPost(){
+    const authKey = localStorage.getItem("auth");
+    if(authKey){
+    this.sendPost(authKey)?.subscribe(
+      (response: PostData) => {
+        console.log("Succesfully sent data");
+        console.log(response);
+        this.form.reset();
+        this.dataImg = this.selectedImage;
+        this.selectedImage = null;
+        console.log(response);
+      },
+      err => { 
+        console.error("Failed at sending data:" + err);
+      }
+    );
+    }
+  }
 }

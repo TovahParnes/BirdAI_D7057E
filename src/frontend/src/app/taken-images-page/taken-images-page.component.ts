@@ -6,7 +6,7 @@ import { CardComponent } from '../card/card.component';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import {User,UserResponse} from 'src/assets/components/components';
+import {LoginUser,UserResponse, listOutput} from 'src/assets/components/components';
 
 @Component({
   selector: 'app-taken-images-page',
@@ -50,9 +50,9 @@ export class TakenImagesPageComponent {
     ) {
   }
   user: SocialUser = new SocialUser;
-  userMe!: User
+  userMe!: LoginUser;
+  userList!: listOutput;
   loggedIn: boolean = false;
-  secret: string = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoSWQiOiJzdHJpbmciLCJ1c2VybmFtZSI6InN0cmluZyJ9.cVENCSr6dIuKnVgijgauLbAYj9gdGnwFLbfsxGicSHA'
   
 
   logout(): void {
@@ -128,8 +128,8 @@ export class TakenImagesPageComponent {
   getCurrentUser(token: string){
     const header = {
       'Authorization': `Bearer ${token}`
-    }
-    return this.http.get<UserResponse>(environment.identifyRequestURL+"/users/me",{ headers: header })
+    };
+    return this.http.get<UserResponse>(environment.identifyRequestURL+"/users/me",{ headers: header });
   }
 
   ngOnInit(): void {
@@ -142,17 +142,34 @@ export class TakenImagesPageComponent {
       this.cardlist = data.find((item) => 'list2' in item)?.list2 || [];
       this.foundlist = data.find((item) => 'list1' in item)?.list1 || [];
       this.backupCards = this.cardlist
-      const userMe = this.getCurrentUser(this.secret).subscribe(
+    });
+    const authKey = localStorage.getItem("auth");
+    if(authKey){
+      this.getCurrentUser(authKey).subscribe(
         (response: UserResponse) => {
-          console.log("Succesfully sent data");
+          console.log("Succesfully got userMe");
           console.log(response.data);
           this.userMe = response.data;
-        },
-        err => { 
+          console.log(this.userMe);
+          //after getting currentuser I have to immediatly run the getCurrentUserList or else the nginit will run this part before for some reason, 
+          //the value of this.userMe is set properly outside nginit but not inside if it is not nestled like this
+          this.getCurrentUserList().subscribe(
+            (response: listOutput) => {
+              console.log("Succesfully retrieved user list");
+              console.log(response.data);
+              this.userList = response;
+            },err => { 
+              console.error("Failed at getting user list:" + err); 
+            }
+          )
+          console.log(this.userList)
+        },err => { 
           console.error("Failed at getting userMe:" + err); 
         }
       )
-      console.log(userMe)
-    });
+    }
+  }
+  getCurrentUserList(){
+    return this.http.get<listOutput>(environment.identifyRequestURL+"/users/"+this.userMe._id+"/posts/list");
   }
 }

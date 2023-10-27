@@ -94,13 +94,19 @@
 
 <p></p>
 
-<div *ngIf="analyzed" >
-  <mat-card class="card" style="text-align: center;">
-    <!-- <img id="ItemPreview" src={{analyzed.data.picture.data}}> -->
-    <img id="ItemPreview" src="{{jsonlist.list3[1].image}}" width="100%">
-    <p>Name: {{analyzed.data.name}}</p>
-    <p>Accuracy: {{analyzed.data.accuracy}}</p>
-  </mat-card>
+<div *ngIf="toggle">
+  <div *ngIf="analyzed">
+    <mat-card class="card" style="text-align: center;">
+      <!-- <img id="ItemPreview" src={{analyzed.data.picture.data}}> -->
+      <img id="ItemPreview" src="{{jsonlist.list3[1].image}}" width="100%">
+      <p>Name: {{analyzed.data.name}}</p>
+      <p>Accuracy: {{analyzed.data.accuracy}}</p>
+      <div style="display: flex; flex-direction: row; justify-content: center;">
+        <button mat-button (click)="togglePreview()">Remove</button>
+        <button mat-button (click)="createPost()">Post</button>
+    </div>
+    </mat-card>
+  </div>
 </div>
 
 

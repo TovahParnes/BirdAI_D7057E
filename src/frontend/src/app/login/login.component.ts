@@ -25,9 +25,12 @@ export class LoginComponent {
   public triedLogIn = false;
 
   postLoggedInUser(): Observable<UserResponse> {
+    //const username = "fabianwidell"
+    const username = `${this.mainApp.user.name}`.replace(/[\s!@#$%^&*()_+{}\[\]:;<>,.?~\\|/`'"-]/g, '')
     const body = {
-      'username': `${this.mainApp.user.name}`,'authId': `${this.mainApp.user.id}`
+      'username': username,'authId': `${this.mainApp.user.id}`
     };
+    console.log(body);
     return this.httpClient.post<UserResponse>(environment.identifyRequestURL+"/users", body);
   }
 
@@ -38,8 +41,8 @@ export class LoginComponent {
       (userResponse: UserResponse) => {
         console.log("logged in");
         console.log(userResponse);
-        // localStorage.setItem("auth",userResponse.data.authId);
-        // console.log(localStorage.getItem("auth"));
+        localStorage.setItem("auth",userResponse.data.authId);
+        console.log(localStorage.getItem("auth"));
         this.router.navigate(['mainpage']);
       },
       err => {
