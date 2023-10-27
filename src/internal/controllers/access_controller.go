@@ -7,14 +7,8 @@ import (
 )
 
 func (c *Controller) CIsAdmin(curUserId string) models.Response {
-	/*
-	response := c.CGetUserByAuthId(authId)
-	if utils.IsTypeError(response) {
-		return response
-	}
-
-	response = c.CGetAdminById(curUserId)
-	if utils.IsTypeError(response) {
+	response := c.CGetAdminByUserId(curUserId)
+	if utils.IsTypeError(response)  && response.Data.(models.Err).StatusCode != http.StatusNotFound{
 		return response
 	}
 
@@ -23,14 +17,11 @@ func (c *Controller) CIsAdmin(curUserId string) models.Response {
 	}
 
 	return utils.ErrorForbidden("User is not admin")
-	*/
-	return utils.Response("TODO: Is admin")
 }
 
 func (c *Controller) CIsSuperAdmin(curUserId string) models.Response {
-	/*
-	response = c.CGetAdminById(curUserId)
-	if utils.IsTypeError(response) {
+	response := c.CGetAdminByUserId(curUserId)
+	if utils.IsTypeError(response) && response.Data.(models.Err).StatusCode != http.StatusNotFound{
 		return response
 	}
 
@@ -39,13 +30,11 @@ func (c *Controller) CIsSuperAdmin(curUserId string) models.Response {
 	}
 	
 	return utils.ErrorForbidden("User is not superadmin")
-	*/
-	return utils.Response("TODO: Is superadmin")
 }
 
 func (c *Controller) CIsPostsUser(curUserId string, postId string) models.Response {
 	response := c.CGetPostById(postId)
-	if utils.IsTypeError(response) {
+	if utils.IsTypeError(response)  && response.Data.(models.Err).StatusCode != http.StatusNotFound{
 		return response
 	}
 

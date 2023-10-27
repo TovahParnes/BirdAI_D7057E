@@ -3,6 +3,7 @@ package repositories
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -19,6 +20,12 @@ func (a *AdminRepository) SetCollection(coll IMongoCollection) {
 // GetAdminById returns a response containing the requested admin if found
 func (a *AdminRepository) GetAdminById(id string) models.Response {
 	filter := bson.M{"_id": id}
+	return a.collection.FindOne(filter)
+}
+
+// GetAdminByUserId returns a response containing the requested admin if found
+func (a *AdminRepository) GetAdminByUserId(userId string) models.Response {
+	filter := bson.M{"user_id": userId}
 	return a.collection.FindOne(filter)
 }
 
