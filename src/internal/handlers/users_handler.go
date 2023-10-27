@@ -5,6 +5,7 @@ package handlers
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
+
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -89,9 +90,12 @@ func (h *Handler) LoginUser(c *fiber.Ctx) error {
 	}
 
 	response = h.auth.LoginUser(user)
-
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
+	}
+	adminResponse := h.controller.FirstAdmin(response.Data.(models.UserDB).Id)
+	if utils.IsTypeError(adminResponse) {
+		return utils.ResponseToStatus(c, adminResponse)
 	}
 	return utils.CreationResponseToStatus(c, response)
 }

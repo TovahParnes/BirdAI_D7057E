@@ -3,7 +3,6 @@ package controllers
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
-	"fmt"
 	"net/http"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -24,7 +23,6 @@ func (c *Controller) CListBirds(set int, search string) (models.Response) {
 	if utils.IsTypeError(response) {
 		return response
 	}
-	fmt.Println(response)
 
 	output := []*models.BirdOutput{}
 	for _, bird := range response.Data.([]models.BirdDB) {
@@ -100,6 +98,5 @@ func (c *Controller) GenerateBirds() models.Response {
 		ImageId:     imageId,
 		SoundId:     soundId,
 	})
-	fmt.Println(response)
 	return response
 }

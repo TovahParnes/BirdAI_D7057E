@@ -72,7 +72,7 @@ func (h *Handler) GetAdminMe(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	response = h.controller.CGetAdminById(curUserId)
+	response = h.controller.CGetAdminByUserId(curUserId)
 
 	return utils.ResponseToStatus(c, response)
 }
@@ -97,9 +97,9 @@ func (h *Handler) ListAdmins(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-	curUserId := response.Data.(models.UserDB).Id
+	//curUserId := response.Data.(models.UserDB).Id
 
-	response = h.controller.CIsSuperAdmin(curUserId)
+	//response = h.controller.CIsSuperAdmin(curUserId)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
@@ -159,7 +159,7 @@ func (h *Handler) CreateAdmin(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	response = h.controller.CCreateAdmin(curUserId, admin)
+	response = h.controller.CCreateAdmin(admin)
 
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)

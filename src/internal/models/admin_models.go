@@ -17,3 +17,11 @@ type AdminOutput struct {
 	User   UserOutput `bson:"user"`
 	Access string     `bson:"access"`
 }
+
+func AdminDBToOutput(db *AdminDB, user *UserOutput) *AdminOutput {
+	return &AdminOutput{
+		Id:     db.Id,
+		User:   *user,
+		Access: db.Access,
+	}
+}

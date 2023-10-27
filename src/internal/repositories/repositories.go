@@ -133,13 +133,13 @@ func (m *MongoCollection) DeleteOne(query bson.M) models.Response {
 		if utils.IsTypeError(response) {
 			return utils.ErrorToResponse(400, "Could not delete object", response.Data.(models.Err).Description)
 		}
-		return response
+		return utils.Response("Deactivated user successfully ")
 	default:
 		one, err := m.Collection.DeleteOne(m.ctx, deleteQuery)
 		if one.DeletedCount != 1 || err != nil {
 			return utils.ErrorToResponse(400, "Could not delete object", "")
 		}
-		return response
+		return utils.Response("Deleted successfully ")
 	}
 }
 
