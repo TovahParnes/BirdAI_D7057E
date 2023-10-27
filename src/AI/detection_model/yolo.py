@@ -15,9 +15,8 @@ def load_images_paths(path):
     return image_paths
 
 
-def predict_image(image_path, rotations):
+def predict_image(image, rotations):
     all_bird_data = []
-    image = Image.open(image_path)
     rotated_images = rotate_image(image, rotations, _multiple_images=False)
     for img in rotated_images:
         results = model.predict(source=img, save_crop=True, project="boxes", name="prediction")
