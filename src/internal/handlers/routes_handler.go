@@ -25,7 +25,6 @@ func New(app *fiber.App, db repositories.RepositoryEndpoints) {
 
 	handler := NewHandler(db)
 	handler.controller.GenerateBirds()
-	handler.controller.ResetAdmin()
 
 	// Add the JWTProtected() method if JTW key is required.
 	usersRoute := app.Group("/users")
@@ -52,6 +51,7 @@ func New(app *fiber.App, db repositories.RepositoryEndpoints) {
 	adminRoute := app.Group("/admins")
 	adminRoute.Get("/list", JWTProtected(), handler.ListAdmins)
 	adminRoute.Get("/me", JWTProtected(), handler.GetAdminMe)
+	adminRoute.Post("/me", JWTProtected(), handler.CreateSuperadminMe)
 	adminRoute.Get("/:id", JWTProtected(), handler.GetAdminById)
 	adminRoute.Post("/", JWTProtected(), handler.CreateAdmin)
 	adminRoute.Patch("/:id", JWTProtected(), handler.UpdateAdmin)

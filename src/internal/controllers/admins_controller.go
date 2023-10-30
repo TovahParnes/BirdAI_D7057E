@@ -125,16 +125,3 @@ func (c *Controller) FirstAdmin(curUserId string) models.Response {
 	}
 	return response
 }
-
-func (c *Controller) ResetAdmin() models.Response {
-	currentAdmins := c.db.Admin.ListAllAdmins(0)
-	if utils.IsTypeError(currentAdmins) && currentAdmins.Data.(models.Err).StatusCode != http.StatusNotFound{
-		return currentAdmins
-	}
-	if len(currentAdmins.Data.([]models.AdminDB)) != 0 {
-		for _, admin := range currentAdmins.Data.([]models.AdminDB) {
-			c.db.Admin.DeleteAdmin(admin.Id)
-		}
-	}
-	return utils.Response(nil)
-}

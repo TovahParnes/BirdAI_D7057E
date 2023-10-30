@@ -167,6 +167,41 @@ func (h *Handler) CreateAdmin(c *fiber.Ctx) error {
 	return utils.CreationResponseToStatus(c, response)
 }
 
+// CreateAdminMe is a function to create a new admin
+//
+// @Summary		TEMP Create a new admin based on the current user
+// @Description	TEMP Create a new admin based on the current user. Does not have any access schecks. This only exists for testing.
+// @Tags		Admins
+// @Accept		json
+// @Produce		json
+// @Security	Bearer
+// @Success		201	{object}	models.Response{}
+// @Failure		400	{object}	models.Response{data=models.Err}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		403	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
+// @Router		/admins/me [post]
+func (h *Handler) CreateSuperadminMe(c *fiber.Ctx) error {
+	response := h.auth.CheckExpired(c)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	curUserId := response.Data.(models.UserDB).Id
+
+	var admin *models.AdminInput
+	admin = &models.AdminInput{
+		UserId: curUserId,
+		Access: "superadmin",
+	}
+
+	response = h.controller.CCreateAdmin(admin)
+
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	return utils.CreationResponseToStatus(c, response)
+}
+
 // UpdateAdmin is a function to update the given admin from the databse
 //
 // @Summary		Update given admin
