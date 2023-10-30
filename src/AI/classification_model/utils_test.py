@@ -2,7 +2,7 @@ import unittest
 import os
 import shutil
 import tempfile
-from utils import load_json_file, create_folder, delete_folder, folder_exists
+from utils import load_json_file, create_folder, delete_folder, folder_exists, generate_random_name
 
 
 class TestYourFunctions(unittest.TestCase):
@@ -51,6 +51,16 @@ class TestYourFunctions(unittest.TestCase):
 
         non_existent_folder = os.path.join(self.temp_dir, "non_existent_folder")
         self.assertFalse(folder_exists(non_existent_folder))
+
+    def test_generate_random_name_length(self):
+        random_name = generate_random_name()
+        self.assertEqual(len(random_name), 32)  # Check if the length is as expected
+
+    def test_generate_random_name(self):
+        random_name_01 = generate_random_name()
+        random_name_02 = generate_random_name()
+
+        self.assertNotEqual(random_name_01, random_name_02)  # Check if the length is as expected
 
 
 if __name__ == '__main__':
