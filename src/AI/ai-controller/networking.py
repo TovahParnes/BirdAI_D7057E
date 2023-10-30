@@ -11,10 +11,10 @@ from io import BytesIO
 app = Flask(__name__)
 _receiver_port = 3500
 
-detection_model_ip = "172.29.0.4" # TODO THIS IS RANDOMIZED PLZ FIX
+detection_model_ip = "172.20.0.4" # TODO THIS IS RANDOMIZED PLZ FIX
 detection_model_port = "3501"
 
-classification_model_ip = "172.29.0.3" # TODO THIS IS RANDOMIZED PLZ FIX
+classification_model_ip = "172.20.0.3" # TODO THIS IS RANDOMIZED PLZ FIX
 classification_model_port = "3502"
 
 
