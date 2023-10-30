@@ -2,18 +2,18 @@ basePath: /
 definitions:
   models.AdminInput:
     properties:
-      access:
+      _id:
         type: string
-      id:
+      access:
         type: string
       userId:
         type: string
     type: object
   models.AdminOutput:
     properties:
-      access:
+      _id:
         type: string
-      id:
+      access:
         type: string
       user:
         $ref: '#/definitions/models.UserOutput'
