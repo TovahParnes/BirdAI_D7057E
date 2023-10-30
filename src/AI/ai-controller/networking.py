@@ -11,10 +11,10 @@ from io import BytesIO
 app = Flask(__name__)
 _receiver_port = 3500
 
-detection_model_ip = "172.20.0.4" # TODO THIS IS RANDOMIZED PLZ FIX
+detection_model_ip = "172.20.0.4"
 detection_model_port = "3501"
 
-classification_model_ip = "172.20.0.3" # TODO THIS IS RANDOMIZED PLZ FIX
+classification_model_ip = "172.20.0.3"
 classification_model_port = "3502"
 
 
@@ -39,32 +39,15 @@ def evaluate_image():
     # Create a PIL image from the pixel data
     im1 = Image.open(BytesIO(pixel_bytes))
 
-    # TODO: Convert to PIL Image.
-
     _result_image = send_image_to_detection(im1, detection_model_ip, detection_model_port)
     _result = send_image_to_classification(_result_image, classification_model_ip, classification_model_port)
 
-    print(_result)
-
     birds = [
-        {"name": str(_result), "accuracy": 1.00}
+        {"name": _result.json()['label'], "accuracy": _result.json()['accuracy']}
     ]
-
-#     bird = {
-#         "name": "test-Sparrow",
-#         "accuracy": 0.95
-#     }
-
-    # Determine the next bird number
-#     next_bird_number = len(birds) + 1
-#     new_bird_key = f"bird{next_bird_number}"
-#
-#     # Add a new bird
-#     birds[new_bird_key] = {"name": "New-Bird", "accuracy": 0.91}
 
     json_structure = json.dumps({"birds": birds}, indent=4)
 
-    # print(json_structure)
     return json_structure
 
 
@@ -74,7 +57,7 @@ def send_image_to_classification(_img, _ip, _port):     # Returns a PIL image.
     # Send a POST request with the image data
     response = requests.post(url, json=convertPILToJSON(_img))
 
-    _result = response.json()['label']
+    _result = response
 
     return _result
 

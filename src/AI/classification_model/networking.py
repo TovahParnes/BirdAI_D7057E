@@ -49,13 +49,28 @@ def process_image():
 
     _result = classification.predict(classification.load_model(), testr_generator[0][0])
 
+    # Get the predicted class probabilities for all classes
+    predicted_probabilities = _result[0]
+
+    # Get the predicted class probability
+    predicted_class_probability = np.argsort(predicted_probabilities)[::-1]
+
+    # Select the top three classes with the highest probabilities
+    top_three_indices = predicted_class_probability[:3]
+
+    # Get the class labels for the top three classes
+    top_three_labels = [get_label_from_position(i) for i in top_three_indices]
+
+    # Get the corresponding probabilities
+    top_three_probabilities = [predicted_probabilities[i] for i in top_three_indices]
+
     _pos = int(np.argmax(_result, axis=-1)[0])
 
     _label = get_label_from_position(_pos)
 
     utils.delete_folder(_prefix_path + _folder_name)
 
-    return jsonify({'message': 'Image successfully received and processed', 'label': _label})
+    return jsonify({'message': 'Image successfully received and processed', 'label': _label, 'accuracy': float(top_three_probabilities[0])})
 
 
 def get_label_from_position(_position):
