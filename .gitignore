@@ -6,3 +6,4 @@
 # ---AI---
 
 src/AI/classification_model/mobilenet_model.keras
+src/AI/classification_model/__pycache__
