@@ -1,10 +1,9 @@
 import torch
 import os
 import shutil
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, ImageDraw
 from ultralytics import YOLO
 model = YOLO("yolov8m.pt")
-
 
 def load_images_paths(path):
     image_paths = []
@@ -14,12 +13,12 @@ def load_images_paths(path):
         image_paths.append(os.path.join(path, image_file))
     return image_paths
 
-
 def predict_image(image, rotations):
     all_bird_data = []
     rotated_images = rotate_image(image, rotations, _multiple_images=False)
     for img in rotated_images:
-        results = model.predict(source=img, save_crop=True, project="boxes", name="prediction")
+        results = model.predict(source=img, name="prediction")
+
         for index in range(0, len(results[0].boxes.data)):
             # IS IT A BIRD?
             if (results[0].boxes.data[index][5] == 14):
@@ -29,11 +28,17 @@ def predict_image(image, rotations):
                 tw = torch.ceil(results[0].boxes.data[index][2]).item()
                 th = torch.ceil(results[0].boxes.data[index][3]).item()
                 score = results[0].boxes.data[index][4].item()
-                bird_data = [tx, ty, tw, th, score]
+
+                boxes = results[0].boxes.cpu().numpy()
+                for box in boxes:  # iterate boxes
+                    edges = box.xyxy[0].astype(int)  # get corner points as int
+                    box_image = image.crop(edges)
+                    #box_image.show()
+
+                bird_data = [box_image, tx, ty, tw, th, score]
 
                 all_bird_data.append(bird_data)
     return all_bird_data
-
 
 def rotate_image(image, rotations, _multiple_images):
     images = []
@@ -47,8 +52,7 @@ def rotate_image(image, rotations, _multiple_images):
         images.append(image.rotate(rotations*90, expand=True))
     return images
 
-
-def crop_images(path, target_size):
+def crop_images_from_folder(path, target_size):
     prediction_dirs = [d for d in os.listdir(path) if os.path.isdir(os.path.join(path, d))]
     image_number = 0
     for prediction_dir in prediction_dirs:
@@ -79,6 +83,10 @@ def crop_images(path, target_size):
 
         return result_images
 
+def crop_images(image, target_size):
+    paddedImage = pad_image(image, target_size)
+    result = paddedImage.resize(target_size, Image.LANCZOS)
+    return result
 
 def pad_image(image, _target_size):
         imageWidth, imageHeight = image.size
@@ -101,7 +109,6 @@ def pad_image(image, _target_size):
 
         return paddedImage
 
-
 def delete_images(path):
     os.makedirs("cropped_images", exist_ok=True)
 
@@ -117,14 +124,12 @@ def delete_images(path):
         elif os.path.isdir(item_path):
             # Remove directories and their contents (recursively)
             shutil.rmtree(item_path)
-            
-            
+
 def run_classification(_image):
-
-    predict_image(_image, rotations=0)
-    _images = crop_images(path="boxes/", target_size=(224, 224))
-
-    if len(_images) > 0:
-        return _images[0]
+    prediction_results = predict_image(_image, rotations=0)     #prediction_results[Bird index][0 = image, 5 = accuracy]
+    _res_image = crop_images(prediction_results[0][0], target_size=(224, 224)) # We send the first bird box image
+    _res_image.show()
+    if _res_image:
+        return _res_image
     else:
         return None
