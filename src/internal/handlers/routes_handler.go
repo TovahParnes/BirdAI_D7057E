@@ -57,7 +57,7 @@ func New(app *fiber.App, db repositories.RepositoryEndpoints) {
 	adminRoute.Delete("/:id", JWTProtected(), handler.DeleteAdmin)
 
 	aiRoute := app.Group("/ai")
-	aiRoute.Post("/inputimage", handler.ImagePrediction)
+	aiRoute.Post("/inputimage", JWTProtected(), handler.ImagePrediction)
 
 }
 

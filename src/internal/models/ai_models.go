@@ -1,8 +1,16 @@
 package models
 
-type Analyze struct {
-	Accuracy string  `json:"accuracy" form:"accuracy"`
+type AnalyzeResponse struct {
+	AiBird    AIBird  `json:"aiBird" form:"aiBird"`
+	BirdId    string  `json:"birdId" form:"birdId"`
+	UserMedia MediaDB `json:"userMedia" form:"userMedia"`
+}
+
+type AIList struct {
+	Birds []AIBird `json:"birds" form:"birds"`
+}
+
+type AIBird struct {
 	Name     string  `json:"name" form:"name"`
-	BirdId   string  `json:"birdId" form:"birdId"`
-	Picture  MediaDB `json:"picture" form:"picture"`
+	Accuracy float32 `json:"accuracy" form:"accuracy"`
 }

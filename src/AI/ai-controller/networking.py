@@ -1,18 +1,20 @@
 import os
 
-import numpy as np
 from flask import Flask, request, jsonify, json
 import requests
 from PIL import Image
 import PIL
+import base64
+import re
+from io import BytesIO
 
 app = Flask(__name__)
 _receiver_port = 3500
 
-detection_model_ip = "172.18.0.2"
+detection_model_ip = "172.29.0.4" # TODO THIS IS RANDOMIZED PLZ FIX
 detection_model_port = "3501"
 
-classification_model_ip = "172.18.0.3"
+classification_model_ip = "172.29.0.3" # TODO THIS IS RANDOMIZED PLZ FIX
 classification_model_port = "3502"
 
 
@@ -20,39 +22,45 @@ def listen():
     app.run(host='0.0.0.0', port=_receiver_port)
 
 
-@app.route('/evaluate_image')
+@app.route('/evaluate_image', methods=['POST'])
 def evaluate_image():
 
     data = request.get_json()
-    images = data.get('media')
+
+    _loaded_base64_data = data["media"]
+
+    _loaded_base64_without_header = re.sub('^data:image/.+;base64,', '', _loaded_base64_data)
+
+    image = base64.b64decode(_loaded_base64_without_header, validate=True)
+
+    # Create a byte array from the pixel data
+    pixel_bytes = bytes(image)
+
+    # Create a PIL image from the pixel data
+    im1 = Image.open(BytesIO(pixel_bytes))
 
     # TODO: Convert to PIL Image.
-
-    im1 = Image.open(r"image.jpg")
 
     _result_image = send_image_to_detection(im1, detection_model_ip, detection_model_port)
     _result = send_image_to_classification(_result_image, classification_model_ip, classification_model_port)
 
     print(_result)
 
-    birds = {
-        "bird1": {"name": "test-Sparrow", "accuracy": 0.95},
-        "bird2": {"name": "test-Robin", "accuracy": 0.92},
-        "bird3": {"name": "test-Eagle", "accuracy": 0.98},
-        "bird4": {"name": "test-Owl", "accuracy": 0.89}
-    }
+    birds = [
+        {"name": str(_result), "accuracy": 1.00}
+    ]
 
-    bird = {
-        "name": "test-Sparrow",
-        "accuracy": 0.95
-    }
+#     bird = {
+#         "name": "test-Sparrow",
+#         "accuracy": 0.95
+#     }
 
     # Determine the next bird number
-    next_bird_number = len(birds) + 1
-    new_bird_key = f"bird{next_bird_number}"
-
-    # Add a new bird
-    birds[new_bird_key] = {"name": "New-Bird", "accuracy": 0.91}
+#     next_bird_number = len(birds) + 1
+#     new_bird_key = f"bird{next_bird_number}"
+#
+#     # Add a new bird
+#     birds[new_bird_key] = {"name": "New-Bird", "accuracy": 0.91}
 
     json_structure = json.dumps({"birds": birds}, indent=4)
 
@@ -66,7 +74,7 @@ def send_image_to_classification(_img, _ip, _port):     # Returns a PIL image.
     # Send a POST request with the image data
     response = requests.post(url, json=convertPILToJSON(_img))
 
-    _result = response.json()['pos']
+    _result = response.json()['label']
 
     return _result
 

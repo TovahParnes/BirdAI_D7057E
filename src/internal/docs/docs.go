@@ -752,7 +752,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "ai"
+                    "AI"
                 ],
                 "summary": "Analyze image",
                 "parameters": [
@@ -778,7 +778,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/models.Analyze"
+                                            "$ref": "#/definitions/models.AnalyzeResponse"
                                         }
                                     }
                                 }
@@ -2439,6 +2439,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.AIBird": {
+            "type": "object",
+            "properties": {
+                "accuracy": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "models.AdminInput": {
             "type": "object",
             "properties": {
@@ -2467,16 +2478,13 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Analyze": {
+        "models.AnalyzeResponse": {
             "type": "object",
             "properties": {
-                "accuracy": {
-                    "type": "string"
+                "aiBird": {
+                    "$ref": "#/definitions/models.AIBird"
                 },
                 "birdId": {
-                    "type": "string"
-                },
-                "name": {
                     "type": "string"
                 },
                 "picture": {

@@ -8,6 +8,8 @@ services:
     container_name: ai-controller
     depends_on:
       - shared-requirements-image
+    ports:
+      - "3500:3500"
   service2:
     build:
       context: ./classification_model
@@ -16,6 +18,8 @@ services:
     container_name: classification_model
     depends_on:
       - shared-requirements-image
+    ports:
+      - "3502:3502"
   service3:
     build:
       context: ./detection_model
@@ -24,9 +28,16 @@ services:
     container_name: detection_model
     depends_on:
       - shared-requirements-image
+    ports:
+      - "3501:3501"
   shared-requirements-image:
     build:
       dockerfile: Dockerfile
     image: shared-requirements-image
 networks:
   ai_network:
+    name: AI
+    ipam:
+      config:
+        - subnet: 172.26.0.0/16
+          gateway: 172.26.0.1

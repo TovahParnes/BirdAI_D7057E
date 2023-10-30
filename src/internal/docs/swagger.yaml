@@ -1,5 +1,12 @@
 basePath: /
 definitions:
+  models.AIBird:
+    properties:
+      accuracy:
+        type: number
+      name:
+        type: string
+    type: object
   models.AdminInput:
     properties:
       access:
@@ -18,13 +25,11 @@ definitions:
       user:
         $ref: '#/definitions/models.UserOutput'
     type: object
-  models.Analyze:
+  models.AnalyzeResponse:
     properties:
-      accuracy:
-        type: string
+      aiBird:
+        $ref: '#/definitions/models.AIBird'
       birdId:
-        type: string
-      name:
         type: string
       picture:
         $ref: '#/definitions/models.MediaDB'
@@ -600,7 +605,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/models.Analyze'
+                  $ref: '#/definitions/models.AnalyzeResponse'
               type: object
         "400":
           description: Bad Request
@@ -639,7 +644,7 @@ paths:
       - Bearer: []
       summary: Analyze image
       tags:
-      - ai
+      - AI
   /birds/{id}:
     get:
       consumes:
