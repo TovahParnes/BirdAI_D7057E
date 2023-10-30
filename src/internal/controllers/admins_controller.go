@@ -14,7 +14,7 @@ func (c *Controller) CGetAdminById(id string) (models.Response) {
 		return response
 	}
 	admin := response.Data.(*models.AdminDB)
-	adminResponse := c.AdminDBToOutput(admin)
+	adminResponse := c.adminDBToOutput(admin)
 	return adminResponse
 }
 
@@ -24,7 +24,7 @@ func (c *Controller) CGetAdminByUserId(id string) (models.Response) {
 		return response
 	}
 	admin := response.Data.(*models.AdminDB)
-	adminResponse := c.AdminDBToOutput(admin)
+	adminResponse := c.adminDBToOutput(admin)
 	return adminResponse
 }
 
@@ -36,7 +36,7 @@ func (c *Controller) CListAdmins(set int, search string) (models.Response) {
 
 	output := []*models.AdminOutput{}
 	for _, admin := range response.Data.([]models.AdminDB) {
-		adminResponse := c.AdminDBToOutput(&admin)
+		adminResponse := c.adminDBToOutput(&admin)
 		if utils.IsTypeError(adminResponse) {
 			return adminResponse
 		}
@@ -52,8 +52,17 @@ func (c *Controller) CCreateAdmin(adminInput *models.AdminInput) (models.Respons
 	if utils.IsTypeError(currentAdmin) && currentAdmin.Data.(models.Err).StatusCode != http.StatusNotFound{
 		return currentAdmin
 	}
-	if utils.IsType(currentAdmin, models.AdminOutput{}) {
+	if utils.IsType(currentAdmin, models.AdminDB{}) {
 		return utils.ErrorToResponse(http.StatusConflict, "Admin already exists", "Admin with that user id already exists")
+	}
+
+	user := c.db.User.GetUserById(adminInput.UserId)
+	if utils.IsTypeError(user) {
+		if user.Data.(models.Err).StatusCode == http.StatusNotFound{
+			return utils.ErrorNotFoundInDatabase("User with given id does not exist")
+		} else {
+		return user
+		}
 	}
 
 	admin := &models.AdminDB{
@@ -66,7 +75,7 @@ func (c *Controller) CCreateAdmin(adminInput *models.AdminInput) (models.Respons
 
 func (c *Controller) CUpdateAdmin(id string, admin *models.AdminInput) (models.Response) {
 	if (admin.Access == "admin") {
-		response := c.CCheckLastSuperadmin(id)
+		response := c.cCheckLastSuperadmin(id)
 		if utils.IsTypeError(response) {
 			return response
 		}
@@ -77,7 +86,7 @@ func (c *Controller) CUpdateAdmin(id string, admin *models.AdminInput) (models.R
 }
 
 func (c *Controller) CDeleteAdmin(id string) (models.Response) {
-	response := c.CCheckLastSuperadmin(id)
+	response := c.cCheckLastSuperadmin(id)
 	if utils.IsTypeError(response) {
 		return response
 	}
@@ -85,7 +94,7 @@ func (c *Controller) CDeleteAdmin(id string) (models.Response) {
 	return response
 }
 
-func (c *Controller) CCheckLastSuperadmin(id string) (models.Response) {
+func (c *Controller) cCheckLastSuperadmin(id string) (models.Response) {
 	filter := bson.M{"access": "superadmin"}
 	response := c.db.Admin.ListAdmins(filter, 0)
 	if utils.IsTypeError(response) {
@@ -100,7 +109,7 @@ func (c *Controller) CCheckLastSuperadmin(id string) (models.Response) {
 	return utils.Response(nil)
 }
 
-func (c *Controller) AdminDBToOutput(admin *models.AdminDB) (models.Response) {
+func (c *Controller) adminDBToOutput(admin *models.AdminDB) (models.Response) {
 	userResponse := c.db.User.GetUserById(admin.UserId)
 	if utils.IsTypeError(userResponse) {
 		return userResponse
@@ -109,19 +118,4 @@ func (c *Controller) AdminDBToOutput(admin *models.AdminDB) (models.Response) {
 	userOutput := models.UserDBToOutput(*userDB)
 	adminOutput := models.AdminDBToOutput(admin, userOutput)
 	return utils.Response(adminOutput)
-}
-
-func (c *Controller) FirstAdmin(curUserId string) models.Response {
-	response := c.db.Admin.ListAdmins(bson.M{}, 0)
-	if utils.IsTypeError(response) {
-		return response
-	}
-	if len(response.Data.([]models.AdminDB)) == 0 {
-		response = c.CCreateAdmin(&models.AdminInput{
-			UserId: curUserId,
-			Access: "superadmin",
-		},)
-		return response
-	}
-	return response
 }

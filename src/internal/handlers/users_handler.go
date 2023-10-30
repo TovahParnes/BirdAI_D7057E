@@ -93,10 +93,7 @@ func (h *Handler) LoginUser(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-	adminResponse := h.controller.FirstAdmin(response.Data.(models.UserDB).Id)
-	if utils.IsTypeError(adminResponse) {
-		return utils.ResponseToStatus(c, adminResponse)
-	}
+	
 	return utils.CreationResponseToStatus(c, response)
 }
 
