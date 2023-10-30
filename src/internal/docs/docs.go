@@ -2442,10 +2442,10 @@ const docTemplate = `{
         "models.AdminInput": {
             "type": "object",
             "properties": {
-                "access": {
+                "_id": {
                     "type": "string"
                 },
-                "id": {
+                "access": {
                     "type": "string"
                 },
                 "userId": {
@@ -2456,10 +2456,10 @@ const docTemplate = `{
         "models.AdminOutput": {
             "type": "object",
             "properties": {
-                "access": {
+                "_id": {
                     "type": "string"
                 },
-                "id": {
+                "access": {
                     "type": "string"
                 },
                 "user": {

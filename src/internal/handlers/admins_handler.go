@@ -97,9 +97,9 @@ func (h *Handler) ListAdmins(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-	//curUserId := response.Data.(models.UserDB).Id
+	curUserId := response.Data.(models.UserDB).Id
 
-	//response = h.controller.CIsSuperAdmin(curUserId)
+	response = h.controller.CIsSuperAdmin(curUserId)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}

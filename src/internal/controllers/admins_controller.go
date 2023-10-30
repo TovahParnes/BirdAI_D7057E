@@ -3,7 +3,6 @@ package controllers
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
-	"fmt"
 	"net/http"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -93,11 +92,8 @@ func (c *Controller) CCheckLastSuperadmin(id string) (models.Response) {
 		return response
 	}
 	admins := response.Data.([]models.AdminDB)
-	fmt.Println("superadmin list: ",admins)
-	fmt.Println("id: ", id)
 
 	if len(admins) == 1 && admins[0].Id == id{
-		fmt.Println("test in if")
 		return utils.ErrorToResponse(http.StatusConflict, "Cannot remove last superadmin", "There must be at least one superadmin")
 	}
 
@@ -125,7 +121,6 @@ func (c *Controller) FirstAdmin(curUserId string) models.Response {
 			UserId: curUserId,
 			Access: "superadmin",
 		},)
-		fmt.Println("create admin response: ",response)
 		return response
 	}
 	return response

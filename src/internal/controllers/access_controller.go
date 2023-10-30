@@ -25,7 +25,7 @@ func (c *Controller) CIsSuperAdmin(curUserId string) models.Response {
 		return response
 	}
 
-	if utils.IsType(response, models.AdminOutput{}) && response.Data.(models.AdminOutput).Access == "superadmin"{
+	if utils.IsType(response, models.AdminOutput{}) && response.Data.(*models.AdminOutput).Access == "superadmin"{
 		return utils.Response("Is superadmin")
 	}
 	
