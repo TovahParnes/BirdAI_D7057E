@@ -1,6 +1,8 @@
 import json
 import os
+import random
 import shutil
+import string
 
 
 def load_json_file(_filename):
@@ -33,3 +35,9 @@ def delete_folder(folder_path):
 def folder_exists(folder_path):
     # Check if a folder exists at the specified path.
     return os.path.exists(folder_path)
+
+
+def generate_random_name(length=32):
+    characters = string.ascii_letters + string.digits  # Use letters and digits
+    random_name = ''.join(random.choice(characters) for _ in range(length))
+    return random_name
