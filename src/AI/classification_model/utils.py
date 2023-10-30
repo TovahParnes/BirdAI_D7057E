@@ -41,3 +41,12 @@ def generate_random_name(length=32):
     characters = string.ascii_letters + string.digits  # Use letters and digits
     random_name = ''.join(random.choice(characters) for _ in range(length))
     return random_name
+
+
+def check_images_folder():
+    # Check if the "images" folder exists in the parent directory. If not, create it.
+    parent_directory = os.path.dirname(os.path.abspath(__file__))
+    images_folder = os.path.join(parent_directory, "images")
+
+    if not os.path.exists(images_folder):
+        create_folder(images_folder)
