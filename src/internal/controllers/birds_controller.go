@@ -8,7 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func (c *Controller) CGetBirdById(id string) (models.Response) {
+func (c *Controller) CGetBirdById(id string) models.Response {
 	response := c.db.Bird.GetBirdById(id)
 	if utils.IsTypeError(response) {
 		return response
@@ -18,7 +18,17 @@ func (c *Controller) CGetBirdById(id string) (models.Response) {
 	return birdResponse
 }
 
-func (c *Controller) CListBirds(set int, search string) (models.Response) {
+func (c *Controller) CGetBirdByName(name string) models.Response {
+	response := c.db.Bird.GetBirdByName(name)
+	if utils.IsTypeError(response) {
+		return response
+	}
+	bird := response.Data.(*models.BirdDB)
+	birdResponse := c.CBirdDBToOutput(bird)
+	return birdResponse
+}
+
+func (c *Controller) CListBirds(set int, search string) models.Response {
 	response := c.db.Bird.ListBirds(bson.M{}, set)
 	if utils.IsTypeError(response) {
 		return response
@@ -30,14 +40,14 @@ func (c *Controller) CListBirds(set int, search string) (models.Response) {
 		if utils.IsTypeError(birdResponse) {
 			return birdResponse
 		}
-		
+
 		output = append(output, birdResponse.Data.(*models.BirdOutput))
 	}
 
 	return utils.Response(output)
 }
 
-func (c *Controller) CUpdateBird(id string, bird *models.BirdInput) (models.Response) {
+func (c *Controller) CUpdateBird(id string, bird *models.BirdInput) models.Response {
 	bird.Id = id
 	response := c.db.Bird.UpdateBird(*bird)
 	if utils.IsTypeError(response) {
@@ -48,8 +58,7 @@ func (c *Controller) CUpdateBird(id string, bird *models.BirdInput) (models.Resp
 	return birdResponse
 }
 
-
-func (c *Controller) CBirdDBToOutput(bird *models.BirdDB) (models.Response) {
+func (c *Controller) CBirdDBToOutput(bird *models.BirdDB) models.Response {
 	imageResponse := c.db.Media.GetMediaById(bird.ImageId)
 	if utils.IsTypeError(imageResponse) {
 		return imageResponse
@@ -67,7 +76,7 @@ func (c *Controller) CBirdDBToOutput(bird *models.BirdDB) (models.Response) {
 
 func (c *Controller) GenerateBirds() models.Response {
 	currentBirds := c.db.Bird.ListAllBirds(0)
-	if utils.IsTypeError(currentBirds) && currentBirds.Data.(models.Err).StatusCode != http.StatusNotFound{
+	if utils.IsTypeError(currentBirds) && currentBirds.Data.(models.Err).StatusCode != http.StatusNotFound {
 		return currentBirds
 	}
 	if len(currentBirds.Data.([]models.BirdDB)) != 0 {

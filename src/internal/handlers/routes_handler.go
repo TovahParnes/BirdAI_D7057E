@@ -24,7 +24,6 @@ func New(app *fiber.App, db repositories.RepositoryEndpoints) {
 	}))
 
 	handler := NewHandler(db)
-	handler.controller.GenerateBirds()
 
 	// Add the JWTProtected() method if JTW key is required.
 	usersRoute := app.Group("/users")

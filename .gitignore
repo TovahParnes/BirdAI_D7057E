@@ -19,3 +19,4 @@ src/AI/classification_model/mobilenet_model.keras
 src/AI/classification_model/__pycache__
 src/AI/classification_model/__pycache__/
 src/AI/classification_model/images/
+src/AI/classification_model/labels.json

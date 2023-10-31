@@ -35,26 +35,23 @@ func (c *Controller) RequestAnalyze(mediaData string) models.AIList {
 	}
 	return models.AIList{Birds: []models.AIBird{
 		{
-			Name:     "MOCKED RESPONSE, CHANGE ENV FOR REAL AI RESPONSE",
+			Name:     "EURASIAN MAGPIE",
 			Accuracy: 1,
 		},
 	}}
 }
 
-func (c *Controller) AiListToResponse(aiList models.AIList, dat string) []models.AnalyzeResponse {
+func (c *Controller) AiListToResponse(aiList models.AIList) []models.AnalyzeResponse {
 	response := []models.AnalyzeResponse{}
 	for _, ai := range aiList.Birds {
+		bird := c.CGetBirdByName(ai.Name)
 		response = append(response, models.AnalyzeResponse{
 			AiBird: models.AIBird{
 				Name:     ai.Name,
 				Accuracy: ai.Accuracy,
 			},
-			BirdId: "333333",
-			UserMedia: models.MediaDB{
-				Id:       "123123",
-				Data:     dat,
-				FileType: "JPG",
-			},
+			BirdId:    bird.Data.(*models.BirdOutput).Id,
+			UserMedia: bird.Data.(*models.BirdOutput).Image,
 		})
 	}
 	return response
