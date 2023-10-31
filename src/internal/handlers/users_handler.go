@@ -21,7 +21,7 @@ import (
 // @Failure		404	{object}	models.Response{data=models.Err}
 // @Failure		410	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
-// @Router		/users/{id} [get]
+// @Router		/api/v1/users/{id} [get]
 func (h *Handler) GetUserById(c *fiber.Ctx) error {
 	id := c.Params("id")
 	response := utils.IsValidId(id)
@@ -46,7 +46,7 @@ func (h *Handler) GetUserById(c *fiber.Ctx) error {
 // @Success		200	{object}	models.Response{data=[]models.UserOutput}
 // @Failure		401	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
-// @Router		/users/list [get]
+// @Router		/api/v1/users/list [get]
 func (h *Handler) ListUsers(c *fiber.Ctx) error {
 	queries := c.Queries()
 	set := queries["set"]
@@ -77,7 +77,7 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 // @Failure		400	{object}	models.Response{data=models.Err}
 // @Failure		401	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
-// @Router		/users/ [post]
+// @Router		/api/v1/users [post]
 func (h *Handler) LoginUser(c *fiber.Ctx) error {
 	var user *models.UserLogin
 	if err := c.BodyParser(&user); err != nil {
@@ -110,7 +110,7 @@ func (h *Handler) LoginUser(c *fiber.Ctx) error {
 // @Failure		404	{object}	models.Response{data=models.Err}
 // @Failure		410	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
-// @Router		/users/me [get]
+// @Router		/api/v1/users/me [get]
 func (h *Handler) GetUserMe(c *fiber.Ctx) error {
 
 	//	@Failure	401	{object}	models.Response{}
@@ -142,7 +142,7 @@ func (h *Handler) GetUserMe(c *fiber.Ctx) error {
 // @Failure		403	{object}	models.Response{data=models.Err}
 // @Failure		404	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
-// @Router		/users/{id} [patch]
+// @Router		/api/v1/users/{id} [patch]
 func (h *Handler) UpdateUser(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)
 	if utils.IsTypeError(response) {
@@ -188,7 +188,7 @@ func (h *Handler) UpdateUser(c *fiber.Ctx) error {
 // @Failure		403	{object}	models.Response{data=models.Err}
 // @Failure		404	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
-// @Router		/users/{id} [delete]
+// @Router		/api/v1/users/{id} [delete]
 func (h *Handler) DeleteUser(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)
 	if utils.IsTypeError(response) {

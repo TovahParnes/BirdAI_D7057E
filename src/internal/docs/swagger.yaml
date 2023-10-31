@@ -32,7 +32,7 @@ definitions:
       birdId:
         type: string
       userMedia:
-        $ref: '#/definitions/models.MediaDB'
+        $ref: '#/definitions/models.MediaOutput'
     type: object
   models.BirdInput:
     properties:
@@ -72,15 +72,6 @@ definitions:
         type: string
       status:
         type: integer
-    type: object
-  models.MediaDB:
-    properties:
-      _id:
-        type: string
-      data:
-        type: string
-      fileType:
-        type: string
     type: object
   models.MediaInput:
     properties:
@@ -199,7 +190,7 @@ info:
   title: BirdAI API
   version: "2.0"
 paths:
-  /admins/:
+  /api/v1/admins:
     post:
       consumes:
       - application/json
@@ -259,7 +250,7 @@ paths:
       summary: Create a new admin
       tags:
       - Admins
-  /admins/{id}:
+  /api/v1/admins/{id}:
     delete:
       consumes:
       - application/json
@@ -454,7 +445,7 @@ paths:
       summary: Update given admin
       tags:
       - Admins
-  /admins/list:
+  /api/v1/admins/list:
     get:
       consumes:
       - application/json
@@ -514,7 +505,7 @@ paths:
       summary: List all admins of a specified set
       tags:
       - Admins
-  /admins/me:
+  /api/v1/admins/me:
     get:
       consumes:
       - application/json
@@ -634,7 +625,7 @@ paths:
       summary: TEMP Create a new admin based on the current user
       tags:
       - Admins
-  /ai/inputimage:
+  /api/v1/ai/inputimage:
     post:
       consumes:
       - application/json
@@ -696,7 +687,7 @@ paths:
       summary: Analyze image
       tags:
       - AI
-  /birds/{id}:
+  /api/v1/birds/{id}:
     get:
       consumes:
       - application/json
@@ -822,7 +813,7 @@ paths:
       summary: Update given bird
       tags:
       - Birds
-  /birds/list:
+  /api/v1/birds/list:
     get:
       consumes:
       - application/json
@@ -871,7 +862,7 @@ paths:
       summary: List all birds of a specified set and seach parameters
       tags:
       - Birds
-  /posts/:
+  /api/v1/posts:
     post:
       consumes:
       - application/json
@@ -927,7 +918,7 @@ paths:
       summary: Create a new post
       tags:
       - Posts
-  /posts/{id}:
+  /api/v1/posts/{id}:
     delete:
       consumes:
       - application/json
@@ -1111,7 +1102,7 @@ paths:
       summary: Update given post
       tags:
       - Posts
-  /posts/list:
+  /api/v1/posts/list:
     get:
       consumes:
       - application/json
@@ -1160,7 +1151,7 @@ paths:
       summary: List all posts of a specified set
       tags:
       - Posts
-  /users/:
+  /api/v1/users:
     post:
       consumes:
       - application/json
@@ -1214,7 +1205,7 @@ paths:
       summary: Login a user
       tags:
       - Users
-  /users/{id}:
+  /api/v1/users/{id}:
     delete:
       consumes:
       - application/json
@@ -1398,7 +1389,7 @@ paths:
       summary: Update given user
       tags:
       - Users
-  /users/{id}/posts/list:
+  /api/v1/users/{id}/posts/list:
     get:
       consumes:
       - application/json
@@ -1452,7 +1443,7 @@ paths:
       summary: List all posts of a specified set
       tags:
       - Posts
-  /users/list:
+  /api/v1/users/list:
     get:
       consumes:
       - application/json
@@ -1501,7 +1492,7 @@ paths:
       summary: List all users of a specified set
       tags:
       - Users
-  /users/me:
+  /api/v1/users/me:
     get:
       consumes:
       - application/json

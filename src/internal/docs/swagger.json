@@ -20,7 +20,7 @@
     "host": "127.0.0.1:3000",
     "basePath": "/",
     "paths": {
-        "/admins/": {
+        "/api/v1/admins": {
             "post": {
                 "security": [
                     {
@@ -131,7 +131,7 @@
                 }
             }
         },
-        "/admins/list": {
+        "/api/v1/admins/list": {
             "get": {
                 "security": [
                     {
@@ -242,7 +242,7 @@
                 }
             }
         },
-        "/admins/me": {
+        "/api/v1/admins/me": {
             "get": {
                 "security": [
                     {
@@ -470,7 +470,7 @@
                 }
             }
         },
-        "/admins/{id}": {
+        "/api/v1/admins/{id}": {
             "get": {
                 "security": [
                     {
@@ -832,7 +832,7 @@
                 }
             }
         },
-        "/ai/inputimage": {
+        "/api/v1/ai/inputimage": {
             "post": {
                 "security": [
                     {
@@ -946,7 +946,7 @@
                 }
             }
         },
-        "/birds/list": {
+        "/api/v1/birds/list": {
             "get": {
                 "description": "List all birds of a specified set and seach parameters",
                 "consumes": [
@@ -1034,7 +1034,7 @@
                 }
             }
         },
-        "/birds/{id}": {
+        "/api/v1/birds/{id}": {
             "get": {
                 "description": "Get bird by ID",
                 "consumes": [
@@ -1266,7 +1266,7 @@
                 }
             }
         },
-        "/posts/": {
+        "/api/v1/posts": {
             "post": {
                 "security": [
                     {
@@ -1371,7 +1371,7 @@
                 }
             }
         },
-        "/posts/list": {
+        "/api/v1/posts/list": {
             "get": {
                 "description": "List all posts of a specified set",
                 "consumes": [
@@ -1459,7 +1459,7 @@
                 }
             }
         },
-        "/posts/{id}": {
+        "/api/v1/posts/{id}": {
             "get": {
                 "description": "Get post by ID",
                 "consumes": [
@@ -1798,7 +1798,7 @@
                 }
             }
         },
-        "/users/": {
+        "/api/v1/users": {
             "post": {
                 "description": "Login a user or create a new user if there is no existing user",
                 "consumes": [
@@ -1898,7 +1898,7 @@
                 }
             }
         },
-        "/users/list": {
+        "/api/v1/users/list": {
             "get": {
                 "description": "List all users of a specified set",
                 "consumes": [
@@ -1986,7 +1986,7 @@
                 }
             }
         },
-        "/users/me": {
+        "/api/v1/users/me": {
             "get": {
                 "security": [
                     {
@@ -2098,7 +2098,7 @@
                 }
             }
         },
-        "/users/{id}": {
+        "/api/v1/users/{id}": {
             "get": {
                 "description": "Get user by ID",
                 "consumes": [
@@ -2437,7 +2437,7 @@
                 }
             }
         },
-        "/users/{id}/posts/list": {
+        "/api/v1/users/{id}/posts/list": {
             "get": {
                 "description": "List all posts of a specified set",
                 "consumes": [
@@ -2583,7 +2583,7 @@
                     "type": "string"
                 },
                 "userMedia": {
-                    "$ref": "#/definitions/models.MediaDB"
+                    "$ref": "#/definitions/models.MediaOutput"
                 }
             }
         },
@@ -2643,20 +2643,6 @@
                 },
                 "status": {
                     "type": "integer"
-                }
-            }
-        },
-        "models.MediaDB": {
-            "type": "object",
-            "properties": {
-                "_id": {
-                    "type": "string"
-                },
-                "data": {
-                    "type": "string"
-                },
-                "fileType": {
-                    "type": "string"
                 }
             }
         },

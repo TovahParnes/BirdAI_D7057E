@@ -26,7 +26,12 @@ func New(app *fiber.App, db repositories.RepositoryEndpoints) {
 	handler := NewHandler(db)
 
 	// Add the JWTProtected() method if JTW key is required.
-	usersRoute := app.Group("/users")
+
+	app.Static("/", "./src/frontend/dist/frontend")
+
+	api := app.Group("/api/v1")
+
+	usersRoute := api.Group("/users")
 	usersRoute.Get("/list", handler.ListUsers)
 	usersRoute.Get("/me", JWTProtected(), handler.GetUserMe)
 	usersRoute.Get("/:id", handler.GetUserById)
@@ -34,12 +39,12 @@ func New(app *fiber.App, db repositories.RepositoryEndpoints) {
 	usersRoute.Patch("/:id", JWTProtected(), handler.UpdateUser)
 	usersRoute.Delete("/:id", JWTProtected(), handler.DeleteUser)
 
-	birdsRoute := app.Group("/birds")
+	birdsRoute := api.Group("/birds")
 	birdsRoute.Get("/list", handler.ListBirds)
 	birdsRoute.Get("/:id", handler.GetBirdById)
 	birdsRoute.Patch("/:id", JWTProtected(), handler.UpdateBird)
 
-	postsRoute := app.Group("/posts")
+	postsRoute := api.Group("/posts")
 	postsRoute.Get("/list", handler.ListPosts)
 	usersRoute.Get("/:id/posts/list", handler.ListUsersPosts)
 	postsRoute.Get("/:id", handler.GetPostById)
@@ -47,7 +52,7 @@ func New(app *fiber.App, db repositories.RepositoryEndpoints) {
 	postsRoute.Patch("/:id", JWTProtected(), handler.UpdatePost)
 	postsRoute.Delete("/:id", JWTProtected(), handler.DeletePost)
 
-	adminRoute := app.Group("/admins")
+	adminRoute := api.Group("/admins")
 	adminRoute.Get("/list", JWTProtected(), handler.ListAdmins)
 	adminRoute.Get("/me", JWTProtected(), handler.GetAdminMe)
 	adminRoute.Post("/me", JWTProtected(), handler.CreateSuperadminMe)
@@ -56,8 +61,14 @@ func New(app *fiber.App, db repositories.RepositoryEndpoints) {
 	adminRoute.Patch("/:id", JWTProtected(), handler.UpdateAdmin)
 	adminRoute.Delete("/:id", JWTProtected(), handler.DeleteAdmin)
 
-	aiRoute := app.Group("/ai")
+	aiRoute := api.Group("/ai")
 	aiRoute.Post("/inputimage", JWTProtected(), handler.ImagePrediction)
+
+	// Serve the Angular app for all other routes
+	app.Get("*", func(c *fiber.Ctx) error {
+		// Serve the Angular app's index.html for all other routes
+		return c.SendFile("./src/frontend/dist/frontend/index.html")
+	})
 
 }
 

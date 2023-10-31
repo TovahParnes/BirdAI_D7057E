@@ -18,7 +18,6 @@ func Setup(ctx context.Context) (*fiber.App, error) {
 	if err != nil {
 		return nil, err
 	}
-	handlers.New(app, db)
 
 	//these two lines needs to be there for swagger to fuction
 	docs.SwaggerInfo.Host = "127.0.0.1:" + os.Getenv("PORT")
@@ -37,6 +36,7 @@ func Setup(ctx context.Context) (*fiber.App, error) {
 		// Ability to change OAuth2 redirect uri location
 		OAuth2RedirectUrl: "http://localhost:" + os.Getenv("PORT") + "/swagger/oauth2-redirect.html",
 	}))
+	handlers.New(app, db)
 
 	return app, nil
 }

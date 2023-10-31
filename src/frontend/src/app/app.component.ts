@@ -3,6 +3,7 @@ import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { Component } from '@angular/core';
 import {AuthGuardService} from './services/auth-guard.service';
 import { Router } from '@angular/router';
+import {environment} from "../environments/environment";
 
 
 @Component({
@@ -30,7 +31,9 @@ export class AppComponent {
 
   constructor(
     private router: Router,
-    public authService: SocialAuthService) { }
+    public authService: SocialAuthService) {
+      console.log(environment.production);
+    }
 
   ngOnInit() {
     this.authService.authState.subscribe((user) => {

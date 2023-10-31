@@ -21,7 +21,7 @@ import (
 // @Failure		404	{object}	models.Response{data=models.Err}
 // @Failure		410	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
-// @Router		/admins/{id} [get]
+// @Router		/api/v1/admins/{id} [get]
 func (h *Handler) GetAdminById(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)
 	if utils.IsTypeError(response) {
@@ -59,7 +59,7 @@ func (h *Handler) GetAdminById(c *fiber.Ctx) error {
 // @Failure		404	{object}	models.Response{data=models.Err}
 // @Failure		410	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
-// @Router		/admins/me [get]
+// @Router		/api/v1/admins/me [get]
 func (h *Handler) GetAdminMe(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)
 	if utils.IsTypeError(response) {
@@ -91,7 +91,7 @@ func (h *Handler) GetAdminMe(c *fiber.Ctx) error {
 // @Failure		403	{object}	models.Response{data=models.Err}
 // @Failure		401	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
-// @Router		/admins/list [get]
+// @Router		/api/v1/admins/list [get]
 func (h *Handler) ListAdmins(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)
 	if utils.IsTypeError(response) {
@@ -136,7 +136,7 @@ func (h *Handler) ListAdmins(c *fiber.Ctx) error {
 // @Failure		401	{object}	models.Response{data=models.Err}
 // @Failure		403	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
-// @Router		/admins/ [post]
+// @Router		/api/v1/admins [post]
 func (h *Handler) CreateAdmin(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)
 	if utils.IsTypeError(response) {
@@ -167,7 +167,7 @@ func (h *Handler) CreateAdmin(c *fiber.Ctx) error {
 	return utils.CreationResponseToStatus(c, response)
 }
 
-// CreateAdminMe is a function to create a new admin
+// CreateSuperadminMe is a function to create a new admin
 //
 // @Summary		TEMP Create a new admin based on the current user
 // @Description	TEMP Create a new admin based on the current user. Does not have any access schecks. This only exists for testing.
@@ -180,7 +180,7 @@ func (h *Handler) CreateAdmin(c *fiber.Ctx) error {
 // @Failure		401	{object}	models.Response{data=models.Err}
 // @Failure		403	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
-// @Router		/admins/me [post]
+// @Router		/api/v1/admins/me [post]
 func (h *Handler) CreateSuperadminMe(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)
 	if utils.IsTypeError(response) {
@@ -218,7 +218,7 @@ func (h *Handler) CreateSuperadminMe(c *fiber.Ctx) error {
 // @Failure		403	{object}	models.Response{data=models.Err}
 // @Failure		404	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
-// @Router			/admins/{id} [patch]
+// @Router			/api/v1/admins/{id} [patch]
 func (h *Handler) UpdateAdmin(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)
 	if utils.IsTypeError(response) {
@@ -266,7 +266,7 @@ func (h *Handler) UpdateAdmin(c *fiber.Ctx) error {
 // @Failure		403	{object}	models.Response{data=models.Err}
 // @Failure		404	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
-// @Router		/admins/{id} [delete]
+// @Router		/api/v1/admins/{id} [delete]
 func (h *Handler) DeleteAdmin(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)
 	if utils.IsTypeError(response) {
