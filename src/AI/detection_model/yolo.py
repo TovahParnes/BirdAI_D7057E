@@ -128,7 +128,6 @@ def delete_images(path):
 def run_classification(_image):
     prediction_results = predict_image(_image, rotations=0)     #prediction_results[Bird index][0 = image, 5 = accuracy]
     _res_image = crop_images(prediction_results[0][0], target_size=(224, 224)) # We send the first bird box image
-    _res_image.show()
     if _res_image:
         return _res_image
     else:
