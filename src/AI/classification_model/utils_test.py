@@ -2,7 +2,7 @@ import unittest
 import os
 import shutil
 import tempfile
-from utils import load_json_file, create_folder, delete_folder, folder_exists, generate_random_name
+from utils import load_json_file, create_folder, delete_folder, folder_exists, generate_random_name, check_prerequisites, check_directory_for_file
 
 
 class TestYourFunctions(unittest.TestCase):
@@ -61,6 +61,37 @@ class TestYourFunctions(unittest.TestCase):
         random_name_02 = generate_random_name()
 
         self.assertNotEqual(random_name_01, random_name_02)  # Check if the length is as expected
+
+    def test_check_prerequisites(self):
+        # Create a temporary "images" folder for testing
+        test_folder = "test_images_folder"
+        self.assertFalse(os.path.exists(test_folder))
+        create_folder(test_folder)
+
+        # Test when both model and labels files exist
+        with open("mobilenet_model.keras", "w") as model_file, open("labels.json", "w") as labels_file:
+            self.assertTrue(check_prerequisites())
+
+        # Test when model file is missing
+        os.remove("mobilenet_model.keras")
+        self.assertFalse(check_prerequisites())
+
+        # Test when labels file is missing
+        os.remove("labels.json")
+        self.assertFalse(check_prerequisites())
+
+        # Clean up the temporary "images" folder
+        os.rmdir(test_folder)
+
+    def test_check_directory_for_file(self):
+        # Create a temporary directory for testing
+        test_dir = "test_dir_" + generate_random_name()
+        self.assertFalse(os.path.exists(test_dir))
+        create_folder(test_dir)
+        self.assertTrue(os.path.exists(test_dir))
+
+        # Clean up the temporary directory
+        os.rmdir(test_dir)
 
 
 if __name__ == '__main__':

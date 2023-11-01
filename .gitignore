@@ -4,11 +4,18 @@
 # ---Frontend---
 
 # ---AI---
-src/AI/classification_model/mobilenet_model.keras
-src/AI/classification_model/__pycache__
-src/AI/classification_model/__pycache__/
+
+# -- Controller
+src/AI/ai-controller/__pycache__/
+
+# -- Detection
 src/AI/detection_model/__pycache__/
 src/AI/detection_model/yolov8m.pt
 src/AI/detection_model/boxes/
+src/AI/detection_model/cropped_images/
+
+# -- Classification
+src/AI/classification_model/mobilenet_model.keras
+src/AI/classification_model/__pycache__
+src/AI/classification_model/__pycache__/
 src/AI/classification_model/images/
-src/AI/ai-controller/__pycache__/
