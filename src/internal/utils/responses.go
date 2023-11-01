@@ -44,7 +44,8 @@ func IsTypeError(response models.Response) bool {
 }
 
 func IsType(response models.Response, data interface{}) bool {
-	return reflect.TypeOf(response.Data) == reflect.TypeOf(data)
+	return (reflect.TypeOf(response.Data) == reflect.TypeOf(data)) ||
+		(reflect.TypeOf(response.Data) == reflect.PtrTo(reflect.TypeOf(data)))
 }
 
 

@@ -9,18 +9,18 @@ definitions:
     type: object
   models.AdminInput:
     properties:
-      access:
+      _id:
         type: string
-      id:
+      access:
         type: string
       userId:
         type: string
     type: object
   models.AdminOutput:
     properties:
-      access:
+      _id:
         type: string
-      id:
+      access:
         type: string
       user:
         $ref: '#/definitions/models.UserOutput'
@@ -581,6 +581,59 @@ paths:
       security:
       - Bearer: []
       summary: Get current admin
+      tags:
+      - Admins
+    post:
+      consumes:
+      - application/json
+      description: TEMP Create a new admin based on the current user. Does not have
+        any access schecks. This only exists for testing.
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Err'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Err'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Err'
+              type: object
+        "503":
+          description: Service Unavailable
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Err'
+              type: object
+      security:
+      - Bearer: []
+      summary: TEMP Create a new admin based on the current user
       tags:
       - Admins
   /ai/inputimage:
