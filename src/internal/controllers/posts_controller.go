@@ -132,35 +132,6 @@ func (c *Controller) CPostDBToOutput(post models.PostDB) (models.Response) {
 	}
 	birdOutput := bird.Data.(*models.BirdOutput)
 
-	//image := mediaColl.FindOne(bson.M{"_id": bird.Data.(*models.BirdDB).ImageId})
-	//imageOutput := models.MediaOutput{
-	//	Id:       image.Data.(*models.MediaDB).Id,
-	//	Data:     []byte(image.Data.(*models.MediaDB).Data),
-	//	FileType: image.Data.(*models.MediaDB).FileType,
-	//}
-	//sound := mediaColl.FindOne(bson.M{"_id": bird.Data.(*models.BirdDB).SoundId})
-	//soundOutput := models.MediaOutput{
-	//	Id:       sound.Data.(*models.MediaDB).Id,
-	//	Data:     []byte(sound.Data.(*models.MediaDB).Data),
-	//	FileType: sound.Data.(*models.MediaDB).FileType,
-	//}
-	//birdOutput := models.BirdOutput{
-	//	Id:          bird.Data.(*models.BirdDB).Id,
-	//	Name:        bird.Data.(*models.BirdDB).Name,
-	//	Description: bird.Data.(*models.BirdDB).Description,
-	//	Image:       imageOutput,
-	//	Sound:       soundOutput,
-	//}
-
-	//TODO fix static birds
-	/*
-	birdOutput := models.BirdOutput{
-		Id:          "651eb6aa9dd12b111952d7b2",
-		Name:        "testbird",
-		Description: "Cool test bird",
-	}
-	*/
-
 	userImage := c.db.Media.GetMediaById(post.MediaId)
 	if utils.IsTypeError(userImage) {
 		return userImage
