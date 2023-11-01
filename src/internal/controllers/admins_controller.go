@@ -14,7 +14,7 @@ func (c *Controller) CGetAdminById(id string) (models.Response) {
 		return response
 	}
 	admin := response.Data.(*models.AdminDB)
-	adminResponse := c.cAdminDBToOutput(admin)
+	adminResponse := c.CAdminDBToOutput(admin)
 	return adminResponse
 }
 
@@ -24,7 +24,7 @@ func (c *Controller) CGetAdminByUserId(id string) (models.Response) {
 		return response
 	}
 	admin := response.Data.(*models.AdminDB)
-	adminResponse := c.cAdminDBToOutput(admin)
+	adminResponse := c.CAdminDBToOutput(admin)
 	return adminResponse
 }
 
@@ -36,7 +36,7 @@ func (c *Controller) CListAdmins(set int, search string) (models.Response) {
 
 	output := []*models.AdminOutput{}
 	for _, admin := range response.Data.([]models.AdminDB) {
-		adminResponse := c.cAdminDBToOutput(&admin)
+		adminResponse := c.CAdminDBToOutput(&admin)
 		if utils.IsTypeError(adminResponse) {
 			return adminResponse
 		}
@@ -75,7 +75,7 @@ func (c *Controller) CCreateAdmin(adminInput *models.AdminInput) (models.Respons
 
 func (c *Controller) CUpdateAdmin(id string, admin *models.AdminInput) (models.Response) {
 	if (admin.Access == "admin") {
-		response := c.cCheckLastSuperadmin(id)
+		response := c.CCheckLastSuperadmin(id)
 		if utils.IsTypeError(response) {
 			return response
 		}
@@ -86,7 +86,7 @@ func (c *Controller) CUpdateAdmin(id string, admin *models.AdminInput) (models.R
 }
 
 func (c *Controller) CDeleteAdmin(id string) (models.Response) {
-	response := c.cCheckLastSuperadmin(id)
+	response := c.CCheckLastSuperadmin(id)
 	if utils.IsTypeError(response) {
 		return response
 	}
@@ -94,7 +94,7 @@ func (c *Controller) CDeleteAdmin(id string) (models.Response) {
 	return response
 }
 
-func (c *Controller) cCheckLastSuperadmin(id string) (models.Response) {
+func (c *Controller) CCheckLastSuperadmin(id string) (models.Response) {
 	filter := bson.M{"access": "superadmin"}
 	response := c.db.Admin.ListAdmins(filter, 0)
 	if utils.IsTypeError(response) {
@@ -109,7 +109,7 @@ func (c *Controller) cCheckLastSuperadmin(id string) (models.Response) {
 	return utils.Response(nil)
 }
 
-func (c *Controller) cAdminDBToOutput(admin *models.AdminDB) (models.Response) {
+func (c *Controller) CAdminDBToOutput(admin *models.AdminDB) (models.Response) {
 	userResponse := c.db.User.GetUserById(admin.UserId)
 	if utils.IsTypeError(userResponse) {
 		return userResponse
