@@ -1,12 +1,9 @@
-import os
-
 from flask import Flask, request, jsonify, json
 import requests
 from PIL import Image
-import PIL
-import base64
-import re
-from io import BytesIO
+from requests import RequestException
+
+import utils
 
 app = Flask(__name__)
 _receiver_port = 3500
@@ -19,32 +16,38 @@ classification_model_port = "3502"
 
 
 def listen():
+    """
+     Starts the listening service, the service will now listen for outbound requests.
+    """
     app.run(host='0.0.0.0', port=_receiver_port)
 
 
 @app.route('/evaluate_image', methods=['POST'])
 def evaluate_image():
+    """
+     Takes a request of an image for detection & classification and returns the prediction.
+    """
 
     data = request.get_json()
 
-    _loaded_base64_data = data["media"]
+    try:
+        media_data = data["media"]
+    except KeyError:
+        return jsonify({"error": "Media data is missing in the request."}, 400)
 
-    _loaded_base64_without_header = re.sub('^data:image/.+;base64,', '', _loaded_base64_data)
+    image = utils.create_pil_image_from_base64(media_data)
 
-    image = base64.b64decode(_loaded_base64_without_header, validate=True)
+    if image is not None:
+        _result_image = send_image_to_detection(image, detection_model_ip, detection_model_port)
+    else:
+        return jsonify({"error": "While trying to create a PIL image"}, 400)
 
-    # Create a byte array from the pixel data
-    pixel_bytes = bytes(image)
+    if _result_image is not None:
+        _result = send_image_to_classification(_result_image, classification_model_ip, classification_model_port)
+    else:
+        return jsonify({"error": "Failure while sending image to classification module"}, 400)
 
-    # Create a PIL image from the pixel data
-    im1 = Image.open(BytesIO(pixel_bytes))
-
-    _result_image = send_image_to_detection(im1, detection_model_ip, detection_model_port)
-    _result = send_image_to_classification(_result_image, classification_model_ip, classification_model_port)
-
-    birds = [
-        {"name": _result.json()['label'], "accuracy": _result.json()['accuracy']}
-    ]
+    birds = [{"name": _result.json()['label'], "accuracy": _result.json()['accuracy']}]
 
     json_structure = json.dumps({"birds": birds}, indent=4)
 
@@ -52,44 +55,89 @@ def evaluate_image():
 
 
 def send_image_to_classification(_img, _ip, _port):     # Returns a PIL image.
+    """
+    Send an image for detection to a remote server and receive the result as a PIL image.
+    """
+
     url = f'http://{_ip}:{_port}/process_image'
 
-    # Send a POST request with the image data
-    response = requests.post(url, json=convertPILToJSON(_img))
+    try:
+        # Send a POST request with the image data
+        response = requests.post(url, json=convert_pil_to_json(_img))
+        response.raise_for_status()  # Raise an exception for HTTP errors
 
-    _result = response
+        return response
 
-    return _result
+    except requests.exceptions.RequestException as e:
+        # Handle request errors, such as network issues or server unavailability
+        print(f"Request error: {e}")
+        return None
+    except requests.exceptions.HTTPError as e:
+        # Handle HTTP errors (e.g., 4xx or 5xx status codes)
+        print(f"HTTP error: {e}")
+        return None
+    except Exception as e:
+        # Handle any other unexpected errors
+        print(f"An unexpected error occurred: {e}")
+        return None
 
 
-def send_image_to_detection(_img, _ip, _port):     # Returns a PIL image.
+def send_image_to_detection(_img, _ip, _port):
+    """
+    Send an image for detection to a remote server and receive the result as a PIL image.
+    """
+
     url = f'http://{_ip}:{_port}/process_image'
 
-    # Send a POST request with the image data
-    response = requests.post(url, json=convertPILToJSON(_img))
+    try:
+        # Send a POST request with the image data
+        response = requests.post(url, json=convert_pil_to_json(_img))
+        response.raise_for_status()  # Raise an exception for HTTP errors
 
-    _image_data = response.json()['image_data']
+        _image_data = response.json()['image_data']
 
-    # Create a byte array from the pixel data
-    pixel_bytes = bytes([value for pixel in _image_data for value in pixel])
+        # Create a byte array from the pixel data
+        pixel_bytes = bytes([value for pixel in _image_data for value in pixel])
 
-    # Create a PIL image from the pixel data
-    image = Image.frombytes('RGB', (224, 224), pixel_bytes)
+        # Create a PIL image from the pixel data
+        image = Image.frombytes('RGB', (224, 224), pixel_bytes)
 
-    return image
+        return image
+
+    except RequestException as e:
+        print(f"Request error: {e}")
+        # Handle the error as needed, e.g., log it or return a default image
+        return None
+    except (ValueError, KeyError) as e:
+        print(f"JSON parsing error: {e}")
+        # Handle JSON parsing errors, e.g., log them or return a default image
+        return None
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+        # Handle any other unexpected errors
+        return None
 
 
-def convertPILToJSON(_image):
+def convert_pil_to_json(image):
+    """
+    Convert a PIL image to a JSON-compatible representation.
+    """
 
-    # Convert the image data to a list of pixel values
-    pixel_data = list(_image.getdata())
+    try:
+        # Convert the image data to a list of pixel values
+        pixel_data = list(image.getdata())
 
-    # Create a dictionary with image data
-    image_info = {
-        "width": _image.width,
-        "height": _image.height,
-        "mode": _image.mode,
-        "pixels": pixel_data
-    }
+        # Create a dictionary with image data
+        image_info = {
+            "width": image.width,
+            "height": image.height,
+            "mode": image.mode,
+            "pixels": pixel_data
+        }
 
-    return image_info
+        return image_info
+    except Exception as e:
+        # Handle any unexpected errors
+        print(f"An unexpected error occurred while converting PIL to JSON: {e}")
+        return None
+
