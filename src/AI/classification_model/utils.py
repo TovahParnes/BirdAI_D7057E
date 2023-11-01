@@ -50,3 +50,37 @@ def check_images_folder():
 
     if not os.path.exists(images_folder):
         create_folder(images_folder)
+
+
+def check_prerequisites():
+    model_filename = "mobilenet_model.keras"
+    labels_filename = "labels.json"
+
+    # Check if the "images" folder exists in the parent directory. If not, create it.
+    check_images_folder()
+
+    model_exists = check_directory_for_file(model_filename)
+    labels_exists = check_directory_for_file(labels_filename)
+
+    if model_exists and labels_exists:
+        return True
+    else:
+        missing_files = []
+        if not model_exists:
+            missing_files.append(model_filename)
+        if not labels_exists:
+            missing_files.append(labels_filename)
+
+        print("The following prerequisite files are missing:")
+        for missing_file in missing_files:
+            print(f"- {missing_file}")
+
+        return False
+
+
+def check_directory_for_file(filename, path=None):
+    if path is None:
+        path = os.getcwd()  # Default to the current working directory
+
+    file_path = os.path.join(path, filename)
+    return os.path.exists(file_path)
