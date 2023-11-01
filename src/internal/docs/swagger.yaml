@@ -94,9 +94,7 @@ definitions:
       _id:
         type: string
       data:
-        items:
-          type: integer
-        type: array
+        type: string
       fileType:
         type: string
     type: object

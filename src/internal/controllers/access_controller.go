@@ -38,7 +38,7 @@ func (c *Controller) CIsPostsUser(curUserId string, postId string) models.Respon
 		return response
 	}
 
-	if utils.IsType(response, models.PostOutput{}) && response.Data.(models.PostOutput).User.Id == curUserId {
+	if utils.IsType(response, models.PostOutput{}) && response.Data.(*models.PostOutput).User.Id == curUserId {
 		return utils.Response("Is posts user")
 	}
 

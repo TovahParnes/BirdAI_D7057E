@@ -2681,10 +2681,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "data": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
+                    "type": "string"
                 },
                 "fileType": {
                     "type": "string"
