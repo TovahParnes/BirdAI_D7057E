@@ -41,7 +41,7 @@ func (c *Controller) RequestAnalyze(mediaData string) models.AIList {
 	}}
 }
 
-func (c *Controller) AiListToResponse(aiList models.AIList, dat []byte) []models.AnalyzeResponse {
+func (c *Controller) AiListToResponse(aiList models.AIList, dat string) []models.AnalyzeResponse {
 	response := []models.AnalyzeResponse{}
 	for _, ai := range aiList.Birds {
 		response = append(response, models.AnalyzeResponse{
@@ -52,7 +52,7 @@ func (c *Controller) AiListToResponse(aiList models.AIList, dat []byte) []models
 			BirdId: "333333",
 			UserMedia: models.MediaDB{
 				Id:       "123123",
-				Data:     string(dat),
+				Data:     dat,
 				FileType: "JPG",
 			},
 		})
