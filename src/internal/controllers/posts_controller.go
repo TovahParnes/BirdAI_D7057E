@@ -136,7 +136,7 @@ func PostDBToOutput(db repositories.RepositoryEndpoints, post models.PostDB) *mo
 	}
 	userImageOutput := models.MediaOutput{
 		Id:       userImage.Data.(*models.MediaDB).Id,
-		Data:     []byte(userImage.Data.(*models.MediaDB).Data),
+		Data:     userImage.Data.(*models.MediaDB).Data,
 		FileType: userImage.Data.(*models.MediaDB).FileType,
 	}
 	return &models.PostOutput{

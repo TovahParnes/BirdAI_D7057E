@@ -35,13 +35,20 @@ func (h *Handler) ImagePrediction(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
 
-	//TEMPORARY for demo
-	dat, err := os.ReadFile("src/internal/handlers/TEMPBIRD.txt")
-	if err != nil {
-		fmt.Print(err.Error())
-	}
+	var aiBirds models.AIList
+	var dat string
 
-	aiBirds := h.controller.RequestAnalyze(string(dat))
+	if os.Getenv("USE_AI") == "true" {
+		dat = picture.Data
+	} else {
+		//TEMPORARY for demo
+		byteDat, err := os.ReadFile("src/internal/handlers/TEMPBIRD.txt")
+		if err != nil {
+			fmt.Print(err.Error())
+		}
+		dat = string(byteDat)
+	}
+	aiBirds = h.controller.RequestAnalyze(dat)
 
 	aiResponse := h.controller.AiListToResponse(aiBirds, dat)
 
