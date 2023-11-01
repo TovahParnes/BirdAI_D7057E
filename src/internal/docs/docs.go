@@ -2585,7 +2585,7 @@ const docTemplate = `{
                 "birdId": {
                     "type": "string"
                 },
-                "picture": {
+                "userMedia": {
                     "$ref": "#/definitions/models.MediaDB"
                 }
             }

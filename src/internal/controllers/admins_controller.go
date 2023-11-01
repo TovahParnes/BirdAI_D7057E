@@ -14,7 +14,7 @@ func (c *Controller) CGetAdminById(id string) (models.Response) {
 		return response
 	}
 	admin := response.Data.(*models.AdminDB)
-	adminResponse := c.adminDBToOutput(admin)
+	adminResponse := c.cAdminDBToOutput(admin)
 	return adminResponse
 }
 
@@ -24,7 +24,7 @@ func (c *Controller) CGetAdminByUserId(id string) (models.Response) {
 		return response
 	}
 	admin := response.Data.(*models.AdminDB)
-	adminResponse := c.adminDBToOutput(admin)
+	adminResponse := c.cAdminDBToOutput(admin)
 	return adminResponse
 }
 
@@ -36,7 +36,7 @@ func (c *Controller) CListAdmins(set int, search string) (models.Response) {
 
 	output := []*models.AdminOutput{}
 	for _, admin := range response.Data.([]models.AdminDB) {
-		adminResponse := c.adminDBToOutput(&admin)
+		adminResponse := c.cAdminDBToOutput(&admin)
 		if utils.IsTypeError(adminResponse) {
 			return adminResponse
 		}
@@ -109,13 +109,13 @@ func (c *Controller) cCheckLastSuperadmin(id string) (models.Response) {
 	return utils.Response(nil)
 }
 
-func (c *Controller) adminDBToOutput(admin *models.AdminDB) (models.Response) {
+func (c *Controller) cAdminDBToOutput(admin *models.AdminDB) (models.Response) {
 	userResponse := c.db.User.GetUserById(admin.UserId)
 	if utils.IsTypeError(userResponse) {
 		return userResponse
 	}
 	userDB := userResponse.Data.(*models.UserDB)
-	userOutput := models.UserDBToOutput(*userDB)
+	userOutput := models.UserDBToOutput(userDB)
 	adminOutput := models.AdminDBToOutput(admin, userOutput)
 	return utils.Response(adminOutput)
 }

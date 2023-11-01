@@ -3,19 +3,23 @@ package controllers
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
+	"fmt"
 	"net/http"
 )
 
 func (c *Controller) CIsAdmin(curUserId string) models.Response {
 	response := c.CGetAdminByUserId(curUserId)
-	if utils.IsTypeError(response)  && response.Data.(models.Err).StatusCode != http.StatusNotFound{
+	fmt.Println("Admin response:",response.Data)
+	if utils.IsTypeError(response) && response.Data.(models.Err).StatusCode != http.StatusNotFound{
+		fmt.Println("if 1")
 		return response
 	}
 
-	if utils.IsType(response, models.AdminOutput{}) {
+	if utils.IsType(response, models.AdminOutput{}){
+		fmt.Println("if 2")
 		return utils.Response("Is admin")
 	}
-
+	
 	return utils.ErrorForbidden("User is not admin")
 }
 
@@ -75,18 +79,27 @@ func (c *Controller) CIsPostsUserOrAdmin(curUserId string, postId string) models
 
 func (c *Controller) CIsCurrentUserOrAdmin(curUserId string, userId string) models.Response {
 	currentUserResponse := c.CIsCurrentUser(curUserId, userId)
+	//fmt.Println("Curtent user response:",currentUserResponse.Data)
+	//fmt.Println("Curtent user response:",currentUserResponse.Data.(models.Err).StatusCode)
+	//fmt.Println(utils.IsTypeError(currentUserResponse) && currentUserResponse.Data.(models.Err).StatusCode != http.StatusForbidden)
+
 	if utils.IsTypeError(currentUserResponse) && currentUserResponse.Data.(models.Err).StatusCode != http.StatusForbidden{
+		//fmt.Println("if 1")
 		return currentUserResponse
 	}
 	if !utils.IsTypeError(currentUserResponse) {
+		//fmt.Println("if 2")
 		return utils.Response("Is current user")
 	}
 
 	adminRresponse := c.CIsAdmin(curUserId)
+	fmt.Println("Admin response:",adminRresponse.Data)
 	if utils.IsTypeError(adminRresponse) && adminRresponse.Data.(models.Err).StatusCode != http.StatusForbidden{
+		fmt.Println("if 3")
 		return adminRresponse
 	}
 	if !utils.IsTypeError(adminRresponse) {
+		fmt.Println("if 4")
 		return utils.Response("Is admin")
 	}
 
