@@ -70,7 +70,10 @@ func (c *Controller) CCreateAdmin(adminInput *models.AdminInput) (models.Respons
 		Access: adminInput.Access,
 	}
 	response := c.db.Admin.CreateAdmin(*admin)
-	return response
+	if utils.IsTypeError(response) {
+		return response
+	}
+	return c.CGetAdminById(response.Data.(string))
 }
 
 func (c *Controller) CUpdateAdmin(id string, admin *models.AdminInput) (models.Response) {

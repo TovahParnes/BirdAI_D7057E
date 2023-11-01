@@ -3,6 +3,8 @@ package controllers
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
+	"fmt"
+	"net/http"
 
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -25,6 +27,12 @@ func (c *Controller) CListPosts(set int, search string) models.Response {
 
 	if utils.IsTypeError(response) {
 		return response
+	}
+
+	//TEMPORATY - restarting fiber changes the bird id, meaning listing posts will 
+	//always from error that bird does not exisits
+	for _, postsObject := range response.Data.([]models.PostDB) {
+		fmt.Println(postsObject.Id)
 	}
 
 	for _, postsObject := range response.Data.([]models.PostDB) {
@@ -54,6 +62,14 @@ func (c *Controller) CListUsersPosts(userId string, set int) models.Response {
 }
 
 func (c *Controller) CCreatePost(userId string, postInput *models.PostInput) models.Response {
+	bird := c.db.Bird.GetBirdById(postInput.BirdId)
+	if utils.IsTypeError(bird) {
+		if bird.Data.(models.Err).StatusCode == http.StatusNotFound {
+			return utils.ErrorToResponse(http.StatusBadRequest, "Bird not found", "Bird with that id does not exist")
+		}
+		return bird
+	}
+
 	media := &models.MediaDB{
 		Data:     postInput.Media.Data,
 		FileType: postInput.Media.FileType,
@@ -69,7 +85,10 @@ func (c *Controller) CCreatePost(userId string, postInput *models.PostInput) mod
 		MediaId:  response.Data.(string),
 	}
 	response = c.db.Post.CreatePost(*post)
-	return response
+	if utils.IsTypeError(response) {
+		return response
+	}
+	return c.CGetPostById(response.Data.(string))
 }
 
 // TODO need to change media also but now it can change location
@@ -86,11 +105,17 @@ func (c *Controller) CUpdatePost(postId string, post *models.PostInput) models.R
 }
 
 func (c *Controller) CDeletePost(id string) models.Response {
+	post := c.db.Post.GetPostById(id)
+	if utils.IsTypeError(post) {
+		return post
+	}
+
 	deletePostResponse := c.db.Post.DeletePost(id)
 	if utils.IsTypeError(deletePostResponse) {
 		return deletePostResponse
 	}
-	deleteMediaResponse := c.db.Media.DeleteMedia(deletePostResponse.Data.(*models.PostDB).MediaId)
+
+	deleteMediaResponse := c.db.Media.DeleteMedia(post.Data.(*models.PostDB).MediaId)
 	return deleteMediaResponse
 }
 
