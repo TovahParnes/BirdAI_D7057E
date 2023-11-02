@@ -8,7 +8,7 @@
 <p></p>
 
 <mat-card class="card">
-  
+
   <mat-vertical-stepper>
 
 
@@ -33,7 +33,7 @@
 
         <img *ngIf="selectedImage" [src]="selectedImage" alt="Selected Image" width="92%" />
         <button *ngIf="selectedImage" mat-icon-button style="position: absolute; left: 22px; top: 22px;" (click)="onClear()" color="primary"><mat-icon>delete</mat-icon></button>
-        
+
         <div style="padding-top: 6px">
           <button mat-button matStepperPrevious style="margin-right: 6px;">Back</button>
             <button mat-raised-button color="primary" type="button" (click)="onSubmit(loading)" [disabled]="!selectedImage">Submit</button>
@@ -50,7 +50,7 @@
         <button mat-button matStepperPrevious style="margin-right: 6px;">Back</button>
         <button mat-button matStepperNext disabled>Submit</button>
       </div>
-      
+
     </mat-step>
     </form>
 
@@ -61,19 +61,30 @@
 
 <p></p>
 
-<div *ngIf="toggle">
+<div *ngIf="togglePostView">
   <div *ngIf="analyzed">
     <mat-card class="card" style="text-align: center;">
-      <!-- <img id="ItemPreview" src={{analyzed.data.picture.data}}> -->
-      <img id="ItemPreview" src="{{jsonlist.list3[1].image}}" width="100%">
-      <p>Name: {{analyzed.data.name}}</p>
-      <p>Accuracy: {{analyzed.data.accuracy}}</p>
+      <div *ngIf="analyzed.data.length > 0">
+      <img id="ItemPreview" src="{{getLatestBird().image}}" width="100%">
+      <p>Name: {{analyzed.data[0].aiBird.name}}</p>
+      <p>Accuracy: {{convertAccuracy(analyzed.data[0].aiBird.accuracy)}}</p>
       <div style="display: flex; flex-direction: row; justify-content: center;">
         <button mat-button (click)="togglePreview()">Remove</button>
         <button mat-button (click)="createPost()">Post</button>
     </div>
+      </div>
+      <div *ngIf="analyzed.data.length === 0">
+        <p>Sorry, but the bird you sent in cannot be found or is not in our collection</p>
+      </div>
     </mat-card>
   </div>
+</div>
+
+<div *ngIf="toggleConfirmView">
+  <mat-card class="card" style="text-align: center;">
+    <p>Post Successfully Created!</p>
+    <button mat-button (click)="toggleConfirmView = false">OK</button>
+  </mat-card>
 </div>
 
 

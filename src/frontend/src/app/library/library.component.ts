@@ -5,6 +5,8 @@ import { AppComponent } from '../app.component';
 import { CardComponent } from '../card/card.component';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {getAllBirdsResponse} from 'src/assets/components/components';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-library',
@@ -48,28 +50,51 @@ export class LibraryComponent {
     ) {
   }
 
-  navigateToSpecies(imageId: string, imageName: string): void {
+  navigateToSpecies(imageId: string, imageName: string, imageDesc: string): void {
     this.router.navigate(['species-page'], {
       queryParams: {
         imageId: encodeURIComponent(imageId),
         imageName: encodeURIComponent(imageName),
+        imageDesc: encodeURI(imageDesc)
       }
       });
+  }
+
+  allBirds: getAllBirdsResponse = {
+    data:[],
+    timestamp: ""
+  }
+
+  allBirdsBackup: getAllBirdsResponse = {
+    data:[],
+    timestamp: ""
   }
 
   //sorts by name but should prob not be visible as a button but rather done autmatically in the background
   sortCards() {
     this.cardlist.sort((a, b) => a.title.localeCompare(b.title));
+    this.allBirds.data.sort((a, b) => a.Name.localeCompare(b.Name));
   }
 
+  // filterCards(letter: string): void {
+  //   if(this.found == true){
+  //     this.allBirds.data = this.foundlist
+  //   }else{
+  //     this.allBirds.data = this.backupCards
+  //   }
+  //   this.allBirds.data = this.allBirds.data.filter(card => card.Name.startsWith(letter));
+  //   this.lastLetter = letter
+  // }
+
   filterCards(letter: string): void {
-    if(this.found == true){
-      this.cardlist = this.foundlist
-    }else{
-      this.cardlist = this.backupCards
-    }
-    this.cardlist = this.cardlist.filter(card => card.title.startsWith(letter));
-    this.lastLetter = letter
+    this.allBirds.data = this.allBirdsBackup.data;
+    this.allBirds.data = this.allBirds.data.filter(card => card.Name.startsWith(letter));
+    this.lastLetter = letter;
+  }
+
+  resetbirds(){
+    this.allBirds.data = this.allBirdsBackup.data;
+    console.log(this.allBirdsBackup.data)
   }
 
   toggleFound(){
@@ -93,9 +118,27 @@ export class LibraryComponent {
   ngOnInit(): void {
     this.getData().subscribe((response) => {
       const data = response;
-      this.cardlist = data.find((item) => 'list2' in item)?.list2 || [];
-      this.foundlist = data.find((item) => 'list1' in item)?.list1 || [];
-      this.backupCards = this.cardlist
+      //this.cardlist = data.find((item) => 'list2' in item)?.list2 || [];
+      //this.foundlist = data.find((item) => 'list1' in item)?.list1 || [];
+      //this.backupCards = this.cardlist
     });
+    this.getAllBirds();
+    this.cardlist = this.allBirds.data
+    this.foundlist =this.allBirds.data;
+  }
+
+  getAllBirds(){
+    this.sendGetBirds().subscribe(
+      (response: getAllBirdsResponse) => {
+        this.allBirds = response;
+        this.allBirdsBackup.data = response.data;
+      },
+      err => { 
+        console.error("Failed at sending data:" + err); 
+      }
+    );
+  }
+  sendGetBirds() {
+    return this.http.get<getAllBirdsResponse>(environment.identifyRequestURL+"/birds/list?set=0");
   }
 }

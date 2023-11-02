@@ -6,7 +6,7 @@ import { Card2Component } from '../card/card.component';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import {LoginUser,UserResponse, listOutput} from 'src/assets/components/components';
+import {DeleteResponse, LoginUser,UpdateResponse,UserResponse, listOutput} from 'src/assets/components/components';
 
 @Component({
   selector: 'app-taken-images-page',
@@ -33,16 +33,40 @@ export class TakenImagesPageComponent {
     ) {
   }
   userMe!: LoginUser;
-  userList!: listOutput;
+  userList: listOutput = {
+    data: [],
+    timestamp: ""
+  }
+
+  parseDate(date:string){
+    const temp = date.split("T");
+    const newDate = temp[0];
+    return(newDate);
+  }
+
+  getDataToUpdate(){
+    const textField = document.getElementById("updateTextField") as HTMLInputElement;
+    const textField2 = document.getElementById("postIdTextField") as HTMLInputElement;
+    const textfield3 = document.getElementById("birdIdTextField") as HTMLInputElement;
+    this.updatePost(textField2.value,textField.value,textfield3.value);
+  }
+
+  getPostIdToDelete(){
+    const textField = document.getElementById("postIdTextField") as HTMLInputElement;
+    this.deletePost(textField.value)
+  }
   
+  getCurrentUserListData(){
+    console.log(this.userList.data)
+  }
 
-
-  navigateToSpecies(imageId: string, imageName: string, imageDate: string): void {
+  navigateToSpecies(imageId: string, imageName: string, imageDate: string, imageDesc: string): void {
     this.router.navigate(['species-page'], {
       queryParams: {
         imageId: encodeURIComponent(imageId),
         imageName: encodeURIComponent(imageName),
         imageDate: encodeURIComponent(imageDate),
+        imageDesc: encodeURIComponent(imageDesc),
       }
       });
   }
@@ -71,22 +95,16 @@ export class TakenImagesPageComponent {
     if(authKey){
       this.getCurrentUser(authKey).subscribe(
         (response: UserResponse) => {
-          console.log("Succesfully got userMe");
-          console.log(response.data);
           this.userMe = response.data;
-          console.log(this.userMe);
           //after getting currentuser I have to immediatly run the getCurrentUserList or else the nginit will run this part before for some reason, 
           //the value of this.userMe is set properly outside nginit but not inside if it is not nestled like this
           this.getCurrentUserList().subscribe(
             (response: listOutput) => {
-              console.log("Succesfully retrieved user list");
-              console.log(response.data);
-              this.userList = response;
+              this.userList.data = response.data;
             },err => { 
               console.error("Failed at getting user list:" + err); 
             }
           )
-          console.log(this.userList)
         },err => { 
           console.error("Failed at getting userMe:" + err); 
         }
@@ -95,6 +113,63 @@ export class TakenImagesPageComponent {
   }
   getCurrentUserList(){
     return this.http.get<listOutput>(environment.identifyRequestURL+"/users/"+this.userMe._id+"/posts/list");
+  }
+
+  // --Prata med emil om vad exakt för konvertering det är som görs för att veta vad för konvertering jag ska göra tillbaka!--
+  // convertByte2String(byte: number[]){
+  //   const toText = (bytes: number[]): string => {
+  //     let result = '';
+  //     for (let i = 0; i < bytes.length; ++i) {
+  //         const byte = bytes[i];
+  //         const text = byte.toString(16);
+  //         result += (byte < 16 ? '%0' : '%') + text;
+  //     }
+  //     return decodeURIComponent(result);
+  // };
+  // return toText(byte);
+  // }
+
+  deletePost(postId: string){
+    const authKey = localStorage.getItem("auth");
+    if(authKey){
+      this.sendDelete(authKey,postId).subscribe(
+        (response: DeleteResponse) => {
+        },err => { 
+          console.error("Failed at deleting post with id: "+ postId + " " + err); 
+        }
+      )
+    }
+  }
+
+  sendDelete(token: string, postId:string){
+    const header = {
+      'Authorization': `Bearer ${token}`
+    };
+    return this.http.delete<DeleteResponse>(environment.identifyRequestURL+"/posts/"+postId,{ headers: header });
+  }
+
+  updatePost(postId:string, newPostValues:string,birdId:string){
+    const authKey = localStorage.getItem("auth");
+    if(authKey){
+      this.sendUpdate(authKey,postId, newPostValues, birdId).subscribe(
+        (response: UpdateResponse) => {
+        },err => { 
+          console.error("Failed at updating post with id: "+ postId + " " + err); 
+        }
+      )
+    }
+  }
+
+  sendUpdate(token: string, postId: string,newPostValues:string,birdId:string){
+    const header = {
+      'Authorization': `Bearer ${token}`
+    };
+    const location = newPostValues;
+    const body = {
+      "birdId": birdId,
+      location
+    }
+    return this.http.patch<UpdateResponse>(environment.identifyRequestURL+"/posts/"+postId,body,{ headers: header });
   }
 
 }
