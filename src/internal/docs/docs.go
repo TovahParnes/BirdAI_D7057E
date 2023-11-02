@@ -2585,7 +2585,7 @@ const docTemplate = `{
                 "birdId": {
                     "type": "string"
                 },
-                "picture": {
+                "userMedia": {
                     "$ref": "#/definitions/models.MediaDB"
                 }
             }
@@ -2681,10 +2681,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "data": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
+                    "type": "string"
                 },
                 "fileType": {
                     "type": "string"

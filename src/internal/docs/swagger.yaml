@@ -31,7 +31,7 @@ definitions:
         $ref: '#/definitions/models.AIBird'
       birdId:
         type: string
-      picture:
+      userMedia:
         $ref: '#/definitions/models.MediaDB'
     type: object
   models.BirdInput:
@@ -94,9 +94,7 @@ definitions:
       _id:
         type: string
       data:
-        items:
-          type: integer
-        type: array
+        type: string
       fileType:
         type: string
     type: object

@@ -14,7 +14,7 @@ func (c *Controller) CGetBirdById(id string) (models.Response) {
 		return response
 	}
 	bird := response.Data.(*models.BirdDB)
-	birdResponse := c.BirdDBToOutput(bird)
+	birdResponse := c.CBirdDBToOutput(bird)
 	return birdResponse
 }
 
@@ -26,7 +26,7 @@ func (c *Controller) CListBirds(set int, search string) (models.Response) {
 
 	output := []*models.BirdOutput{}
 	for _, bird := range response.Data.([]models.BirdDB) {
-		birdResponse := c.BirdDBToOutput(&bird)
+		birdResponse := c.CBirdDBToOutput(&bird)
 		if utils.IsTypeError(birdResponse) {
 			return birdResponse
 		}
@@ -44,12 +44,12 @@ func (c *Controller) CUpdateBird(id string, bird *models.BirdInput) (models.Resp
 		return response
 	}
 	birdDB := response.Data.(*models.BirdDB)
-	birdResponse := c.BirdDBToOutput(birdDB)
+	birdResponse := c.CBirdDBToOutput(birdDB)
 	return birdResponse
 }
 
 
-func (c *Controller) BirdDBToOutput(bird *models.BirdDB) (models.Response) {
+func (c *Controller) CBirdDBToOutput(bird *models.BirdDB) (models.Response) {
 	imageResponse := c.db.Media.GetMediaById(bird.ImageId)
 	if utils.IsTypeError(imageResponse) {
 		return imageResponse

@@ -8,14 +8,14 @@ import (
 
 func (c *Controller) CIsAdmin(curUserId string) models.Response {
 	response := c.CGetAdminByUserId(curUserId)
-	if utils.IsTypeError(response)  && response.Data.(models.Err).StatusCode != http.StatusNotFound{
+	if utils.IsTypeError(response) && response.Data.(models.Err).StatusCode != http.StatusNotFound{
 		return response
 	}
 
-	if utils.IsType(response, models.AdminOutput{}) {
+	if utils.IsType(response, models.AdminOutput{}){
 		return utils.Response("Is admin")
 	}
-
+	
 	return utils.ErrorForbidden("User is not admin")
 }
 
@@ -38,7 +38,7 @@ func (c *Controller) CIsPostsUser(curUserId string, postId string) models.Respon
 		return response
 	}
 
-	if utils.IsType(response, models.PostOutput{}) && response.Data.(models.PostOutput).User.Id == curUserId {
+	if utils.IsType(response, models.PostOutput{}) && response.Data.(*models.PostOutput).User.Id == curUserId {
 		return utils.Response("Is posts user")
 	}
 

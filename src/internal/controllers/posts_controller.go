@@ -2,8 +2,10 @@ package controllers
 
 import (
 	"birdai/src/internal/models"
-	"birdai/src/internal/repositories"
 	"birdai/src/internal/utils"
+	"fmt"
+	"net/http"
+
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -14,11 +16,9 @@ func (c *Controller) CGetPostById(id string) models.Response {
 		return response
 	}
 
-	if utils.IsType(response, models.PostOutput{}) {
-		return utils.ErrorDeleted("Post collection")
-	}
-
-	return response
+	post := response.Data.(*models.PostDB)
+	postOutput := c.CPostDBToOutput(*post)
+	return postOutput
 }
 
 func (c *Controller) CListPosts(set int, search string) models.Response {
@@ -29,12 +29,18 @@ func (c *Controller) CListPosts(set int, search string) models.Response {
 		return response
 	}
 
+	//TEMPORATY - restarting fiber changes the bird id, meaning listing posts will 
+	//always from error that bird does not exisits
 	for _, postsObject := range response.Data.([]models.PostDB) {
-		o := PostDBToOutput(c.db, postsObject)
-		if o == nil {
-			return utils.ErrorNotFoundInDatabase("post collection")
+		fmt.Println(postsObject.Id)
+	}
+
+	for _, postsObject := range response.Data.([]models.PostDB) {
+		postResponse := c.CPostDBToOutput(postsObject)
+		if utils.IsTypeError(postResponse) {
+			return postResponse
 		}
-		posts = append(posts, o)
+		posts = append(posts, postResponse.Data.(*models.PostOutput))
 	}
 
 	return utils.Response(posts)
@@ -46,16 +52,24 @@ func (c *Controller) CListUsersPosts(userId string, set int) models.Response {
 	response := c.db.Post.ListPosts(filter, set)
 	output := []*models.PostOutput{}
 	for _, post := range response.Data.([]models.PostDB) {
-		postOutput := PostDBToOutput(c.db, post)
-		if postOutput == nil {
-			return utils.ErrorNotFoundInDatabase("post collection")
+		postOutput := c.CPostDBToOutput(post)
+		if utils.IsTypeError(postOutput) {
+			return postOutput
 		}
-		output = append(output, postOutput)
+		output = append(output, postOutput.Data.(*models.PostOutput))
 	}
 	return utils.Response(output)
 }
 
 func (c *Controller) CCreatePost(userId string, postInput *models.PostInput) models.Response {
+	bird := c.db.Bird.GetBirdById(postInput.BirdId)
+	if utils.IsTypeError(bird) {
+		if bird.Data.(models.Err).StatusCode == http.StatusNotFound {
+			return utils.ErrorToResponse(http.StatusBadRequest, "Bird not found", "Bird with that id does not exist")
+		}
+		return bird
+	}
+
 	media := &models.MediaDB{
 		Data:     postInput.Media.Data,
 		FileType: postInput.Media.FileType,
@@ -71,7 +85,10 @@ func (c *Controller) CCreatePost(userId string, postInput *models.PostInput) mod
 		MediaId:  response.Data.(string),
 	}
 	response = c.db.Post.CreatePost(*post)
-	return response
+	if utils.IsTypeError(response) {
+		return response
+	}
+	return c.CGetPostById(response.Data.(string))
 }
 
 // TODO need to change media also but now it can change location
@@ -79,72 +96,47 @@ func (c *Controller) CCreatePost(userId string, postInput *models.PostInput) mod
 func (c *Controller) CUpdatePost(postId string, post *models.PostInput) models.Response {
 	post.Id = postId
 	response := c.db.Post.UpdatePost(*post)
-	return response
+	if utils.IsTypeError(response) {
+		return response
+	}
+	postDB := response.Data.(*models.PostDB)
+	postOutput := c.CPostDBToOutput(*postDB)
+	return postOutput
 }
 
 func (c *Controller) CDeletePost(id string) models.Response {
+	post := c.db.Post.GetPostById(id)
+	if utils.IsTypeError(post) {
+		return post
+	}
+
 	deletePostResponse := c.db.Post.DeletePost(id)
 	if utils.IsTypeError(deletePostResponse) {
 		return deletePostResponse
 	}
-	deleteMediaResponse := c.db.Media.DeleteMedia(deletePostResponse.Data.(*models.PostDB).MediaId)
+
+	deleteMediaResponse := c.db.Media.DeleteMedia(post.Data.(*models.PostDB).MediaId)
 	return deleteMediaResponse
 }
 
-func PostDBToOutput(db repositories.RepositoryEndpoints, post models.PostDB) *models.PostOutput {
-	user := db.User.GetUserById(post.UserId)
+func (c *Controller) CPostDBToOutput(post models.PostDB) (models.Response) {
+	user := c.CGetUserById(post.UserId)
 	if utils.IsTypeError(user) {
-		return nil
+		return user
 	}
-	userOutput := models.UserOutput{
-		Id:        user.Data.(*models.UserDB).Id,
-		Username:  user.Data.(*models.UserDB).Username,
-		CreatedAt: user.Data.(*models.UserDB).CreatedAt,
-		Active:    user.Data.(*models.UserDB).Active,
-	}
-	//bird := birdColl.FindOne(bson.M{"_id": post.BirdId})
-	//image := mediaColl.FindOne(bson.M{"_id": bird.Data.(*models.BirdDB).ImageId})
-	//imageOutput := models.MediaOutput{
-	//	Id:       image.Data.(*models.MediaDB).Id,
-	//	Data:     []byte(image.Data.(*models.MediaDB).Data),
-	//	FileType: image.Data.(*models.MediaDB).FileType,
-	//}
-	//sound := mediaColl.FindOne(bson.M{"_id": bird.Data.(*models.BirdDB).SoundId})
-	//soundOutput := models.MediaOutput{
-	//	Id:       sound.Data.(*models.MediaDB).Id,
-	//	Data:     []byte(sound.Data.(*models.MediaDB).Data),
-	//	FileType: sound.Data.(*models.MediaDB).FileType,
-	//}
-	//birdOutput := models.BirdOutput{
-	//	Id:          bird.Data.(*models.BirdDB).Id,
-	//	Name:        bird.Data.(*models.BirdDB).Name,
-	//	Description: bird.Data.(*models.BirdDB).Description,
-	//	Image:       imageOutput,
-	//	Sound:       soundOutput,
-	//}
+	userOutput := user.Data.(*models.UserOutput)
 
-	//TODO fix static birds
-	birdOutput := models.BirdOutput{
-		Id:          "651eb6aa9dd12b111952d7b2",
-		Name:        "testbird",
-		Description: "Cool test bird",
+	bird := c.CGetBirdById(post.BirdId)
+	if utils.IsTypeError(bird) {
+		return bird
 	}
+	birdOutput := bird.Data.(*models.BirdOutput)
 
-	userImage := db.Media.GetMediaById(post.MediaId)
+	userImage := c.db.Media.GetMediaById(post.MediaId)
 	if utils.IsTypeError(userImage) {
-		return nil
+		return userImage
 	}
-	userImageOutput := models.MediaOutput{
-		Id:       userImage.Data.(*models.MediaDB).Id,
-		Data:     userImage.Data.(*models.MediaDB).Data,
-		FileType: userImage.Data.(*models.MediaDB).FileType,
-	}
-	return &models.PostOutput{
-		Id:        post.Id,
-		User:      userOutput,
-		Bird:      birdOutput,
-		CreatedAt: post.CreatedAt,
-		Location:  post.Location,
-		UserMedia: userImageOutput,
-	}
+	userImageOutput := models.MediaDBToOutput(userImage.Data.(*models.MediaDB))
+	postOutput := models.PostDBToOutput(&post, userOutput, birdOutput, userImageOutput)
+	return utils.Response(postOutput)
 }

@@ -14,11 +14,13 @@ func (c *Controller) CGetUserById(id string) models.Response {
 		return response
 	}
 
-	if utils.IsType(response, models.UserOutput{}) && response.Data.(models.UserOutput).Active == false {
+	if utils.IsType(response, models.UserDB{}) && response.Data.(*models.UserDB).Active == false {
 		return utils.ErrorDeleted("User collection")
 	}
 
-	return response
+	db := response.Data.(*models.UserDB)
+	output := models.UserDBToOutput(db)
+	return utils.Response(output)
 }
 
 func (c *Controller) CGetUserByAuthId(authId string) models.Response {
@@ -32,7 +34,9 @@ func (c *Controller) CGetUserByAuthId(authId string) models.Response {
 		return utils.ErrorDeleted("User collection")
 	}
 
-	return response
+	db := response.Data.(*models.UserDB)
+	output := models.UserDBToOutput(db)
+	return utils.Response(output)
 }
 
 func (c *Controller) CListUsers(set int) models.Response {
@@ -44,7 +48,7 @@ func (c *Controller) CListUsers(set int) models.Response {
 	}
 
 	for _, usersObject := range response.Data.([]models.UserDB) {
-		users = append(users, models.UserDBToOutput(usersObject))
+		users = append(users, models.UserDBToOutput(&usersObject))
 	}
 
 	return utils.Response(users)
@@ -57,5 +61,11 @@ func (c *Controller) CDeleteUser(id string) models.Response {
 func (c *Controller) CUpdateUser(id string, user *models.UserInput) models.Response {
 	user.Id = id
 	response := c.db.User.UpdateUser(*user)
-	return response
+	if utils.IsTypeError(response) {
+		return response
+	}
+
+	db := response.Data.(*models.UserDB)
+	output := models.UserDBToOutput(db)
+	return utils.Response(output)
 }

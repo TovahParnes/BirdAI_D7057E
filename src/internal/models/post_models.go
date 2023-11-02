@@ -24,3 +24,14 @@ type PostOutput struct {
 	Location  string      `bson:"location" json:"location" form:"location"`
 	UserMedia MediaOutput `bson:"user_media" json:"userMedia" form:"userMedia"`
 }
+
+func PostDBToOutput(db *PostDB, user *UserOutput, bird *BirdOutput, media *MediaOutput) *PostOutput {
+	return &PostOutput{
+		Id:     	db.Id,
+		User:   	*user,
+		Bird:      	*bird,
+		CreatedAt: 	db.CreatedAt,
+		Location:  	db.Location, 
+		UserMedia: 	*media,
+	}
+}
