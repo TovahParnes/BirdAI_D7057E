@@ -64,6 +64,7 @@ func TestUserController(t *testing.T) {
 	t.Run("Test GetUserById", func(t *testing.T) {
 		response :=userContr.CGetUserById(testUser1.GetId())
 		require.False(t, utils.IsTypeError(response))
+		require.IsType(t, &models.UserOutput{}, response.Data.(*models.UserOutput))
 		require.Equal(t, testUser1.Id, response.Data.(*models.UserOutput).Id)
 
 	
