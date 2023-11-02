@@ -20,5 +20,13 @@ services:
     volumes:
       - dbdata:/data/db
 
+  mongo_setup:
+    container_name: mongo_setup
+    build:
+      context: ./mongo-setup
+      dockerfile: Dockerfile
+    depends_on:
+      - mongodb
+
 volumes:
   dbdata:
