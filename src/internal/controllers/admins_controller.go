@@ -3,6 +3,7 @@ package controllers
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
+	"fmt"
 	"net/http"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -77,6 +78,24 @@ func (c *Controller) CCreateAdmin(adminInput *models.AdminInput) (models.Respons
 }
 
 func (c *Controller) CUpdateAdmin(id string, admin *models.AdminInput) (models.Response) {
+	currentAdmin := c.db.Admin.GetAdminByUserId(admin.UserId)
+	fmt.Println("currentAdmin: ",currentAdmin.Data)
+	if utils.IsTypeError(currentAdmin) && currentAdmin.Data.(models.Err).StatusCode != http.StatusNotFound{
+		return currentAdmin
+	}
+	if (utils.IsType(currentAdmin, models.AdminDB{}) && currentAdmin.Data.(*models.AdminDB).Id != id) {
+		return utils.ErrorToResponse(http.StatusConflict, "Admin already exists", "Admin with that user id already exists")
+	}
+
+	user := c.db.User.GetUserById(admin.UserId)
+	if utils.IsTypeError(user) {
+		if user.Data.(models.Err).StatusCode == http.StatusNotFound{
+			return utils.ErrorNotFoundInDatabase("User with given id does not exist")
+		} else {
+		return user
+		}
+	}
+	
 	if (admin.Access == "admin") {
 		response := c.CCheckLastSuperadmin(id)
 		if utils.IsTypeError(response) {
@@ -85,7 +104,12 @@ func (c *Controller) CUpdateAdmin(id string, admin *models.AdminInput) (models.R
 	}
 	admin.Id = id
 	response := c.db.Admin.UpdateAdmin(*admin)
-	return response
+	if utils.IsTypeError(response) {
+		return response
+	}
+	adminOutput := response.Data.(*models.AdminDB)
+	adminResponse := c.CAdminDBToOutput(adminOutput)
+	return adminResponse
 }
 
 func (c *Controller) CDeleteAdmin(id string) (models.Response) {
