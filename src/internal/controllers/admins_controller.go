@@ -20,6 +20,15 @@ func (c *Controller) CGetAdminById(id string) (models.Response) {
 }
 
 func (c *Controller) CGetAdminByUserId(id string) (models.Response) {
+	user := c.db.User.GetUserById(id)
+	if utils.IsTypeError(user) {
+		if user.Data.(models.Err).StatusCode == http.StatusNotFound{
+			return utils.ErrorNotFoundInDatabase("User with given id does not exist")
+		} else {
+		return user
+		}
+	}
+	
 	response := c.db.Admin.GetAdminByUserId(id)
 	if utils.IsTypeError(response) {
 		return response
