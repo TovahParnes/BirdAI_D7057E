@@ -5,14 +5,25 @@ from requests import RequestException
 
 import utils
 
+from dotenv import load_dotenv
+
+# Determine the environment (e.g., 'dev' or 'prod')
+env = 'prod'  # Change this to 'prod' for the production environment
+
+# Load the environment variables from the corresponding .env file
+env_file = f'.env.{env}'
+if os.path.exists(env_file):
+    load_dotenv(env_file)
+
+# Access the values using the os.getenv() function
+detection_model_ip = os.getenv('DETECTION_MODEL_IP')
+detection_model_port = os.getenv('DETECTION_MODEL_PORT')
+classification_model_ip = os.getenv('CLASSIFICATION_MODEL_IP')
+classification_model_port = os.getenv('CLASSIFICATION_MODEL_PORT')
+
+
 app = Flask(__name__)
 _receiver_port = 3500
-
-detection_model_ip = "172.20.0.4"
-detection_model_port = "3501"
-
-classification_model_ip = "172.20.0.3"
-classification_model_port = "3502"
 
 
 def listen():

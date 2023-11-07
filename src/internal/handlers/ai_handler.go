@@ -50,7 +50,7 @@ func (h *Handler) ImagePrediction(c *fiber.Ctx) error {
 	}
 	aiBirds = h.controller.RequestAnalyze(dat)
 
-	aiResponse := h.controller.AiListToResponse(aiBirds, dat)
+	aiResponse := h.controller.AiListToResponse(aiBirds)
 
 	response = utils.Response(aiResponse)
 
