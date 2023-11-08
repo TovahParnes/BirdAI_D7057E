@@ -3,7 +3,6 @@ package controllers
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
-	"fmt"
 	"net/http"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -88,7 +87,6 @@ func (c *Controller) CCreateAdmin(adminInput *models.AdminInput) (models.Respons
 
 func (c *Controller) CUpdateAdmin(id string, admin *models.AdminInput) (models.Response) {
 	currentAdmin := c.db.Admin.GetAdminByUserId(admin.UserId)
-	fmt.Println("currentAdmin: ",currentAdmin.Data)
 	if utils.IsTypeError(currentAdmin) && currentAdmin.Data.(models.Err).StatusCode != http.StatusNotFound{
 		return currentAdmin
 	}

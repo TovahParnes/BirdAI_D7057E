@@ -301,6 +301,18 @@ func TestAccessController(t *testing.T) {
 		if err != nil {
 			return
 		}
+		_, err = db.Collection(repositories.BirdColl).DeleteMany(context.TODO(), bson.M{})
+		if err != nil {
+			return
+		}
+		_, err = db.Collection(repositories.MediaColl).DeleteMany(context.TODO(), bson.M{})
+		if err != nil {
+			return
+		}
+		_, err = db.Collection(repositories.PostColl).DeleteMany(context.TODO(), bson.M{})
+		if err != nil {
+			return
+		}
 	})
 
 }

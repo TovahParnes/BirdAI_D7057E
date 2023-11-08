@@ -68,7 +68,7 @@ func TestPostRepository(t *testing.T) {
 
 	t.Run("Test UpdatePost", func(t *testing.T) {
 		updatePost := models.PostInput{
-			//Id:       testPost1.Id,
+			Id:       testPost1.Id,
 			Location: "Location update",
 		}
 		response := postColl.UpdatePost(updatePost)

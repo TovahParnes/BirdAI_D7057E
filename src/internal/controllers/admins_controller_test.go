@@ -6,7 +6,6 @@ import (
 	"birdai/src/internal/repositories"
 	"birdai/src/internal/utils"
 	"context"
-	"fmt"
 	"net/http"
 	"testing"
 
@@ -111,13 +110,11 @@ func TestAdminController(t *testing.T) {
 		require.False(t, utils.IsTypeError(response))
 		require.IsType(t, &models.AdminOutput{}, response.Data.(*models.AdminOutput))
 		require.Equal(t, testAdmin1.Id, response.Data.(*models.AdminOutput).Id)
-		fmt.Println(response.Data.(*models.AdminOutput))
 
 		response = contr.CGetAdminByUserId(testUser2.Id)
 		require.False(t, utils.IsTypeError(response))
 		require.IsType(t, &models.AdminOutput{}, response.Data.(*models.AdminOutput))
 		require.Equal(t, testAdmin2.Id, response.Data.(*models.AdminOutput).Id)
-		fmt.Println(response.Data.(*models.AdminOutput))
 
 		response = contr.CGetAdminByUserId("IncorrectID")
 		require.True(t, utils.IsTypeError(response))
@@ -126,7 +123,6 @@ func TestAdminController(t *testing.T) {
 
 	t.Run("Test ListAdmins", func(t *testing.T) {
 		response := contr.CListAdmins(0, "")
-		fmt.Println(response.Data)
 		require.False(t, utils.IsTypeError(response))
 		require.Equal(t, 2, len(response.Data.([]*models.AdminOutput)))
 		require.IsType(t, &models.AdminOutput{}, response.Data.([]*models.AdminOutput)[0])
@@ -142,7 +138,6 @@ func TestAdminController(t *testing.T) {
 			UserId: "IncorrectID",
 			Access: "admin",
 		})
-		fmt.Println(response.Data)
 		require.True(t, utils.IsTypeError(response))
 		require.Equal(t, http.StatusNotFound, response.Data.(models.Err).StatusCode)
 
@@ -160,7 +155,6 @@ func TestAdminController(t *testing.T) {
 			Access: "admin",
 		})
 		require.True(t, utils.IsTypeError(response))
-		fmt.Println(response.Data)
 		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
 
 		//No changes to document
@@ -169,7 +163,6 @@ func TestAdminController(t *testing.T) {
 			Access: "admin",
 		})
 		require.True(t, utils.IsTypeError(response))
-		fmt.Println(response.Data)
 		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
 
 		//Update sucessful
@@ -177,7 +170,6 @@ func TestAdminController(t *testing.T) {
 			UserId: testUser1.Id,
 			Access: "superadmin",
 		})
-		fmt.Println(response.Data)
 		require.False(t, utils.IsTypeError(response))
 		require.IsType(t, &models.AdminOutput{}, response.Data.(*models.AdminOutput))
 		require.Equal(t, testUser1.Id, response.Data.(*models.AdminOutput).User.Id)
