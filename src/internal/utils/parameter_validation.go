@@ -112,8 +112,8 @@ func isValidName(name string) models.Response {
 	if name == "" {
 		return ErrorParams("Name is empty")
 	}
-	if len(name) < 2 || len(name) > 40 {
-		return ErrorParams("Name must be between 2 and 40 characters")
+	if len(name) <= 3 || len(name) >= 40 {
+		return ErrorParams("Name must be between 3 and 40 characters")
 	}
 	if containsSpecialCharacters(name) {
 		return ErrorParams("Name must not contain special characters")
