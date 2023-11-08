@@ -7,6 +7,7 @@
 
 # -- Controller
 src/AI/ai-controller/__pycache__/
+src/AI/ai-controller/tests/__pycache__
 
 # -- Detection
 src/AI/detection_model/__pycache__/
@@ -18,5 +19,6 @@ src/AI/detection_model/cropped_images/
 src/AI/classification_model/mobilenet_model.keras
 src/AI/classification_model/__pycache__
 src/AI/classification_model/__pycache__/
+src/AI/classification_model/_tests/__pycache__
 src/AI/classification_model/images/
 src/AI/classification_model/labels.json
