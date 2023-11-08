@@ -1,28 +1,12 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
+import {Component, OnInit } from '@angular/core';
+import {SocialAuthService } from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
-import {AnalyzeResponse, Post, PostData} from 'src/assets/components/components';
+import {AnalyzeResponse, PostData, AnalyzedBird, UserBirdList} from 'src/assets/components/components';
 import {AppComponent} from '../app.component';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
-import { NgOptimizedImage } from '@angular/common'
-import jsonData from '../../assets/data.json';
-
-interface UserBirdList {
-  list3:{   
-    title: string;
-    image: string;
-    accuracy: string;
-  }[]
-}
-
-interface AnalyzedBird {
-  title: string;
-  image: string;
-  accuracy: string;
-}
 
 @Component({
   selector: 'app-home-page',
@@ -36,30 +20,33 @@ export class MainPageComponent implements OnInit {
   form!: FormGroup;
   selectedImage: any;
   isLoading: boolean = false;
-  print =""
-  element!: AnalyzedBird
-  dummyitem: AnalyzedBird = {title:'test',image:'test',accuracy:'test'}
-  jsonlist = jsonData[2] as UserBirdList;
-
+  latestAnalyzedBird!: AnalyzedBird
+  analyzedBirdList: UserBirdList = {
+    birds: []
+  }
   data: any;
   dataImg: any;
   analyzed: AnalyzeResponse | null = null;
-  toggle = true;
-
+  togglePostView = true;
+  toggleConfirmView = false;
+  fileFormat = "";
 
   constructor(
-    private router: Router, 
+    private router: Router,
     public mainApp: AppComponent,
     public socialAuthService: SocialAuthService,
     private formBuilder: FormBuilder,
     private http: HttpClient) {
   }
 
+  convertAccuracy(accuracy: string){
+    return (Number(accuracy) * 100).toString()+"%";
+  }
+
   ngOnInit() {
     this.form = this.formBuilder.group({
-      option: new FormControl(), // Initialize with a default value
+      option: new FormControl(),
     });
-    this.getJsonData();
     console.log(localStorage.getItem("auth"));
   }
 
@@ -70,6 +57,10 @@ export class MainPageComponent implements OnInit {
       reader.readAsDataURL(file);
       reader.onload = (e) => {
         this.selectedImage = reader.result;
+        const dataUrl = this.selectedImage as string;
+        console.log(dataUrl)
+        const fileFormat = dataUrl.substring(dataUrl.indexOf('/') + 1, dataUrl.indexOf(';'));
+        this.fileFormat = fileFormat
       };
     }
   }
@@ -78,16 +69,19 @@ export class MainPageComponent implements OnInit {
     this.selectedImage = null;
   }
 
-  postImage(): Observable<AnalyzeResponse> {
-    //console.log(header);
-    const body = {'data': `${this.selectedImage}`, 'fileType': "JPG"};
-    return this.http.post<AnalyzeResponse>(environment.identifyRequestURL+"/ai/inputimage", body);
+  postImage(token: string): Observable<AnalyzeResponse> {
+    const header = {
+      'Authorization': `Bearer ${token}`
+    };
+    const body = {'data': `${this.selectedImage}`, 'fileType': this.fileFormat};
+    return this.http.post<AnalyzeResponse>(environment.identifyRequestURL+"/ai/inputimage", body, { headers: header });
   }
 
   onSubmit(el: HTMLElement) {
     this.isLoading = true;
-
-    this.postImage().subscribe(
+    const authKey = localStorage.getItem("auth");
+    if(authKey){
+    this.postImage(authKey).subscribe(
       (response: AnalyzeResponse) => {
         console.log("Succesfully sent data");
         console.log(response.data);
@@ -96,32 +90,37 @@ export class MainPageComponent implements OnInit {
         this.selectedImage = null;
         el.scrollIntoView();
         this.analyzed = response;
-        this.addNewBird(this.analyzed.data.name, this.analyzed.data.picture.data, this.analyzed.data.accuracy);
+        if (this.analyzed.data.length == 0) {
+          console.log("No birds found");
+        }
+        else {
+          this.addNewBird(this.analyzed.data[0].aiBird.name, this.analyzed.data[0].userMedia.data, this.analyzed.data[0].aiBird.accuracy);
+        }
       },
-      err => { 
-        console.error("Failed at sending data:" + err); 
+      err => {
+        console.error("Failed at sending data:" + err);
       }
     );
     this.isLoading = false;
-    this.toggle = true;
+    this.togglePostView = true;
+    }
   }
 
-  //AddnewBird sparar temporärt i jsonlist, detta skulle kunna skickas mellan sidorna
   addNewBird(name: string, imageUrl:string, accuracy:string){
     const newitem = {"title": name, "image": imageUrl, "accuracy": accuracy}
-    this.jsonlist.list3.push(newitem)
-
+    this.analyzedBirdList.birds.push(newitem);
   }
 
-  getJsonData(){
-    this.element = this.jsonlist.list3[1]
+  getLatestBird(){
+    const len = this.analyzedBirdList.birds.length - 1;
+    return(this.analyzedBirdList.birds[len]);
   }
 
   togglePreview(){
-    if(this.toggle){
-      this.toggle = false;
+    if(this.togglePostView){
+      this.togglePostView = false;
     }else{
-      this.toggle = true;
+      this.togglePostView = true;
     }
   }
 
@@ -130,15 +129,14 @@ export class MainPageComponent implements OnInit {
       const header = {
         'Authorization': `Bearer ${token}`
       };
-      const postdata = {'birdId': this.analyzed.data.name, 'imageId': this.analyzed.data.picture.data, 'location': "no", 'soundId':"no"};
-      console.log(postdata);
-      return this.http.post<PostData>(environment.identifyRequestURL+"/posts",postdata,{ headers: header });
+      const postData = {'_id': "no", 'birdId': this.analyzed.data[0].birdId,'location': "no", "media":{'data':this.dataImg, 'filetype': this.fileFormat }};
+      console.log(postData);
+      return this.http.post<PostData>(environment.identifyRequestURL+"/posts",postData,{ headers: header });
       }else{
         return null
       }
   }
-//createPost fungerar ej pga bad request error (fel på strukt skickad) dock svårt att testa pga swagger 
-//kraschar varje gång jag ska skicka den på localhosten
+
   createPost(){
     const authKey = localStorage.getItem("auth");
     if(authKey){
@@ -149,9 +147,10 @@ export class MainPageComponent implements OnInit {
         this.form.reset();
         this.dataImg = this.selectedImage;
         this.selectedImage = null;
-        console.log(response);
+        this.togglePreview();
+        this.toggleConfirmView = true;
       },
-      err => { 
+      err => {
         console.error("Failed at sending data:" + err);
       }
     );

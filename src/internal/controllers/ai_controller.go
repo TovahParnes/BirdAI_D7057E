@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"birdai/src/internal/models"
+	"birdai/src/internal/utils"
 	"bytes"
 	"encoding/json"
 	"io"
@@ -45,6 +46,9 @@ func (c *Controller) AiListToResponse(aiList models.AIList) []models.AnalyzeResp
 	response := []models.AnalyzeResponse{}
 	for _, ai := range aiList.Birds {
 		bird := c.CGetBirdByName(ai.Name)
+		if utils.IsTypeError(bird) {
+			continue
+		}
 		response = append(response, models.AnalyzeResponse{
 			AiBird: models.AIBird{
 				Name:     ai.Name,

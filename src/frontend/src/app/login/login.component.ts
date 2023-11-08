@@ -25,17 +25,15 @@ export class LoginComponent {
   public triedLogIn = false;
 
   postLoggedInUser(): Observable<UserResponse> {
-    //const username = "fabianwidell"
     const username = `${this.mainApp.user.name}`.replace(/[\s!@#$%^&*()_+{}\[\]:;<>,.?~\\|/`'"-]/g, '')
     const body = {
       'username': username,'authId': `${this.mainApp.user.id}`
     };
-    console.log(body);
     return this.httpClient.post<UserResponse>(environment.identifyRequestURL+"/users", body);
   }
 
   login(): void {
-    console.log(this.mainApp.user);
+    this.router.navigate(['mainpage']);
     this.postLoggedInUser()
     .subscribe(
       (userResponse: UserResponse) => {

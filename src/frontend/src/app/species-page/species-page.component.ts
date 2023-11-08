@@ -26,6 +26,7 @@ export class SpeciesPageComponent implements AfterViewInit{
   imageId!: string;
   imageName!: string;
   imageDate!: string;
+  imageDesc!: string;
   responseData: ApiResponse | null = null;
   images: string[] = [];
 
@@ -42,14 +43,11 @@ export class SpeciesPageComponent implements AfterViewInit{
   }
 
   ngOnInit() {
-    this.http.get<ApiResponse>('http://localhost:4000/swagger/index.html').subscribe(data => {
-      this.responseData = data;
-      console.log(data);
-    });
     this.route.queryParams.subscribe(params => {
       this.imageId = decodeURIComponent(params['imageId']);
       this.imageName = decodeURIComponent(params['imageName'])
-        this.imageDate = decodeURIComponent(params['imageDate'])
+      this.imageDate = decodeURIComponent(params['imageDate'])
+      this.imageDesc = decodeURIComponent(params['imageDesc'])
         if (this.imageDate == "undefined"){
           this.imageDate = "Not Found Yet"
         }
@@ -57,7 +55,6 @@ export class SpeciesPageComponent implements AfterViewInit{
 
       this.images = [
         this.imageId,
-        'assets/map.png',
       ];
     });
   }

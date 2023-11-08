@@ -4,6 +4,7 @@ from PIL import Image
 from requests import RequestException
 
 import utils
+import os
 
 from dotenv import load_dotenv
 
