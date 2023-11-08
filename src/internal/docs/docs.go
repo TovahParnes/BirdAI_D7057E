@@ -23,7 +23,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/admins/": {
+        "/api/v1/admins": {
             "post": {
                 "security": [
                     {
@@ -134,7 +134,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/admins/list": {
+        "/api/v1/admins/list": {
             "get": {
                 "security": [
                     {
@@ -245,7 +245,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/admins/me": {
+        "/api/v1/admins/me": {
             "get": {
                 "security": [
                     {
@@ -473,7 +473,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/admins/{id}": {
+        "/api/v1/admins/{id}": {
             "get": {
                 "security": [
                     {
@@ -835,7 +835,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/ai/inputimage": {
+        "/api/v1/ai/inputimage": {
             "post": {
                 "security": [
                     {
@@ -949,7 +949,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/birds/list": {
+        "/api/v1/birds/list": {
             "get": {
                 "description": "List all birds of a specified set and seach parameters",
                 "consumes": [
@@ -1037,7 +1037,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/birds/{id}": {
+        "/api/v1/birds/{id}": {
             "get": {
                 "description": "Get bird by ID",
                 "consumes": [
@@ -1269,7 +1269,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/posts/": {
+        "/api/v1/posts": {
             "post": {
                 "security": [
                     {
@@ -1374,7 +1374,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/posts/list": {
+        "/api/v1/posts/list": {
             "get": {
                 "description": "List all posts of a specified set",
                 "consumes": [
@@ -1462,7 +1462,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/posts/{id}": {
+        "/api/v1/posts/{id}": {
             "get": {
                 "description": "Get post by ID",
                 "consumes": [
@@ -1801,7 +1801,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/": {
+        "/api/v1/users": {
             "post": {
                 "description": "Login a user or create a new user if there is no existing user",
                 "consumes": [
@@ -1901,7 +1901,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/list": {
+        "/api/v1/users/list": {
             "get": {
                 "description": "List all users of a specified set",
                 "consumes": [
@@ -1989,7 +1989,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/me": {
+        "/api/v1/users/me": {
             "get": {
                 "security": [
                     {
@@ -2101,7 +2101,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/{id}": {
+        "/api/v1/users/{id}": {
             "get": {
                 "description": "Get user by ID",
                 "consumes": [
@@ -2440,7 +2440,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/{id}/posts/list": {
+        "/api/v1/users/{id}/posts/list": {
             "get": {
                 "description": "List all posts of a specified set",
                 "consumes": [
@@ -2586,7 +2586,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "userMedia": {
-                    "$ref": "#/definitions/models.MediaDB"
+                    "$ref": "#/definitions/models.MediaOutput"
                 }
             }
         },
@@ -2646,20 +2646,6 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "integer"
-                }
-            }
-        },
-        "models.MediaDB": {
-            "type": "object",
-            "properties": {
-                "_id": {
-                    "type": "string"
-                },
-                "data": {
-                    "type": "string"
-                },
-                "fileType": {
-                    "type": "string"
                 }
             }
         },

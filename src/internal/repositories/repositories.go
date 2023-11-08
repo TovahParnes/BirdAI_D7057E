@@ -4,6 +4,7 @@ import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
 	"context"
+	"os"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -54,7 +55,7 @@ func Connect(dbName, mongoURI string) (IMongoInstance, error) {
 // SetupRepositories return a RepositoryEndpoints struct that allows access to the different repositories and functions
 // Needs to swap out, so it uses env variables instead of set names
 func SetupRepositories() (RepositoryEndpoints, error) {
-	mongoInstance, err := Connect("birdai", "mongodb://localhost:27017")
+	mongoInstance, err := Connect(os.Getenv("DB_NAME"), os.Getenv("MONGO_URI"))
 	if err != nil {
 		return RepositoryEndpoints{}, err
 	}

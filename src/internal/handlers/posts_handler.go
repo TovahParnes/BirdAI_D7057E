@@ -18,7 +18,7 @@ import (
 // @Failure		404	{object}	models.Response{data=models.Err}
 // @Failure		410	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
-// @Router		/posts/{id} [get]
+// @Router		/api/v1/posts/{id} [get]
 func (h *Handler) GetPostById(c *fiber.Ctx) error {
 	id := c.Params("id")
 	response := utils.IsValidId(id)
@@ -43,7 +43,7 @@ func (h *Handler) GetPostById(c *fiber.Ctx) error {
 // @Success		200	{object}	models.Response{data=[]models.PostOutput}
 // @Failure		401	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
-// @Router		/posts/list [get]
+// @Router		/api/v1/posts/list [get]
 func (h *Handler) ListPosts(c *fiber.Ctx) error {
 	queries := c.Queries()
 	set := queries["set"]
@@ -75,7 +75,7 @@ func (h *Handler) ListPosts(c *fiber.Ctx) error {
 // @Success		200	{object}	models.Response{data=[]models.PostOutput}
 // @Failure		401	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
-// @Router		/users/{id}/posts/list [get]
+// @Router		/api/v1/users/{id}/posts/list [get]
 func (h *Handler) ListUsersPosts(c *fiber.Ctx) error {
 	userId := c.Params("id")
 	response := utils.IsValidId(userId)
@@ -114,7 +114,7 @@ func (h *Handler) ListUsersPosts(c *fiber.Ctx) error {
 // @Failure		400	{object}	models.Response{data=models.Err}
 // @Failure		401	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
-// @Router		/posts/ [post]
+// @Router		/api/v1/posts [post]
 func (h *Handler) CreatePost(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)
 	if utils.IsTypeError(response) {
@@ -156,7 +156,7 @@ func (h *Handler) CreatePost(c *fiber.Ctx) error {
 // @Failure		403	{object}	models.Response{data=models.Err}
 // @Failure		404	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
-// @Router		/posts/{id} [patch]
+// @Router		/api/v1/posts/{id} [patch]
 func (h *Handler) UpdatePost(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)
 	if utils.IsTypeError(response) {
@@ -205,7 +205,7 @@ func (h *Handler) UpdatePost(c *fiber.Ctx) error {
 // @Failure		403	{object}	models.Response{data=models.Err}
 // @Failure		404	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
-// @Router		/posts/{id} [delete]
+// @Router		/api/v1/posts/{id} [delete]
 func (h *Handler) DeletePost(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)
 	if utils.IsTypeError(response) {

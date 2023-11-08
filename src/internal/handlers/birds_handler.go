@@ -19,7 +19,7 @@ import (
 // @Failure		404	{object}	models.Response{data=models.Err}
 // @Failure		410	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
-// @Router		/birds/{id} [get]
+// @Router		/api/v1/birds/{id} [get]
 func (h *Handler) GetBirdById(c *fiber.Ctx) error {
 	id := c.Params("id")
 	response := utils.IsValidId(id)
@@ -43,7 +43,7 @@ func (h *Handler) GetBirdById(c *fiber.Ctx) error {
 // @Success		200	{object}	models.Response{data=[]models.BirdOutput}
 // @Failure		401	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
-// @Router		/birds/list [get]
+// @Router		/api/v1/birds/list [get]
 func (h *Handler) ListBirds(c *fiber.Ctx) error {
 
 	//	@Failure	503	{object}	models.Response{}
@@ -86,7 +86,7 @@ func (h *Handler) ListBirds(c *fiber.Ctx) error {
 // @Failure		403	{object}	models.Response{data=models.Err}
 // @Failure		404	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
-// @Router		/birds/{id} [patch]
+// @Router		/api/v1/birds/{id} [patch]
 func (h *Handler) UpdateBird(c *fiber.Ctx) error {
 	response := h.auth.CheckExpired(c)
 	if utils.IsTypeError(response) {

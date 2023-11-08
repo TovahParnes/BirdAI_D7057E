@@ -21,7 +21,7 @@ import (
 // @Failure		401	{object}	models.Response{data=[]models.Err}
 // @Failure		503	{object}	models.Response{data=[]models.Err}
 // @Security 	Bearer
-// @Router		/ai/inputimage [post]
+// @Router		/api/v1/ai/inputimage [post]
 func (h *Handler) ImagePrediction(c *fiber.Ctx) error {
 
 	response := h.auth.CheckExpired(c)

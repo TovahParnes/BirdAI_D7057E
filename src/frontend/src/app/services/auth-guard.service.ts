@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 
 @Injectable({
-    providedIn: 'root' 
+    providedIn: 'root'
 })
 
 export class AuthGuardService {
@@ -11,7 +11,7 @@ export class AuthGuardService {
   public loggedIn = false;
 
   constructor(
-    private router: Router, 
+    private router: Router,
     private authService: SocialAuthService) {
     this.authService.authState.subscribe(async (user) => {
       this.user = user;
@@ -23,8 +23,9 @@ export class AuthGuardService {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
     const logged = this.loggedIn;
     const destination: string = state.url;
-    
+
     if (!this.loggedIn) {
+        console.log(state.url);
         this.router.navigate(['login'], { queryParams: { returnUrl: state.url }});
     }
 }
