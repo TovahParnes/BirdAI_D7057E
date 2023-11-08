@@ -1,8 +1,8 @@
 version: "3"
 services:
   bird_ai:
-    #image: ${REPOSITORY}:latest
-    image: bird_ai # for running local build aka "make build"
+    image: ${REPOSITORY}:1.0.0
+    #image: bird_ai # for running local build aka "make build"
     container_name: bird_ai
     build: 
       context: .
