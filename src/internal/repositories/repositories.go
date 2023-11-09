@@ -101,6 +101,9 @@ func (m *MongoCollection) UpdateOne(query bson.M) models.Response {
 	update := bson.M{"$set": query}
 	result, err := m.Collection.UpdateOne(m.ctx, filter, update)
 	response := m.FindOne(filter)
+	if utils.IsTypeError(response) {
+		return response
+	}
 	if result.ModifiedCount != 1 {
 		// Needs to check if there is an error, if not the update was a "success" but there was no change needed
 		if err != nil {

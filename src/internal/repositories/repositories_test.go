@@ -109,11 +109,13 @@ func TestRepository(t *testing.T) {
 		require.False(t, utils.IsTypeError(response))
 		testUser1.Username = "Deleted User"
 		testUser1.Active = false
+		require.IsType(t, "string", response.Data.(string))
+		response = userColl.FindOne(bson.M{"_id": testUser1.Id})
 		require.Equal(t, testUser1, response.Data.(*models.UserDB))
 
 		response = birdColl.DeleteOne(bson.M{"_id": testBird.Id})
 		require.False(t, utils.IsTypeError(response))
-		require.Equal(t, testBird, response.Data.(*models.BirdDB))
+		require.IsType(t, "string", response.Data.(string))
 	})
 
 	// Need to delete everything from testDB

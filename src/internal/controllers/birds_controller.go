@@ -47,7 +47,25 @@ func (c *Controller) CListBirds(set int, search string) models.Response {
 	return utils.Response(output)
 }
 
-func (c *Controller) CUpdateBird(id string, bird *models.BirdInput) models.Response {
+func (c *Controller) CUpdateBird(id string, bird *models.BirdInput) (models.Response) {
+	media := c.db.Media.GetMediaById(bird.ImageId)
+	if utils.IsTypeError(media) {
+		if media.Data.(models.Err).StatusCode == http.StatusNotFound{
+			return utils.ErrorNotFoundInDatabase("Image with given id does not exist")
+		} else {
+		return media
+		}
+	}
+
+	media = c.db.Media.GetMediaById(bird.SoundId)
+	if utils.IsTypeError(media) {
+		if media.Data.(models.Err).StatusCode == http.StatusNotFound{
+			return utils.ErrorNotFoundInDatabase("Sound with given id does not exist")
+		} else {
+		return media
+		}
+	}
+	
 	bird.Id = id
 	response := c.db.Bird.UpdateBird(*bird)
 	if utils.IsTypeError(response) {

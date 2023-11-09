@@ -89,6 +89,7 @@ func TestUserRepository(t *testing.T) {
 	t.Run("Test DeleteOne", func(t *testing.T) {
 		response := userColl.DeleteUser(testUser1.GetId())
 		require.False(t, utils.IsTypeError(response))
+		response = userColl.GetUserById(testUser1.GetId())
 		testUser1.Username = "Deleted User"
 		testUser1.Active = false
 		require.Equal(t, testUser1, response.Data.(*models.UserDB))
