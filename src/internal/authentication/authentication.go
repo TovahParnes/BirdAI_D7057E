@@ -35,6 +35,7 @@ func (a *Authentication) LoginUser(user *models.UserLogin) models.Response {
 			return response
 		}
 	}
+	// Check if user is active
 	response = a.UserColl.GetUserByAuthId(user.AuthId)
 	if !response.Data.(*models.UserDB).Active {
 		return utils.ErrorDeleted(response.Data.(*models.UserDB).Username)
