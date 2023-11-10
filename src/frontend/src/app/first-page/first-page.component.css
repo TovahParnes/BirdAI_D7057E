@@ -79,3 +79,12 @@
     overflow: hidden; 
     font-size: small;
   }
+
+  .login-button {
+    color-scheme: light;
+    height: 40px;
+    width: 250px;
+    display: flex;
+    margin: 10% auto;
+    justify-content: center;
+  }

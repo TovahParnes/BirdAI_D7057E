@@ -19,7 +19,7 @@ import {ProfilePageComponent} from './profile-page/profile-page.component';
 import {NavbarComponent} from './navbar/navbar.component';
 import {CardComponent, Card2Component, BottomInfoComponent} from './card/card.component';
 import {FirstPageComponent} from './first-page/first-page.component';
-
+import { AdminComponent } from './admin/admin.component';
 
 // login authguard imports
 import {GoogleLoginProvider, GoogleSigninButtonModule, SocialLoginModule, SocialAuthServiceConfig} from '@abacritt/angularx-social-login';
@@ -39,6 +39,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -54,6 +55,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     BottomInfoComponent,
     FirstPageComponent,
     AboutComponent,
+    AdminComponent,
 
   ],
   imports: [
@@ -70,8 +72,9 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
       {path: 'species-page', component: SpeciesPageComponent,},
       {path: 'first-page', component: FirstPageComponent,},
       {path: 'about', component: AboutComponent,},
+      {path: 'admin',component: AdminComponent,},
 
-      {path: '**', component: LoginComponent},
+      {path: '**', component: FirstPageComponent},
     ]),
     BrowserAnimationsModule,
     CommonModule,

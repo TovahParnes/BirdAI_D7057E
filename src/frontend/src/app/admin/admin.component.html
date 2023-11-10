@@ -1,0 +1,60 @@
+<app-navbar firstSelected="false" secondSelected="false" thirdSelected="false"></app-navbar>
+
+<div style="text-align: center; font-size: 32px">
+  Admin
+</div>
+
+<p></p>
+
+<mat-card class="card" style="text-align: center;">
+  Modify Admins
+  <p></p>
+  <input id="createAdmin_id" type="text" placeholder="_id" style="text-align: center;">
+  <input id="createAdminAccess" type="text" placeholder="access - admin/superadmin" style="text-align: center;">
+  <input id="createAdminUserId" type="text" placeholder="userId" style="text-align: center;">
+  <br>
+  <div style="flex-direction:column;">
+    <button (click)="createInput('createAdmin')">Create Admin</button>
+    &nbsp;
+    <button (click)="createInput('updateAdmin')">Update Admin</button>
+  </div>
+  <br>
+  <input id="deleteAdminUserId" type="text" placeholder="adminID" style="text-align: center;">
+  <div style="flex-direction:column;">
+    <br>
+  <button (click)="createInput('deleteAdmin')">Delete Admin</button>
+</div>
+  
+</mat-card>
+
+<p></p>
+
+<mat-card class="card" style="text-align: center;">
+  Make Current User Admin
+  <p></p>
+  <div style="flex-direction:column;">
+  <button (click)="makeMeAdmin()">Make Me Admin</button>
+  </div>
+</mat-card>
+
+<p></p>
+
+<mat-card class="card" style="text-align: center;">
+  Get Admins
+  <p></p>
+  <input id="getAdminByID" type="text" placeholder="Admin ID">
+  <input id="getSetOfAdmins" type="text" placeholder="Set Of Admins">
+  <input id="getSearchParameterForAdmins" type="text" placeholder="Search Parameter For Admins">
+  <br>
+  <div style="flex-direction:column;">
+  <button (click)="createInput('getCurrentAdmin')">Get Current Admin</button>
+  &nbsp;
+  <button (click)="createInput('getAdminByID')">Get Admin By ID</button>
+  &nbsp;
+  <button (click)="createInput('getListSetOfAdmins')">List Set Of Admins</button>
+</div>
+</mat-card>
+
+<p></p>
+
+<app-bottominfo></app-bottominfo>
