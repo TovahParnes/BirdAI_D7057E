@@ -60,3 +60,8 @@ div.desc {
   padding: 0;
   flex-direction: column;
 }
+
+.dropdownb {
+  background-color: #424242; 
+  border: none;
+}

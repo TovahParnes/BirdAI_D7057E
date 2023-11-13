@@ -14,11 +14,12 @@
         <p style="flex: 1.5;">{{item.bird.Name}}</p>
           <!-- <app-dropdown id="dropdown"></app-dropdown> -->
         <div class="dropDown" style="max-width: 115px; position: absolute; right: 0; padding: 10px; ">
-            <button (click)="toggleUpdatePostField(item._id)">Update</button>
-            <button (click)="deletePost(item._id)">Delete</button>
+            <!-- <button (click)="toggleUpdatePostField(item._id)">Update</button> -->
+            <button class="dropdownb" (click)="toggleUpdatePostField(item._id)"><span class="material-symbols-outlined" style="padding: 0px 36px; background-color: #424242; cursor: pointer;">more_horiz</span></button>
             <div id={{item._id}} style="display:none;">
-              <input type="text" id="updateTextField" style="width: 105px; text-align: center;" placeholder="Insert Location">
-              <button (click)="getDataToUpdate(item._id,item.bird.Id)" style="width: 113px;">Change</button>
+              <button (click)="deletePost(item._id)" style="width: 113px;">Delete Post</button>
+              <input type="text" id="updateTextField" style="width: 105px; text-align: center;" placeholder="Change Location">
+              <button (click)="getDataToUpdate(item._id,item.bird.Id)" style="width: 113px;">Update</button>
             </div>
         </div>
 
