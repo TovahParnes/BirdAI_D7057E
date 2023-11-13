@@ -91,9 +91,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     MatCardModule,
     MatIconModule,
     MatProgressSpinnerModule,
-
     MatButtonToggleModule,
-
   ],
   exports:[
     RouterModule

@@ -1,12 +1,12 @@
-import {Component, OnInit } from '@angular/core';
-import {SocialAuthService } from '@abacritt/angularx-social-login';
+import {Component, OnInit} from '@angular/core';
+import {SocialAuthService} from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
 import {AnalyzeResponse, PostData, AnalyzedBird, UserBirdList, AdminResponse, UserResponse} from 'src/assets/components/components';
 import {AppComponent} from '../app.component';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
-import { Observable } from 'rxjs';
+import {FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
+import {HttpClient} from '@angular/common/http';
+import {environment} from 'src/environments/environment';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-home-page',
@@ -14,12 +14,14 @@ import { Observable } from 'rxjs';
   styleUrls: ['./home-page.component.css'],
 })
 
+
 export class MainPageComponent implements OnInit {
 
-  isLinear = false;
   form!: FormGroup;
+  postDetailsForm!: FormGroup;
   selectedImage: any;
   isLoading: boolean = false;
+  createPostForm: boolean = false;
   latestAnalyzedBird!: AnalyzedBird
   analyzedBirdList: UserBirdList = {
     birds: []
@@ -27,7 +29,7 @@ export class MainPageComponent implements OnInit {
   data: any;
   dataImg: any;
   analyzed: AnalyzeResponse | null = null;
-  togglePostView = true;
+  togglePostView = false;
   toggleConfirmView = false;
   fileFormat = "";
 
@@ -39,17 +41,27 @@ export class MainPageComponent implements OnInit {
     private http: HttpClient) {
   }
 
-  convertAccuracy(accuracy: string){
-    return (Number(accuracy) * 100).toString()+"%";
-  }
-
   ngOnInit() {
     this.getUserMe();
     this.getCurrentAdmin();
     this.form = this.formBuilder.group({
       option: new FormControl(),
     });
+    this.postDetailsForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      accuracy: ['', Validators.required],
+      location: ['', Validators.required],
+      comment: ['', Validators.required],
+    });
     console.log(localStorage.getItem("auth"));
+  }
+  
+  convertAccuracy(accuracy: string){
+    return (Number(accuracy) * 100);
+  }
+
+  convertAccuracyToString(accuracy: string){
+    return this.convertAccuracy(accuracy).toString()+"%";
   }
 
   onFileSelected(event: any) {
@@ -87,24 +99,24 @@ export class MainPageComponent implements OnInit {
       (response: AnalyzeResponse) => {
         console.log("Succesfully sent data");
         console.log(response.data);
-        this.form.reset();
         this.dataImg = this.selectedImage;
-        this.selectedImage = null;
-        el.scrollIntoView();
         this.analyzed = response;
         if (this.analyzed.data.length == 0) {
+          this.isLoading = false;
           console.log("No birds found");
         }
         else {
+          this.isLoading = false;
           this.addNewBird(this.analyzed.data[0].aiBird.name, this.analyzed.data[0].userMedia.data, this.analyzed.data[0].aiBird.accuracy);
         }
       },
       err => {
+        this.isLoading = false;
         console.error("Failed at sending data:" + err);
       }
     );
-    this.isLoading = false;
     this.togglePostView = true;
+    el.scrollIntoView();
     }
   }
 
@@ -118,23 +130,55 @@ export class MainPageComponent implements OnInit {
     return(this.analyzedBirdList.birds[len]);
   }
 
-  togglePreview(){
-    if(this.togglePostView){
-      this.togglePostView = false;
-    }else{
-      this.togglePostView = true;
+  getCurrentDateAndTime() {
+    const dateTime = new Date();
+    return dateTime.toLocaleString();
+  }
+
+  resetForm(){
+    this.form.reset();
+    this.postDetailsForm.reset();
+    this.analyzed = null;
+    this.togglePostView = false;
+    this.selectedImage = null;
+    setTimeout(function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
+  }
+  
+  openPostForm(){
+    if (this.analyzed){
+      document.body.style.overflow = 'hidden';
+      this.postDetailsForm = this.formBuilder.group({
+        name: [{ value: this.analyzed.data[0].aiBird.name, disabled: true }, Validators.required],
+        accuracy: [{ value: this.convertAccuracyToString(this.analyzed.data[0].aiBird.accuracy), disabled: true }, Validators.required],
+        date: [{ value: this.getCurrentDateAndTime(), disabled: true }, Validators.required],
+        location: [ '' , Validators.required],
+        comment: [ '' , Validators.required],
+      });
+      this.createPostForm = true;
     }
+  }
+
+  closePostForm(){
+    document.body.style.overflow = 'auto';
+    this.createPostForm = false;
+    this.postDetailsForm.reset();
   }
 
   sendPost(token:string) {
       if (this.analyzed){
-      const header = {
-        'Authorization': `Bearer ${token}`
-      };
-      const postData = {'_id': "no", 'birdId': this.analyzed.data[0].birdId,'location': "no", "media":{'data':this.dataImg, 'filetype': this.fileFormat }};
-      console.log(postData);
-      return this.http.post<PostData>(environment.identifyRequestURL+"/posts",postData,{ headers: header });
-      }else{
+        const header = {
+          'Authorization': `Bearer ${token}`
+        };
+
+        let location = this.postDetailsForm.get('location')?.value;
+        console.log(location);
+        const postData = {'_id': "no", 'birdId': this.analyzed.data[0].birdId, 'location': location, "media":{'data': this.selectedImage, 'filetype': this.fileFormat}};
+        console.log("Send:", postData);
+        console.log(environment.identifyRequestURL+"/posts",postData,{ headers: header });
+        return this.http.post<PostData>(environment.identifyRequestURL+"/posts",postData,{ headers: header });
+      } else {
         return null
       }
   }
@@ -142,21 +186,21 @@ export class MainPageComponent implements OnInit {
   createPost(){
     const authKey = localStorage.getItem("auth");
     if(authKey){
-    this.sendPost(authKey)?.subscribe(
-      (response: PostData) => {
-        console.log("Succesfully sent data");
-        console.log(response);
-        this.form.reset();
-        this.dataImg = this.selectedImage;
-        this.selectedImage = null;
-        this.togglePreview();
-        this.toggleConfirmView = true;
-      },
-      err => {
-        console.error("Failed at sending data:" + err);
-      }
-    );
+      this.sendPost(authKey)?.subscribe(
+        (response: PostData) => {
+          console.log("Succesfully sent data");
+          this.dataImg = this.selectedImage;
+        },
+        err => {
+          console.error("Failed at sending data:" + err);
+        }
+        );
+      setTimeout(() => {
+        document.body.style.overflow = 'auto';
+        this.router.navigate(['takenImages']);
+      }, 100);
     }
+    document.body.style.overflow = 'auto';
   }
 
   async getCurrentAdmin(){

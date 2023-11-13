@@ -1,14 +1,12 @@
-import {Component, ViewChildren, QueryList, HostListener, AfterViewInit} from '@angular/core';
-import {SocialAuthService, GoogleLoginProvider, SocialUser} from '@abacritt/angularx-social-login';
+import {Component} from '@angular/core';
+import {SocialAuthService} from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
-import { AppComponent } from '../app.component';
-import { Card2Component} from '../card/card.component';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import {AppComponent} from '../app.component';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {environment} from 'src/environments/environment';
 import {DeleteResponse, LoginUser,UpdateResponse,UserResponse, listOutput} from 'src/assets/components/components';
-import { Location } from '@angular/common'
-import { Block } from '@angular/compiler';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-taken-images-page',
@@ -18,28 +16,60 @@ import { Block } from '@angular/compiler';
 
 export class TakenImagesPageComponent {
 
-  list1: any[] = [];
-  list2: any[] = [];
   private jsonUrl = 'assets/data.json';
-  dropDownVisibility = false;
-
-  // cardlist = [
-  //   {title: 'Duck',imageSrc: 'assets/duck.jpg', date:'2023-10-05'},
-  //   {title: 'Budgie',imageSrc: 'assets/undulat.jpg', date:'2023-10-04'},
-  // ]
+  dataList: any[] = [];
+  activeSubMenuIndex: number | null = null;
+  openForm: boolean = false;
+  updateDetailsForm!: FormGroup;
+  userMe!: LoginUser;
+  userList: listOutput = {
+    data: [],
+    timestamp: ""
+  }
 
   constructor(
     private router: Router, 
     public mainApp: AppComponent,
     public socialAuthService: SocialAuthService,
+    private formBuilder: FormBuilder,
     private http: HttpClient,
     private location: Location,
     ) {
   }
-  userMe!: LoginUser;
-  userList: listOutput = {
-    data: [],
-    timestamp: ""
+
+  ngOnInit(): void {
+    this.getData().subscribe((response) => {
+      const data = response;
+      this.dataList = data.find((item) => 'dataList' in item)?.dataList || [];
+    });
+
+    this.updateDetailsForm = this.formBuilder.group({
+      postId: ['', Validators.required],
+      birdId: ['', Validators.required],
+      location: ['', Validators.required],
+      comment: ['', Validators.required],
+    });
+
+    const authKey = localStorage.getItem("auth");
+    if(authKey){
+      this.getCurrentUser(authKey).subscribe(
+        (response: UserResponse) => {
+          this.userMe = response.data;
+          //after getting currentuser I have to immediatly run the getCurrentUserList or else the nginit will run this part before for some reason, 
+          //the value of this.userMe is set properly outside nginit but not inside if it is not nestled like this
+          this.getCurrentUserList().subscribe(
+            (response: listOutput) => {
+              this.userList.data = response.data;
+              console.log(this.userList.data);
+            },err => { 
+              console.error("Failed at getting user list:" + err); 
+            }
+          )
+        },err => { 
+          console.error("Failed at getting userMe:" + err); 
+        }
+      )
+    }
   }
 
   parseDate(date:string){
@@ -48,15 +78,31 @@ export class TakenImagesPageComponent {
     return(newDate);
   }
 
-  getDataToUpdate(postId:string,birdId:string){
-    const textField = document.getElementById("updateTextField") as HTMLInputElement;
-    this.updatePost(postId,textField.value,birdId);
-    this.toggleUpdatePostField("null");
+  toggleSubMenu(index: number, event: Event) {
+    event.stopPropagation();
+    this.activeSubMenuIndex = this.activeSubMenuIndex === index ? null : index;
   }
 
-  getPostIdToDelete(){
-    const textField = document.getElementById("postIdTextField") as HTMLInputElement;
-    this.deletePost(textField.value)
+  updateForm(postId: string, location: string, birdId: string){
+    document.body.style.overflow = 'hidden';
+    this.updateDetailsForm = this.formBuilder.group({
+      postId: [{ value: postId}, Validators.required],
+      birdId: [{ value: birdId}, Validators.required],
+      location: [{ value: location, disabled: false } , Validators.required],
+      comment: [ '' , Validators.required],
+    });
+    this.openForm = true;
+  }
+
+  closePostForm(){
+    document.body.style.overflow = 'auto';
+    this.openForm = false;
+    this.updateDetailsForm.reset();
+  }
+
+  getPostIdToDelete(id: string){
+    this.deletePost(id);
+    location.reload();
   }
   
   getCurrentUserListData(){
@@ -78,10 +124,6 @@ export class TakenImagesPageComponent {
     return this.http.get<any[]>(this.jsonUrl);
   }
 
-  // getBackendData() {
-  //   return this.http.get<any[]>(environment.identifyRequestURL+"/birds/list", this.userMe._id)
-  // }
-
   getCurrentUser(token: string){
     const header = {
       'Authorization': `Bearer ${token}`
@@ -89,32 +131,6 @@ export class TakenImagesPageComponent {
     return this.http.get<UserResponse>(environment.identifyRequestURL+"/users/me",{ headers: header });
   }
 
-  ngOnInit(): void {
-    this.getData().subscribe((response) => {
-      const data = response;
-      this.list1 = data.find((item) => 'list1' in item)?.list1 || [];
-    });
-    const authKey = localStorage.getItem("auth");
-    if(authKey){
-      this.getCurrentUser(authKey).subscribe(
-        (response: UserResponse) => {
-          this.userMe = response.data;
-          //after getting currentuser I have to immediatly run the getCurrentUserList or else the nginit will run this part before for some reason, 
-          //the value of this.userMe is set properly outside nginit but not inside if it is not nestled like this
-          this.getCurrentUserList().subscribe(
-            (response: listOutput) => {
-              this.userList.data = response.data;
-              console.log(this.userList.data)
-            },err => { 
-              console.error("Failed at getting user list:" + err); 
-            }
-          )
-        },err => { 
-          console.error("Failed at getting userMe:" + err); 
-        }
-      )
-    }
-  }
   getCurrentUserList(){
     return this.http.get<listOutput>(environment.identifyRequestURL+"/users/"+this.userMe._id+"/posts/list");
   }
@@ -139,11 +155,18 @@ export class TakenImagesPageComponent {
     return this.http.delete<DeleteResponse>(environment.identifyRequestURL+"/posts/"+postId,{ headers: header });
   }
 
-  updatePost(postId:string, newPostValues:string,birdId:string){
+  updatePost(){
     const authKey = localStorage.getItem("auth");
     if(authKey){
-      this.sendUpdate(authKey,postId, newPostValues, birdId).subscribe(
+      let postId = this.updateDetailsForm.get('postId')?.value?.value;
+      let birdId = this.updateDetailsForm.get('birdId')?.value?.value;
+      let location = this.updateDetailsForm.get('location')?.value ?? "unknown";
+      
+      this.sendUpdate(authKey, postId, location, birdId).subscribe(
         (response: UpdateResponse) => {
+          this.openForm = false;
+          document.body.style.overflow = 'auto';
+          location.reload();
         },err => { 
           console.error("Failed at updating post with id: "+ postId + " " + err); 
         }
@@ -151,7 +174,7 @@ export class TakenImagesPageComponent {
     }
   }
 
-  sendUpdate(token: string, postId: string,newPostValues:string,birdId:string){
+  sendUpdate(token: string, postId: string, newPostValues: string, birdId: string){
     const header = {
       'Authorization': `Bearer ${token}`
     };
@@ -160,34 +183,6 @@ export class TakenImagesPageComponent {
       "birdId": birdId,
       location
     }
-    return this.http.patch<UpdateResponse>(environment.identifyRequestURL+"/posts/"+postId,body,{ headers: header });
+    return this.http.patch<UpdateResponse>(environment.identifyRequestURL+"/posts/"+postId, body, { headers: header });
   }
-
-  // @HostListener('document:click', ['$event'])
-  // handleDocumentClick(event: MouseEvent) {
-  //   console.log("clicked");
-  //   const dropdownElement = document.getElementById('dropdown-menu');
-  //   const elements = document.querySelectorAll('dropdown');
-  //   console.log(elements);
-  //   // if (this.dropDownVisibility) {
-  //   //   const dropdownElement = document.getElementById('dropdown-menu');
-  //   //   if (dropdownElement && !dropdownElement.contains(event.target as Node)) {
-  //   //     this.dropDownVisibility = false;
-  //   //   }
-  //   // }
-  // }
-
-  toggleUpdatePostField(id:string){
-    const updatePostField = document.getElementById(id);
-    if(updatePostField){
-      if(updatePostField.style.display == 'none'){
-        updatePostField.style.display='block';
-      }else{
-        updatePostField.style.display='none';
-      }
-    }
-  }
-  
 }
-
-
