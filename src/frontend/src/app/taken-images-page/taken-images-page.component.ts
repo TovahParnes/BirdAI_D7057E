@@ -1,12 +1,14 @@
-import {Component, ViewChildren, QueryList} from '@angular/core';
+import {Component, ViewChildren, QueryList, HostListener, AfterViewInit} from '@angular/core';
 import {SocialAuthService, GoogleLoginProvider, SocialUser} from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
 import { AppComponent } from '../app.component';
-import { Card2Component } from '../card/card.component';
+import { Card2Component} from '../card/card.component';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {DeleteResponse, LoginUser,UpdateResponse,UserResponse, listOutput} from 'src/assets/components/components';
+import { Location } from '@angular/common'
+import { Block } from '@angular/compiler';
 
 @Component({
   selector: 'app-taken-images-page',
@@ -19,6 +21,7 @@ export class TakenImagesPageComponent {
   list1: any[] = [];
   list2: any[] = [];
   private jsonUrl = 'assets/data.json';
+  dropDownVisibility = false;
 
   // cardlist = [
   //   {title: 'Duck',imageSrc: 'assets/duck.jpg', date:'2023-10-05'},
@@ -30,6 +33,7 @@ export class TakenImagesPageComponent {
     public mainApp: AppComponent,
     public socialAuthService: SocialAuthService,
     private http: HttpClient,
+    private location: Location,
     ) {
   }
   userMe!: LoginUser;
@@ -44,11 +48,10 @@ export class TakenImagesPageComponent {
     return(newDate);
   }
 
-  getDataToUpdate(){
+  getDataToUpdate(postId:string,birdId:string){
     const textField = document.getElementById("updateTextField") as HTMLInputElement;
-    const textField2 = document.getElementById("postIdTextField") as HTMLInputElement;
-    const textfield3 = document.getElementById("birdIdTextField") as HTMLInputElement;
-    this.updatePost(textField2.value,textField.value,textfield3.value);
+    this.updatePost(postId,textField.value,birdId);
+    this.toggleUpdatePostField("null");
   }
 
   getPostIdToDelete(){
@@ -101,6 +104,7 @@ export class TakenImagesPageComponent {
           this.getCurrentUserList().subscribe(
             (response: listOutput) => {
               this.userList.data = response.data;
+              console.log(this.userList.data)
             },err => { 
               console.error("Failed at getting user list:" + err); 
             }
@@ -115,25 +119,12 @@ export class TakenImagesPageComponent {
     return this.http.get<listOutput>(environment.identifyRequestURL+"/users/"+this.userMe._id+"/posts/list");
   }
 
-  // --Prata med emil om vad exakt för konvertering det är som görs för att veta vad för konvertering jag ska göra tillbaka!--
-  // convertByte2String(byte: number[]){
-  //   const toText = (bytes: number[]): string => {
-  //     let result = '';
-  //     for (let i = 0; i < bytes.length; ++i) {
-  //         const byte = bytes[i];
-  //         const text = byte.toString(16);
-  //         result += (byte < 16 ? '%0' : '%') + text;
-  //     }
-  //     return decodeURIComponent(result);
-  // };
-  // return toText(byte);
-  // }
-
   deletePost(postId: string){
     const authKey = localStorage.getItem("auth");
     if(authKey){
       this.sendDelete(authKey,postId).subscribe(
         (response: DeleteResponse) => {
+          window.location.reload();
         },err => { 
           console.error("Failed at deleting post with id: "+ postId + " " + err); 
         }
@@ -172,4 +163,31 @@ export class TakenImagesPageComponent {
     return this.http.patch<UpdateResponse>(environment.identifyRequestURL+"/posts/"+postId,body,{ headers: header });
   }
 
+  // @HostListener('document:click', ['$event'])
+  // handleDocumentClick(event: MouseEvent) {
+  //   console.log("clicked");
+  //   const dropdownElement = document.getElementById('dropdown-menu');
+  //   const elements = document.querySelectorAll('dropdown');
+  //   console.log(elements);
+  //   // if (this.dropDownVisibility) {
+  //   //   const dropdownElement = document.getElementById('dropdown-menu');
+  //   //   if (dropdownElement && !dropdownElement.contains(event.target as Node)) {
+  //   //     this.dropDownVisibility = false;
+  //   //   }
+  //   // }
+  // }
+
+  toggleUpdatePostField(id:string){
+    const updatePostField = document.getElementById(id);
+    if(updatePostField){
+      if(updatePostField.style.display == 'none'){
+        updatePostField.style.display='block';
+      }else{
+        updatePostField.style.display='none';
+      }
+    }
+  }
+  
 }
+
+

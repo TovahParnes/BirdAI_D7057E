@@ -1,49 +1,44 @@
 <app-navbar firstSelected="false" secondSelected="true" thirdSelected="false"></app-navbar>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
 
 <!-- For some reason when the card elements are created using the imported card2 the way I want to make them they make the entire horizontal section clickable when adding the <a> element around it.
      I changed it for now so it has the code from card2 element here instead removing the bug -->
-  <!-- <div *ngFor="let item of list1">
-      <p></p>
-        <mat-card class="card" (click)="navigateToSpecies(item.image, item.title, item.date)">
-          <div class="desc" style="display: flex;justify-content: space-between;">
-          <p style="flex: 1;">{{item.title}}</p>
-          <p style="flex: 1; text-align: right;">{{item.date}}</p>
-          </div>
-          <div class="gallery">
-              <img mat-card-image [src]=item.image alt="Duck" style="width: 50%;">
-          </div>
-      </mat-card>
-    </div> -->
-
-  <!-- <a target="_blank" (click)="navigateToSpecies('item.image', 'item.title', 'item.date');" >
-    <app-card2 title=item.title imageSrc=item.image date=item.date ></app-card2>
-  </a> -->
-
   <div *ngFor="let item of userList.data">
     <p></p>
     <!-- <a target="_blank" (click)="navigateToSpecies(item.userMedia.data, item.bird.Name, parseDate(item.createdAt))">
         <app-card2 title={{item.bird.Name}} imageSrc={{item.userMedia.data}} date={{parseDate(item.createdAt)}}></app-card2>
       </a> -->
-      <mat-card class="card" (click)="navigateToSpecies(item.userMedia.data, item.bird.Name, parseDate(item.createdAt), item.bird.Description)">
+      <mat-card class="card">
         <div class="desc" style="display: flex;justify-content: space-between;">
-        <p style="flex: 1;">{{item.bird.Name}}</p>
-        <p style="flex: 1; text-align: right;">{{parseDate(item.createdAt)}}</p>
+        <p style="flex: 1;">{{parseDate(item.createdAt)}}</p>
+        <p style="flex: 1.5;">{{item.bird.Name}}</p>
+          <!-- <app-dropdown id="dropdown"></app-dropdown> -->
+        <div class="dropDown" style="max-width: 115px; position: absolute; right: 0; padding: 10px; ">
+            <!-- <button (click)="toggleUpdatePostField(item._id)">Update</button> -->
+            <button class="dropdownb" (click)="toggleUpdatePostField(item._id)"><span class="material-symbols-outlined" style="padding: 0px 36px; background-color: #424242; cursor: pointer;">more_horiz</span></button>
+            <div id={{item._id}} style="display:none;">
+              <button (click)="deletePost(item._id)" style="width: 113px;">Delete Post</button>
+              <input type="text" id="updateTextField" style="width: 105px; text-align: center;" placeholder="Change Location">
+              <button (click)="getDataToUpdate(item._id,item.bird.Id)" style="width: 113px;">Update</button>
+            </div>
+        </div>
+
         </div>
         <div class="gallery">
-            <img mat-card-image [src]=item.userMedia.data alt="Duck" style="width: 50%;">
+            <img class="gallery img" (click)="navigateToSpecies(item.userMedia.data, item.bird.Name, parseDate(item.createdAt), item.bird.Description)" mat-card-image [src]=item.userMedia.data alt="Duck" style="width: 50%;">
         </div>
     </mat-card>
 
   </div>
 
-  <div style="justify-content: center; text-align: center;">
+  <!-- <div style="justify-content: center; text-align: center;">
     <button mat-button (click)="getCurrentUserListData()"> getListData</button>
     <input type="text" id="postIdTextField" placeholder="Enter text">
     <button (click)="getPostIdToDelete()">DeletePost</button>
-    <input type="text" id="updateTextField" placeholder='update the location'>
+     <input type="text" id="updateTextField" placeholder='update the location'> 
     <input type="text" id="birdIdTextField" placeholder='insert birdId'>
-    <button (click)="getDataToUpdate()">UpdatePost</button>
-  </div>
+     <button (click)="getDataToUpdate()">UpdatePost</button> 
+  </div> -->
 
 
 <app-bottominfo></app-bottominfo>

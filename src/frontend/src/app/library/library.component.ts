@@ -92,11 +92,6 @@ export class LibraryComponent {
     this.lastLetter = letter;
   }
 
-  resetbirds(){
-    this.allBirds.data = this.allBirdsBackup.data;
-    console.log(this.allBirdsBackup.data)
-  }
-
   toggleFound(){
     if (this.found == true){
       this.found = false

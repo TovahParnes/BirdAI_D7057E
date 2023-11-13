@@ -19,11 +19,12 @@ import {ProfilePageComponent} from './profile-page/profile-page.component';
 import {NavbarComponent} from './navbar/navbar.component';
 import {CardComponent, Card2Component, BottomInfoComponent} from './card/card.component';
 import {FirstPageComponent} from './first-page/first-page.component';
-
+import { AdminComponent } from './admin/admin.component';
 
 // login authguard imports
 import {GoogleLoginProvider, GoogleSigninButtonModule, SocialLoginModule, SocialAuthServiceConfig} from '@abacritt/angularx-social-login';
 import {AuthGuardService} from './services/auth-guard.service';
+import {AuthGuardAdminService} from './services/auth-admin-guard.service'
 
 // material
 import {MatButtonModule} from '@angular/material/button';
@@ -35,6 +36,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+
 
 
 
@@ -54,6 +56,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     BottomInfoComponent,
     FirstPageComponent,
     AboutComponent,
+    AdminComponent,
 
   ],
   imports: [
@@ -70,8 +73,9 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
       {path: 'species-page', component: SpeciesPageComponent,},
       {path: 'first-page', component: FirstPageComponent,},
       {path: 'about', component: AboutComponent,},
+      {path: 'admin',component: AdminComponent, canActivate: [AuthGuardAdminService]},
 
-      {path: '**', component: LoginComponent},
+      {path: '**', component: FirstPageComponent},
     ]),
     BrowserAnimationsModule,
     CommonModule,
@@ -111,6 +115,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
       } as SocialAuthServiceConfig,
     },
     AuthGuardService,
+    AuthGuardAdminService,
   ],
   bootstrap: [AppComponent]
 })

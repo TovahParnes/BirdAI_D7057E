@@ -51,11 +51,15 @@
 
             <p>Login to your google account</p>
 
-            <div class="content-element" style="font-family: sans-serif;">            
-                <button class="sign-up-with-google-button" (click)="navigateToLogin()" style="background-image: url('assets/loginbutton.png');">
-                <!-- <img src="assets/loginbutton.png" style="width: 200px;vertical-align: middle;"/> -->
-                
-            </button>
+            <div class="content-element" style="font-family: sans-serif;"> 
+                <div *ngIf="!triedLogIn && mainApp.user">
+                    {{login()}}
+                </div>
+            
+                <div class="login-button">
+                    <asl-google-signin-button *ngIf="!mainApp.user" type='standard' size='medium' theme="filled_black"></asl-google-signin-button>
+                </div>           
+                <!-- <button class="sign-up-with-google-button" (click)="navigateToLogin()" style="background-image: url('assets/loginbutton.png');"></button> -->
             </div>
 
             

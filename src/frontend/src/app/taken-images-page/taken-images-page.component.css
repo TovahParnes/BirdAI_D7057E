@@ -7,8 +7,9 @@ div.gallery {
   
 }
 
-div.gallery:hover {
-  border: 1px solid #777;
+div.gallery img:hover {
+  cursor:pointer;
+  opacity: 0.7;
 }
 
 div.gallery img {
@@ -20,4 +21,47 @@ div.desc {
   padding: 15px;
   text-align: left;
   color: white;
+}
+
+.dropDownButton {
+  background-color: #424242;
+  border: none;
+  cursor: pointer;
+}
+
+
+.dropDownButtons {
+  
+  position: absolute;
+  right: 1%;
+  background-color: #424242;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25); 
+  z-index: 2;
+  border-radius: 7px;
+  list-style: none;
+  padding: 0;
+  flex-direction: column;
+}
+
+.show {
+  display: block;
+}
+
+.sub-menu {
+  display: none;
+  position: absolute;
+  top: 60%;
+  right: 1%;
+  background-color: #424242;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25); 
+  z-index: 2;
+  border-radius: 7px;
+  list-style: none;
+  padding: 0;
+  flex-direction: column;
+}
+
+.dropdownb {
+  background-color: #424242; 
+  border: none;
 }

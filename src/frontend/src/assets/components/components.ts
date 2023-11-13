@@ -89,8 +89,8 @@ export interface UserBirdList {
   }
 
 export interface DeleteResponse {
-    "timestamp": string,
-    "data": Media
+    "timestamp": string;
+    "data": string;
 }
 
 export interface UpdateResponse {
@@ -107,4 +107,15 @@ export interface UpdateResponse {
 export interface getAllBirdsResponse {
     "timestamp": string;
     "data": Bird[];
+}
+
+export interface AdminResponse {
+    "timestamp": string;
+    "data": AdminData;
+}
+
+interface AdminData {
+    "_id": string;
+    "user": ListUser;
+    "access": string;
 }
