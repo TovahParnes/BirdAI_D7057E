@@ -99,7 +99,6 @@ export class TakenImagesPageComponent {
       this.getCurrentUser(authKey).subscribe(
         (response: UserResponse) => {
           this.userMe = response.data;
-          localStorage.setItem("userId",response.data._id);
           //after getting currentuser I have to immediatly run the getCurrentUserList or else the nginit will run this part before for some reason, 
           //the value of this.userMe is set properly outside nginit but not inside if it is not nestled like this
           this.getCurrentUserList().subscribe(

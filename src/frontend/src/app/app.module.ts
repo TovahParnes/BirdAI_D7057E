@@ -24,6 +24,7 @@ import { AdminComponent } from './admin/admin.component';
 // login authguard imports
 import {GoogleLoginProvider, GoogleSigninButtonModule, SocialLoginModule, SocialAuthServiceConfig} from '@abacritt/angularx-social-login';
 import {AuthGuardService} from './services/auth-guard.service';
+import {AuthGuardAdminService} from './services/auth-admin-guard.service'
 
 // material
 import {MatButtonModule} from '@angular/material/button';
@@ -72,7 +73,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
       {path: 'species-page', component: SpeciesPageComponent,},
       {path: 'first-page', component: FirstPageComponent,},
       {path: 'about', component: AboutComponent,},
-      {path: 'admin',component: AdminComponent,},
+      {path: 'admin',component: AdminComponent, canActivate: [AuthGuardAdminService]},
 
       {path: '**', component: FirstPageComponent},
     ]),
@@ -114,6 +115,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
       } as SocialAuthServiceConfig,
     },
     AuthGuardService,
+    AuthGuardAdminService,
   ],
   bootstrap: [AppComponent]
 })

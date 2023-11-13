@@ -1,7 +1,7 @@
 import {Component, OnInit } from '@angular/core';
 import {SocialAuthService } from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
-import {AnalyzeResponse, PostData, AnalyzedBird, UserBirdList} from 'src/assets/components/components';
+import {AnalyzeResponse, PostData, AnalyzedBird, UserBirdList, AdminResponse, UserResponse} from 'src/assets/components/components';
 import {AppComponent} from '../app.component';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -44,6 +44,8 @@ export class MainPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getUserMe();
+    this.getCurrentAdmin();
     this.form = this.formBuilder.group({
       option: new FormControl(),
     });
@@ -156,4 +158,40 @@ export class MainPageComponent implements OnInit {
     );
     }
   }
+
+  async getCurrentAdmin(){
+    const authKey = localStorage.getItem("auth");
+    if(authKey){
+      (await this.sendGetCurrentAdmin(authKey)).subscribe(
+        (response: AdminResponse) => {
+          console.log(response)
+          localStorage.setItem("currentAdmin",response.data.user._id);
+        }
+      )
+    }
+  }
+
+  async sendGetCurrentAdmin(token:string){
+    const header = {
+      'Authorization': `Bearer ${token}`
+    };
+    return this.http.get<AdminResponse>(environment.identifyRequestURL+"/admins/me",{ headers: header });
+  }
+
+  getUserMe(){
+    const authKey = localStorage.getItem("auth");
+    if(authKey){
+      this.getCurrentUser(authKey).subscribe(
+        (response: UserResponse) => {
+          localStorage.setItem("userId",response.data._id);
+    }
+  )}
+}
+getCurrentUser(token: string){
+  const header = {
+    'Authorization': `Bearer ${token}`
+  };
+  return this.http.get<UserResponse>(environment.identifyRequestURL+"/users/me",{ headers: header });
+}
+  
 }

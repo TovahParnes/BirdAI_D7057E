@@ -9,10 +9,10 @@ import { AdminResponse } from 'src/assets/components/components';
     providedIn: 'root' 
 })
 
-export class AuthGuardService {
+export class AuthGuardAdminService {
   public user: SocialUser | undefined;
   public loggedIn = false;
-  private currentAdmin?: AdminResponse
+  private currentAdmin = localStorage.getItem("currentAdmin")
 
   constructor(
     private router: Router, 
@@ -25,12 +25,32 @@ export class AuthGuardService {
     });
   }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
-    const logged = this.loggedIn;
-    const destination: string = state.url;
-    
-    if (!this.loggedIn) {
+  async getCurrentAdmin(){
+    const authKey = localStorage.getItem("auth");
+    if(authKey){
+      (await this.sendGetCurrentAdmin(authKey)).subscribe(
+        (response: AdminResponse) => {
+          this.currentAdmin = response.data._id;
+        }
+      )
+    }
+  }
+
+  async sendGetCurrentAdmin(token:string){
+    const header = {
+      'Authorization': `Bearer ${token}`
+    };
+    return this.http.get<AdminResponse>(environment.identifyRequestURL+"/admins/me",{ headers: header });
+  }
+
+  async canActivate(state: RouterStateSnapshot){
+    const currentUser = localStorage.getItem('userId');
+    await this.getCurrentAdmin();
+    if (this.currentAdmin == currentUser){
+        console.log("ok")
+    }else {
+        console.log("notok")
         this.router.navigate(['login'], { queryParams: { returnUrl: state.url }});
     }
-}
+  }
 }
