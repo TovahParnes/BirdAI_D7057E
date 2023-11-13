@@ -1,15 +1,18 @@
 version: "3"
 services:
   bird_ai:
-    image: ${REPOSITORY}:latest
+    image: ${REPOSITORY}:1.0.0
     #image: bird_ai # for running local build aka "make build"
     container_name: bird_ai
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile
     env_file:
       - compose/.env
+      - secret/.env
     restart: unless-stopped
     ports:
-      - "8080:3030"
+      - "8080:8080"
 
   mongodb:
     image: mongo:7.0.1

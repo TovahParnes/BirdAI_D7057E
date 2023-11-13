@@ -112,8 +112,8 @@ func isValidName(name string) models.Response {
 	if name == "" {
 		return ErrorParams("Name is empty")
 	}
-	if len(name) < 6 || len(name) > 20 {
-		return ErrorParams("Name must be between 6 and 20 characters")
+	if len(name) < 2 || len(name) > 40 {
+		return ErrorParams("Name must be between 2 and 40 characters")
 	}
 	if containsSpecialCharacters(name) {
 		return ErrorParams("Name must not contain special characters")
@@ -123,7 +123,7 @@ func isValidName(name string) models.Response {
 
 func containsSpecialCharacters(str string) bool {
 	f := func(r rune) bool {
-		return r < 'A' || r > 'z'
+		return (r < 'A' || r > 'Z') && (r < 'a' || r > 'z') && (r < 'À' || r > 'Ö') && (r < 'Ø' || r > 'ß') && (r < 'à' || r > 'ö') && (r < 'ø' || r > 'ƿ')
 	}
 	if strings.IndexFunc(str, f) != -1 {
 		return true

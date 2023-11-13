@@ -94,6 +94,14 @@ func (c *Controller) CCreatePost(userId string, postInput *models.PostInput) mod
 // TODO need to change media also but now it can change location
 
 func (c *Controller) CUpdatePost(postId string, post *models.PostInput) models.Response {
+	bird := c.db.Bird.GetBirdById(post.BirdId)
+	if utils.IsTypeError(bird) {
+		if bird.Data.(models.Err).StatusCode == http.StatusNotFound {
+			return utils.ErrorToResponse(http.StatusBadRequest, "Bird not found", "Bird with that id does not exist")
+		}
+		return bird
+	}
+	
 	post.Id = postId
 	response := c.db.Post.UpdatePost(*post)
 	if utils.IsTypeError(response) {

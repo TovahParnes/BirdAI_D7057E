@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { AdminResponse } from 'src/assets/components/components';
 
 @Injectable({
-    providedIn: 'root' 
+    providedIn: 'root'
 })
 
 export class AuthGuardService {
@@ -15,8 +15,7 @@ export class AuthGuardService {
   private currentAdmin?: AdminResponse
 
   constructor(
-    private router: Router, 
-    private http: HttpClient,
+    private router: Router,
     private authService: SocialAuthService) {
     this.authService.authState.subscribe(async (user) => {
       this.user = user;
@@ -28,8 +27,9 @@ export class AuthGuardService {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
     const logged = this.loggedIn;
     const destination: string = state.url;
-    
+
     if (!this.loggedIn) {
+        console.log(state.url);
         this.router.navigate(['login'], { queryParams: { returnUrl: state.url }});
     }
 }
