@@ -7,7 +7,7 @@ services:
     image: ai-controller-image
     container_name: ai-controller
     depends_on:
-      - shared-requirements-image
+      - shared-requirements
     networks:
       ai_network:
         ipv4_address: 172.20.0.2
@@ -20,7 +20,7 @@ services:
     image: classification_model-image
     container_name: classification_model
     depends_on:
-      - shared-requirements-image
+      - shared-requirements
     networks:
       ai_network:
         ipv4_address: 172.20.0.3
@@ -46,16 +46,16 @@ services:
     image: detection_model-image
     container_name: detection_model
     depends_on:
-      - shared-requirements-image
+      - shared-requirements
     networks:
       ai_network:
         ipv4_address: 172.20.0.4
     ports:
       - "3502:3500"    # Map container port 3500 to host port 3502
-  shared-requirements-image:
+  shared-requirements:
     build:
       dockerfile: Dockerfile
-    image: shared-requirements-image
+    image: shared-requirements
 networks:
   ai_network:
     driver: bridge
