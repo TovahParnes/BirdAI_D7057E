@@ -2674,7 +2674,13 @@
         "models.PostDB": {
             "type": "object",
             "properties": {
+                "accuracy": {
+                    "type": "number"
+                },
                 "birdId": {
+                    "type": "string"
+                },
+                "comment": {
                     "type": "string"
                 },
                 "createdAt": {
@@ -2700,7 +2706,13 @@
                 "_id": {
                     "type": "string"
                 },
+                "accuracy": {
+                    "type": "number"
+                },
                 "birdId": {
+                    "type": "string"
+                },
+                "comment": {
                     "type": "string"
                 },
                 "location": {
@@ -2717,8 +2729,14 @@
                 "_id": {
                     "type": "string"
                 },
+                "accuracy": {
+                    "type": "number"
+                },
                 "bird": {
                     "$ref": "#/definitions/models.BirdOutput"
+                },
+                "comment": {
+                    "type": "string"
                 },
                 "createdAt": {
                     "type": "string"
