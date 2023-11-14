@@ -32,8 +32,7 @@ export class TakenImagesPageComponent {
     public mainApp: AppComponent,
     public socialAuthService: SocialAuthService,
     private formBuilder: FormBuilder,
-    private http: HttpClient,
-    private location: Location,
+    private http: HttpClient
     ) {
   }
 
@@ -102,7 +101,7 @@ export class TakenImagesPageComponent {
 
   getPostIdToDelete(id: string){
     this.deletePost(id);
-    location.reload();
+    window.location.reload();
   }
   
   getCurrentUserListData(){
@@ -160,13 +159,13 @@ export class TakenImagesPageComponent {
     if(authKey){
       let postId = this.updateDetailsForm.get('postId')?.value?.value;
       let birdId = this.updateDetailsForm.get('birdId')?.value?.value;
-      let location = this.updateDetailsForm.get('location')?.value ?? "unknown";
+      let locat = this.updateDetailsForm.get('location')?.value ?? "unknown";
       
-      this.sendUpdate(authKey, postId, location, birdId).subscribe(
+      this.sendUpdate(authKey, postId, locat, birdId).subscribe(
         (response: UpdateResponse) => {
           this.openForm = false;
           document.body.style.overflow = 'auto';
-          location.reload();
+          window.location.reload();
         },err => { 
           console.error("Failed at updating post with id: "+ postId + " " + err); 
         }

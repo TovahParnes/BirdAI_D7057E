@@ -17,7 +17,7 @@ import {TakenImagesPageComponent} from './taken-images-page/taken-images-page.co
 import {SpeciesPageComponent} from './species-page/species-page.component';
 import {ProfilePageComponent} from './profile-page/profile-page.component';
 import {NavbarComponent} from './navbar/navbar.component';
-import {CardComponent, Card2Component, BottomInfoComponent} from './card/card.component';
+import {CardComponent, BottomInfoComponent} from './card/card.component';
 import {FirstPageComponent} from './first-page/first-page.component';
 import { AdminComponent } from './admin/admin.component';
 
@@ -51,13 +51,11 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     TakenImagesPageComponent,
     ProfilePageComponent,
     CardComponent,
-    Card2Component,
     NavbarComponent,
     BottomInfoComponent,
     FirstPageComponent,
     AboutComponent,
     AdminComponent,
-
   ],
   imports: [
     BrowserModule,
@@ -65,16 +63,13 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     RouterModule.forRoot([
       {path: 'login', component: LoginComponent},
       {path: 'mainpage', component: MainPageComponent},
-      {path: 'library', component: LibraryComponent, },
-      {path: 'takenImages', component: TakenImagesPageComponent, },
-
+      {path: 'library', component: LibraryComponent},
+      {path: 'takenImages', component: TakenImagesPageComponent},
       {path: 'profile', component: ProfilePageComponent}, //canActivate: [AuthGuardService]
-
-      {path: 'species-page', component: SpeciesPageComponent,},
-      {path: 'first-page', component: FirstPageComponent,},
-      {path: 'about', component: AboutComponent,},
+      {path: 'species-page', component: SpeciesPageComponent},
+      {path: 'first-page', component: FirstPageComponent},
+      {path: 'about', component: AboutComponent},
       {path: 'admin',component: AdminComponent, canActivate: [AuthGuardAdminService]},
-
       {path: '**', component: FirstPageComponent},
     ]),
     BrowserAnimationsModule,
