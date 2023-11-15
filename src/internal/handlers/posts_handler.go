@@ -180,7 +180,7 @@ func (h *Handler) CreatePost(c *fiber.Ctx) error {
 	return utils.CreationResponseToStatus(c, response)
 }
 
-// UpdatePost is a function to update the given post from the databse
+// UpdatePost is a function to update the given post from the database
 //
 // @Summary		Update given post
 // @Description	Update given post

@@ -2732,9 +2732,6 @@ const docTemplate = `{
                 "description": {
                     "type": "string"
                 },
-                "imageId": {
-                    "type": "string"
-                },
                 "name": {
                     "type": "string"
                 },
@@ -2752,14 +2749,11 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
-                "image": {
-                    "$ref": "#/definitions/models.MediaOutput"
-                },
                 "name": {
                     "type": "string"
                 },
                 "sound": {
-                    "$ref": "#/definitions/models.MediaOutput"
+                    "type": "string"
                 },
                 "species": {
                     "type": "boolean"

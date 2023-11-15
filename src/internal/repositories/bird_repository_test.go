@@ -25,13 +25,11 @@ func TestBirdRepository(t *testing.T) {
 	testBird1 := &models.BirdDB{
 		Name:        "Bird 1",
 		Description: "This is bird 1",
-		ImageId:     primitive.NewObjectID().Hex(),
 		SoundId:     primitive.NewObjectID().Hex(),
 	}
 	testBird2 := &models.BirdDB{
 		Name:        "Bird 2",
 		Description: "This is bird 2",
-		ImageId:     primitive.NewObjectID().Hex(),
 		SoundId:     primitive.NewObjectID().Hex(),
 	}
 
