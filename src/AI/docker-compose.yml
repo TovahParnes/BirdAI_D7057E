@@ -26,6 +26,19 @@ services:
         ipv4_address: 172.20.0.3
     ports:
       - "3501:3500"  # Map container port 3500 to host port 3501
+  sound_classification:
+    build:
+      context: ./sound_classification
+      dockerfile: Dockerfile
+    image: sound_classification-image
+    container_name: sound_classification
+    depends_on:
+      - shared-requirements-image
+    networks:
+      ai_network:
+        ipv4_address: 172.20.0.5
+    ports:
+      - "3503:3500"  # Map container port 3500 to host port 3501
   detection_model:
     build:
       context: ./detection_model
