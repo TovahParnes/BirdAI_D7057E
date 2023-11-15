@@ -21,6 +21,8 @@ detection_model_ip = os.getenv('DETECTION_MODEL_IP')
 detection_model_port = os.getenv('DETECTION_MODEL_PORT')
 classification_model_ip = os.getenv('CLASSIFICATION_MODEL_IP')
 classification_model_port = os.getenv('CLASSIFICATION_MODEL_PORT')
+sound_classification_model_ip = os.getenv('SOUND_CLASSIFICATION_MODEL_IP')
+sound_classification_model_port = os.getenv('SOUND_CLASSIFICATION_MODEL_PORT')
 
 
 app = Flask(__name__)
@@ -32,6 +34,26 @@ def listen():
      Starts the listening service, the service will now listen for outbound requests.
     """
     app.run(host='0.0.0.0', port=_receiver_port)
+
+
+@app.route('/evaluate_spectrogram', methods=['POST'])
+def evaluate_spectrogram():
+    data = request.get_json()
+
+    try:
+        media_data = data["media"]
+    except KeyError:
+        return jsonify({"error": "Media data is missing in the request."}, 400)
+
+    image = utils.create_pil_image_from_base64(media_data)
+
+    _result = send_data_to_sound_classification(image, sound_classification_model_ip, sound_classification_model_port)
+
+    birds = [{"name": _result.json()['label'], "accuracy": _result.json()['accuracy']}]
+
+    json_structure = json.dumps({"birds": birds}, indent=4)
+
+    return json_structure
 
 
 @app.route('/evaluate_image', methods=['POST'])
@@ -127,6 +149,23 @@ def send_image_to_detection(_img, _ip, _port):
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
         # Handle any other unexpected errors
+        return None
+
+
+def send_data_to_sound_classification(_data, _ip, _port):
+    url = f'http://{_ip}:{_port}/process_sound'
+
+    try:
+        response = requests.post(url, json=convert_pil_to_json(_data))
+        return response
+    except RequestException as e:
+        print(f"Request error: {e}")
+        return None
+    except (ValueError, KeyError) as e:
+        print(f"JSON parsing error: {e}")
+        return None
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
         return None
 
 
