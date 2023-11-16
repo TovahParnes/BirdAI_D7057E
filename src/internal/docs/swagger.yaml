@@ -91,7 +91,11 @@ definitions:
     type: object
   models.PostDB:
     properties:
+      accuracy:
+        type: number
       birdId:
+        type: string
+      comment:
         type: string
       createdAt:
         type: string
@@ -108,7 +112,11 @@ definitions:
     properties:
       _id:
         type: string
+      accuracy:
+        type: number
       birdId:
+        type: string
+      comment:
         type: string
       location:
         type: string
@@ -119,8 +127,12 @@ definitions:
     properties:
       _id:
         type: string
+      accuracy:
+        type: number
       bird:
         $ref: '#/definitions/models.BirdOutput'
+      comment:
+        type: string
       createdAt:
         type: string
       location:

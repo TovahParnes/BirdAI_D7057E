@@ -2677,7 +2677,13 @@ const docTemplate = `{
         "models.PostDB": {
             "type": "object",
             "properties": {
+                "accuracy": {
+                    "type": "number"
+                },
                 "birdId": {
+                    "type": "string"
+                },
+                "comment": {
                     "type": "string"
                 },
                 "createdAt": {
@@ -2703,7 +2709,13 @@ const docTemplate = `{
                 "_id": {
                     "type": "string"
                 },
+                "accuracy": {
+                    "type": "number"
+                },
                 "birdId": {
+                    "type": "string"
+                },
+                "comment": {
                     "type": "string"
                 },
                 "location": {
@@ -2720,8 +2732,14 @@ const docTemplate = `{
                 "_id": {
                     "type": "string"
                 },
+                "accuracy": {
+                    "type": "number"
+                },
                 "bird": {
                     "$ref": "#/definitions/models.BirdOutput"
+                },
+                "comment": {
+                    "type": "string"
                 },
                 "createdAt": {
                     "type": "string"
