@@ -1,7 +1,10 @@
+import librosa
 import numpy as np
 from PIL import Image
 from flask import Flask, jsonify, request
 from keras.preprocessing.image import ImageDataGenerator
+from matplotlib import pyplot as plt
+import io
 
 import classification
 import utils
@@ -14,9 +17,35 @@ def listen():
     app.run(host='0.0.0.0', port=_receiver_port)
 
 
+def sound_to_spectrogram(sound_data):
+    y, sr = librosa.load(io.BytesIO(sound_data), sr=None)
+
+    # Generate a mel spectrogram
+    spectrogram = librosa.feature.melspectrogram(y=y, sr=sr)
+    spectrogram_db = librosa.power_to_db(spectrogram, ref=np.max)
+
+    plt.figure(figsize=(10, 4))
+    librosa.display.specshow(spectrogram_db, x_axis='time', y_axis='mel')
+    plt.colorbar(format='%+2.0f dB')
+    plt.title('Spectrogram')
+
+    # Save the plot as an image in memory
+    image_stream = io.BytesIO()
+    plt.savefig(image_stream, format='png')
+    image_stream.seek(0)
+
+    # Create a PIL image from the saved image stream
+    return Image.open(image_stream)
+
+
 @app.route('/process_sound', methods=['POST'])
 def process_sound():
     data = request.get_json()
+
+    media_data = data["media"]
+    decoded_data = utils.preprocess_sound(media_data)
+
+    image = sound_to_spectrogram(decoded_data)
 
     _prefix_path = "images/"
     _folder_name = utils.generate_random_name()
@@ -26,17 +55,7 @@ def process_sound():
     _full_path = _prefix_path + _folder_name + "/bird01"
     utils.create_folder(_prefix_path + _folder_name + "/bird01")
 
-    width = data["width"]
-    height = data["height"]
-    mode = data["mode"]
-    pixels = [value for pixel in data["pixels"] for value in pixel]
-
-    _pixel_bytes = bytes(pixels)    # Create a byte array from the pixel data
-
-    _image_from_bytes = Image.frombytes(mode, (width, height), _pixel_bytes)   # Create a PIL image from the pixel data
-
-    _image_from_bytes.save(_full_path + "/image.png")   # Future, fix so that more birds can be saved.
-    _image_from_bytes.show()
+    image.save(_full_path + "/image.png")   # Future, fix so that more birds can be saved.
     general_datagen = ImageDataGenerator(rescale=1. / 255)  # for training, validation and testing data
 
     testr_directory = _prefix_path + _folder_name
