@@ -71,6 +71,10 @@ func IsValidMediaInput(post *models.MediaInput) models.Response {
 }
 
 func IsValidPostCreation(post *models.PostCreation) models.Response {
+	response := IsValidId(post.BirdId)
+	if IsTypeError(response) {
+		return ErrorParams("Given bird id is not a valid id")
+	}
 	if post.Location == "" {
 		return ErrorParams("Location is empty")
 	}

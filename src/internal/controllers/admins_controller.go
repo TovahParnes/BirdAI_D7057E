@@ -109,8 +109,7 @@ func (c *Controller) CUpdateAdmin(id string, admin *models.AdminInput) (models.R
 			return response
 		}
 	}
-	admin.Id = id
-	response := c.db.Admin.UpdateAdmin(*admin)
+	response := c.db.Admin.UpdateAdmin(id, *admin)
 	if utils.IsTypeError(response) {
 		return response
 	}

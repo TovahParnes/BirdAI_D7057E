@@ -157,13 +157,22 @@ func TestParameterValidation(t *testing.T) {
 	t.Run("Test IsValidPostInput", func(t *testing.T) {
 		post := &models.PostInput{
 			Location: "location",
+			Comment: "comment",
 		}
 		response := utils.IsValidPostInput(post)
 		require.False(t, utils.IsTypeError(response))
 
+		post.Location = ""
 		response = utils.IsValidPostInput(post)
 		require.True(t, utils.IsTypeError(response))
 		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
+	
+		post.Location = "location"
+		post.Comment = ""
+		response = utils.IsValidPostInput(post)
+		require.True(t, utils.IsTypeError(response))
+		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
+	
 	})
 
 	t.Run("Test IsValidUserInput", func(t *testing.T) {
