@@ -10,10 +10,7 @@ type PostDB struct {
 }
 
 type PostInput struct {
-	Id       string     `bson:"_id" json:"_id" form:"_id"`
-	BirdId   string     `bson:"bird_id" json:"birdId" form:"birdId"`
 	Location string     `bson:"location" json:"location" form:"location"`
-	Media    MediaInput `bson:"media" json:"media" form:"media"`
 }
 
 type PostOutput struct {

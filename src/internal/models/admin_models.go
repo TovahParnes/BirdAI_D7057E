@@ -7,7 +7,6 @@ type AdminDB struct {
 }
 
 type AdminInput struct {
-	Id     string `bson:"_id" json:"_id" form:"_id"`
 	UserId string `bson:"user_id" json:"userId" form:"userId"`
 	Access string `bson:"access" json:"access" form:"access"`
 }
