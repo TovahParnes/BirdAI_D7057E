@@ -34,11 +34,18 @@ func IsValidSearch(search string) models.Response {
 	return Response(nil)
 }
 
-func IsValidAdminInput(admin *models.AdminInput) models.Response {
+func IsValidAdminCreation(admin *models.AdminCreation) models.Response {
 	response := IsValidId(admin.UserId)
 	if IsTypeError(response) {
 		return ErrorParams("Given user id is not a valid id")
 	}
+	if admin.Access != "admin" && admin.Access != "superadmin" {
+		return ErrorParams("Given access is not a valid access, must be admin or superadmin")
+	}
+	return Response(nil)
+}
+
+func IsValidAdminInput(admin *models.AdminInput) models.Response {
 	if admin.Access != "admin" && admin.Access != "superadmin" {
 		return ErrorParams("Given access is not a valid access, must be admin or superadmin")
 	}

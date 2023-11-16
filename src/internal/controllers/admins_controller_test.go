@@ -67,7 +67,7 @@ func TestAdminController(t *testing.T) {
 	}
 
 	t.Run("Test CreateAdmin", func(t *testing.T) {
-		adminInput := &models.AdminInput{
+		adminInput := &models.AdminCreation{
 			UserId: testUser1.Id,
 			Access: testAdmin1.Access,
 		}
@@ -80,7 +80,7 @@ func TestAdminController(t *testing.T) {
 		require.True(t, utils.IsTypeError(response))
 		require.Equal(t, http.StatusConflict, response.Data.(models.Err).StatusCode)
 
-		adminInput = &models.AdminInput{
+		adminInput = &models.AdminCreation{
 			UserId: testUser2.Id,
 			Access: testAdmin2.Access,
 		}
@@ -89,7 +89,7 @@ func TestAdminController(t *testing.T) {
 		require.IsType(t, &models.AdminOutput{}, response.Data.(*models.AdminOutput))
 		testAdmin2.Id = response.Data.(*models.AdminOutput).Id
 		
-		response = contr.CCreateAdmin(&models.AdminInput{
+		response = contr.CCreateAdmin(&models.AdminCreation{
 			UserId: "IncorrectID",
 			Access: "admin",
 		})
@@ -142,16 +142,14 @@ func TestAdminController(t *testing.T) {
 
 	t.Run("Test UpdateAdmin", func(t *testing.T) {
 		//incorrect user id
-		response := contr.CUpdateAdmin(testAdmin1.Id, &models.AdminInput{
-			UserId: "IncorrectID",
+		response := contr.CUpdateAdmin("IncorrectID", &models.AdminInput{
 			Access: "admin",
 		})
 		require.True(t, utils.IsTypeError(response))
 		require.Equal(t, http.StatusNotFound, response.Data.(models.Err).StatusCode)
 
 		//User id already exists
-		response = contr.CUpdateAdmin(testAdmin1.Id, &models.AdminInput{
-			UserId: testUser2.Id,
+		response = contr.CUpdateAdmin(testAdmin2.Id, &models.AdminInput{
 			Access: "admin",
 		})
 		require.True(t, utils.IsTypeError(response))
@@ -159,7 +157,6 @@ func TestAdminController(t *testing.T) {
 
 		//Can't remove last superadmin
 		response = contr.CUpdateAdmin(testAdmin1.Id, &models.AdminInput{
-			UserId: testUser1.Id,
 			Access: "admin",
 		})
 		require.True(t, utils.IsTypeError(response))
@@ -167,7 +164,6 @@ func TestAdminController(t *testing.T) {
 
 		//No changes to document
 		response = contr.CUpdateAdmin(testAdmin1.Id, &models.AdminInput{
-			UserId: testUser1.Id,
 			Access: "admin",
 		})
 		require.True(t, utils.IsTypeError(response))
@@ -175,7 +171,6 @@ func TestAdminController(t *testing.T) {
 
 		//Update sucessful
 		response = contr.CUpdateAdmin(testAdmin1.Id, &models.AdminInput{
-			UserId: testUser1.Id,
 			Access: "superadmin",
 		})
 		require.False(t, utils.IsTypeError(response))

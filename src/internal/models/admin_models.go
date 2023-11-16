@@ -6,8 +6,11 @@ type AdminDB struct {
 	Access string `bson:"access" json:"access" form:"access"`
 }
 
-type AdminInput struct {
+type AdminCreation struct {
 	UserId string `bson:"user_id" json:"userId" form:"userId"`
+	Access string `bson:"access" json:"access" form:"access"`
+}
+type AdminInput struct {
 	Access string `bson:"access" json:"access" form:"access"`
 }
 

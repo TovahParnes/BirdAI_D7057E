@@ -49,9 +49,31 @@ func TestParameterValidation(t *testing.T) {
 		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
 	})
 
+	t.Run("Test IsValidAdminCreation", func(t *testing.T) {
+		admin := &models.AdminCreation{
+			UserId: "5f9d3b3b9d3b3b9d3b3b9d3b",
+			Access: "admin",
+		}
+		response := utils.IsValidAdminCreation(admin)
+		require.False(t, utils.IsTypeError(response))
+
+		admin.Access = "superadmin"
+		response = utils.IsValidAdminCreation(admin)
+		require.False(t, utils.IsTypeError(response))
+
+		admin.UserId = "1234"
+		response = utils.IsValidAdminCreation(admin)
+		require.True(t, utils.IsTypeError(response))
+		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
+
+		admin.Access = "hello"
+		response = utils.IsValidAdminCreation(admin)
+		require.True(t, utils.IsTypeError(response))
+		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
+	})
+
 	t.Run("Test IsValidAdminInput", func(t *testing.T) {
 		admin := &models.AdminInput{
-			UserId: "5f9d3b3b9d3b3b9d3b3b9d3b",
 			Access: "admin",
 		}
 		response := utils.IsValidAdminInput(admin)
@@ -60,11 +82,6 @@ func TestParameterValidation(t *testing.T) {
 		admin.Access = "superadmin"
 		response = utils.IsValidAdminInput(admin)
 		require.False(t, utils.IsTypeError(response))
-
-		admin.UserId = "1234"
-		response = utils.IsValidAdminInput(admin)
-		require.True(t, utils.IsTypeError(response))
-		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
 
 		admin.Access = "hello"
 		response = utils.IsValidAdminInput(admin)

@@ -92,7 +92,7 @@ func TestAccessController(t *testing.T) {
 	}
 
 	t.Run("Test CreateAdmin", func(t *testing.T) {
-		adminInput := &models.AdminInput{
+		adminInput := &models.AdminCreation{
 			UserId: testUser1.Id,
 			Access: testAdmin1.Access,
 		}
@@ -101,7 +101,7 @@ func TestAccessController(t *testing.T) {
 		require.IsType(t, &models.AdminOutput{}, response.Data.(*models.AdminOutput))
 		testAdmin1.Id = response.Data.(*models.AdminOutput).Id
 
-		adminInput = &models.AdminInput{
+		adminInput = &models.AdminCreation{
 			UserId: testUser2.Id,
 			Access: testAdmin2.Access,
 		}

@@ -130,7 +130,7 @@ func (h *Handler) ListAdmins(c *fiber.Ctx) error {
 // @Accept		json
 // @Produce		json
 // @Security	Bearer
-// @Param		admin	body	models.AdminInput	true	"admin"
+// @Param		admin	body	models.AdminCreation	true	"admin"
 // @Success		201	{object}	models.Response{}
 // @Failure		400	{object}	models.Response{data=models.Err}
 // @Failure		401	{object}	models.Response{data=models.Err}
@@ -149,12 +149,12 @@ func (h *Handler) CreateAdmin(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	var admin *models.AdminInput
+	var admin *models.AdminCreation
 	if err := c.BodyParser(&admin); err != nil {
 		//	@Failure	400	{object}	models.Response{}
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
-	response = utils.IsValidAdminInput(admin)
+	response = utils.IsValidAdminCreation(admin)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
@@ -188,8 +188,8 @@ func (h *Handler) CreateSuperadminMe(c *fiber.Ctx) error {
 	}
 	curUserId := response.Data.(models.UserDB).Id
 
-	var admin *models.AdminInput
-	admin = &models.AdminInput{
+	var admin *models.AdminCreation
+	admin = &models.AdminCreation{
 		UserId: curUserId,
 		Access: "superadmin",
 	}
