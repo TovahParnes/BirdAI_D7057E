@@ -261,7 +261,7 @@ func (h *Handler) UpdateAdmin(c *fiber.Ctx) error {
 // @Produce		json
 // @Security	Bearer
 // @Param		id	path	string	true	"Admin ID"
-// @Success		200	{object}	models.Response{}
+// @Success		200	{object}	models.Response{"Deleted successfully"}
 // @Failure		401	{object}	models.Response{data=models.Err}
 // @Failure		403	{object}	models.Response{data=models.Err}
 // @Failure		404	{object}	models.Response{data=models.Err}

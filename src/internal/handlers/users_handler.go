@@ -73,7 +73,7 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 // @Accept		json
 // @Produce		json
 // @Param		user	body		models.UserLogin	true	"user"
-// @Success		201	{object}	models.Response{data=models.UserDB}
+// @Success		201	{object}	models.Response{data=models.UserLoginOutput}
 // @Failure		400	{object}	models.Response{data=models.Err}
 // @Failure		401	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
@@ -182,8 +182,8 @@ func (h *Handler) UpdateUser(c *fiber.Ctx) error {
 // @Accept		json
 // @Produce		json
 // @Security 	Bearer
-// @Param		id			path		string	true	"User ID"
-// @Success		200	{object}	models.Response{}
+// @Param		id	path		string	true	"User ID"
+// @Success		200	{object}	models.Response{"Deleted successfully"}
 // @Failure		401	{object}	models.Response{data=models.Err}
 // @Failure		403	{object}	models.Response{data=models.Err}
 // @Failure		404	{object}	models.Response{data=models.Err}

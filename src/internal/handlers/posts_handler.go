@@ -201,7 +201,7 @@ func (h *Handler) UpdatePost(c *fiber.Ctx) error {
 // @Produce		json
 // @Security 	Bearer
 // @Param		id	path	string	true	"Post ID"
-// @Success		200	{object}	models.Response{}
+// @Success		200	{object}	models.Response{data="Deleted successfully"}
 // @Failure		401	{object}	models.Response{data=models.Err}
 // @Failure		403	{object}	models.Response{data=models.Err}
 // @Failure		404	{object}	models.Response{data=models.Err}
