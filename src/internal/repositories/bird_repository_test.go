@@ -5,12 +5,13 @@ import (
 	"birdai/src/internal/repositories"
 	"birdai/src/internal/utils"
 	"context"
+	"testing"
+
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"testing"
 )
 
 // TestRepository functions
@@ -77,16 +78,13 @@ func TestBirdRepository(t *testing.T) {
 
 	t.Run("Test UpdateOne", func(t *testing.T) {
 		updateBird := models.BirdInput{
-			Id:          testBird1.Id,
 			Description: "Test Bird 1 is the best!!",
 		}
-		response := birdColl.UpdateBird(updateBird)
+		response := birdColl.UpdateBird(testBird1.Id, updateBird)
 		require.False(t, utils.IsTypeError(response))
 		require.Equal(t, updateBird.Name, response.Data.(*models.BirdDB).Name)
 
-		response = birdColl.UpdateBird(updateBird)
-		require.True(t, utils.IsTypeError(response))
-		response = birdColl.UpdateBird(updateBird)
+		response = birdColl.UpdateBird(testBird1.Id, updateBird)
 		require.True(t, utils.IsTypeError(response))
 	})
 

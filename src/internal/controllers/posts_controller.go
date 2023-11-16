@@ -61,7 +61,7 @@ func (c *Controller) CListUsersPosts(userId string, set int) models.Response {
 	return utils.Response(output)
 }
 
-func (c *Controller) CCreatePost(userId string, postInput *models.PostInput) models.Response {
+func (c *Controller) CCreatePost(userId string, postInput *models.PostCreation) models.Response {
 	bird := c.db.Bird.GetBirdById(postInput.BirdId)
 	if utils.IsTypeError(bird) {
 		if bird.Data.(models.Err).StatusCode == http.StatusNotFound {
@@ -72,7 +72,6 @@ func (c *Controller) CCreatePost(userId string, postInput *models.PostInput) mod
 
 	media := &models.MediaDB{
 		Data:     postInput.Media.Data,
-		FileType: postInput.Media.FileType,
 	}
 	response := c.db.Media.CreateMedia(*media)
 	if utils.IsTypeError(response) {
@@ -82,6 +81,8 @@ func (c *Controller) CCreatePost(userId string, postInput *models.PostInput) mod
 		UserId:   userId,
 		BirdId:   postInput.BirdId,
 		Location: postInput.Location,
+		Comment:  postInput.Comment,
+		Accuracy: postInput.Accuracy,
 		MediaId:  response.Data.(string),
 	}
 	response = c.db.Post.CreatePost(*post)
@@ -94,16 +95,7 @@ func (c *Controller) CCreatePost(userId string, postInput *models.PostInput) mod
 // TODO need to change media also but now it can change location
 
 func (c *Controller) CUpdatePost(postId string, post *models.PostInput) models.Response {
-	bird := c.db.Bird.GetBirdById(post.BirdId)
-	if utils.IsTypeError(bird) {
-		if bird.Data.(models.Err).StatusCode == http.StatusNotFound {
-			return utils.ErrorToResponse(http.StatusBadRequest, "Bird not found", "Bird with that id does not exist")
-		}
-		return bird
-	}
-	
-	post.Id = postId
-	response := c.db.Post.UpdatePost(*post)
+	response := c.db.Post.UpdatePost(postId, *post)
 	if utils.IsTypeError(response) {
 		return response
 	}

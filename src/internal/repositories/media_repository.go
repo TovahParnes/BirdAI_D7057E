@@ -3,6 +3,7 @@ package repositories
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -34,7 +35,7 @@ func (m *MediaRepository) CreateMedia(media models.MediaDB) models.Response {
 
 // UpdateMedia updates the media item with the specified changes and returns a response
 // containing the updated media item.
-func (m *MediaRepository) UpdateMedia(media models.MediaInput) models.Response {
+func (m *MediaRepository) UpdateMedia(id string, media models.MediaInput) models.Response {
 	data, err := bson.Marshal(media)
 	if err != nil {
 		return utils.ErrorToResponse(400, "Could not update object", err.Error())
@@ -44,6 +45,7 @@ func (m *MediaRepository) UpdateMedia(media models.MediaInput) models.Response {
 	if err != nil {
 		return utils.ErrorToResponse(400, "Could not update object", err.Error())
 	}
+	bsonMedia["_id"] = id
 	return m.collection.UpdateOne(bsonMedia)
 }
 

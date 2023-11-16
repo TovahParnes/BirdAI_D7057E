@@ -41,3 +41,14 @@ func UserDBToOutput(db *UserDB) *UserOutput {
 		Active:    db.Active,
 	}
 }
+
+func UserDBToLoginOutput(db *UserDB, token string, CreatedNew bool) *UserLoginOutput {
+	return &UserLoginOutput{
+		Id:        db.Id,
+		Username:  db.Username,
+		Token:    token,
+		CreatedAt: db.CreatedAt,
+		Active:    db.Active,
+		CreatedNew: CreatedNew,
+	}
+}

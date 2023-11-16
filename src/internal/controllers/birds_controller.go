@@ -66,8 +66,7 @@ func (c *Controller) CUpdateBird(id string, bird *models.BirdInput) (models.Resp
 		}
 	}
 	
-	bird.Id = id
-	response := c.db.Bird.UpdateBird(*bird)
+	response := c.db.Bird.UpdateBird(id, *bird)
 	if utils.IsTypeError(response) {
 		return response
 	}
@@ -89,41 +88,4 @@ func (c *Controller) CBirdDBToOutput(bird *models.BirdDB) models.Response {
 	soundOutput := models.MediaDBToOutput(soundResponse.Data.(*models.MediaDB))
 	birdOutput := models.BirdDBToOutput(bird, imageOutput, soundOutput)
 	return utils.Response(birdOutput)
-
-}
-
-func (c *Controller) GenerateBirds() models.Response {
-	currentBirds := c.db.Bird.ListAllBirds(0)
-	if utils.IsTypeError(currentBirds) && currentBirds.Data.(models.Err).StatusCode != http.StatusNotFound {
-		return currentBirds
-	}
-	if len(currentBirds.Data.([]models.BirdDB)) != 0 {
-		for _, bird := range currentBirds.Data.([]models.BirdDB) {
-			c.db.Bird.DeleteBird(bird.Id)
-		}
-	}
-
-	response := c.db.Media.CreateMedia(models.MediaDB{
-		Data:     "testImage",
-		FileType: "image/png",
-	})
-	if utils.IsTypeError(response) {
-		return response
-	}
-	imageId := response.Data.(string)
-	response = c.db.Media.CreateMedia(models.MediaDB{
-		Data:     "testSound",
-		FileType: "audio/mpeg",
-	})
-	if utils.IsTypeError(response) {
-		return response
-	}
-	soundId := response.Data.(string)
-	response = c.db.Bird.CreateBird(models.BirdDB{
-		Name:        "Skata",
-		Description: "Cool test bird",
-		ImageId:     imageId,
-		SoundId:     soundId,
-	})
-	return response
 }

@@ -81,23 +81,31 @@ func TestAccessController(t *testing.T) {
 		testUser3.Id = response.Data.(string)
 	})
 
-	testAdmin1 := &models.AdminInput{
+	testAdmin1 := &models.AdminDB{
 		UserId: testUser1.Id,
 		Access: "admin",
 	}
 
-	testAdmin2 := &models.AdminInput{
+	testAdmin2 := &models.AdminDB{
 		UserId: testUser2.Id,
 		Access: "superadmin",
 	}
 
 	t.Run("Test CreateAdmin", func(t *testing.T) {
-		response := contr.CCreateAdmin(testAdmin1)
+		adminInput := &models.AdminInput{
+			UserId: testUser1.Id,
+			Access: testAdmin1.Access,
+		}
+		response := contr.CCreateAdmin(adminInput)
 		require.False(t, utils.IsTypeError(response))
 		require.IsType(t, &models.AdminOutput{}, response.Data.(*models.AdminOutput))
 		testAdmin1.Id = response.Data.(*models.AdminOutput).Id
 
-		response = contr.CCreateAdmin(testAdmin2)
+		adminInput = &models.AdminInput{
+			UserId: testUser2.Id,
+			Access: testAdmin2.Access,
+		}
+		response = contr.CCreateAdmin(adminInput)
 		require.False(t, utils.IsTypeError(response))
 		require.IsType(t, &models.AdminOutput{}, response.Data.(*models.AdminOutput))
 		testAdmin2.Id = response.Data.(*models.AdminOutput).Id
@@ -105,17 +113,14 @@ func TestAccessController(t *testing.T) {
 
 	testImage := &models.MediaDB{
 		Data:     "testImage",
-		FileType: "audio/mpeg",
 	}
 
 	testSound := &models.MediaDB{
 		Data:     "testSound",
-		FileType: "audio/mpeg",
 	}
 
 	testMediaInput := &models.MediaInput{
 		Data:     "testSound",
-		FileType: "audio/mpeg",
 	}
 
 	t.Run("Test CreateMedia", func(t *testing.T) {
@@ -146,25 +151,36 @@ func TestAccessController(t *testing.T) {
 		testBird1.Id = response.Data.(string)
 	})
 
-	testPost1 := &models.PostInput{
+	testPost1 := &models.PostDB{
 		BirdId: testBird1.Id,
 		Location: "place 1",
-		Media: *testMediaInput,
 	}
 
-	testPost2 := &models.PostInput{
+	testPost2 := &models.PostDB{
 		BirdId: testBird1.Id,
 		Location: "place 2",
-		Media: *testMediaInput,
 	}
 
 	t.Run("Test CreatePost", func(t *testing.T) {
-		response := contr.CCreatePost(testUser1.Id, testPost1)
+		postCreation := &models.PostCreation{
+			BirdId: testBird1.Id,
+			Location: testPost1.Location,
+			Media: *testMediaInput,
+		}
+
+		response := contr.CCreatePost(testUser1.Id, postCreation)
 		require.False(t, utils.IsTypeError(response))
 		require.IsType(t, &models.PostOutput{}, response.Data.(*models.PostOutput))
 		testPost1.Id = response.Data.(*models.PostOutput).Id
+		testPost1.MediaId = response.Data.(*models.PostOutput).UserMedia.Id
 
-		response = contr.CCreatePost(testUser3.Id, testPost2)
+		postCreation = &models.PostCreation{
+			BirdId: testPost2.BirdId,
+			Location: testPost2.Location,
+			Media: *testMediaInput,
+		}
+
+		response = contr.CCreatePost(testUser3.Id, postCreation)
 		require.False(t, utils.IsTypeError(response))
 		require.IsType(t, &models.PostOutput{}, response.Data.(*models.PostOutput))
 		testPost2.Id = response.Data.(*models.PostOutput).Id

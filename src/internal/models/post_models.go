@@ -11,10 +11,18 @@ type PostDB struct {
 	MediaId   string  `bson:"media_id"`
 }
 
-type PostInput struct {
+type PostCreation struct {
+	BirdId    string  `bson:"bird_id"`
 	Location string     `bson:"location" json:"location" form:"location"`
 	Comment  string     `bson:"comment" json:"comment" form:"comment"`
 	Accuracy float32    `bson:"accuracy" json:"accuracy" form:"accuracy"`
+	Media    MediaInput `bson:"media" json:"media" form:"media"`
+}
+
+
+type PostInput struct {
+	Location string     `bson:"location" json:"location" form:"location"`
+	Comment  string     `bson:"comment" json:"comment" form:"comment"`
 }
 
 type PostOutput struct {
