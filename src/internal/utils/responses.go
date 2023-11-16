@@ -9,6 +9,12 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+func UserCreationResponseToStatus(c *fiber.Ctx, response models.Response) error {
+	if (response.Data.(*models.UserLoginOutput).CreatedNew) {
+		return c.Status(http.StatusCreated).JSON(response)
+	}
+	return c.Status(http.StatusOK).JSON(response)
+}
 
 func CreationResponseToStatus(c *fiber.Ctx, response models.Response) error {
 	return c.Status(http.StatusCreated).JSON(response)

@@ -94,7 +94,7 @@ func (h *Handler) LoginUser(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 	
-	return utils.CreationResponseToStatus(c, response)
+	return utils.UserCreationResponseToStatus(c, response)
 }
 
 // GetUserMe is a function to get the current user from the databse
@@ -183,7 +183,7 @@ func (h *Handler) UpdateUser(c *fiber.Ctx) error {
 // @Produce		json
 // @Security 	Bearer
 // @Param		id	path		string	true	"User ID"
-// @Success		200	{object}	models.Response{"Deleted successfully"}
+// @Success		200	{object}	models.Response{data=string}
 // @Failure		401	{object}	models.Response{data=models.Err}
 // @Failure		403	{object}	models.Response{data=models.Err}
 // @Failure		404	{object}	models.Response{data=models.Err}

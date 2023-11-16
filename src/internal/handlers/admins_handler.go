@@ -239,8 +239,6 @@ func (h *Handler) UpdateAdmin(c *fiber.Ctx) error {
 
 	var admin *models.AdminInput
 	if err := c.BodyParser(&admin); err != nil {
-		//	@Failure	400	{object}	models.Response{}
-		// something with body is wrong/missing
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
 	response = utils.IsValidAdminInput(admin)
@@ -261,7 +259,7 @@ func (h *Handler) UpdateAdmin(c *fiber.Ctx) error {
 // @Produce		json
 // @Security	Bearer
 // @Param		id	path	string	true	"Admin ID"
-// @Success		200	{object}	models.Response{"Deleted successfully"}
+// @Success		200	{object}	models.Response{data=string}
 // @Failure		401	{object}	models.Response{data=models.Err}
 // @Failure		403	{object}	models.Response{data=models.Err}
 // @Failure		404	{object}	models.Response{data=models.Err}
