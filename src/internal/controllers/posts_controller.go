@@ -29,7 +29,7 @@ func (c *Controller) CListPosts(set int, search string) models.Response {
 		return response
 	}
 
-	//TEMPORATY - restarting fiber changes the bird id, meaning listing posts will 
+	//TEMPORATY - restarting fiber changes the bird id, meaning listing posts will
 	//always from error that bird does not exisits
 	for _, postsObject := range response.Data.([]models.PostDB) {
 		fmt.Println(postsObject.Id)
@@ -57,6 +57,16 @@ func (c *Controller) CListUsersPosts(userId string, set int) models.Response {
 			return postOutput
 		}
 		output = append(output, postOutput.Data.(*models.PostOutput))
+	}
+	return utils.Response(output)
+}
+
+func (c *Controller) CListUsersFoundBirds(userId string, set int) models.Response {
+	filter := bson.M{"user_id": userId}
+	response := c.db.Post.ListPosts(filter, set)
+	output := []*models.PostDB{}
+	for _, post := range response.Data.([]models.PostDB) {
+		output = append(output, &post)
 	}
 	return utils.Response(output)
 }
@@ -101,7 +111,7 @@ func (c *Controller) CUpdatePost(postId string, post *models.PostInput) models.R
 		}
 		return bird
 	}
-	
+
 	post.Id = postId
 	response := c.db.Post.UpdatePost(*post)
 	if utils.IsTypeError(response) {
@@ -127,7 +137,7 @@ func (c *Controller) CDeletePost(id string) models.Response {
 	return deleteMediaResponse
 }
 
-func (c *Controller) CPostDBToOutput(post models.PostDB) (models.Response) {
+func (c *Controller) CPostDBToOutput(post models.PostDB) models.Response {
 	user := c.CGetUserById(post.UserId)
 	if utils.IsTypeError(user) {
 		return user
