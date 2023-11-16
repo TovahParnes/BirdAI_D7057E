@@ -44,7 +44,7 @@ func (h *Handler) GetUserById(c *fiber.Ctx) error {
 // @Param		set	query		int	false	"Set of users"
 // @Param		search	query	string	false	"Search parameter for user"
 // @Success		200	{object}	models.Response{data=[]models.UserOutput}
-// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		400	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
 // @Router		/api/v1/users/list [get]
 func (h *Handler) ListUsers(c *fiber.Ctx) error {
@@ -73,6 +73,7 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 // @Accept		json
 // @Produce		json
 // @Param		user	body		models.UserLogin	true	"user"
+// @Success		200	{object}	models.Response{data=models.UserDB}
 // @Success		201	{object}	models.Response{data=models.UserDB}
 // @Failure		400	{object}	models.Response{data=models.Err}
 // @Failure		401	{object}	models.Response{data=models.Err}
@@ -81,7 +82,6 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 func (h *Handler) LoginUser(c *fiber.Ctx) error {
 	var user *models.UserLogin
 	if err := c.BodyParser(&user); err != nil {
-		//	@Failure	400	{object}	models.Response{}
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
 	response := utils.IsValidUserLogin(user)
@@ -94,7 +94,7 @@ func (h *Handler) LoginUser(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 	
-	return utils.CreationResponseToStatus(c, response)
+	return utils.UserCreationResponseToStatus(c, response)
 }
 
 // GetUserMe is a function to get the current user from the databse
