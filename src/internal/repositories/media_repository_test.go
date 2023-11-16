@@ -5,11 +5,12 @@ import (
 	"birdai/src/internal/repositories"
 	"birdai/src/internal/utils"
 	"context"
+	"testing"
+
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"testing"
 )
 
 // TestRepository functions
@@ -22,7 +23,6 @@ func TestMediaRepository(t *testing.T) {
 
 	testMedia := &models.MediaDB{
 		Data:     "123",
-		FileType: "testFile",
 	}
 
 	t.Run("Test CreateMedia", func(t *testing.T) {

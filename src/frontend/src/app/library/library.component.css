@@ -1,6 +1,23 @@
-.card-container {
+.cardContainer {
     display: flex; 
     justify-content: center; 
     gap: 16px; 
     flex-wrap: wrap; 
+}
+
+.filterContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.formField {
+    margin-left: 8px;
+}
+
+.nameText {
+    font-size: smaller;
+    margin-top: 0px;
+    min-width: 100px;
 }

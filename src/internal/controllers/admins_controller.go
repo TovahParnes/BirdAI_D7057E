@@ -56,41 +56,12 @@ func (c *Controller) CListAdmins(set int, search string) (models.Response) {
 	return utils.Response(output)
 }
 
-func (c *Controller) CCreateAdmin(adminInput *models.AdminInput) (models.Response) {
-	currentAdmin := c.db.Admin.GetAdminByUserId(adminInput.UserId)
-	if utils.IsTypeError(currentAdmin) && currentAdmin.Data.(models.Err).StatusCode != http.StatusNotFound{
-		return currentAdmin
-	}
-	if utils.IsType(currentAdmin, models.AdminDB{}) {
-		return utils.ErrorToResponse(http.StatusConflict, "Admin already exists", "Admin with that user id already exists")
-	}
-
-	user := c.db.User.GetUserById(adminInput.UserId)
-	if utils.IsTypeError(user) {
-		if user.Data.(models.Err).StatusCode == http.StatusNotFound{
-			return utils.ErrorNotFoundInDatabase("User with given id does not exist")
-		} else {
-		return user
-		}
-	}
-
-	admin := &models.AdminDB{
-		UserId: adminInput.UserId,
-		Access: adminInput.Access,
-	}
-	response := c.db.Admin.CreateAdmin(*admin)
-	if utils.IsTypeError(response) {
-		return response
-	}
-	return c.CGetAdminById(response.Data.(string))
-}
-
-func (c *Controller) CUpdateAdmin(id string, admin *models.AdminInput) (models.Response) {
+func (c *Controller) CCreateAdmin(admin *models.AdminCreation) (models.Response) {
 	currentAdmin := c.db.Admin.GetAdminByUserId(admin.UserId)
 	if utils.IsTypeError(currentAdmin) && currentAdmin.Data.(models.Err).StatusCode != http.StatusNotFound{
 		return currentAdmin
 	}
-	if (utils.IsType(currentAdmin, models.AdminDB{}) && currentAdmin.Data.(*models.AdminDB).Id != id) {
+	if utils.IsType(currentAdmin, models.AdminDB{}) {
 		return utils.ErrorToResponse(http.StatusConflict, "Admin already exists", "Admin with that user id already exists")
 	}
 
@@ -102,15 +73,24 @@ func (c *Controller) CUpdateAdmin(id string, admin *models.AdminInput) (models.R
 		return user
 		}
 	}
-	
+
+	adminDB := models.AdminCreationToDB(admin)
+
+	response := c.db.Admin.CreateAdmin(*adminDB)
+	if utils.IsTypeError(response) {
+		return response
+	}
+	return c.CGetAdminById(response.Data.(string))
+}
+
+func (c *Controller) CUpdateAdmin(id string, admin *models.AdminInput) (models.Response) {
 	if (admin.Access == "admin") {
 		response := c.CCheckLastSuperadmin(id)
 		if utils.IsTypeError(response) {
 			return response
 		}
 	}
-	admin.Id = id
-	response := c.db.Admin.UpdateAdmin(*admin)
+	response := c.db.Admin.UpdateAdmin(id, *admin)
 	if utils.IsTypeError(response) {
 		return response
 	}

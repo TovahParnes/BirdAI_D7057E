@@ -48,7 +48,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.AdminInput"
+                            "$ref": "#/definitions/models.AdminCreation"
                         }
                     }
                 ],
@@ -623,7 +623,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -1294,7 +1306,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.PostInput"
+                            "$ref": "#/definitions/models.PostCreation"
                         }
                     }
                 ],
@@ -1310,7 +1322,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/models.PostDB"
+                                            "$ref": "#/definitions/models.PostOutput"
                                         }
                                     }
                                 }
@@ -1589,7 +1601,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -1837,7 +1861,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/models.UserDB"
+                                            "$ref": "#/definitions/models.UserLoginOutput"
                                         }
                                     }
                                 }
@@ -2228,7 +2252,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -2440,6 +2476,101 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/users/{id}/birds/list": {
+            "get": {
+                "description": "List all posts of a specified set",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "List all posts of a specified set",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Set of posts",
+                        "name": "set",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search parameter for post",
+                        "name": "search",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/models.PostDB"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Err"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Err"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/users/{id}/posts/list": {
             "get": {
                 "description": "List all posts of a specified set",
@@ -2548,16 +2679,21 @@ const docTemplate = `{
                 }
             }
         },
-        "models.AdminInput": {
+        "models.AdminCreation": {
             "type": "object",
             "properties": {
-                "_id": {
-                    "type": "string"
-                },
                 "access": {
                     "type": "string"
                 },
                 "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.AdminInput": {
+            "type": "object",
+            "properties": {
+                "access": {
                     "type": "string"
                 }
             }
@@ -2596,9 +2732,6 @@ const docTemplate = `{
                 "description": {
                     "type": "string"
                 },
-                "id": {
-                    "type": "string"
-                },
                 "imageId": {
                     "type": "string"
                 },
@@ -2627,6 +2760,9 @@ const docTemplate = `{
                 },
                 "sound": {
                     "$ref": "#/definitions/models.MediaOutput"
+                },
+                "species": {
+                    "type": "boolean"
                 }
             }
         },
@@ -2654,9 +2790,6 @@ const docTemplate = `{
             "properties": {
                 "data": {
                     "type": "string"
-                },
-                "fileType": {
-                    "type": "string"
                 }
             }
         },
@@ -2668,16 +2801,39 @@ const docTemplate = `{
                 },
                 "data": {
                     "type": "string"
+                }
+            }
+        },
+        "models.PostCreation": {
+            "type": "object",
+            "properties": {
+                "accuracy": {
+                    "type": "number"
                 },
-                "fileType": {
+                "birdId": {
                     "type": "string"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "media": {
+                    "$ref": "#/definitions/models.MediaInput"
                 }
             }
         },
         "models.PostDB": {
             "type": "object",
             "properties": {
+                "accuracy": {
+                    "type": "number"
+                },
                 "birdId": {
+                    "type": "string"
+                },
+                "comment": {
                     "type": "string"
                 },
                 "createdAt": {
@@ -2700,17 +2856,11 @@ const docTemplate = `{
         "models.PostInput": {
             "type": "object",
             "properties": {
-                "_id": {
-                    "type": "string"
-                },
-                "birdId": {
+                "comment": {
                     "type": "string"
                 },
                 "location": {
                     "type": "string"
-                },
-                "media": {
-                    "$ref": "#/definitions/models.MediaInput"
                 }
             }
         },
@@ -2720,8 +2870,14 @@ const docTemplate = `{
                 "_id": {
                     "type": "string"
                 },
+                "accuracy": {
+                    "type": "number"
+                },
                 "bird": {
                     "$ref": "#/definitions/models.BirdOutput"
+                },
+                "comment": {
+                    "type": "string"
                 },
                 "createdAt": {
                     "type": "string"
@@ -2746,34 +2902,11 @@ const docTemplate = `{
                 }
             }
         },
-        "models.UserDB": {
-            "type": "object",
-            "properties": {
-                "_id": {
-                    "type": "string"
-                },
-                "active": {
-                    "type": "boolean"
-                },
-                "authId": {
-                    "type": "string"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
         "models.UserInput": {
             "type": "object",
             "properties": {
                 "active": {
                     "type": "boolean"
-                },
-                "id": {
-                    "type": "string"
                 },
                 "user": {
                     "type": "string"
@@ -2784,6 +2917,29 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "authId": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.UserLoginOutput": {
+            "type": "object",
+            "properties": {
+                "_id": {
+                    "type": "string"
+                },
+                "active": {
+                    "type": "boolean"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdNew": {
+                    "type": "boolean"
+                },
+                "token": {
                     "type": "string"
                 },
                 "username": {

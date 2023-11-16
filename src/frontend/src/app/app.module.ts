@@ -1,42 +1,45 @@
 // base imports
-import {NgModule} from '@angular/core';
-import {RouterModule} from '@angular/router';
-import {BrowserModule} from '@angular/platform-browser';
-import {CommonModule} from "@angular/common";
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {HttpClientModule} from '@angular/common/http';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from "@angular/common";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // page components imports
-import {AppComponent} from './app.component';
-import {AboutComponent} from './about/about.component';
-import {LoginComponent} from './login/login.component';
-import {MainPageComponent} from './home/home-page.component';
-import {LibraryComponent} from './library/library.component';
-import {TakenImagesPageComponent} from './taken-images-page/taken-images-page.component';
-import {SpeciesPageComponent} from './species-page/species-page.component';
-import {ProfilePageComponent} from './profile-page/profile-page.component';
-import {NavbarComponent} from './navbar/navbar.component';
-import {CardComponent, BottomInfoComponent} from './card/card.component';
-import {FirstPageComponent} from './first-page/first-page.component';
+import { AppComponent } from './app.component';
+import { LoginComponent } from './login/login.component';
+import { MainPageComponent } from './home/home-page.component';
+import { LibraryComponent } from './library/library.component';
+import { TakenImagesPageComponent } from './taken-images-page/taken-images-page.component';
+import { SpeciesPageComponent } from './species-page/species-page.component';
+import { ProfilePageComponent } from './profile-page/profile-page.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { CardComponent, BottomInfoComponent } from './card/card.component';
+import { FirstPageComponent } from './first-page/first-page.component';
 import { AdminComponent } from './admin/admin.component';
 
 // login authguard imports
-import {GoogleLoginProvider, GoogleSigninButtonModule, SocialLoginModule, SocialAuthServiceConfig} from '@abacritt/angularx-social-login';
-import {AuthGuardService} from './services/auth-guard.service';
-import {AuthGuardAdminService} from './services/auth-admin-guard.service';
+import { GoogleLoginProvider, GoogleSigninButtonModule, SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
+import { AuthGuardService } from './services/auth-guard.service';
+import { AuthGuardAdminService } from './services/auth-admin-guard.service';
 import { WikirestService } from './services/wiki.service';
 
 // material
-import {MatButtonModule} from '@angular/material/button';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import {MatStepperModule} from '@angular/material/stepper';
-import {MatRadioModule} from '@angular/material/radio';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatCardModule} from '@angular/material/card';
-import {MatIconModule} from '@angular/material/icon';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+
 
 
 
@@ -55,7 +58,6 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     NavbarComponent,
     BottomInfoComponent,
     FirstPageComponent,
-    AboutComponent,
     AdminComponent,
   ],
   imports: [
@@ -63,15 +65,15 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     HttpClientModule,
     RouterModule.forRoot([
       //{path: 'login', component: LoginComponent},
-      {path: 'mainpage', component: MainPageComponent,canActivate: [AuthGuardService]},
-      {path: 'library', component: LibraryComponent,canActivate: [AuthGuardService]},
-      {path: 'takenImages', component: TakenImagesPageComponent,canActivate: [AuthGuardService]},
-      {path: 'profile', component: ProfilePageComponent,canActivate: [AuthGuardService]}, //canActivate: [AuthGuardService]
-      {path: 'species-page', component: SpeciesPageComponent,canActivate: [AuthGuardService]},
-      {path: 'first-page', component: FirstPageComponent},
-      {path: 'about', component: AboutComponent,canActivate: [AuthGuardService]},
-      {path: 'admin',component: AdminComponent, canActivate: [AuthGuardAdminService]},
-      {path: '**', component: FirstPageComponent},
+      { path: 'mainpage', component: MainPageComponent, canActivate: [AuthGuardService] },
+      { path: 'library', component: LibraryComponent, canActivate: [AuthGuardService] },
+      { path: 'takenImages', component: TakenImagesPageComponent, canActivate: [AuthGuardService] },
+      { path: 'profile', component: ProfilePageComponent, canActivate: [AuthGuardService] }, //canActivate: [AuthGuardService]
+      { path: 'species-page', component: SpeciesPageComponent, canActivate: [AuthGuardService] },
+      { path: 'first-page', component: FirstPageComponent },
+      { path: 'about', component: AboutComponent, canActivate: [AuthGuardService] },
+      { path: 'admin', component: AdminComponent, canActivate: [AuthGuardAdminService] },
+      { path: '**', component: FirstPageComponent },
     ]),
     BrowserAnimationsModule,
     CommonModule,
@@ -86,10 +88,13 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     MatFormFieldModule,
     MatCardModule,
     MatIconModule,
+    MatCheckboxModule,
+    MatSelectModule,
+    MatInputModule,
     MatProgressSpinnerModule,
     MatButtonToggleModule,
   ],
-  exports:[
+  exports: [
     RouterModule
   ],
   providers: [
@@ -114,4 +119,4 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

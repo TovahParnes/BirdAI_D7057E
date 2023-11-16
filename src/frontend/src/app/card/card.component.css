@@ -1,16 +1,80 @@
-.example-card {
-    max-width: 200px;
-    max-height: 400px;
-    display: flex; 
-    flex-direction: column; 
-    justify-content: space-between; 
-    background-color: #242526;
-    height: 100%; 
-    cursor: pointer;
+* {
+  transition: all 0.3s ease-out;
+}
+
+.name {
+  margin: 3px;
+  margin-left: 6px;
+}
+
+.go-corner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  top: 0;
+  right: 0;
+  background-color: #00838d;
+  border-radius: 0 4px 0 32px;
+}
+
+.go-arrow {
+  margin-top: -4px;
+  margin-right: -4px;
+  color: white;
+  font-family: courier, sans;
+}
+
+.library-card {
+  position: relative;
+  max-height: 400px;
+  max-width: 200px;
+  top: 0px;
+  background-color: #242526;
+  border: 0px solid #ffffff00;
+  border-radius: 6px;
+  cursor: pointer;
+  overflow: hidden;
+
+  .go-corner {
+    background-color: #00838d;
+    height: 100%;
+    width: 16px;
+    padding-right: 9px;
+    border-radius: 0;
+    transform: skew(6deg);
+    margin-right: -36px;
+    align-items: start;
+    background-image: linear-gradient(-45deg, #47539a 1%, #2a8cdc 100%);
   }
 
-  @media (max-width: 600px){
-    .example-card{
-        max-width: 300px;
-    }
+  .go-arrow {
+    transform: skew(-6deg);
+    margin-left: -2px;
+    margin-top: 9px;
+    opacity: 0;
   }
+
+  &:hover {
+    border: 0px solid #2a8cdc;
+  }
+}
+
+.library-card:hover {
+  .go-corner {
+    margin-right: -12px;
+  }
+
+  .go-arrow {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .example-card {
+    max-width: 300px;
+  }
+}

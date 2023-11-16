@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
-import {SocialAuthService, GoogleLoginProvider} from '@abacritt/angularx-social-login';
+import {SocialAuthService} from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
-import { AppComponent } from '../app.component';
+import {AppComponent} from '../app.component';
 
 @Component({
   selector: 'app-profile-page',

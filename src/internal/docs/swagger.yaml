@@ -7,13 +7,16 @@ definitions:
       name:
         type: string
     type: object
-  models.AdminInput:
+  models.AdminCreation:
     properties:
-      _id:
-        type: string
       access:
         type: string
       userId:
+        type: string
+    type: object
+  models.AdminInput:
+    properties:
+      access:
         type: string
     type: object
   models.AdminOutput:
@@ -38,8 +41,6 @@ definitions:
     properties:
       description:
         type: string
-      id:
-        type: string
       imageId:
         type: string
       name:
@@ -59,6 +60,8 @@ definitions:
         type: string
       sound:
         $ref: '#/definitions/models.MediaOutput'
+      species:
+        type: boolean
     type: object
   models.Err:
     properties:
@@ -77,8 +80,6 @@ definitions:
     properties:
       data:
         type: string
-      fileType:
-        type: string
     type: object
   models.MediaOutput:
     properties:
@@ -86,12 +87,27 @@ definitions:
         type: string
       data:
         type: string
-      fileType:
+    type: object
+  models.PostCreation:
+    properties:
+      accuracy:
+        type: number
+      birdId:
         type: string
+      comment:
+        type: string
+      location:
+        type: string
+      media:
+        $ref: '#/definitions/models.MediaInput'
     type: object
   models.PostDB:
     properties:
+      accuracy:
+        type: number
       birdId:
+        type: string
+      comment:
         type: string
       createdAt:
         type: string
@@ -106,21 +122,21 @@ definitions:
     type: object
   models.PostInput:
     properties:
-      _id:
-        type: string
-      birdId:
+      comment:
         type: string
       location:
         type: string
-      media:
-        $ref: '#/definitions/models.MediaInput'
     type: object
   models.PostOutput:
     properties:
       _id:
         type: string
+      accuracy:
+        type: number
       bird:
         $ref: '#/definitions/models.BirdOutput'
+      comment:
+        type: string
       createdAt:
         type: string
       location:
@@ -136,31 +152,31 @@ definitions:
       timestamp:
         type: string
     type: object
-  models.UserDB:
-    properties:
-      _id:
-        type: string
-      active:
-        type: boolean
-      authId:
-        type: string
-      createdAt:
-        type: string
-      username:
-        type: string
-    type: object
   models.UserInput:
     properties:
       active:
         type: boolean
-      id:
-        type: string
       user:
         type: string
     type: object
   models.UserLogin:
     properties:
       authId:
+        type: string
+      username:
+        type: string
+    type: object
+  models.UserLoginOutput:
+    properties:
+      _id:
+        type: string
+      active:
+        type: boolean
+      createdAt:
+        type: string
+      createdNew:
+        type: boolean
+      token:
         type: string
       username:
         type: string
@@ -201,7 +217,7 @@ paths:
         name: admin
         required: true
         schema:
-          $ref: '#/definitions/models.AdminInput'
+          $ref: '#/definitions/models.AdminCreation'
       produces:
       - application/json
       responses:
@@ -267,7 +283,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Response'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -873,7 +894,7 @@ paths:
         name: post
         required: true
         schema:
-          $ref: '#/definitions/models.PostInput'
+          $ref: '#/definitions/models.PostCreation'
       produces:
       - application/json
       responses:
@@ -884,7 +905,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/models.PostDB'
+                  $ref: '#/definitions/models.PostOutput'
               type: object
         "400":
           description: Bad Request
@@ -935,7 +956,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Response'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -1173,7 +1199,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/models.UserDB'
+                  $ref: '#/definitions/models.UserLoginOutput'
               type: object
         "400":
           description: Bad Request
@@ -1222,7 +1248,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Response'
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -1389,6 +1420,60 @@ paths:
       summary: Update given user
       tags:
       - Users
+  /api/v1/users/{id}/birds/list:
+    get:
+      consumes:
+      - application/json
+      description: List all posts of a specified set
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Set of posts
+        in: query
+        name: set
+        type: integer
+      - description: Search parameter for post
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.PostDB'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Err'
+              type: object
+        "503":
+          description: Service Unavailable
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Err'
+              type: object
+      summary: List all posts of a specified set
+      tags:
+      - Posts
   /api/v1/users/{id}/posts/list:
     get:
       consumes:

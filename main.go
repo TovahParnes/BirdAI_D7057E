@@ -35,7 +35,6 @@ func main() {
 		log.Fatalf("Failed to load env: %v", err)
 	}
 
-	
 	// get JWT secret variable
 	if err := godotenv.Load("secret/.env"); err != nil {
 		log.Fatalf("Failed to load secret env: %v", err)
@@ -49,6 +48,12 @@ func main() {
 		fmt.Println(err.Error())
 	}
 	fmt.Println("Port used: " + os.Getenv("PORT"))
+
+	// HTTPS Configuration
+	err = app.ListenTLS(":"+os.Getenv("PORT"), "fullchain.pem", "privkey.pem")
+	if err != nil {
+		fmt.Println("Could not find certificate, continuing without https...")
+	}
 	log.Fatal(app.Listen(":" + os.Getenv("PORT")))
 
 }

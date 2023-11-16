@@ -1,6 +1,9 @@
 # ---Backend---
 .idea
 .DS_Store
+fullchain.pem
+privkey.pem
+/secret
 # ---Frontend---
 .vscode/*
 

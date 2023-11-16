@@ -38,15 +38,25 @@ body {
     right: 30px;
 }
 
-.input[type=file]::file-selector-button {
-    position: relative;
-    top: 150px;
-    width: 150px;
-    padding: 10px;
-    border: 1px dashed #BBB;
-    text-align: center;
-    background-color: #DDD;
+.imageInput {
+    padding-top: 6px;
+    padding-bottom: 2px;
     cursor: pointer;
+}
+
+.deleteButton {
+    position: absolute;
+    left: 22px;
+    top: 22px;
+}
+
+.popup {
+    position: fixed;
+    height: 100%;
+    top: 0px;
+    width: 100%;
+    background-color: #4242425b;
+    z-index: 1000;
 }
 
 .textarea {

@@ -56,32 +56,40 @@ func TestAdminController(t *testing.T) {
 		testUser2.Id = response.Data.(string)
 	})
 
-	testAdmin1 := &models.AdminInput{
+	testAdmin1 := &models.AdminDB{
 		UserId: testUser1.Id,
 		Access: "admin",
 	}
 
-	testAdmin2 := &models.AdminInput{
+	testAdmin2 := &models.AdminDB{
 		UserId: testUser2.Id,
 		Access: "superadmin",
 	}
 
 	t.Run("Test CreateAdmin", func(t *testing.T) {
-		response := contr.CCreateAdmin(testAdmin1)
+		adminInput := &models.AdminCreation{
+			UserId: testUser1.Id,
+			Access: testAdmin1.Access,
+		}
+		response := contr.CCreateAdmin(adminInput)
 		require.False(t, utils.IsTypeError(response))
 		require.IsType(t, &models.AdminOutput{}, response.Data.(*models.AdminOutput))
 		testAdmin1.Id = response.Data.(*models.AdminOutput).Id
 
-		response = contr.CCreateAdmin(testAdmin2)
-		require.False(t, utils.IsTypeError(response))
-		require.IsType(t, &models.AdminOutput{}, response.Data.(*models.AdminOutput))
-		testAdmin2.Id = response.Data.(*models.AdminOutput).Id
-
-		response = contr.CCreateAdmin(testAdmin1)
+		response = contr.CCreateAdmin(adminInput)
 		require.True(t, utils.IsTypeError(response))
 		require.Equal(t, http.StatusConflict, response.Data.(models.Err).StatusCode)
 
-		response = contr.CCreateAdmin(&models.AdminInput{
+		adminInput = &models.AdminCreation{
+			UserId: testUser2.Id,
+			Access: testAdmin2.Access,
+		}
+		response = contr.CCreateAdmin(adminInput)
+		require.False(t, utils.IsTypeError(response))
+		require.IsType(t, &models.AdminOutput{}, response.Data.(*models.AdminOutput))
+		testAdmin2.Id = response.Data.(*models.AdminOutput).Id
+		
+		response = contr.CCreateAdmin(&models.AdminCreation{
 			UserId: "IncorrectID",
 			Access: "admin",
 		})
@@ -134,16 +142,14 @@ func TestAdminController(t *testing.T) {
 
 	t.Run("Test UpdateAdmin", func(t *testing.T) {
 		//incorrect user id
-		response := contr.CUpdateAdmin(testAdmin1.Id, &models.AdminInput{
-			UserId: "IncorrectID",
+		response := contr.CUpdateAdmin("IncorrectID", &models.AdminInput{
 			Access: "admin",
 		})
 		require.True(t, utils.IsTypeError(response))
 		require.Equal(t, http.StatusNotFound, response.Data.(models.Err).StatusCode)
 
 		//User id already exists
-		response = contr.CUpdateAdmin(testAdmin1.Id, &models.AdminInput{
-			UserId: testUser2.Id,
+		response = contr.CUpdateAdmin(testAdmin2.Id, &models.AdminInput{
 			Access: "admin",
 		})
 		require.True(t, utils.IsTypeError(response))
@@ -151,7 +157,6 @@ func TestAdminController(t *testing.T) {
 
 		//Can't remove last superadmin
 		response = contr.CUpdateAdmin(testAdmin1.Id, &models.AdminInput{
-			UserId: testUser1.Id,
 			Access: "admin",
 		})
 		require.True(t, utils.IsTypeError(response))
@@ -159,7 +164,6 @@ func TestAdminController(t *testing.T) {
 
 		//No changes to document
 		response = contr.CUpdateAdmin(testAdmin1.Id, &models.AdminInput{
-			UserId: testUser1.Id,
 			Access: "admin",
 		})
 		require.True(t, utils.IsTypeError(response))
@@ -167,7 +171,6 @@ func TestAdminController(t *testing.T) {
 
 		//Update sucessful
 		response = contr.CUpdateAdmin(testAdmin1.Id, &models.AdminInput{
-			UserId: testUser1.Id,
 			Access: "superadmin",
 		})
 		require.False(t, utils.IsTypeError(response))

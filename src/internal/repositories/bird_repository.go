@@ -3,6 +3,7 @@ package repositories
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -32,14 +33,13 @@ func (b *BirdRepository) GetBirdByName(name string) models.Response {
 func (b *BirdRepository) CreateBird(bird models.BirdDB) models.Response {
 	bird.Id = primitive.NewObjectID().Hex()
 	return b.collection.CreateOne(&bird)
-
 }
 
 // TODO: Fix ToBson and FromBson on structs for easier handling of bson to struct and back
 
 // UpdateBird updates the bird with the specified changes and returns a response
 // containing the updated bird.
-func (b *BirdRepository) UpdateBird(bird models.BirdInput) models.Response {
+func (b *BirdRepository) UpdateBird(id string, bird models.BirdInput) models.Response {
 	data, err := bson.Marshal(bird)
 	if err != nil {
 		return utils.ErrorToResponse(400, "Could not update object", err.Error())
@@ -49,6 +49,7 @@ func (b *BirdRepository) UpdateBird(bird models.BirdInput) models.Response {
 	if err != nil {
 		return utils.ErrorToResponse(400, "Could not update object", err.Error())
 	}
+	bsonBird["_id"] = id
 	return b.collection.UpdateOne(bsonBird)
 }
 
