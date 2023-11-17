@@ -4,6 +4,7 @@ import {Router, ActivatedRoute} from '@angular/router';
 import { AppComponent } from '../app.component';
 import { HttpClient } from '@angular/common/http';
 import { Location } from '@angular/common';
+import { WikiImages, WikiPageSegment, WikiSummary, WikirestService } from '../services/wiki.service';
 
 interface ApiResponse {
   data: {  
@@ -29,6 +30,9 @@ export class SpeciesPageComponent implements AfterViewInit{
   imageDesc!: string;
   responseData: ApiResponse | null = null;
   images: string[] = [];
+  wikiData: WikiSummary = new WikiSummary;
+  wikiContent: WikiPageSegment = new WikiPageSegment;
+  wikiImages: string = "";
 
   constructor(
     private router: Router,
@@ -38,6 +42,7 @@ export class SpeciesPageComponent implements AfterViewInit{
     private http: HttpClient,
     private route: ActivatedRoute,
     private location: Location,
+    private wikiRest: WikirestService,
     ) {
 
   }
@@ -57,6 +62,8 @@ export class SpeciesPageComponent implements AfterViewInit{
         this.imageId,
       ];
     });
+    this.getWikiData(this.getWikiLinkTitle());
+    this.getWikiImage(this.getWikiLinkTitle());
   }
 
   currentImageIndex = 0;
@@ -90,6 +97,56 @@ export class SpeciesPageComponent implements AfterViewInit{
 
   goBack(): void {
     this.location.back();
+  }
+
+  getWikiLinkTitle(){
+    let cutOffIndex = this.imageDesc.indexOf('wiki/');
+    let cutString = this.imageDesc.substring(cutOffIndex + 'wiki/'.length)
+    return cutString;
+  }
+
+  getWikiData(wikiTitle:string){
+    this.wikiRest.getWiki(wikiTitle).subscribe(data => {
+      console.log(data);
+      if(data.extract){
+      this.wikiData = data;
+      }
+    }, err => { console.log('something went wrong' + err)
+  }); 
+  
+//   this.wikiRest.getWikiPage('Eurasian magpie').subscribe(data => {
+//     if(data){
+//     let cutOffIndex = data.indexOf('<td>Order:</td>');
+//     let cutString = data.substring(cutOffIndex)
+//     cutOffIndex = cutString.indexOf('</a></td></tr>');
+//     cutString = cutString.substring(0,cutOffIndex);
+//     console.log(cutString);
+//     }
+//   }, err => { console.log('something went wrong' + err)
+// }); 
+  }
+
+  getWikiImage(wikiTitle:string){
+    this.wikiRest.getWikiImages(wikiTitle).subscribe((data: WikiImages) => {
+      console.log(data);
+      const hasMapInTitle2 = data.items[2].title.includes('map')
+      const hasMapInTitle3 = data.items[3].title.includes('map')
+      const hasMapInTitle4 = data.items[4].title.includes('map')
+      for(let i=0;i<= data.items.length;i++){
+        if(data.items[i].title.includes('map')){
+          this.wikiImages = data.items[i].srcset[0].src;
+        }
+      }
+      // if(hasMapInTitle2){
+      //   this.wikiImages = data.items[2].srcset[0].src
+      // }else if (hasMapInTitle3){
+      //   this.wikiImages = data.items[3].srcset[0].src
+      // }else if(hasMapInTitle4){
+      //   this.wikiImages = data.items[4].srcset[0].src
+      // }else{
+      //   this.wikiImages = data.items[3].srcset[0].src
+      // }
+    })
   }
 
 }

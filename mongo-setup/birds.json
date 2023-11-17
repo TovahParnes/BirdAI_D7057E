@@ -2,49 +2,49 @@
   {
     "_id": "6541021f2065f8c2c490e12c",
     "name": "EURASIAN MAGPIE",
-    "description": "Common and conspicuous, this flashy, long-tailed crow relative is unmistakable, and its loud chattering calls are a familiar sound in many areas. Found in open and semiopen areas from farmland and open woodland to towns and gardens, singly or more often in pairs or groups. Bulky stick nest often conspicuous in tall tree or hedgerow. Boldly pied plumage is distinctive, with white belly, white back, and white wing patches. Wings show blue-green gloss in good light.",
+    "description": "https://en.wikipedia.org/wiki/Eurasian_Magpie",
     "image_id": "6540ff238d84ea3d83165ee8",
     "sound_id": "6540fd52f7ff7960ba6714c4"
   },
   {
     "_id": "65437b1e51f15671bccbb523",
     "name": "EURASIAN BULLFINCH",
-    "description": "Uncommon to fairly common, but unobtrusive and easily overlooked. Favors mixed woodland and edge, parks, gardens, orchards; also farmland with hedges and wooded patches. Usually found in pairs or small groups, feeding quietly and sluggishly on buds and fruits; does not usually visit feeders. Male handsome and distinctive, with black cap, bright pink cheeks and breast, blue-gray back; female colors muted, but note distinctive black cap, stubby black bill. White rump patch shows mainly in flight. Soft, plaintive whistled notes may draw attention.",
+    "description": "https://en.wikipedia.org/wiki/Eurasian_Bullfinch",
     "image_id": "65437b2204f836c667169737",
     "sound_id": "65437b259b377875dad6c4fc"
   },
   {
     "_id": "65437b287f60e6b2cf9f0da4",
     "name": "EUROPEAN GOLDFINCH",
-    "description": "Beautiful little finch with a sharp pink bil, cherry-red face, and brilliant black-and-yellow flashes in the wings. Western birds (Europe east to far western Central Asia) have a black-and-white cowl; eastern birds (rest of Central Asia) lack this cowl, and are grayer overall, with more white on the wing. Juvenile (seen in late summer and autumn) has a plain head but is told easily by bold wing pattern. Uses a wide array of wooded and open habitats, from forests and gardens to steppe grasslands and meadows; often feeds on seeding thistles. Forms flocks in autumn and winter, gathering at food sources. Can be inconspicuous, but often detected by pleasant bubbling and twittering calls and song.",
+    "description": "https://en.wikipedia.org/wiki/European_Goldfinch",
     "image_id": "65437b2bfe0dd1b4795f4abc",
     "sound_id": "65437b2ede7b796e300ac466"
   },
   {
     "_id": "65437b32e55be8ae9ea18021",
     "name": "BARN SWALLOW",
-    "description": "A fairly large, colorful swallow. Usually easy to identify with its long, forked tail and dark rump. Iridescent navy-blue above with a rich orange throat and forehead. Underparts vary across range, from bright buffy-orange to whitish. Occurs in any open habitat, especially large fields and wetlands. Often seen foraging in flocks, sometimes mixed with other species of swallow. Typically nests close to human habitation; builds a muddy cup nest in a barn or under a dock. Listen for dry, scratchy “svit svit” calls. Note head and breast pattern and tail length to help separate from various similar species in Africa, Asia, and Australia (e.g., Welcome Swallow, Angolan Swallow, Pacific Swallow).",
+    "description": "https://en.wikipedia.org/wiki/Barn_Swallow",    
     "image_id": "65437b34cc180f25c8781c4c",
     "sound_id": "65437b374d2f0813d3fab082"
   },
   {
     "_id": "65437b3ab8ce25f09395efa7",
     "name": "BARN OWL",
-    "description": "Medium-sized owl with a heart-shaped facial disc and deep dark eyes; the only Tyto owl present throughout much of its range. Varies across a wide global range, but always note white-and-black speckling on the upperparts, beautiful gray-and-tawny wings, and large round head. Color of the facial disc and underparts varies from pure white to rusty orange. Hunts primarily rodents in open areas by night, foraging with a slow and buoyant flight. Roosts in old buildings, tree hollows, caves, and nest boxes by day. Its call is a bone-chilling, rising shriek.",
+    "description": "https://en.wikipedia.org/wiki/Barn_Owl",    
     "image_id": "65437b3f9091dc7875c679b7",
     "sound_id": "65437b42c80280d8b18e788c"
   },
   {
     "_id": "65437b45d8a36fcd71f34874",
     "name": "HOUSE SPARROW",
-    "description": "Widespread and abundant in cities, neighborhoods and farms. Avoids dense woods. Flocks cluster in dense bushes, bustling around and chattering to one another. Males have smart black bibs, bright rufous napes, and stunningly patterned wings with brilliant buffs and browns. Underparts are pale pearly-gray. Females are plain brown with cute face and lighter eyebrow. Native to Eurasia; introduced to much of the rest of the world.",
+    "description": "https://en.wikipedia.org/wiki/House_Sparrow",    
     "image_id": "65437b487c58cdbb7ecf348f",
     "sound_id": "65437b4b5d9aa9f80a0e1ce9"
   },
   {
     "_id": "65437b4ef1e000be2bc8b93a",
     "name": "MALLARD DUCK",
-    "description": "A large duck, generally common and familiar within its extensive range. Males are distinctive with iridescent green head, yellow bill, chestnut breast, and gray body. Females are mottled brown with orange and black splotches on the bill. Found anywhere with water, including city parks, backyard creeks, and various wetland habitats. Often in flocks, and frequently mixes with other duck species. In North America, females can be tricky to distinguish from American Black Duck, Mottled Duck, and Mexican Duck where ranges overlap. Those species are all darker-bodied than Mallard. A good view of the wing can be helpful, too: white wingbars on the leading and trailing edges of the blue wing patch are bolder on Mallard. Frequently hybridizes with those species, which can be even more confusing. Any bird with extensive white in the tail or curled feathers above the tail has some Mallard genes.",
+    "description": "https://en.wikipedia.org/wiki/Mallard_Duck",    
     "image_id": "65437b52405c0b146717fded",
     "sound_id": "65437b54533ee687556101e6"
   }

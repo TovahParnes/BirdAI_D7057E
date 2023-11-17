@@ -41,9 +41,7 @@ export class FirstPageComponent {
     .subscribe(
       (userResponse: UserResponse) => {
         console.log("logged in");
-        console.log(userResponse);
         localStorage.setItem("auth",userResponse.data.authId);
-        console.log(localStorage.getItem("auth"));
         this.router.navigate(['mainpage']);
       },
       err => {

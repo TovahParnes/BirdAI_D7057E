@@ -24,7 +24,8 @@ import { AdminComponent } from './admin/admin.component';
 // login authguard imports
 import {GoogleLoginProvider, GoogleSigninButtonModule, SocialLoginModule, SocialAuthServiceConfig} from '@abacritt/angularx-social-login';
 import {AuthGuardService} from './services/auth-guard.service';
-import {AuthGuardAdminService} from './services/auth-admin-guard.service'
+import {AuthGuardAdminService} from './services/auth-admin-guard.service';
+import { WikirestService } from './services/wiki.service';
 
 // material
 import {MatButtonModule} from '@angular/material/button';
@@ -109,6 +110,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     },
     AuthGuardService,
     AuthGuardAdminService,
+    WikirestService,
   ],
   bootstrap: [AppComponent]
 })

@@ -206,12 +206,15 @@ export class MainPageComponent implements OnInit {
   async getCurrentAdmin(){
     const authKey = localStorage.getItem("auth");
     if(authKey){
+      try{
       (await this.sendGetCurrentAdmin(authKey)).subscribe(
         (response: AdminResponse) => {
           console.log(response)
           localStorage.setItem("currentAdmin",response.data.user._id);
         }
       )
+      }catch(error){
+      }
     }
   }
 

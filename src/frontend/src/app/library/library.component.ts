@@ -5,8 +5,9 @@ import { AppComponent } from '../app.component';
 import { CardComponent } from '../card/card.component';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {getAllBirdsResponse} from 'src/assets/components/components';
+import {getAllBirdsResponse } from 'src/assets/components/components';
 import { environment } from 'src/environments/environment';
+import { WikiPageSegment, WikiSummary, WikirestService } from '../services/wiki.service';
 
 @Component({
   selector: 'app-library',
@@ -47,6 +48,7 @@ export class LibraryComponent {
     public mainApp: AppComponent,
     public socialAuthService: SocialAuthService,
     private http: HttpClient,
+    private wikiRest: WikirestService,
     ) {
   }
 
@@ -113,13 +115,10 @@ export class LibraryComponent {
   ngOnInit(): void {
     this.getData().subscribe((response) => {
       const data = response;
-      //this.cardlist = data.find((item) => 'list2' in item)?.list2 || [];
-      //this.foundlist = data.find((item) => 'list1' in item)?.list1 || [];
-      //this.backupCards = this.cardlist
     });
     this.getAllBirds();
-    this.cardlist = this.allBirds.data
-    this.foundlist =this.allBirds.data;
+    this.cardlist = this.allBirds.data;
+    this.foundlist = this.allBirds.data;
   }
 
   getAllBirds(){
@@ -127,6 +126,9 @@ export class LibraryComponent {
       (response: getAllBirdsResponse) => {
         this.allBirds = response;
         this.allBirdsBackup.data = response.data;
+        for(let i = 0; i <= this.allBirds.data.length; i++){
+          this.setDataImageToWikiImage(this.getWikiLinkTitle(i),i);
+        }
       },
       err => { 
         console.error("Failed at sending data:" + err); 
@@ -136,4 +138,25 @@ export class LibraryComponent {
   sendGetBirds() {
     return this.http.get<getAllBirdsResponse>(environment.identifyRequestURL+"/birds/list?set=0");
   }
+
+  getWikiLinkTitle(index:number){
+    let cutOffIndex = this.allBirds.data[index].Description.indexOf('wiki/');
+    let cutString = this.allBirds.data[index].Description.substring(cutOffIndex + 'wiki/'.length)
+    return cutString;
+  }
+
+  async setDataImageToWikiImage(wikiTitle:string,index:number){
+    this.wikiRest.getWiki(wikiTitle).subscribe(data => {
+      console.log(data);
+      if(data.extract){
+      //this.wikiData = data;
+      if(data.originalimage?.source){
+        this.allBirds.data[index].Image.data = data.originalimage?.source;
+        this.allBirdsBackup.data[index].Image.data = data.originalimage?.source;
+      }
+      }
+    }, err => { console.log('something went wrong' + err)
+  }); 
+
+}
 }

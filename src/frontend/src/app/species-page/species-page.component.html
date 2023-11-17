@@ -20,14 +20,19 @@
           <div class="image-container">
               <img [src]="currentImage" alt="Slideshow Image" class="fit-image" id="Slideshow-image">
           </div>
-          <div class="buttonContainer">        
+          <!-- <div class="buttonContainer">        
               <a class="prev" (click)="prevImage()">❮</a>
               <a class="next" (click)="nextImage()">❯</a>
-          </div>
+          </div> -->
           <p></p>
       Info: <br>
-      <p>{{imageDesc}}</p>
-      <div class="container" style="text-align: center;"> Common regions: <img src="assets/map.png" style="width: 100%;"></div>
+      <p>{{wikiData.extract}}</p>
+      <!-- <img src="{{wikiData.originalimage?.source}}" alt="{{wikiData.title}}"> -->
+      <!-- <div class="container" style="text-align: center;"> Common regions: <img src="assets/map.png" style="width: 100%;"></div> -->
+      <div class="container" style="text-align: center;">
+        Common Regions 
+        <img src="{{wikiImages}}" style="width: 100%;">
+    </div>
 
   </mat-card>
 </div>
