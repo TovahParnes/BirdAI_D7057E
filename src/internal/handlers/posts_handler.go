@@ -101,6 +101,45 @@ func (h *Handler) ListUsersPosts(c *fiber.Ctx) error {
 	return utils.ResponseToStatus(c, response)
 }
 
+// ListUsersFoundBirds is a function to get a set of all posts from a given user from database
+//
+// @Summary		List all posts of a specified set
+// @Description	List all posts of a specified set
+// @Tags		Posts
+// @Accept		json
+// @Produce		json
+// @Param		id	path	string	true	"User ID"
+// @Param		set	query		int	false	"Set of posts"
+// @Param		search	query	string	false	"Search parameter for post"
+// @Success		200	{object}	models.Response{data=[]models.PostDB}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
+// @Router		/api/v1/users/{id}/birds/list [get]
+func (h *Handler) ListUsersFoundBirds(c *fiber.Ctx) error {
+	userId := c.Params("id")
+	response := utils.IsValidId(userId)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
+	queries := c.Queries()
+	set := queries["set"]
+	response = utils.IsValidSet(&set)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	setInt := response.Data.(int)
+
+	search := queries["search"]
+	response = utils.IsValidSearch(search)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
+	response = h.controller.CListUsersFoundBirds(userId, setInt)
+	return utils.ResponseToStatus(c, response)
+}
+
 // CreatePost is a function to create a new post
 //
 // @Summary		Create a new post
