@@ -1,6 +1,4 @@
 <app-navbar firstSelected="true" secondSelected="false" thirdSelected="false"></app-navbar>
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
-
 
 <mat-card class="card">
   <h1 style="margin-top: 0px;">Welcome to Bird AI</h1>
@@ -28,12 +26,12 @@
 
     <mat-step *ngIf="form.value.option === 'option1'">
         <ng-template matStepLabel>Select the Image</ng-template>
-        <input [disabled]="togglePostView" type="file" (change)="onFileSelected($event)" accept="image/*" style="padding-top: 2px; padding-bottom: 4px"/>
+        <input [disabled]="togglePostView" type="file" class="imageInput" id="imageInput" (change)="onFileSelected($event)" accept="image/*"/>
 
         <img *ngIf="selectedImage" [src]="selectedImage" alt="Selected Image" width="92%" />
-        <button *ngIf="selectedImage && !togglePostView" mat-icon-button style="position: absolute; left: 22px; top: 22px;" (click)="onClear()" color="primary"><mat-icon>delete</mat-icon></button>
+        <button *ngIf="selectedImage && !togglePostView" mat-icon-button class="deleteButton" onclick="document.getElementById('imageInput').value = ''" (click)="onClear()" color="primary"><mat-icon>delete</mat-icon></button>
 
-        <div style="padding-top: 6px">
+        <div style="padding-top: 4px">
           <button mat-button matStepperPrevious style="margin-right: 6px;" [disabled]="togglePostView">Back</button>
           <button mat-raised-button color="primary" type="button" (click)="onSubmit(loading)" [disabled]="!selectedImage || togglePostView">Submit</button>
         </div>
@@ -57,7 +55,7 @@
 <p></p>
 
 <div #loading style="height: 500px;">
-  <div *ngIf="isLoading" style="height: 100%; z-index: 1000; position: fixed; top: 0px; width: 100%; background-color:  #4242425b;">
+  <div *ngIf="isLoading" class="popup">
     <mat-spinner style="margin: auto; top: 40%;"></mat-spinner>
   </div>
   <div *ngIf="togglePostView">
@@ -84,7 +82,7 @@
   </div>
 </div>
 
-<div *ngIf="createPostForm" style="height: 100%; z-index: 1000; position: fixed; top: 0px; width: 100%; background-color: #4242425b;">
+<div *ngIf="createPostForm" class="popup">
   <mat-card class="card" style="top: 20%; background-color: rgb(31, 32, 32); max-width: 500px;">
     <form [formGroup]="postDetailsForm" (ngSubmit)="createPost()" class="form-container">
       <div><label for="name">Name: </label></div>
