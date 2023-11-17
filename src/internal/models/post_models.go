@@ -20,6 +20,7 @@ type PostInput struct {
 	Media    MediaInput `bson:"media" json:"media" form:"media"`
 }
 
+// TODO add accuracy and own comment
 type PostOutput struct {
 	Id        string      `bson:"_id" json:"_id" form:"_id"`
 	User      UserOutput  `bson:"user" json:"user" form:"user"`

@@ -1,23 +1,31 @@
 version: "3"
 services:
   bird_ai:
-    image: ${REPOSITORY}:1.0.0
+    image: ${REPOSITORY}:1.0.1
     #image: bird_ai # for running local build aka "make build"
     container_name: bird_ai
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
+    depends_on:
+      - shared-requirements
     env_file:
       - compose/.env
       - secret/.env
     restart: unless-stopped
+    networks:
+      ai_network:
+        ipv4_address: 172.20.0.5
     ports:
-      - "8080:8080"
+      - "443:443"
 
   mongodb:
     image: mongo:7.0.1
     container_name: mongodb
     restart: unless-stopped
+    networks:
+      ai_network:
+        ipv4_address: 172.20.0.6
     ports:
       - '27017:27017'
     volumes:
@@ -28,8 +36,63 @@ services:
     build:
       context: ./mongo-setup
       dockerfile: Dockerfile
+    networks:
+      ai_network:
+        ipv4_address: 172.20.0.7
     depends_on:
       - mongodb
 
+  ai-controller:
+    container_name: ai-controller
+    build:
+      context: ./src/AI/ai-controller/deploy
+      dockerfile: Dockerfile
+    depends_on:
+      - bird_ai
+    restart: unless-stopped
+    networks:
+      ai_network:
+        ipv4_address: 172.20.0.2
+    ports:
+      - "3500:3500" # Map container port 3500 to host port 3500
+  classification_model:
+    container_name: classification_model
+    build:
+      context: ./src/AI/classification_model/deploy
+      dockerfile: Dockerfile
+    depends_on:
+      - bird_ai
+    restart: unless-stopped
+    networks:
+      ai_network:
+        ipv4_address: 172.20.0.3
+    ports:
+      - "3501:3500"  # Map container port 3500 to host port 3501
+  detection_model:
+    container_name: detection_model
+    build:
+      context: ./src/AI/detection_model/deploy
+      dockerfile: Dockerfile
+    depends_on:
+      - bird_ai
+    restart: unless-stopped
+    networks:
+      ai_network:
+        ipv4_address: 172.20.0.4
+    ports:
+      - "3502:3500"    # Map container port 3500 to host port 3502
+  shared-requirements:
+    build:
+      context: ./src/AI
+      dockerfile: Dockerfile
+    image: shared-requirements
+
 volumes:
   dbdata:
+
+networks:
+  ai_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

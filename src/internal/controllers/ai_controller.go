@@ -18,7 +18,7 @@ func (c *Controller) RequestAnalyze(mediaData string) models.AIList {
 			"media": mediaData,
 		})
 		responseBody := bytes.NewBuffer(postBody)
-		resp, err := http.Post("http://localhost:3500/evaluate_image", "application/json", responseBody)
+		resp, err := http.Post(os.Getenv("AI_URI")+"/evaluate_image", "application/json", responseBody)
 		if err != nil {
 			log.Fatalln(err)
 		}

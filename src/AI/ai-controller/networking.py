@@ -81,6 +81,9 @@ def evaluate_image():
     if _result_image is not None:
         _result = send_image_to_classification(_result_image, classification_model_ip, classification_model_port)
     else:
+        return jsonify({"error": "Failure while sending image to detection module"}, 400)
+
+    if _result is None:
         return jsonify({"error": "Failure while sending image to classification module"}, 400)
 
     birds = [{"name": _result.json()['label'], "accuracy": _result.json()['accuracy']}]
