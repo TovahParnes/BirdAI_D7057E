@@ -26,7 +26,7 @@ export class NavbarComponent {
 
 
     logout(): void {
-        this.mainApp.authService.signOut().then(() => this.router.navigate(['login']));
+        this.mainApp.authService.signOut().then(() => this.router.navigate(['first-page']));
     }
     
     navigateToHome(): void {
@@ -43,6 +43,10 @@ export class NavbarComponent {
     
     navigateToProfilePage(): void {
         this.router.navigate(['profile']);
+    }
+    
+    getLoggedIn(){
+        return localStorage.getItem("loggedIn");
     }
 } 
   

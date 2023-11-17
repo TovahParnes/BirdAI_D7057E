@@ -28,8 +28,8 @@
 <mat-card class="card">
     <div class="cardContainer">
         <div *ngFor="let item of allBirds.data; let last = last">
-            <a target="_blank" (click)="navigateToSpecies(item.Image.data, item.Name, item.Description)">
-                <app-card title={{item.Name}} imageSrc={{item.Image.data}}></app-card>
+            <a target="_blank" (click)="navigateToSpecies(item.Image, item.Name, item.Sound, item.Description, item.species)">
+                <app-card title={{item.Name}} imageSrc={{item.Image}}></app-card>
             </a>
             <ng-container *ngIf="last">
                 {{ sortCards() }}

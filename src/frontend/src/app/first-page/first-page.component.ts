@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {GoogleLoginProvider, SocialAuthService} from '@abacritt/angularx-social-login';
 import { AppComponent } from '../app.component';
@@ -6,6 +6,8 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UserResponse } from 'src/assets/components/components';
+
+declare const gapi: any;
 
 @Component({
   selector: 'app-first-page',
@@ -36,14 +38,12 @@ export class FirstPageComponent {
   }
 
   login(): void {
-    this.router.navigate(['mainpage']);
+    //this.router.navigate(['mainpage']);
     this.postLoggedInUser()
     .subscribe(
       (userResponse: UserResponse) => {
         console.log("logged in");
-        console.log(userResponse);
-        localStorage.setItem("auth",userResponse.data.authId);
-        console.log(localStorage.getItem("auth"));
+        localStorage.setItem("auth",userResponse.data.token);
         this.router.navigate(['mainpage']);
       },
       err => {
@@ -53,7 +53,4 @@ export class FirstPageComponent {
     this.triedLogIn = true;
   }
 
-  navigateToLogin(){
-    this.router.navigate(['Login']);
-  }
 }

@@ -23,7 +23,8 @@ import { AdminComponent } from './admin/admin.component';
 // login authguard imports
 import {GoogleLoginProvider, GoogleSigninButtonModule, SocialLoginModule, SocialAuthServiceConfig} from '@abacritt/angularx-social-login';
 import {AuthGuardService} from './services/auth-guard.service';
-import {AuthGuardAdminService} from './services/auth-admin-guard.service'
+import {AuthGuardAdminService} from './services/auth-admin-guard.service';
+import { WikirestService } from './services/wiki.service';
 
 // material
 import {MatButtonModule} from '@angular/material/button';
@@ -63,12 +64,12 @@ import {MatInputModule} from '@angular/material/input';
     BrowserModule,
     HttpClientModule,
     RouterModule.forRoot([
-      {path: 'login', component: LoginComponent},
-      {path: 'mainpage', component: MainPageComponent},
-      {path: 'library', component: LibraryComponent},
-      {path: 'takenImages', component: TakenImagesPageComponent},
-      {path: 'profile', component: ProfilePageComponent}, //canActivate: [AuthGuardService]
-      {path: 'species-page', component: SpeciesPageComponent},
+      //{path: 'login', component: LoginComponent},
+      {path: 'mainpage', component: MainPageComponent,canActivate: [AuthGuardService]},
+      {path: 'library', component: LibraryComponent,canActivate: [AuthGuardService]},
+      {path: 'takenImages', component: TakenImagesPageComponent,canActivate: [AuthGuardService]},
+      {path: 'profile', component: ProfilePageComponent,canActivate: [AuthGuardService]}, //canActivate: [AuthGuardService]
+      {path: 'species-page', component: SpeciesPageComponent,canActivate: [AuthGuardService]},
       {path: 'first-page', component: FirstPageComponent},
       {path: 'admin',component: AdminComponent, canActivate: [AuthGuardAdminService]},
       {path: '**', component: FirstPageComponent},
@@ -113,6 +114,7 @@ import {MatInputModule} from '@angular/material/input';
     },
     AuthGuardService,
     AuthGuardAdminService,
+    WikirestService,
   ],
   bootstrap: [AppComponent]
 })

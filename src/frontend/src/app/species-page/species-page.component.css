@@ -62,11 +62,47 @@ margin: auto;
 
 .goBackButton {
   position: absolute;
-  top: 0;
-  left: 20%;
+  top: 0.5%;
+  left: 5%;
   transform: translateX(-50%);
 }
 
 .group{
   position: relative;
+}
+
+.soundBox{
+  overflow: hidden; 
+  margin: 15px auto; 
+  max-height: 50px; 
+  justify-content: center; 
+  text-align: center;
+}
+
+.resultCard {
+  margin: 0 auto;
+  max-width: 50%;
+  border-radius: 7px;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.16);
+  cursor: pointer;
+}
+
+@media (max-width:600px){
+  .resultCard{
+    max-width: 95%;
+  }
+  .desktopSize{
+    display: none;
+  }
+  .soundBox{
+    max-height: 75px;
+  }
+  .goBackButton{
+    left: 10%;
+  }
+}
+@media (min-width:600px){
+  .phoneSize{
+    display: none;
+  }
 }

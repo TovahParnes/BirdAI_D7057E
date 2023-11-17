@@ -1,12 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {SocialAuthService} from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
-import {AppComponent} from '../app.component';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {getAllBirdsResponse} from 'src/assets/components/components';
-import {environment} from 'src/environments/environment';
+import { AppComponent } from '../app.component';
+import { CardComponent } from '../card/card.component';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import {getAllBirdsResponse } from 'src/assets/components/components';
+import { environment } from 'src/environments/environment';
 import {FormControl} from '@angular/forms';
+import { WikiPageSegment, WikiSummary, WikirestService } from '../services/wiki.service';
 
 @Component({
   selector: 'app-library',
@@ -28,6 +30,7 @@ export class LibraryComponent implements OnInit {
     public mainApp: AppComponent,
     public socialAuthService: SocialAuthService,
     private http: HttpClient,
+    private wikiRest: WikirestService,
     ) {
   }
 
@@ -45,12 +48,14 @@ export class LibraryComponent implements OnInit {
     });
   }
 
-  navigateToSpecies(imageId: string, imageName: string, imageDesc: string): void {
+  navigateToSpecies(imageId: string, imageName: string,imageSound:string, imageDesc: string, imageGenus:Boolean): void {
     this.router.navigate(['species-page'], {
       queryParams: {
         imageId: encodeURIComponent(imageId),
         imageName: encodeURIComponent(imageName),
-        imageDesc: encodeURI(imageDesc)
+        imageSound: encodeURIComponent(imageSound),
+        imageDesc: encodeURI(imageDesc),
+        imageGenus: imageGenus
       }
     });
   }
@@ -89,6 +94,9 @@ export class LibraryComponent implements OnInit {
       (response: getAllBirdsResponse) => {
         this.allBirds = response;
         this.allBirdsBackup.data = response.data;
+        for(let i = 0; i <= this.allBirds.data.length; i++){
+          this.setDataImageToWikiImage(this.getWikiLinkTitle(i),i);
+        }
       },
       err => { 
         console.error("Failed at sending data:" + err); 
@@ -99,4 +107,25 @@ export class LibraryComponent implements OnInit {
   sendRequestGetBirds() {
     return this.http.get<getAllBirdsResponse>(environment.identifyRequestURL+"/birds/list?set=0");
   }
+
+  getWikiLinkTitle(index:number){
+    let cutOffIndex = this.allBirds.data[index].Description.indexOf('wiki/');
+    let cutString = this.allBirds.data[index].Description.substring(cutOffIndex + 'wiki/'.length)
+    return cutString;
+  }
+
+  async setDataImageToWikiImage(wikiTitle:string,index:number){
+    this.wikiRest.getWiki(wikiTitle).subscribe(data => {
+      console.log(data);
+      if(data.extract){
+      //this.wikiData = data;
+      if(data.originalimage?.source){
+        this.allBirds.data[index].Image = data.originalimage?.source;
+        this.allBirdsBackup.data[index].Image = data.originalimage?.source;
+      }
+      }
+    }, err => { console.log('something went wrong' + err)
+  }); 
+
+}
 }

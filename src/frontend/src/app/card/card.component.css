@@ -71,3 +71,19 @@
     opacity: 1;
   }
 }
+.example-card {
+    max-width: 200px;
+    max-height: 400px;
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between; 
+    background-color: #242526;
+    height: 100%; 
+    cursor: pointer;
+  }
+
+  @media (max-width: 600px){
+    .example-card{
+        max-width: 300px;
+    }
+  }
