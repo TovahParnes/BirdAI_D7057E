@@ -9,6 +9,17 @@
 | Frontend | `src/frontend`   |
 |    AI    | `src/AI`         |
 
+# Deploy
+## Prerequisites
+* If local: add empty `fullchain.pem` & `privkey.pem` to root. **Already exists if in deploy server**
+* Add a `/secret/.env` with JWT key in root. *Found in Backend folder on drive.*
+* Add `src/AI/classification_model/mobilenet_model.keras` & `src/AI/classification_model/labels.json` *Found in AI folder on drive.*
+
+Run `docker-compose up -d` and visit [local](localhost:443) if you are running local and [deploy](https://birdai.duckdns.org/) if you are running on deploy server.
+
+The deployment docker-compose will run the latest stable tag **unless** you change image to `bird_ai` and the same in each of the AI deploy folders.
+
+
 # Creating and launching the AI Containers automatically
 Create and launch all images/containers
 ```
