@@ -33,6 +33,21 @@ type UserOutput struct {
 	Active    bool   `bson:"active"`
 }
 
+func UserLoginToDB(input *UserLogin) *UserDB {
+	return &UserDB{
+		Username: input.Username,
+		AuthId:   input.AuthId,
+		Active:   true,
+	}
+}
+
+func UserInputToDB(input *UserInput) *UserDB {
+	return &UserDB{
+		Username: input.Username,
+		Active:   input.Active,
+	}
+}
+
 func UserDBToOutput(db *UserDB) *UserOutput {
 	return &UserOutput{
 		Id:        db.Id,

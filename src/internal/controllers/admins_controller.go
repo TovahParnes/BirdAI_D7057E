@@ -74,10 +74,8 @@ func (c *Controller) CCreateAdmin(admin *models.AdminCreation) (models.Response)
 		}
 	}
 
-	adminDB := &models.AdminDB{
-		UserId: admin.UserId,
-		Access: admin.Access,
-	}
+	adminDB := models.AdminCreationToDB(admin)
+
 	response := c.db.Admin.CreateAdmin(*adminDB)
 	if utils.IsTypeError(response) {
 		return response

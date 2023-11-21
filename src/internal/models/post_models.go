@@ -36,6 +36,24 @@ type PostOutput struct {
 	UserMedia MediaOutput `bson:"user_media" json:"userMedia" form:"userMedia"`
 }
 
+func PostCreationToDB(userId string, creation *PostCreation, mediaId string) *PostDB {
+	return &PostDB{
+		UserId:    userId,
+		BirdId:    creation.BirdId,
+		Location:  creation.Location,
+		Comment:   creation.Comment,
+		Accuracy:  creation.Accuracy,
+		MediaId:   mediaId,
+	}
+}
+
+func PostInputToDB(input *PostInput) *PostDB {
+	return &PostDB{
+		Location: input.Location,
+		Comment:  input.Comment,
+	}
+}
+
 func PostDBToOutput(db *PostDB, user *UserOutput, bird *BirdOutput, media *MediaOutput) *PostOutput {
 	return &PostOutput{
 		Id:        db.Id,

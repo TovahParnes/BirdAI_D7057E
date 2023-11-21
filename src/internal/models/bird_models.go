@@ -23,6 +23,15 @@ type BirdOutput struct {
 	Sound       MediaOutput `bson:"sound"`
 }
 
+func BirdInputToDB(input *BirdInput) *BirdDB {
+	return &BirdDB{
+		Name:        input.Name,
+		Description: input.Description,
+		ImageId:     input.ImageId,
+		SoundId:     input.SoundId,
+	}
+}
+
 func BirdDBToOutput(db *BirdDB, image *MediaOutput, sound *MediaOutput) *BirdOutput {
 	return &BirdOutput{
 		Id:          db.Id,

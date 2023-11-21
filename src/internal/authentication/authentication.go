@@ -28,7 +28,7 @@ func (a *Authentication) LoginUser(user *models.UserLogin) models.Response {
 	if utils.IsType(response, models.Err{}) {
 		if response.Data.(models.Err).StatusCode == http.StatusNotFound {
 			createdNow = true
-			userDB := &models.UserDB{Username: user.Username, AuthId: user.AuthId, Active: true}
+			userDB := models.UserLoginToDB(user)
 			response = a.UserColl.CreateUser(*userDB)
 			if utils.IsTypeError(response) {
 				return response

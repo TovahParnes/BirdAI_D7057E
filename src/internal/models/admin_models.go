@@ -20,6 +20,19 @@ type AdminOutput struct {
 	Access string     `bson:"access" json:"access" form:"access"`
 }
 
+func AdminCreationToDB(creation *AdminCreation) *AdminDB {
+	return &AdminDB{
+		UserId: creation.UserId,
+		Access: creation.Access,
+	}
+}
+
+func AdminInputToDB(input *AdminInput) *AdminDB {
+	return &AdminDB{
+		Access: input.Access,
+	}
+}
+
 func AdminDBToOutput(db *AdminDB, user *UserOutput) *AdminOutput {
 	return &AdminOutput{
 		Id:     db.Id,
