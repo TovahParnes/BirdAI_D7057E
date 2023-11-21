@@ -51,6 +51,12 @@ COPY src/AI/detection_model /app/detection_model
 RUN apt-get update && apt-get install -y libgl1-mesa-glx && rm -rf /var/lib/apt/lists/*
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Sound
+WORKDIR /app/sound_classification
+COPY src/AI/sound_classification /app/sound_classification
+RUN apt-get update && apt-get install -y libgl1-mesa-glx && rm -rf /var/lib/apt/lists/*
+RUN pip install --no-cache-dir -r requirements.txt
+
 # Start your Golang application
 WORKDIR /app
 CMD ["./birdai"]
