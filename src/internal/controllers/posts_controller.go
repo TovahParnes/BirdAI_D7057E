@@ -92,6 +92,8 @@ func (c *Controller) CCreatePost(userId string, postInput *models.PostInput) mod
 		UserId:   userId,
 		BirdId:   postInput.BirdId,
 		Location: postInput.Location,
+		Accuracy: postInput.Accuracy,
+		Comment:  postInput.Comment,
 		MediaId:  response.Data.(string),
 	}
 	response = c.db.Post.CreatePost(*post)
