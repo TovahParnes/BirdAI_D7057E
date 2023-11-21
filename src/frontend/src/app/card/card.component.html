@@ -1,10 +1,10 @@
-<mat-card class="example-card" (mouseenter)="changeTextColor('#2196f3')" (mouseleave)="changeTextColor('white')">
-    <mat-card-header>
-      <mat-card-title [style.color]=textColor>{{ title }}</mat-card-title>
-      <p></p>
-    </mat-card-header>
-    <img mat-card-image [src]="imageSrc" alt="Card Image">
-    <mat-card-content></mat-card-content>
+<mat-card class="library-card">
+  <img mat-card-image [src]="imageSrc" alt="Card Image">
+  <mat-card-title class="name"> {{title}} </mat-card-title>
+  <div class="dimmer"></div>
+  <div class="go-corner">
+    <div class="go-arrow">
+      →
+    </div>
+  </div>
 </mat-card>
-
-

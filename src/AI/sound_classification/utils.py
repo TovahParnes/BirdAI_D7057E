@@ -3,7 +3,8 @@ import os
 import random
 import shutil
 import string
-
+import re
+import base64
 
 def load_json_file(_filename):
     # Load JSON data from a file and return it as a Python dictionary.
@@ -84,3 +85,18 @@ def check_directory_for_file(filename, path=None):
 
     file_path = os.path.join(path, filename)
     return os.path.exists(file_path)
+
+
+def decode_base64(encoded_data):
+    """
+    Decode a base64-encoded string and remove the data URI header.
+    """
+    data_match = re.match(r'^data:(.+);base64,', encoded_data)
+    if data_match:
+        data_type = data_match.group(1)
+        decoded_data = re.sub(f'^data:{data_type};base64,', '', encoded_data)
+        return data_type, decoded_data
+
+
+def preprocess_sound(encoded_data):
+    return base64.b64decode(decode_base64(encoded_data)[1], validate=True)

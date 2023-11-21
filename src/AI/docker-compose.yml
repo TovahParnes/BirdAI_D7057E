@@ -7,7 +7,7 @@ services:
     image: ai-controller-image
     container_name: ai-controller
     depends_on:
-      - shared-requirements-image
+      - shared-requirements
     networks:
       ai_network:
         ipv4_address: 172.20.0.2
@@ -20,12 +20,25 @@ services:
     image: classification_model-image
     container_name: classification_model
     depends_on:
-      - shared-requirements-image
+      - shared-requirements
     networks:
       ai_network:
         ipv4_address: 172.20.0.3
     ports:
       - "3501:3500"  # Map container port 3500 to host port 3501
+  sound_classification:
+    build:
+      context: ./sound_classification
+      dockerfile: Dockerfile
+    image: sound_classification-image
+    container_name: sound_classification
+    depends_on:
+      - shared-requirements-image
+    networks:
+      ai_network:
+        ipv4_address: 172.20.0.5
+    ports:
+      - "3503:3500"  # Map container port 3500 to host port 3501
   detection_model:
     build:
       context: ./detection_model
@@ -33,16 +46,16 @@ services:
     image: detection_model-image
     container_name: detection_model
     depends_on:
-      - shared-requirements-image
+      - shared-requirements
     networks:
       ai_network:
         ipv4_address: 172.20.0.4
     ports:
       - "3502:3500"    # Map container port 3500 to host port 3502
-  shared-requirements-image:
+  shared-requirements:
     build:
       dockerfile: Dockerfile
-    image: shared-requirements-image
+    image: shared-requirements
 networks:
   ai_network:
     driver: bridge

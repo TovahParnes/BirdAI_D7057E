@@ -9,7 +9,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 // page components imports
 import {AppComponent} from './app.component';
-import {AboutComponent} from './about/about.component';
 import {LoginComponent} from './login/login.component';
 import {MainPageComponent} from './home/home-page.component';
 import {LibraryComponent} from './library/library.component';
@@ -34,8 +33,12 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatSelectModule} from '@angular/material/select';
+import {MatInputModule} from '@angular/material/input';
+
 
 
 
@@ -54,7 +57,6 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     NavbarComponent,
     BottomInfoComponent,
     FirstPageComponent,
-    AboutComponent,
     AdminComponent,
   ],
   imports: [
@@ -68,7 +70,6 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
       {path: 'profile', component: ProfilePageComponent}, //canActivate: [AuthGuardService]
       {path: 'species-page', component: SpeciesPageComponent},
       {path: 'first-page', component: FirstPageComponent},
-      {path: 'about', component: AboutComponent},
       {path: 'admin',component: AdminComponent, canActivate: [AuthGuardAdminService]},
       {path: '**', component: FirstPageComponent},
     ]),
@@ -85,6 +86,9 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     MatFormFieldModule,
     MatCardModule,
     MatIconModule,
+    MatCheckboxModule,
+    MatSelectModule,
+    MatInputModule,
     MatProgressSpinnerModule,
     MatButtonToggleModule,
   ],

@@ -1,58 +1,41 @@
 <app-navbar firstSelected="false" secondSelected="false" thirdSelected="true"></app-navbar>
 
 <mat-card class="card">
+    <h3 style="text-align: center;">You have found !TODO! birds, check out below whats avalible.</h3>
+    <section>
+        <div class="filterContainer">
+            <mat-form-field class="formField">
+                    <mat-label>Search</mat-label>
+                    <input matInput [formControl]="searchInput">
+            </mat-form-field>
 
-    <div class="card-container">
-        <mat-button-toggle-group multiple>
-            <mat-button-toggle (click)="sortCards()" style="background-color: #2196f3;">Alphabetical order</mat-button-toggle>
-            <mat-button-toggle (click)="toggleFound()" [style.background-color]="color">Sort by Found</mat-button-toggle>
-        </mat-button-toggle-group>
-    <div>
-        <p style="font-size: smaller; margin-top: 1px;">Name:</p>
-        <select #selectElement (change)="filterCards(selectElement.value)">
-            <option value="">All</option>
-            <ng-container *ngFor="let letter of alphabet">
-                <option [value]="letter">{{ letter }}</option>
-            </ng-container>
-        </select>
-    </div>
-        <div>
-            <p style="font-size: smaller;margin-top: 1px;">Species:</p>
-            <select #selectElement>
-                <option value="birds">Birds</option>
-                <option value="other">Other Species</option>
-            </select>
+            <mat-form-field class="formField">
+                <mat-label>Filter by Letter</mat-label>
+                <mat-select [formControl]="selectedOption">
+                    <mat-option value="">All</mat-option>
+                    <ng-container *ngFor="let letter of alphabet">
+                        <mat-option [value]="letter">{{letter}}</mat-option>
+                    </ng-container>
+                </mat-select>
+            </mat-form-field>
+            <mat-checkbox [labelPosition]="'before'" style="min-width: 150px; margin-left: 8px;">Show only found</mat-checkbox>
         </div>
-    </div>
+    </section>
+</mat-card>
 
-    <p></p>
+<p></p>
 
-    <!-- <div class="card-container">
-        <div *ngFor="let card of cardlist">
-        <a target="_blank" (click)="navigateToSpecies(card.imageSrc, card.title)">
-        <app-card title={{card.title}} imageSrc={{card.imageSrc}}></app-card>
-        </a>
-        </div>
-    </div> -->
-
-    <p></p>
-
-    <!-- <div class="card-container">
-        <div *ngFor="let item of cardlist">
-            <a target="_blank" (click)="navigateToSpecies(item.image, item.title)">
-                <app-card title={{item.title}} imageSrc={{item.image}}></app-card>
-            </a>
-        </div>
-    </div> -->
-
-    <div class="card-container">
-        <div *ngFor="let item of allBirds.data">
+<mat-card class="card">
+    <div class="cardContainer">
+        <div *ngFor="let item of allBirds.data; let last = last">
             <a target="_blank" (click)="navigateToSpecies(item.Image.data, item.Name, item.Description)">
                 <app-card title={{item.Name}} imageSrc={{item.Image.data}}></app-card>
             </a>
+            <ng-container *ngIf="last">
+                {{ sortCards() }}
+            </ng-container>
         </div>
     </div>
-
 </mat-card>
 
 <app-bottominfo></app-bottominfo>

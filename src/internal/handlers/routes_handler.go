@@ -42,6 +42,7 @@ func New(app *fiber.App, db repositories.RepositoryEndpoints) {
 	postsRoute := api.Group("/posts")
 	postsRoute.Get("/list", handler.ListPosts)
 	usersRoute.Get("/:id/posts/list", handler.ListUsersPosts)
+	usersRoute.Get("/:id/birds/list", handler.ListUsersFoundBirds)
 	postsRoute.Get("/:id", handler.GetPostById)
 	postsRoute.Post("/", JWTProtected(), handler.CreatePost)
 	postsRoute.Patch("/:id", JWTProtected(), handler.UpdatePost)

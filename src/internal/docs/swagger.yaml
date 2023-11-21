@@ -1399,6 +1399,60 @@ paths:
       summary: Update given user
       tags:
       - Users
+  /api/v1/users/{id}/birds/list:
+    get:
+      consumes:
+      - application/json
+      description: List all posts of a specified set
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Set of posts
+        in: query
+        name: set
+        type: integer
+      - description: Search parameter for post
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.PostDB'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Err'
+              type: object
+        "503":
+          description: Service Unavailable
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Err'
+              type: object
+      summary: List all posts of a specified set
+      tags:
+      - Posts
   /api/v1/users/{id}/posts/list:
     get:
       consumes:

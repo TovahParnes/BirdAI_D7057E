@@ -34,7 +34,7 @@ export class BottomInfoComponent{
   }
   
   navigateToAbout(){
-    this.router.navigate(['about']);
+    window.open("https://99jessve.github.io./", "_blank");
   }
 }
 
