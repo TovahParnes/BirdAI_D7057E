@@ -39,8 +39,8 @@ func BirdDBToOutput(db *BirdDB, image *MediaOutput, sound *MediaOutput) *BirdOut
 		Id:          db.Id,
 		Name:        db.Name,
 		Description: db.Description,
-		//Image:       *image,
-		//Sound:       *sound,
+		Image:       *image,
+		Sound:       *sound,
 		Species:	 db.Species,
 	}
 }
