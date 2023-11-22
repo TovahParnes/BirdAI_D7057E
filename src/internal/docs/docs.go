@@ -48,7 +48,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.AdminInput"
+                            "$ref": "#/definitions/models.AdminCreation"
                         }
                     }
                 ],
@@ -623,7 +623,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -1294,7 +1306,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.PostInput"
+                            "$ref": "#/definitions/models.PostCreation"
                         }
                     }
                 ],
@@ -1310,7 +1322,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/models.PostDB"
+                                            "$ref": "#/definitions/models.PostOutput"
                                         }
                                     }
                                 }
@@ -1589,7 +1601,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -1837,7 +1861,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/models.UserDB"
+                                            "$ref": "#/definitions/models.UserLoginOutput"
                                         }
                                     }
                                 }
@@ -2228,7 +2252,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -2643,16 +2679,21 @@ const docTemplate = `{
                 }
             }
         },
-        "models.AdminInput": {
+        "models.AdminCreation": {
             "type": "object",
             "properties": {
-                "_id": {
-                    "type": "string"
-                },
                 "access": {
                     "type": "string"
                 },
                 "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.AdminInput": {
+            "type": "object",
+            "properties": {
+                "access": {
                     "type": "string"
                 }
             }
@@ -2689,9 +2730,6 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "description": {
-                    "type": "string"
-                },
-                "id": {
                     "type": "string"
                 },
                 "imageId": {
@@ -2749,9 +2787,6 @@ const docTemplate = `{
             "properties": {
                 "data": {
                     "type": "string"
-                },
-                "fileType": {
-                    "type": "string"
                 }
             }
         },
@@ -2763,47 +2798,12 @@ const docTemplate = `{
                 },
                 "data": {
                     "type": "string"
-                },
-                "fileType": {
-                    "type": "string"
                 }
             }
         },
-        "models.PostDB": {
+        "models.PostCreation": {
             "type": "object",
             "properties": {
-                "accuracy": {
-                    "type": "number"
-                },
-                "birdId": {
-                    "type": "string"
-                },
-                "comment": {
-                    "type": "string"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "location": {
-                    "type": "string"
-                },
-                "mediaId": {
-                    "type": "string"
-                },
-                "userId": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.PostInput": {
-            "type": "object",
-            "properties": {
-                "_id": {
-                    "type": "string"
-                },
                 "accuracy": {
                     "type": "number"
                 },
@@ -2818,6 +2818,17 @@ const docTemplate = `{
                 },
                 "media": {
                     "$ref": "#/definitions/models.MediaInput"
+                }
+            }
+        },
+        "models.PostInput": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
                 }
             }
         },
@@ -2859,34 +2870,11 @@ const docTemplate = `{
                 }
             }
         },
-        "models.UserDB": {
-            "type": "object",
-            "properties": {
-                "_id": {
-                    "type": "string"
-                },
-                "active": {
-                    "type": "boolean"
-                },
-                "authId": {
-                    "type": "string"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
         "models.UserInput": {
             "type": "object",
             "properties": {
                 "active": {
                     "type": "boolean"
-                },
-                "id": {
-                    "type": "string"
                 },
                 "user": {
                     "type": "string"
@@ -2897,6 +2885,29 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "authId": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.UserLoginOutput": {
+            "type": "object",
+            "properties": {
+                "_id": {
+                    "type": "string"
+                },
+                "active": {
+                    "type": "boolean"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdNew": {
+                    "type": "boolean"
+                },
+                "token": {
                     "type": "string"
                 },
                 "username": {

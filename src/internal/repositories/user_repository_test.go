@@ -75,14 +75,13 @@ func TestUserRepository(t *testing.T) {
 
 	t.Run("Test UpdateOne", func(t *testing.T) {
 		updateUser := models.UserInput{
-			Id:       testUser1.Id,
 			Username: "Test User 1 is the best!!",
 		}
-		response := userColl.UpdateUser(updateUser)
+		response := userColl.UpdateUser(testUser1.Id, updateUser)
 		require.False(t, utils.IsTypeError(response))
 		require.Equal(t, updateUser.Username, response.Data.(*models.UserDB).Username)
 
-		response = userColl.UpdateUser(updateUser)
+		response = userColl.UpdateUser(testUser1.Id, updateUser)
 		require.True(t, utils.IsTypeError(response))
 	})
 	// Delete both

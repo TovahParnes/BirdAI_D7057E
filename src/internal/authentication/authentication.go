@@ -23,10 +23,12 @@ func NewAuthentication(userCollection repositories.UserRepository) Authenticatio
 
 func (a *Authentication) LoginUser(user *models.UserLogin) models.Response {
 	response := a.UserColl.GetUserByAuthId(user.AuthId)
+	createdNow := false
 	// Check if data is type error
 	if utils.IsType(response, models.Err{}) {
 		if response.Data.(models.Err).StatusCode == http.StatusNotFound {
-			userDB := &models.UserDB{Username: user.Username, AuthId: user.AuthId, Active: true}
+			createdNow = true
+			userDB := models.UserLoginToDB(user)
 			response = a.UserColl.CreateUser(*userDB)
 			if utils.IsTypeError(response) {
 				return response
@@ -56,12 +58,7 @@ func (a *Authentication) LoginUser(user *models.UserLogin) models.Response {
 		return utils.ErrorParams(err.Error())
 	}
 
-	// Change authId to token in response
-	var UserCopy models.UserDB
-	UserCopy = *response.Data.(*models.UserDB)
-	UserCopy.AuthId = t
-
-	return utils.Response(UserCopy)
+	return utils.Response(models.UserDBToLoginOutput(response.Data.(*models.UserDB), t, createdNow))
 }
 
 //func (a *Authentication) Logout(c *fiber.Ctx) models.Response {

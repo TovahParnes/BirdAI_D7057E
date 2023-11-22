@@ -34,12 +34,10 @@ func TestBirdController(t *testing.T) {
 
 	testImage := &models.MediaDB{
 		Data:     "testImage",
-		FileType: "audio/mpeg",
 	}
 
 	testSound := &models.MediaDB{
 		Data:     "testSound",
-		FileType: "audio/mpeg",
 	}
 
 	t.Run("Test CreateMedia", func(t *testing.T) {

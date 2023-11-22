@@ -73,7 +73,7 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 // @Accept		json
 // @Produce		json
 // @Param		user	body		models.UserLogin	true	"user"
-// @Success		201	{object}	models.Response{data=models.UserDB}
+// @Success		201	{object}	models.Response{data=models.UserLoginOutput}
 // @Failure		400	{object}	models.Response{data=models.Err}
 // @Failure		401	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
@@ -94,7 +94,7 @@ func (h *Handler) LoginUser(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 	
-	return utils.CreationResponseToStatus(c, response)
+	return utils.UserCreationResponseToStatus(c, response)
 }
 
 // GetUserMe is a function to get the current user from the databse
@@ -182,8 +182,8 @@ func (h *Handler) UpdateUser(c *fiber.Ctx) error {
 // @Accept		json
 // @Produce		json
 // @Security 	Bearer
-// @Param		id			path		string	true	"User ID"
-// @Success		200	{object}	models.Response{}
+// @Param		id	path		string	true	"User ID"
+// @Success		200	{object}	models.Response{data=string}
 // @Failure		401	{object}	models.Response{data=models.Err}
 // @Failure		403	{object}	models.Response{data=models.Err}
 // @Failure		404	{object}	models.Response{data=models.Err}

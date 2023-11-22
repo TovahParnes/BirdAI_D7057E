@@ -35,7 +35,6 @@ func TestModels(t *testing.T) {
 		media := &models.MediaOutput{
 			Id: "5f9d3b3b9d3b3b9d3b3b9d3b",
 			Data: "test",
-			FileType: "sound",
 		}
 		out := models.BirdDBToOutput(db, media, media)
 		require.IsType(t, &models.BirdOutput{}, out)
@@ -45,7 +44,6 @@ func TestModels(t *testing.T) {
 		db := &models.MediaDB{
 			Id: "5f9d3b3b9d3b3b9d3b3b9d3b",
 			Data: "test",
-			FileType: "sound",
 		}
 		out := models.MediaDBToOutput(db)
 		require.IsType(t, &models.MediaOutput{}, out)
@@ -66,7 +64,6 @@ func TestModels(t *testing.T) {
 		media := &models.MediaOutput{
 			Id: "5f9d3b3b9d3b3b9d3b3b9d3b",
 			Data: "test",
-			FileType: "sound",
 		}
 		bird := &models.BirdOutput{
 			Id:		"5f9d3b3b9d3b3b9d3b3b9d3b",
@@ -89,5 +86,8 @@ func TestModels(t *testing.T) {
 		}
 		out := models.UserDBToOutput(db)
 		require.IsType(t, &models.UserOutput{}, out)
+
+		out2 := models.UserDBToLoginOutput(db, "token", true)
+		require.IsType(t, &models.UserLoginOutput{}, out2)
 	})
 }

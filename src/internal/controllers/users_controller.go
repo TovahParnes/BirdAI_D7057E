@@ -59,8 +59,7 @@ func (c *Controller) CDeleteUser(id string) models.Response {
 }
 
 func (c *Controller) CUpdateUser(id string, user *models.UserInput) models.Response {
-	user.Id = id
-	response := c.db.User.UpdateUser(*user)
+	response := c.db.User.UpdateUser(id, *user)
 	if utils.IsTypeError(response) {
 		return response
 	}

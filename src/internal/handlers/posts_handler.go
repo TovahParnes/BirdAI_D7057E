@@ -3,6 +3,7 @@ package handlers
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
+
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -148,8 +149,8 @@ func (h *Handler) ListUsersFoundBirds(c *fiber.Ctx) error {
 // @Accept		json
 // @Produce		json
 // @Security 	Bearer
-// @Param		post	body		models.PostInput	true	"post"
-// @Success		201	{object}	models.Response{data=models.PostDB}
+// @Param		post	body	models.PostCreation	true	"post"
+// @Success		201	{object}	models.Response{data=models.PostOutput}
 // @Failure		400	{object}	models.Response{data=models.Err}
 // @Failure		401	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
@@ -161,12 +162,12 @@ func (h *Handler) CreatePost(c *fiber.Ctx) error {
 	}
 	curUserId := response.Data.(models.UserDB).Id
 
-	var post *models.PostInput
+	var post *models.PostCreation
 	if err := c.BodyParser(&post); err != nil {
 		//	@Failure	400	{object}	models.Response{}
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
-	response = utils.IsValidPostInput(post)
+	response = utils.IsValidPostCreation(post)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
@@ -239,7 +240,7 @@ func (h *Handler) UpdatePost(c *fiber.Ctx) error {
 // @Produce		json
 // @Security 	Bearer
 // @Param		id	path	string	true	"Post ID"
-// @Success		200	{object}	models.Response{}
+// @Success		200	{object}	models.Response{data=string}
 // @Failure		401	{object}	models.Response{data=models.Err}
 // @Failure		403	{object}	models.Response{data=models.Err}
 // @Failure		404	{object}	models.Response{data=models.Err}

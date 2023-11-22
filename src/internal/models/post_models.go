@@ -11,16 +11,20 @@ type PostDB struct {
 	MediaId   string  `bson:"media_id"`
 }
 
-type PostInput struct {
-	Id       string     `bson:"_id" json:"_id" form:"_id"`
-	BirdId   string     `bson:"bird_id" json:"birdId" form:"birdId"`
+type PostCreation struct {
+	BirdId    string  `bson:"bird_id"`
 	Location string     `bson:"location" json:"location" form:"location"`
 	Comment  string     `bson:"comment" json:"comment" form:"comment"`
 	Accuracy float32    `bson:"accuracy" json:"accuracy" form:"accuracy"`
 	Media    MediaInput `bson:"media" json:"media" form:"media"`
 }
 
-// TODO add accuracy and own comment
+
+type PostInput struct {
+	Location string     `bson:"location" json:"location" form:"location"`
+	Comment  string     `bson:"comment" json:"comment" form:"comment"`
+}
+
 type PostOutput struct {
 	Id        string      `bson:"_id" json:"_id" form:"_id"`
 	User      UserOutput  `bson:"user" json:"user" form:"user"`
@@ -30,6 +34,24 @@ type PostOutput struct {
 	Comment   string      `bson:"comment" json:"comment" form:"comment"`
 	Accuracy  float32     `bson:"accuracy" json:"accuracy" form:"accuracy"`
 	UserMedia MediaOutput `bson:"user_media" json:"userMedia" form:"userMedia"`
+}
+
+func PostCreationToDB(userId string, creation *PostCreation, mediaId string) *PostDB {
+	return &PostDB{
+		UserId:    userId,
+		BirdId:    creation.BirdId,
+		Location:  creation.Location,
+		Comment:   creation.Comment,
+		Accuracy:  creation.Accuracy,
+		MediaId:   mediaId,
+	}
+}
+
+func PostInputToDB(input *PostInput) *PostDB {
+	return &PostDB{
+		Location: input.Location,
+		Comment:  input.Comment,
+	}
 }
 
 func PostDBToOutput(db *PostDB, user *UserOutput, bird *BirdOutput, media *MediaOutput) *PostOutput {

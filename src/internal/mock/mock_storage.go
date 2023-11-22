@@ -213,7 +213,6 @@ func (m *mockCollection) CreateOne(object models.HandlerObject) models.Response 
 		newObject = &models.MediaDB{
 			Id:       primitive.NewObjectID().Hex(),
 			Data:     object.(*models.MediaDB).Data,
-			FileType: object.(*models.MediaDB).FileType,
 		}
 
 	default:

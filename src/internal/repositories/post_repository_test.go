@@ -68,14 +68,13 @@ func TestPostRepository(t *testing.T) {
 
 	t.Run("Test UpdatePost", func(t *testing.T) {
 		updatePost := models.PostInput{
-			Id:       testPost1.Id,
 			Location: "Location update",
 		}
-		response := postColl.UpdatePost(updatePost)
+		response := postColl.UpdatePost(testPost1.Id, updatePost)
 		require.False(t, utils.IsTypeError(response))
 		require.Equal(t, updatePost.Location, response.Data.(*models.PostDB).Location)
 
-		response = postColl.UpdatePost(updatePost)
+		response = postColl.UpdatePost(testPost1.Id, updatePost)
 		require.True(t, utils.IsTypeError(response))
 	})
 

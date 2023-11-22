@@ -34,11 +34,18 @@ func IsValidSearch(search string) models.Response {
 	return Response(nil)
 }
 
-func IsValidAdminInput(admin *models.AdminInput) models.Response {
+func IsValidAdminCreation(admin *models.AdminCreation) models.Response {
 	response := IsValidId(admin.UserId)
 	if IsTypeError(response) {
 		return ErrorParams("Given user id is not a valid id")
 	}
+	if admin.Access != "admin" && admin.Access != "superadmin" {
+		return ErrorParams("Given access is not a valid access, must be admin or superadmin")
+	}
+	return Response(nil)
+}
+
+func IsValidAdminInput(admin *models.AdminInput) models.Response {
 	if admin.Access != "admin" && admin.Access != "superadmin" {
 		return ErrorParams("Given access is not a valid access, must be admin or superadmin")
 	}
@@ -67,28 +74,33 @@ func IsValidBirdInput(bird *models.BirdInput) models.Response {
 }
 
 func IsValidMediaInput(post *models.MediaInput) models.Response {
-	if post.FileType != "image" && post.FileType != "sound" {
-		return ErrorParams("Given type is not a valid type, must be image or sound")
+	return Response(nil)
+}
+
+func IsValidPostCreation(post *models.PostCreation) models.Response {
+	response := IsValidId(post.BirdId)
+	if IsTypeError(response) {
+		return ErrorParams("Given bird id is not a valid id")
+	}
+	if post.Location == "" {
+		return ErrorParams("Location is empty")
+	}
+	if post.Comment == "" {
+		return ErrorParams("Comment is empty")
+	}
+	if post.Accuracy <= 0 || post.Accuracy >= 1 {
+		return ErrorParams("Accuracy must be between 0 and 1")
 	}
 	return Response(nil)
 }
 
 func IsValidPostInput(post *models.PostInput) models.Response {
-	response := IsValidId(post.BirdId)
-	if IsTypeError(response) {
-		return ErrorParams("Given bird id is not a valid id")
+	if post.Location == "" {
+		return ErrorParams("Location is empty")
 	}
-
-	//TODO validate location?
-
-	//response = IsValidId(post.ImageId)
-	//if IsTypeError(response) {
-	//	return ErrorParams("Given image id is not a valid id")
-	//}
-	//response = IsValidId(post.SoundId)
-	//if IsTypeError(response) {
-	//	return ErrorParams("Given sound id is not a valid id")
-	//}
+	if post.Comment == "" {
+		return ErrorParams("Comment is empty")
+	}
 	return Response(nil)
 }
 

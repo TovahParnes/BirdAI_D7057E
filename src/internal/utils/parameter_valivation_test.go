@@ -49,9 +49,31 @@ func TestParameterValidation(t *testing.T) {
 		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
 	})
 
+	t.Run("Test IsValidAdminCreation", func(t *testing.T) {
+		admin := &models.AdminCreation{
+			UserId: "5f9d3b3b9d3b3b9d3b3b9d3b",
+			Access: "admin",
+		}
+		response := utils.IsValidAdminCreation(admin)
+		require.False(t, utils.IsTypeError(response))
+
+		admin.Access = "superadmin"
+		response = utils.IsValidAdminCreation(admin)
+		require.False(t, utils.IsTypeError(response))
+
+		admin.UserId = "1234"
+		response = utils.IsValidAdminCreation(admin)
+		require.True(t, utils.IsTypeError(response))
+		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
+
+		admin.Access = "hello"
+		response = utils.IsValidAdminCreation(admin)
+		require.True(t, utils.IsTypeError(response))
+		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
+	})
+
 	t.Run("Test IsValidAdminInput", func(t *testing.T) {
 		admin := &models.AdminInput{
-			UserId: "5f9d3b3b9d3b3b9d3b3b9d3b",
 			Access: "admin",
 		}
 		response := utils.IsValidAdminInput(admin)
@@ -60,11 +82,6 @@ func TestParameterValidation(t *testing.T) {
 		admin.Access = "superadmin"
 		response = utils.IsValidAdminInput(admin)
 		require.False(t, utils.IsTypeError(response))
-
-		admin.UserId = "1234"
-		response = utils.IsValidAdminInput(admin)
-		require.True(t, utils.IsTypeError(response))
-		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
 
 		admin.Access = "hello"
 		response = utils.IsValidAdminInput(admin)
@@ -114,39 +131,69 @@ func TestParameterValidation(t *testing.T) {
 	})
 
 	t.Run("Test IsValidMediaInput", func(t *testing.T) {
-		media := &models.MediaInput{
-			FileType: "image",
-		}
-		response := utils.IsValidMediaInput(media)
-		require.False(t, utils.IsTypeError(response))
+		})
 
-		media.FileType = "sound"
-		response = utils.IsValidMediaInput(media)
-		require.False(t, utils.IsTypeError(response))
-
-		media.FileType = "hello"
-		response = utils.IsValidMediaInput(media)
-		require.True(t, utils.IsTypeError(response))
-		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)	
-	})
-
-	t.Run("Test IsValidPostInput", func(t *testing.T) {
-		post := &models.PostInput{
+	t.Run("Test IsValidPostCreation", func(t *testing.T) {
+		post := &models.PostCreation{
 			BirdId: "5f9d3b3b9d3b3b9d3b3b9d3b",
 			Location: "location",
+			Comment: "comment",
+			Accuracy: 0.5,
+		}
+		response := utils.IsValidPostCreation(post)
+		require.False(t, utils.IsTypeError(response))
+
+		post.BirdId = "1234"
+		response = utils.IsValidPostCreation(post)
+		require.True(t, utils.IsTypeError(response))
+		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
+
+		post.Location = ""
+		response = utils.IsValidPostCreation(post)
+		require.True(t, utils.IsTypeError(response))
+		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
+
+		post.Location = "location"
+		post.Comment = ""
+		response = utils.IsValidPostCreation(post)
+		require.True(t, utils.IsTypeError(response))
+		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
+
+		post.Comment = "comment"
+		post.Accuracy = 1.2
+		response = utils.IsValidPostCreation(post)
+		require.True(t, utils.IsTypeError(response))
+		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
+
+		post.Accuracy = -0.2
+		response = utils.IsValidPostCreation(post)
+		require.True(t, utils.IsTypeError(response))
+		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
+
+	})
+	t.Run("Test IsValidPostInput", func(t *testing.T) {
+		post := &models.PostInput{
+			Location: "location",
+			Comment: "comment",
 		}
 		response := utils.IsValidPostInput(post)
 		require.False(t, utils.IsTypeError(response))
 
-		post.BirdId = "1234"
+		post.Location = ""
 		response = utils.IsValidPostInput(post)
 		require.True(t, utils.IsTypeError(response))
 		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
+	
+		post.Location = "location"
+		post.Comment = ""
+		response = utils.IsValidPostInput(post)
+		require.True(t, utils.IsTypeError(response))
+		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
+	
 	})
 
 	t.Run("Test IsValidUserInput", func(t *testing.T) {
 		user := &models.UserInput{
-			Id: "5f9d3b3b9d3b3b9d3b3b9d3b",
 			Username: "username",
 			Active: true,
 		}
