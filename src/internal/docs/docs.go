@@ -2760,6 +2760,9 @@ const docTemplate = `{
                 },
                 "sound": {
                     "$ref": "#/definitions/models.MediaOutput"
+                },
+                "species": {
+                    "type": "boolean"
                 }
             }
         },
@@ -2818,6 +2821,35 @@ const docTemplate = `{
                 },
                 "media": {
                     "$ref": "#/definitions/models.MediaInput"
+                }
+            }
+        },
+        "models.PostDB": {
+            "type": "object",
+            "properties": {
+                "accuracy": {
+                    "type": "number"
+                },
+                "birdId": {
+                    "type": "string"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "mediaId": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
                 }
             }
         },

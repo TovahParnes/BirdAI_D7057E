@@ -6,6 +6,7 @@ type BirdDB struct {
 	Description string `bson:"description"`
 	ImageId     string `bson:"image_id"`
 	SoundId     string `bson:"sound_id"`
+	Species		bool `bson:"species"`
 }
 
 type BirdInput struct {
@@ -21,6 +22,7 @@ type BirdOutput struct {
 	Description string      `bson:"description"`
 	Image       MediaOutput `bson:"image"`
 	Sound       MediaOutput `bson:"sound"`
+	Species		bool `bson:"species"`
 }
 
 func BirdInputToDB(input *BirdInput) *BirdDB {
@@ -37,7 +39,8 @@ func BirdDBToOutput(db *BirdDB, image *MediaOutput, sound *MediaOutput) *BirdOut
 		Id:          db.Id,
 		Name:        db.Name,
 		Description: db.Description,
-		Image:       *image,
-		Sound:       *sound,
+		//Image:       *image,
+		//Sound:       *sound,
+		Species:	 db.Species,
 	}
 }

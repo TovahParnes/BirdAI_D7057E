@@ -33,7 +33,6 @@ func (b *BirdRepository) GetBirdByName(name string) models.Response {
 func (b *BirdRepository) CreateBird(bird models.BirdDB) models.Response {
 	bird.Id = primitive.NewObjectID().Hex()
 	return b.collection.CreateOne(&bird)
-
 }
 
 // TODO: Fix ToBson and FromBson on structs for easier handling of bson to struct and back
