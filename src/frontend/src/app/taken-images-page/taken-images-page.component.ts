@@ -108,12 +108,12 @@ export class TakenImagesPageComponent {
     console.log(this.userList.data)
   }
 
-  navigateToSpecies(imageId: string, imageName: string, imageDate: string, imageDesc: string): void {
+  navigateToSpecies(imageId: string, imageName: string, imageSound: string, imageDesc: string): void {
     this.router.navigate(['species-page'], {
       queryParams: {
         imageId: encodeURIComponent(imageId),
         imageName: encodeURIComponent(imageName),
-        imageDate: encodeURIComponent(imageDate),
+        imageSound: encodeURIComponent(imageSound),
         imageDesc: encodeURIComponent(imageDesc),
       }
       });

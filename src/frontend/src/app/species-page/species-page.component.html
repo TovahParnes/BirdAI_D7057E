@@ -7,33 +7,35 @@
 
 
 <div class="group">
-  <button mat-fab class="goBackButton" color="primary" (click)="goBack()"><mat-icon>keyboard_arrow_left</mat-icon></button>
-
-  <mat-card class="card" id="info">
-      <div style="display: flex; justify-content: space-between;">
-          <p style="flex: 1; text-align: left;">{{imageName}}</p>
-          <p style="flex: 1; text-align: right;">{{imageDate}}</p>
+  <mat-card class="resultCard" id="info">
+      <button mat-fab class="goBackButton" color="primary" (click)="goBack()"><mat-icon>keyboard_arrow_left</mat-icon></button>
+      <img [src]="currentImage" alt="Slideshow Image" class="fit-image" id="Slideshow-image" style="width: 100%; border-top-left-radius: 7px; border-top-right-radius: 7px;">
+          
+      <h2 style="text-align: center;">{{imageName}}</h2>
+      <br>
+      <div style="text-align: center; justify-content: center;">
+        <audio controls>
+          <!-- <source src="https://xeno-canto.org/842389/download"/> -->
+          <source src={{imageSound}}/>
+        </audio>
       </div>
-      
-      <p></p>
-
-          <div class="image-container">
-              <img [src]="currentImage" alt="Slideshow Image" class="fit-image" id="Slideshow-image">
-          </div>
+        
           <!-- <div class="buttonContainer">        
               <a class="prev" (click)="prevImage()">❮</a>
               <a class="next" (click)="nextImage()">❯</a>
           </div> -->
-          <p></p>
-      Info: <br>
-      <p>{{wikiData.extract}}</p>
+      <div style="padding-left: 2.5%;padding-right: 2.5%;">
+        <h2>Info</h2>
+        {{wikiData.extract}}
+      </div>
+      <br><br>
       <!-- <img src="{{wikiData.originalimage?.source}}" alt="{{wikiData.title}}"> -->
       <!-- <div class="container" style="text-align: center;"> Common regions: <img src="assets/map.png" style="width: 100%;"></div> -->
       <div class="container" style="text-align: center;">
-        Common Regions 
+        Common Regions <br><br>
         <img src="{{wikiImages}}" style="width: 100%;">
     </div>
-
+    <br>
   </mat-card>
 </div>
 

@@ -1,7 +1,7 @@
 <div class="container2">
 
-    
-        <div class="logo-container2">
+    <div class="phoneScaling">
+        <div class="logo-container2" style="height: 100%;">
             <img src="assets/birdAI-logo.svg" class="logo">  
 
             
@@ -38,6 +38,7 @@
             </div>
 
         </div>
+    </div>
 
         <div class="items-container">
 
@@ -57,8 +58,8 @@
                 </div>
             
                 <div class="login-button">
-                    <asl-google-signin-button *ngIf="!mainApp.user" type='standard' size='medium' theme="filled_black"></asl-google-signin-button>
-                </div>           
+                    <asl-google-signin-button *ngIf="!mainApp.user" type='standard' size='medium' theme="filled_black" locale="en"></asl-google-signin-button>
+                </div>         
             </div>
 
         </div>

@@ -12,13 +12,17 @@ import { AdminResponse } from 'src/assets/components/components';
 export class AuthGuardService {
   public user: SocialUser | undefined;
   public loggedIn = false;
-  private currentAdmin?: AdminResponse
+  private currentAdmin?: AdminResponse;
 
   constructor(
     private router: Router,
     private authService: SocialAuthService) {
     this.authService.authState.subscribe(async (user) => {
       this.user = user;
+      //-----------------------------------------
+      const socialUser = JSON.stringify(user)
+      localStorage.setItem("socialUser",socialUser);
+      //-----------------------------------------
       this.loggedIn = (user != null);
       localStorage.setItem('id_token', user.idToken);
     });
@@ -30,7 +34,12 @@ export class AuthGuardService {
 
     if (!this.loggedIn) {
         console.log(state.url);
-        this.router.navigate(['login'], { queryParams: { returnUrl: state.url }});
+        this.router.navigate(['first-page'], { queryParams: { returnUrl: state.url }});
     }
+
+    // if (localStorage.getItem("loggedIn")=="false"){
+    //   console.log(state.url);
+    //   this.router.navigate(['first-page'], { queryParams: { returnUrl: state.url }});
+    // }
   }
 }

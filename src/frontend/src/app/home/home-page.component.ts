@@ -6,7 +6,7 @@ import {AppComponent} from '../app.component';
 import {FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {environment} from 'src/environments/environment';
-import {Observable} from 'rxjs';
+import {Observable, catchError} from 'rxjs';
 
 @Component({
   selector: 'app-home-page',
@@ -203,22 +203,25 @@ export class MainPageComponent implements OnInit {
     document.body.style.overflow = 'auto';
   }
 
-  async getCurrentAdmin(){
+  getCurrentAdmin(){
+    try{
     const authKey = localStorage.getItem("auth");
     if(authKey){
-      try{
-      (await this.sendGetCurrentAdmin(authKey)).subscribe(
+      this.sendGetCurrentAdmin(authKey).pipe(
+        catchError((error: any) => {
+          return [];
+        })
+      ).subscribe(
         (response: AdminResponse) => {
-          console.log(response)
           localStorage.setItem("currentAdmin",response.data.user._id);
         }
       )
-      }catch(error){
-      }
     }
+  }catch(error){
+  }
   }
 
-  async sendGetCurrentAdmin(token:string){
+  sendGetCurrentAdmin(token:string){
     const header = {
       'Authorization': `Bearer ${token}`
     };

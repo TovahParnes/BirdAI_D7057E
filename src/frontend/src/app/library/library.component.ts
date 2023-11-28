@@ -52,11 +52,12 @@ export class LibraryComponent {
     ) {
   }
 
-  navigateToSpecies(imageId: string, imageName: string, imageDesc: string): void {
+  navigateToSpecies(imageId: string, imageName: string,imageSound:string, imageDesc: string): void {
     this.router.navigate(['species-page'], {
       queryParams: {
         imageId: encodeURIComponent(imageId),
         imageName: encodeURIComponent(imageName),
+        imageSound: encodeURIComponent(imageSound),
         imageDesc: encodeURI(imageDesc)
       }
       });

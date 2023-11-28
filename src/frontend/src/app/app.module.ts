@@ -62,14 +62,14 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     BrowserModule,
     HttpClientModule,
     RouterModule.forRoot([
-      {path: 'login', component: LoginComponent},
-      {path: 'mainpage', component: MainPageComponent},
-      {path: 'library', component: LibraryComponent},
-      {path: 'takenImages', component: TakenImagesPageComponent},
-      {path: 'profile', component: ProfilePageComponent}, //canActivate: [AuthGuardService]
-      {path: 'species-page', component: SpeciesPageComponent},
+      //{path: 'login', component: LoginComponent},
+      {path: 'mainpage', component: MainPageComponent,},
+      {path: 'library', component: LibraryComponent,},
+      {path: 'takenImages', component: TakenImagesPageComponent,},
+      {path: 'profile', component: ProfilePageComponent,}, //canActivate: [AuthGuardService]
+      {path: 'species-page', component: SpeciesPageComponent,},
       {path: 'first-page', component: FirstPageComponent},
-      {path: 'about', component: AboutComponent},
+      {path: 'about', component: AboutComponent,},
       {path: 'admin',component: AdminComponent, canActivate: [AuthGuardAdminService]},
       {path: '**', component: FirstPageComponent},
     ]),

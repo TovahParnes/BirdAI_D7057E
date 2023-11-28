@@ -1,11 +1,12 @@
 <app-navbar firstSelected="true" secondSelected="false" thirdSelected="false"></app-navbar>
 <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
 
-
+<div class="phoneScaling">
 <mat-card class="card">
   <h1 style="margin-top: 0px;">Welcome to Bird AI</h1>
   <p>With the help of ai figure out what kind of bird it is you found. Our model is trained on over 500 species of birds.</p>
 </mat-card>
+</div>
 
 <p></p>
 
@@ -14,7 +15,9 @@
     <form [formGroup]="form">
 
     <mat-step [editable]="!togglePostView">
+      <div class="phoneScaling">
       <ng-template matStepLabel>Select type of media</ng-template>
+    </div>
       <mat-radio-group formControlName="option">
         <mat-radio-button value="option1">Image</mat-radio-button><br>
         <mat-radio-button value="option2">Sound</mat-radio-button>

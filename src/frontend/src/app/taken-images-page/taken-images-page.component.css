@@ -91,3 +91,9 @@
 .form-group-double {
   grid-column: span 2;
 }
+
+@media (max-width: 600px){
+  .resultCard{
+      max-width: 95%;
+  }
+}

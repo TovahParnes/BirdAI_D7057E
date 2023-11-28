@@ -28,6 +28,7 @@ export class SpeciesPageComponent implements AfterViewInit{
   imageName!: string;
   imageDate!: string;
   imageDesc!: string;
+  imageSound!: string;
   responseData: ApiResponse | null = null;
   images: string[] = [];
   wikiData: WikiSummary = new WikiSummary;
@@ -51,7 +52,7 @@ export class SpeciesPageComponent implements AfterViewInit{
     this.route.queryParams.subscribe(params => {
       this.imageId = decodeURIComponent(params['imageId']);
       this.imageName = decodeURIComponent(params['imageName'])
-      this.imageDate = decodeURIComponent(params['imageDate'])
+      this.imageSound = decodeURIComponent(params['imageSound'])
       this.imageDesc = decodeURIComponent(params['imageDesc'])
         if (this.imageDate == "undefined"){
           this.imageDate = "Not Found Yet"
@@ -114,38 +115,16 @@ export class SpeciesPageComponent implements AfterViewInit{
     }, err => { console.log('something went wrong' + err)
   }); 
   
-//   this.wikiRest.getWikiPage('Eurasian magpie').subscribe(data => {
-//     if(data){
-//     let cutOffIndex = data.indexOf('<td>Order:</td>');
-//     let cutString = data.substring(cutOffIndex)
-//     cutOffIndex = cutString.indexOf('</a></td></tr>');
-//     cutString = cutString.substring(0,cutOffIndex);
-//     console.log(cutString);
-//     }
-//   }, err => { console.log('something went wrong' + err)
-// }); 
   }
 
   getWikiImage(wikiTitle:string){
     this.wikiRest.getWikiImages(wikiTitle).subscribe((data: WikiImages) => {
       console.log(data);
-      const hasMapInTitle2 = data.items[2].title.includes('map')
-      const hasMapInTitle3 = data.items[3].title.includes('map')
-      const hasMapInTitle4 = data.items[4].title.includes('map')
       for(let i=0;i<= data.items.length;i++){
         if(data.items[i].title.includes('map')){
           this.wikiImages = data.items[i].srcset[0].src;
         }
       }
-      // if(hasMapInTitle2){
-      //   this.wikiImages = data.items[2].srcset[0].src
-      // }else if (hasMapInTitle3){
-      //   this.wikiImages = data.items[3].srcset[0].src
-      // }else if(hasMapInTitle4){
-      //   this.wikiImages = data.items[4].srcset[0].src
-      // }else{
-      //   this.wikiImages = data.items[3].srcset[0].src
-      // }
     })
   }
 
