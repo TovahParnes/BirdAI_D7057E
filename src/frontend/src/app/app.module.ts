@@ -39,6 +39,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
+import { SoundEditorComponent } from './sound-editor/sound-editor.component';
 
 
 
@@ -59,6 +60,7 @@ import {MatInputModule} from '@angular/material/input';
     BottomInfoComponent,
     FirstPageComponent,
     AdminComponent,
+    SoundEditorComponent,
   ],
   imports: [
     BrowserModule,
