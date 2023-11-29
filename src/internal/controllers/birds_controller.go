@@ -29,7 +29,8 @@ func (c *Controller) CGetBirdByName(name string) models.Response {
 }
 
 func (c *Controller) CListBirds(set int, search string) models.Response {
-	response := c.db.Bird.ListBirds(bson.M{}, set)
+	filter := bson.M{"name": bson.M{"$regex": "(?i)"+search}}
+	response := c.db.Bird.ListBirds(filter, set)
 	if utils.IsTypeError(response) {
 		return response
 	}

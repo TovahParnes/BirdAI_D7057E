@@ -61,7 +61,7 @@ func (h *Handler) ListUsers(c *fiber.Ctx) error {
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
-	response = h.controller.CListUsers(setInt)
+	response = h.controller.CListUsers(setInt, search)
 	return utils.ResponseToStatus(c, response)
 }
 

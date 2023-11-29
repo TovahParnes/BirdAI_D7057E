@@ -6,6 +6,7 @@ import (
 	"birdai/src/internal/repositories"
 	"birdai/src/internal/utils"
 	"context"
+	"fmt"
 	"net/http"
 	"testing"
 
@@ -121,13 +122,15 @@ func TestPostController(t *testing.T) {
 
 	testPost1 := &models.PostDB{
 		BirdId: testBird1.Id,
-		Location: "place 1",
+		Location: "place 1, aaa",
+		Comment: "one comment",
 		Accuracy: 0.5,
 	}
 
 	testPost2 := &models.PostDB{
 		BirdId: testBird2.Id,
 		Location: "place 2",
+		Comment: "two comment, aaa",
 		Accuracy: 0.9,
 	}
 
@@ -180,6 +183,7 @@ func TestPostController(t *testing.T) {
 
 	t.Run("Test ListPosts", func(t *testing.T) {
 		response := contr.CListPosts(0, "")
+		fmt.Println(response.Data)
 		require.False(t, utils.IsTypeError(response))
 		require.Equal(t, 2, len(response.Data.([]*models.PostOutput)))
 		require.IsType(t, &models.PostOutput{}, response.Data.([]*models.PostOutput)[0])
@@ -187,6 +191,26 @@ func TestPostController(t *testing.T) {
 		response = contr.CListPosts(1, "")
 		require.False(t, utils.IsTypeError(response))
 		require.Equal(t, 0, len(response.Data.([]*models.PostOutput)))
+	
+		response = contr.CListPosts(0, "two")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 1, len(response.Data.([]*models.PostOutput)))
+		require.IsType(t, &models.PostOutput{}, response.Data.([]*models.PostOutput)[0])
+		require.Equal(t, testPost2.Id, response.Data.([]*models.PostOutput)[0].Id)
+
+		response = contr.CListPosts(0, "AAA")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 2, len(response.Data.([]*models.PostOutput)))
+		require.IsType(t, &models.PostOutput{}, response.Data.([]*models.PostOutput)[0])
+
+		response = contr.CListPosts(0, "hello")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 0, len(response.Data.([]*models.PostOutput)))
+
+		response = contr.CListPosts(0, "1")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 1, len(response.Data.([]*models.PostOutput)))
+		require.IsType(t, &models.PostOutput{}, response.Data.([]*models.PostOutput)[0])
 	})
 
 	t.Run("Test ListUsersPosts", func(t *testing.T) {

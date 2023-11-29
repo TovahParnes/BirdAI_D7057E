@@ -22,7 +22,27 @@ func (c *Controller) CGetPostById(id string) models.Response {
 }
 
 func (c *Controller) CListPosts(set int, search string) models.Response {
-	response := c.db.Post.ListPosts(bson.M{}, set)
+	filter := bson.M{}
+	
+	if search != "" {
+		filter = bson.M{
+			 "$or": [
+				bson.M{ "name": { "$regex": "^Da"} }, 
+				bson.M{ "name": { "$regex": "^Ali" }}
+]
+
+			"$or": [
+				{"location": {"$regex": "(?i)"+search}},
+				bson.M{"comment": bson.M{"$regex": "(?i)"+search}},
+			]
+			
+			bson.M{
+				"location": bson.M{"$regex": "(?i)"+search},
+				"comment": bson.M{"$regex": "(?i)"+search},
+			},
+		}
+	}
+	response := c.db.Post.ListPosts(filter, set)
 	posts := []*models.PostOutput{}
 
 	if utils.IsTypeError(response) {
