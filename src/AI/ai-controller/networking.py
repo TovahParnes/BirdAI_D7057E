@@ -86,8 +86,19 @@ def evaluate_image():
     if _result is None:
         return jsonify({"error": "Failure while sending image to classification module"}, 400)
 
-    birds = [{"name": _result.json()['label'], "accuracy": _result.json()['accuracy']}]
+    birds_data = _result.json().get('birds', {}).get('bird1', {})
 
+    # Extracting data for each guess
+    guess1_data = birds_data.get('guess1', {})
+    guess2_data = birds_data.get('guess2', {})
+    guess3_data = birds_data.get('guess3', {})
+
+    # Creating a list of predictions
+    birds = [
+        {"name": guess1_data.get('label'), "accuracy": guess1_data.get('accuracy')},
+        {"name": guess2_data.get('label'), "accuracy": guess2_data.get('accuracy')},
+        {"name": guess3_data.get('label'), "accuracy": guess3_data.get('accuracy')}
+    ]
     json_structure = json.dumps({"birds": birds}, indent=4)
 
     return json_structure
