@@ -38,7 +38,7 @@ export class FirstPageComponent {
   }
 
   login(): void {
-    this.router.navigate(['mainpage']);
+    //this.router.navigate(['mainpage']);
     this.postLoggedInUser()
     .subscribe(
       (userResponse: UserResponse) => {

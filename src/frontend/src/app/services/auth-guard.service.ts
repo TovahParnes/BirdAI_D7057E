@@ -20,8 +20,8 @@ export class AuthGuardService {
     this.authService.authState.subscribe(async (user) => {
       this.user = user;
       //-----------------------------------------
-      const socialUser = JSON.stringify(user)
-      localStorage.setItem("socialUser",socialUser);
+      //const socialUser = JSON.stringify(user)
+      //localStorage.setItem("socialUser",socialUser);
       //-----------------------------------------
       this.loggedIn = (user != null);
       localStorage.setItem('id_token', user.idToken);
