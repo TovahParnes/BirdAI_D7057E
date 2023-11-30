@@ -52,13 +52,14 @@ export class LibraryComponent {
     ) {
   }
 
-  navigateToSpecies(imageId: string, imageName: string,imageSound:string, imageDesc: string): void {
+  navigateToSpecies(imageId: string, imageName: string,imageSound:string, imageDesc: string, imageGenus:Boolean): void {
     this.router.navigate(['species-page'], {
       queryParams: {
         imageId: encodeURIComponent(imageId),
         imageName: encodeURIComponent(imageName),
         imageSound: encodeURIComponent(imageSound),
-        imageDesc: encodeURI(imageDesc)
+        imageDesc: encodeURI(imageDesc),
+        imageGenus: imageGenus
       }
       });
   }
@@ -114,9 +115,6 @@ export class LibraryComponent {
   }
 
   ngOnInit(): void {
-    this.getData().subscribe((response) => {
-      const data = response;
-    });
     this.getAllBirds();
     this.cardlist = this.allBirds.data;
     this.foundlist = this.allBirds.data;

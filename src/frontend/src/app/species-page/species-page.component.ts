@@ -29,6 +29,7 @@ export class SpeciesPageComponent implements AfterViewInit{
   imageDate!: string;
   imageDesc!: string;
   imageSound!: string;
+  imageGenus!: Boolean;
   responseData: ApiResponse | null = null;
   images: string[] = [];
   wikiData: WikiSummary = new WikiSummary;
@@ -51,9 +52,10 @@ export class SpeciesPageComponent implements AfterViewInit{
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.imageId = decodeURIComponent(params['imageId']);
-      this.imageName = decodeURIComponent(params['imageName'])
-      this.imageSound = decodeURIComponent(params['imageSound'])
-      this.imageDesc = decodeURIComponent(params['imageDesc'])
+      this.imageName = decodeURIComponent(params['imageName']);
+      this.imageSound = decodeURIComponent(params['imageSound']);
+      this.imageDesc = decodeURIComponent(params['imageDesc']);
+      this.imageGenus = params['imageGenus'];
         if (this.imageDate == "undefined"){
           this.imageDate = "Not Found Yet"
         }

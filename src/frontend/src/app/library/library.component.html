@@ -47,7 +47,7 @@
 
     <div class="card-container">
         <div *ngFor="let item of allBirds.data">
-            <a target="_blank" (click)="navigateToSpecies(item.Image.data, item.Name, item.Sound.data, item.Description)">
+            <a target="_blank" (click)="navigateToSpecies(item.Image.data, item.Name, item.Sound.data, item.Description, item.species)">
                 <app-card title={{item.Name}} imageSrc={{item.Image.data}}></app-card>
             </a>
         </div>

@@ -11,7 +11,10 @@
       <button mat-fab class="goBackButton" color="primary" (click)="goBack()"><mat-icon>keyboard_arrow_left</mat-icon></button>
       <img [src]="currentImage" alt="Slideshow Image" class="fit-image" id="Slideshow-image" style="width: 100%; border-top-left-radius: 7px; border-top-right-radius: 7px;">
           
-      <h2 style="text-align: center;">{{imageName}}</h2>
+      <h2 style="text-align: center;">
+        {{imageName}}
+        <div *ngIf="imageGenus">(Genus)</div>
+      </h2>
       <br>
       <div style="text-align: center; justify-content: center;">
         <audio controls>

@@ -60,6 +60,7 @@ interface Bird {
     "Description": string,
     "Image": Media,
     "Sound": Media,
+    "species": Boolean
 }
 
 export interface PostData {
