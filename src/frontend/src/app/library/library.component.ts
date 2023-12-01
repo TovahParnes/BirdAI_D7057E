@@ -21,9 +21,11 @@ export class LibraryComponent implements OnInit {
   jsonUrl = 'assets/data.json';
   alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   searchInput: FormControl = new FormControl();
+  pageSearch: FormControl = new FormControl();
   selectedOption: FormControl = new FormControl('');
   cardlist: any[] = [];
   foundlist: any[] = [];
+  currentPageNumber: Number = 0;
   
   constructor(
     private router: Router,
@@ -35,7 +37,7 @@ export class LibraryComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getAllBirds();
+    this.getAllBirds(0);
     this.cardlist = this.allBirds.data;
     this.foundlist = this.allBirds.data;
 
@@ -45,6 +47,15 @@ export class LibraryComponent implements OnInit {
 
     this.searchInput.valueChanges.subscribe(value => {
       this.filterBySearch(value.toUpperCase());
+    });
+
+    this.pageSearch.valueChanges.subscribe(value => {
+      const numericValue = parseInt(value, 10);
+      this.currentPageNumber = numericValue;
+      if (Number.isNaN(this.currentPageNumber.valueOf())){
+        this.currentPageNumber = 0;
+      }
+      this.changePage(0);
     });
   }
 
@@ -89,8 +100,8 @@ export class LibraryComponent implements OnInit {
     return this.http.get<any[]>(this.jsonUrl);
   }
 
-  getAllBirds(){
-    this.sendRequestGetBirds().subscribe(
+  getAllBirds(pageNumber:Number){
+    this.sendRequestGetBirds(pageNumber).subscribe(
       (response: getAllBirdsResponse) => {
         this.allBirds = response;
         this.allBirdsBackup.data = response.data;
@@ -104,8 +115,21 @@ export class LibraryComponent implements OnInit {
     );
   }
 
-  sendRequestGetBirds() {
-    return this.http.get<getAllBirdsResponse>(environment.identifyRequestURL+"/birds/list?set=0");
+  changePage(increment:Number){
+    if(increment.valueOf()<0){
+    this.currentPageNumber = this.currentPageNumber.valueOf()-1;
+    }else if(increment.valueOf()>0){
+      this.currentPageNumber = this.currentPageNumber.valueOf()+1;
+    }
+    if (this.currentPageNumber.valueOf() < 0){
+      this.currentPageNumber = 0;
+    }else{
+      this.getAllBirds(this.currentPageNumber);
+    }
+  }
+
+  sendRequestGetBirds(pageNumber:Number) {
+    return this.http.get<getAllBirdsResponse>(environment.identifyRequestURL+"/birds/list?set="+pageNumber);
   }
 
   getWikiLinkTitle(index:number){

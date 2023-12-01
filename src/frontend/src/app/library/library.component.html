@@ -26,6 +26,15 @@
 <p></p>
 
 <mat-card class="card">
+    <div style="justify-content: space-between; display: flex;">
+    <button mat-fab color="primary" (click)="changePage(-1)"><mat-icon>keyboard_arrow_left</mat-icon></button>
+    <mat-form-field class="formField">
+        <mat-label>Current Page: {{currentPageNumber}}</mat-label>
+        <input matInput [formControl]="pageSearch">
+    </mat-form-field>
+    <button mat-fab color="primary" (click)="changePage(1)"><mat-icon>keyboard_arrow_right</mat-icon></button>
+    </div>
+    <p></p>
     <div class="cardContainer">
         <div *ngFor="let item of allBirds.data; let last = last">
             <a target="_blank" (click)="navigateToSpecies(item.Image, item.Name, item.Sound, item.Description, item.species)">
