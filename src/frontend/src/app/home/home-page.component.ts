@@ -38,7 +38,7 @@ export class MainPageComponent implements OnInit {
     public mainApp: AppComponent,
     public socialAuthService: SocialAuthService,
     private formBuilder: FormBuilder,
-    private http: HttpClient) {
+    private http: HttpClient,) {
   }
 
   ngOnInit() {
@@ -53,14 +53,19 @@ export class MainPageComponent implements OnInit {
       location: ['', Validators.required],
       comment: ['', Validators.required],
     });
-    console.log(localStorage.getItem("auth"));
-  }
-  
-  convertAccuracy(accuracy: string){
-    return (Number(accuracy) * 100);
   }
 
-  convertAccuracyToString(accuracy: string){
+  round(value: Number, precision: Number) {
+    var multiplier = Math.pow(10, precision.valueOf() || 0);
+    return Math.round(value.valueOf() * multiplier) / multiplier;
+}
+  
+  convertAccuracy(accuracy: Number): Number {
+    const newAccuracy = (accuracy.valueOf() * 100);
+    return this.round(newAccuracy, 1);
+  }
+
+  convertAccuracyToString(accuracy: Number): string {
     return this.convertAccuracy(accuracy).toString()+"%";
   }
 
@@ -72,7 +77,6 @@ export class MainPageComponent implements OnInit {
       reader.onload = (e) => {
         this.selectedImage = reader.result;
         const dataUrl = this.selectedImage as string;
-        console.log(dataUrl)
         const fileFormat = dataUrl.substring(dataUrl.indexOf('/') + 1, dataUrl.indexOf(';'));
         this.fileFormat = fileFormat
       };
@@ -83,11 +87,14 @@ export class MainPageComponent implements OnInit {
     this.selectedImage = null;
   }
 
-  postImage(token: string): Observable<AnalyzeResponse> {
+  postImageForAnalysing(token: string): Observable<AnalyzeResponse> {
     const header = {
       'Authorization': `Bearer ${token}`
     };
-    const body = {'data': `${this.selectedImage}`, 'fileType': this.fileFormat};
+    const body = {
+      'data': `${this.selectedImage}`,
+      'fileType': this.fileFormat
+    };
     return this.http.post<AnalyzeResponse>(environment.identifyRequestURL+"/ai/inputimage", body, { headers: header });
   }
 
@@ -95,19 +102,25 @@ export class MainPageComponent implements OnInit {
     this.isLoading = true;
     const authKey = localStorage.getItem("auth");
     if(authKey){
-    this.postImage(authKey).subscribe(
+    this.postImageForAnalysing(authKey).subscribe(
       (response: AnalyzeResponse) => {
-        console.log("Succesfully sent data");
-        console.log(response.data);
-        this.dataImg = this.selectedImage;
+        console.log("analised:", response.data); //TABORT
+        this.dataImg = this.selectedImage; //TABORT???????
         this.analyzed = response;
+
+        // No birds found
         if (this.analyzed.data.length == 0) {
           this.isLoading = false;
-          console.log("No birds found");
         }
+
+        // Bird found
         else {
           this.isLoading = false;
-          this.addNewBird(this.analyzed.data[0].aiBird.name, this.analyzed.data[0].userMedia.data, this.analyzed.data[0].aiBird.accuracy);
+          this.addNewBird(
+            this.analyzed.data[0].aiBird.name,
+            this.analyzed.data[0].userMedia.data,
+            this.analyzed.data[0].aiBird.accuracy
+          );
         }
       },
       err => {
@@ -120,7 +133,7 @@ export class MainPageComponent implements OnInit {
     }
   }
 
-  addNewBird(name: string, imageUrl:string, accuracy:string){
+  addNewBird(name: string, imageUrl: string, accuracy: Number){
     const newitem = {"title": name, "image": imageUrl, "accuracy": accuracy}
     this.analyzedBirdList.birds.push(newitem);
   }
@@ -173,10 +186,22 @@ export class MainPageComponent implements OnInit {
         };
 
         let location = this.postDetailsForm.get('location')?.value;
-        console.log(location);
-        const postData = {'_id': "no", 'birdId': this.analyzed.data[0].birdId, 'location': location, "media":{'data': this.selectedImage, 'filetype': this.fileFormat}};
-        console.log("Send:", postData);
-        console.log(environment.identifyRequestURL+"/posts",postData,{ headers: header });
+        let comment = this.postDetailsForm.get('comment')?.value;
+
+        console.log(location); //TABORT
+        const postData = {
+          'accuracy': this.convertAccuracy(this.analyzed.data[0].aiBird.accuracy),
+          'birdId': this.analyzed.data[0].birdId,
+          'comment': comment,
+          'location': location,
+          "media":{
+            'data': this.selectedImage,
+            'filetype': this.fileFormat
+          }
+        };
+
+        console.log("Send:", postData); //TABORT
+        console.log(environment.identifyRequestURL+"/posts",postData,{ headers: header }); //TABORT
         return this.http.post<PostData>(environment.identifyRequestURL+"/posts",postData,{ headers: header });
       } else {
         return null
@@ -188,7 +213,7 @@ export class MainPageComponent implements OnInit {
     if(authKey){
       this.sendPost(authKey)?.subscribe(
         (response: PostData) => {
-          console.log("Succesfully sent data");
+          console.log("Succesfully sent data"); //TABORT
           this.dataImg = this.selectedImage;
         },
         err => {

@@ -1,10 +1,6 @@
-
-import { SocialAuthService } from '@abacritt/angularx-social-login';
-import { Component } from '@angular/core';
-import {AuthGuardService} from './services/auth-guard.service';
-import { Router } from '@angular/router';
+import {Component} from '@angular/core';
 import {environment} from "../environments/environment";
-
+import {SocialAuthService} from '@abacritt/angularx-social-login';
 
 @Component({
   selector: 'app-root',
@@ -13,27 +9,12 @@ import {environment} from "../environments/environment";
 })
 
 export class AppComponent {
-  isDark = true;
-
-  switchDarkmodeSetting(): void {
-    document.documentElement.style.display = 'none';
-    document.documentElement.setAttribute(
-        "data-color-scheme",
-        this.isDark  ? "dark" : "light"
-    );
-    document.body.clientWidth;
-    document.documentElement.style.display = '';
-    this.isDark = true;
-  }
-
   user:any;
   loggedIn: boolean = false;
 
   constructor(
-    private router: Router,
     public authService: SocialAuthService) {
-      console.log(environment.production);
-    }
+  }
 
   ngOnInit() {
     this.authService.authState.subscribe((user) => {
