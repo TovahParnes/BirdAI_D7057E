@@ -110,7 +110,6 @@ export class SpeciesPageComponent implements AfterViewInit{
 
   getWikiData(wikiTitle:string){
     this.wikiRest.getWiki(wikiTitle).subscribe(data => {
-      console.log(data);
       if(data.extract){
       this.wikiData = data;
       }
@@ -121,7 +120,6 @@ export class SpeciesPageComponent implements AfterViewInit{
 
   getWikiImage(wikiTitle:string){
     this.wikiRest.getWikiImages(wikiTitle).subscribe((data: WikiImages) => {
-      console.log(data);
       for(let i=0;i<= data.items.length;i++){
         if(data.items[i].title.includes('map')){
           this.wikiImages = data.items[i].srcset[0].src;

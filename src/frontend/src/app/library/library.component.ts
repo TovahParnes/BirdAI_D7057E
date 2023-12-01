@@ -140,9 +140,7 @@ export class LibraryComponent implements OnInit {
 
   async setDataImageToWikiImage(wikiTitle:string,index:number){
     this.wikiRest.getWiki(wikiTitle).subscribe(data => {
-      console.log(data);
       if(data.extract){
-      //this.wikiData = data;
       if(data.originalimage?.source){
         this.allBirds.data[index].Image = data.originalimage?.source;
         this.allBirdsBackup.data[index].Image = data.originalimage?.source;

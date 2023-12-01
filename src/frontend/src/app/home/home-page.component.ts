@@ -117,7 +117,11 @@ export class MainPageComponent implements OnInit {
         // Bird found
         else {
           this.isLoading = false;
-          this.addNewBird(this.analyzed.data[0].aiBird.name, this.analyzed.data[0].description, this.analyzed.data[0].aiBird.accuracy);
+          this.addNewBird(
+            this.analyzed.data[0].aiBird.name,
+            this.analyzed.data[0].description,
+            this.analyzed.data[0].aiBird.accuracy
+              );
         }
       },
       err => {
