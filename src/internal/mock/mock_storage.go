@@ -195,7 +195,6 @@ func (m *mockCollection) CreateOne(object models.HandlerObject) models.Response 
 			Id:          primitive.NewObjectID().Hex(),
 			Name:        object.(*models.BirdDB).Name,
 			Description: object.(*models.BirdDB).Description,
-			ImageId:     object.(*models.BirdDB).ImageId,
 			SoundId:     object.(*models.BirdDB).SoundId,
 		}
 
@@ -211,8 +210,8 @@ func (m *mockCollection) CreateOne(object models.HandlerObject) models.Response 
 
 	case *models.MediaDB:
 		newObject = &models.MediaDB{
-			Id:       primitive.NewObjectID().Hex(),
-			Data:     object.(*models.MediaDB).Data,
+			Id:   primitive.NewObjectID().Hex(),
+			Data: object.(*models.MediaDB).Data,
 		}
 
 	default:

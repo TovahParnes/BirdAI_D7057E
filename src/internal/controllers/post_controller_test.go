@@ -30,19 +30,18 @@ func TestPostController(t *testing.T) {
 	mi.AddCollection(repositories.BirdColl)
 	birdColl := repositories.BirdRepository{}
 	birdColl.SetCollection(mi.GetCollection(repositories.BirdColl))
-	
+
 	mi.AddCollection(repositories.MediaColl)
 	mediaColl := repositories.MediaRepository{}
 	mediaColl.SetCollection(mi.GetCollection(repositories.MediaColl))
 
 	db := repositories.RepositoryEndpoints{
-		User: userColl,
-		Post: postColl,
-		Bird: birdColl,
+		User:  userColl,
+		Post:  postColl,
+		Bird:  birdColl,
 		Media: mediaColl,
 	}
 	contr := controllers.NewController(db)
-
 
 	testUser1 := &models.UserDB{
 		Username: "test User 1",
@@ -54,7 +53,6 @@ func TestPostController(t *testing.T) {
 		AuthId:   "456",
 		Active:   true,
 	}
-	
 
 	t.Run("Test CreateUser", func(t *testing.T) {
 		response := userColl.CreateUser(*testUser1)
@@ -69,15 +67,15 @@ func TestPostController(t *testing.T) {
 	})
 
 	testImage := &models.MediaDB{
-		Data:     "testImage",
+		Data: "testImage",
 	}
 
 	testSound := &models.MediaDB{
-		Data:     "testSound",
+		Data: "testSound",
 	}
 
 	testMediaInput := &models.MediaInput{
-		Data:     "testSound",
+		Data: "testSound",
 	}
 
 	t.Run("Test CreateMedia", func(t *testing.T) {
@@ -92,19 +90,15 @@ func TestPostController(t *testing.T) {
 		testSound.Id = response.Data.(string)
 	})
 
-
 	testBird1 := &models.BirdDB{
-		Name: "test Bird 1",
+		Name:        "test Bird 1",
 		Description: "Cool test bird",
-		ImageId: testImage.Id,
-		SoundId: testSound.Id,
-
+		SoundId:     testSound.Id,
 	}
 	testBird2 := &models.BirdDB{
-		Name: "test Bird 2",
+		Name:        "test Bird 2",
 		Description: "Rad test bird",
-		ImageId: testImage.Id,
-		SoundId: testSound.Id,
+		SoundId:     testSound.Id,
 	}
 
 	t.Run("Test CreateBirds", func(t *testing.T) {
@@ -120,23 +114,23 @@ func TestPostController(t *testing.T) {
 	})
 
 	testPost1 := &models.PostDB{
-		BirdId: testBird1.Id,
+		BirdId:   testBird1.Id,
 		Location: "place 1",
 		Accuracy: 0.5,
 	}
 
 	testPost2 := &models.PostDB{
-		BirdId: testBird2.Id,
+		BirdId:   testBird2.Id,
 		Location: "place 2",
 		Accuracy: 0.9,
 	}
 
 	t.Run("Test CreatePost", func(t *testing.T) {
 		postCreation := &models.PostCreation{
-			BirdId: testPost1.BirdId,
+			BirdId:   testPost1.BirdId,
 			Location: testPost1.Location,
 			Accuracy: testPost1.Accuracy,
-			Media: *testMediaInput,
+			Media:    *testMediaInput,
 		}
 		response := contr.CCreatePost(testUser1.Id, postCreation)
 		require.False(t, utils.IsTypeError(response))
@@ -145,10 +139,10 @@ func TestPostController(t *testing.T) {
 		testPost1.MediaId = response.Data.(*models.PostOutput).UserMedia.Id
 
 		postCreation = &models.PostCreation{
-			BirdId: testPost2.BirdId,
+			BirdId:   testPost2.BirdId,
 			Location: testPost2.Location,
 			Accuracy: testPost2.Accuracy,
-			Media: *testMediaInput,
+			Media:    *testMediaInput,
 		}
 		response = contr.CCreatePost(testUser2.Id, postCreation)
 		require.False(t, utils.IsTypeError(response))
@@ -200,11 +194,10 @@ func TestPostController(t *testing.T) {
 		require.Equal(t, 0, len(response.Data.([]*models.PostOutput)))
 	})
 
-
 	t.Run("Test UpdatePost", func(t *testing.T) {
 		updatePost := &models.PostInput{
 			Location: "updated place",
-			Comment: "updated comment",
+			Comment:  "updated comment",
 		}
 
 		response := contr.CUpdatePost(testPost1.Id, updatePost)

@@ -1,9 +1,9 @@
 package models
 
 type AnalyzeResponse struct {
-	AiBird    AIBird      `json:"aiBird" form:"aiBird"`
-	BirdId    string      `json:"birdId" form:"birdId"`
-	UserMedia MediaOutput `json:"userMedia" form:"userMedia"`
+	AiBird      AIBird `json:"aiBird" form:"aiBird"`
+	BirdId      string `json:"birdId" form:"birdId"`
+	Description string `json:"description" form:"description"`
 }
 
 type AIList struct {

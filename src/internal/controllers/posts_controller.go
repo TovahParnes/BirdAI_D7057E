@@ -29,8 +29,8 @@ func (c *Controller) CListPosts(set int, search string) models.Response {
 		return response
 	}
 
-	//TEMPORATY - restarting fiber changes the bird id, meaning listing posts will
-	//always from error that bird does not exisits
+	//TEMPORARY - restarting fiber changes the bird id, meaning listing posts will
+	//always from error that bird does not exist
 	for _, postsObject := range response.Data.([]models.PostDB) {
 		fmt.Println(postsObject.Id)
 	}
@@ -81,7 +81,7 @@ func (c *Controller) CCreatePost(userId string, post *models.PostCreation) model
 	}
 
 	media := &models.MediaDB{
-		Data:     post.Media.Data,
+		Data: post.Media.Data,
 	}
 	response := c.db.Media.CreateMedia(*media)
 	if utils.IsTypeError(response) {

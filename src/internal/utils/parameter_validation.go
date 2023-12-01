@@ -59,13 +59,8 @@ func IsValidBirdInput(bird *models.BirdInput) models.Response {
 	if bird.Description == "" {
 		return ErrorParams("Description is empty")
 	}
-	response := IsValidId(bird.ImageId)
-	if IsTypeError(response) {
-		return ErrorParams("Given image id is not a valid id")
-	}
-	response = IsValidId(bird.SoundId)
-	if IsTypeError(response) {
-		return ErrorParams("Given sound id is not a valid id")
+	if bird.SoundId == "" {
+		return ErrorParams("Sound is empty")
 	}
 	if containsSpecialCharacters(bird.Name) {
 		return ErrorParams("Name must not contain special characters")
@@ -82,13 +77,7 @@ func IsValidPostCreation(post *models.PostCreation) models.Response {
 	if IsTypeError(response) {
 		return ErrorParams("Given bird id is not a valid id")
 	}
-	if post.Location == "" {
-		return ErrorParams("Location is empty")
-	}
-	if post.Comment == "" {
-		return ErrorParams("Comment is empty")
-	}
-	if post.Accuracy <= 0 || post.Accuracy >= 1 {
+	if post.Accuracy < 0 || post.Accuracy > 1 {
 		return ErrorParams("Accuracy must be between 0 and 1")
 	}
 	return Response(nil)
