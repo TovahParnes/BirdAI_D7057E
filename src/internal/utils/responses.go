@@ -20,14 +20,6 @@ func CreationResponseToStatus(c *fiber.Ctx, response models.Response) error {
 	return c.Status(http.StatusCreated).JSON(response)
 }
 
-func UserCreationResponseToStatus(c *fiber.Ctx, response models.Response) error {
-	createdAt, _ := time.Parse(time.RFC3339, response.Data.(models.UserDB).CreatedAt)
-	if time.Since(createdAt) < 1*time.Second {
-		return c.Status(http.StatusCreated).JSON(response)
-	}
-	return c.Status(http.StatusOK).JSON(response)
-}
-
 func ResponseToStatus(c *fiber.Ctx, response models.Response) error {
 	if IsTypeError(response){
 		return c.Status(response.Data.(models.Err).StatusCode).JSON(response)

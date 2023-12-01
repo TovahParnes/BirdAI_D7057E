@@ -51,12 +51,10 @@ func TestBirdHandler(t *testing.T) {
 
 	testImage := &models.MediaDB{
 		Data:     "testImage",
-		FileType: "audio/mpeg",
 	}
 
 	testSound := &models.MediaDB{
 		Data:     "testSound",
-		FileType: "audio/mpeg",
 	}
 
 	t.Run("Test CreateMedia", func(t *testing.T) {
@@ -74,14 +72,12 @@ func TestBirdHandler(t *testing.T) {
 	testBird1 := &models.BirdDB{
 		Name: "test Bird 1",
 		Description: "Cool test bird",
-		ImageId: testImage.Id,
 		SoundId: testSound.Id,
 
 	}
 	testBird2 := &models.BirdDB{
 		Name: "test Bird 2",
 		Description: "Rad test bird",
-		ImageId: testImage.Id,
 		SoundId: testSound.Id,
 	}
 
