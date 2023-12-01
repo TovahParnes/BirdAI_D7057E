@@ -137,7 +137,7 @@ func (h *Handler) ListUsersFoundBirds(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	response = h.controller.CListUsersFoundBirds(userId, setInt)
+	response = h.controller.CListUsersFoundBirds(userId, setInt, search)
 	return utils.ResponseToStatus(c, response)
 }
 

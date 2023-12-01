@@ -259,6 +259,27 @@ func TestPostController(t *testing.T) {
 		require.IsType(t, &models.PostOutput{}, response.Data.([]*models.PostOutput)[0])
 	})
 
+	t.Run("Test ListUsersFoundBirds", func(t *testing.T) {
+		response := contr.CListUsersFoundBirds(testUser1.Id, 0, "")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 2, len(response.Data.([]*models.PostDB)))
+		require.IsType(t, &models.PostDB{}, response.Data.([]*models.PostDB)[0])
+
+		response = contr.CListUsersFoundBirds(testUser1.Id, 1, "")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 0, len(response.Data.([]*models.PostDB)))
+		
+		response = contr.CListUsersFoundBirds(testUser1.Id, 0, "aAa")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 1, len(response.Data.([]*models.PostDB)))
+		require.IsType(t, &models.PostDB{}, response.Data.([]*models.PostDB)[0])
+
+		response = contr.CListUsersFoundBirds(testUser1.Id, 0, "bird")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 0, len(response.Data.([]*models.PostDB)))
+
+	})
+
 	t.Run("Test UpdatePost", func(t *testing.T) {
 		updatePost := &models.PostInput{
 			Location: "updated place",
