@@ -59,7 +59,6 @@ export class TakenImagesPageComponent {
           this.getCurrentUserList().subscribe(
             (response: listOutput) => {
               this.userList.data = response.data;
-              console.log(this.userList.data);
             },err => { 
               console.error("Failed at getting user list:" + err); 
             }
@@ -82,13 +81,13 @@ export class TakenImagesPageComponent {
     this.activeSubMenuIndex = this.activeSubMenuIndex === index ? null : index;
   }
 
-  updateForm(postId: string, location: string, birdId: string){
+  updateForm(postId: string, location: string, comment: string,birdId: string){
     document.body.style.overflow = 'hidden';
     this.updateDetailsForm = this.formBuilder.group({
       postId: [{ value: postId}, Validators.required],
       birdId: [{ value: birdId}, Validators.required],
       location: [{ value: location, disabled: false } , Validators.required],
-      comment: [ '' , Validators.required],
+      comment: [ { value: comment, disabled: false } , Validators.required],
     });
     this.openForm = true;
   }
@@ -139,7 +138,12 @@ export class TakenImagesPageComponent {
     if(authKey){
       this.sendDelete(authKey,postId).subscribe(
         (response: DeleteResponse) => {
-          window.location.reload();
+          this.getCurrentUserList().subscribe(
+            (response: listOutput) => {
+              this.userList.data = [];
+              this.userList.data = response.data;
+            },err => {}
+          )
         },err => { 
           console.error("Failed at deleting post with id: "+ postId + " " + err); 
         }
@@ -160,27 +164,34 @@ export class TakenImagesPageComponent {
       let postId = this.updateDetailsForm.get('postId')?.value?.value;
       let birdId = this.updateDetailsForm.get('birdId')?.value?.value;
       let locat = this.updateDetailsForm.get('location')?.value ?? "unknown";
+      let comment = this.updateDetailsForm.get('comment')?.value ?? "unknown";
+
       
-      this.sendUpdate(authKey, postId, locat, birdId).subscribe(
+      this.sendUpdate(authKey, postId, locat, comment, birdId).subscribe(
         (response: UpdateResponse) => {
           this.openForm = false;
           document.body.style.overflow = 'auto';
-          window.location.reload();
-        },err => { 
+          this.getCurrentUserList().subscribe(
+            (response: listOutput) => {
+              this.userList.data = [];
+              this.userList.data = response.data;
+            },err => {}
+          )
+        },err => {
           console.error("Failed at updating post with id: "+ postId + " " + err); 
         }
       )
     }
   }
 
-  sendUpdate(token: string, postId: string, newPostValues: string, birdId: string){
+  sendUpdate(token: string, postId: string, location: string, comment: string, birdId: string){
     const header = {
       'Authorization': `Bearer ${token}`
     };
-    const location = newPostValues;
     const body = {
       "birdId": birdId,
-      location
+      "location": location,
+      "comment": comment
     }
     return this.http.patch<UpdateResponse>(environment.identifyRequestURL+"/posts/"+postId, body, { headers: header });
   }
