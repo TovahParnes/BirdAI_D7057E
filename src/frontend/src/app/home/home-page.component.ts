@@ -104,7 +104,6 @@ export class MainPageComponent implements OnInit {
     if(authKey){
     this.postImageForAnalysing(authKey).subscribe(
       (response: AnalyzeResponse) => {
-        console.log("analised:", response.data); //TABORT
         this.dataImg = this.selectedImage; //TABORT???????
         this.analyzed = response;
 
@@ -188,7 +187,6 @@ export class MainPageComponent implements OnInit {
         let location = this.postDetailsForm.get('location')?.value;
         let comment = this.postDetailsForm.get('comment')?.value;
 
-        console.log(location); //TABORT
         const postData = {
           'accuracy': this.convertAccuracy(this.analyzed.data[0].aiBird.accuracy),
           'birdId': this.analyzed.data[0].birdId,
@@ -200,8 +198,6 @@ export class MainPageComponent implements OnInit {
           }
         };
 
-        console.log("Send:", postData); //TABORT
-        console.log(environment.identifyRequestURL+"/posts",postData,{ headers: header }); //TABORT
         return this.http.post<PostData>(environment.identifyRequestURL+"/posts",postData,{ headers: header });
       } else {
         return null
@@ -213,7 +209,6 @@ export class MainPageComponent implements OnInit {
     if(authKey){
       this.sendPost(authKey)?.subscribe(
         (response: PostData) => {
-          console.log("Succesfully sent data"); //TABORT
           this.dataImg = this.selectedImage;
         },
         err => {
