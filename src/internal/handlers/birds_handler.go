@@ -33,8 +33,8 @@ func (h *Handler) GetBirdById(c *fiber.Ctx) error {
 
 // ListBirds is a function to get a set of all birds from database, with optional search parameters
 //
-// @Summary		List all birds of a specified set and seach parameters
-// @Description	List all birds of a specified set and seach parameters
+// @Summary		List all birds of a specified set and search parameters
+// @Description	List all birds of a specified set and search parameters
 // @Tags		Birds
 // @Accept		json
 // @Produce		json

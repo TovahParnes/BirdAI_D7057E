@@ -45,11 +45,16 @@ func (c *Controller) CListPosts(set int, search string) models.Response {
 	return utils.Response(posts)
 }
 
-func (c *Controller) CListUsersPosts(userId string, set int) models.Response {
-	filter := bson.M{"user_id": userId}
-
-
-
+func (c *Controller) CListUsersPosts(userId string, set int, search string) models.Response {
+	filter := bson.M{
+		"$and": []bson.M{
+			{"user_id": userId},
+			{"$or": []bson.M{
+				{"location": bson.M{"$regex": "(?i)"+search}}, 
+				{"comment": bson.M{"$regex": "(?i)"+search}},
+			}},
+		},
+	}
 
 	//birdColl := c.db.GetCollection(repositories.BirdColl)
 	response := c.db.Post.ListPosts(filter, set)

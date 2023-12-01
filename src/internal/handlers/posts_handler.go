@@ -98,7 +98,7 @@ func (h *Handler) ListUsersPosts(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	response = h.controller.CListUsersPosts(userId, setInt)
+	response = h.controller.CListUsersPosts(userId, setInt, search)
 	return utils.ResponseToStatus(c, response)
 }
 
