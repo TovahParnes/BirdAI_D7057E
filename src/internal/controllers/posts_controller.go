@@ -27,9 +27,8 @@ func (c *Controller) CListPosts(set int, search string) models.Response {
 	if search != "" {
 		filter = bson.M{
 			 "$or": [
-				bson.M{ "name": { "$regex": "^Da"} }, 
-				bson.M{ "name": { "$regex": "^Ali" }}
-]
+				bson.M{"name": { "$regex": "^Da"}}
+		]}
 
 			"$or": [
 				{"location": {"$regex": "(?i)"+search}},
