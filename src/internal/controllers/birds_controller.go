@@ -3,7 +3,6 @@ package controllers
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
-	"net/http"
 
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -48,25 +47,7 @@ func (c *Controller) CListBirds(set int, search string) models.Response {
 	return utils.Response(output)
 }
 
-func (c *Controller) CUpdateBird(id string, bird *models.BirdInput) (models.Response) {
-	media := c.db.Media.GetMediaById(bird.ImageId)
-	if utils.IsTypeError(media) {
-		if media.Data.(models.Err).StatusCode == http.StatusNotFound{
-			return utils.ErrorNotFoundInDatabase("Image with given id does not exist")
-		} else {
-		return media
-		}
-	}
-
-	media = c.db.Media.GetMediaById(bird.SoundId)
-	if utils.IsTypeError(media) {
-		if media.Data.(models.Err).StatusCode == http.StatusNotFound{
-			return utils.ErrorNotFoundInDatabase("Sound with given id does not exist")
-		} else {
-		return media
-		}
-	}
-	
+func (c *Controller) CUpdateBird(id string, bird *models.BirdInput) models.Response {
 	response := c.db.Bird.UpdateBird(id, *bird)
 	if utils.IsTypeError(response) {
 		return response
@@ -77,16 +58,9 @@ func (c *Controller) CUpdateBird(id string, bird *models.BirdInput) (models.Resp
 }
 
 func (c *Controller) CBirdDBToOutput(bird *models.BirdDB) models.Response {
-	imageResponse := c.db.Media.GetMediaById(bird.ImageId)
-	if utils.IsTypeError(imageResponse) {
-		return imageResponse
+	if bird.Description == "" {
+		return utils.ErrorParams("Description cannot be empty")
 	}
-	imageOutput := models.MediaDBToOutput(imageResponse.Data.(*models.MediaDB))
-	soundResponse := c.db.Media.GetMediaById(bird.SoundId)
-	if utils.IsTypeError(soundResponse) {
-		return soundResponse
-	}
-	soundOutput := models.MediaDBToOutput(soundResponse.Data.(*models.MediaDB))
-	birdOutput := models.BirdDBToOutput(bird, imageOutput, soundOutput)
+	birdOutput := models.BirdDBToOutput(bird)
 	return utils.Response(birdOutput)
 }

@@ -70,8 +70,27 @@ def process_image():
 
     utils.delete_folder(_prefix_path + _folder_name)
 
-    return jsonify({'message': 'Image successfully received and processed', 'label': _label, 'accuracy': float(top_three_probabilities[0])})
-
+    if len(top_three_labels) >= 3 and len(top_three_probabilities) >= 3:
+        return jsonify({
+            'birds': {
+                'bird1': {
+                    'guess1': {
+                        'label': top_three_labels[0],
+                        'accuracy': float(top_three_probabilities[0])
+                    },
+                    'guess2': {
+                        'label': top_three_labels[1],
+                        'accuracy': float(top_three_probabilities[1])
+                    },
+                    'guess3': {
+                        'label': top_three_labels[2],
+                        'accuracy': float(top_three_probabilities[2])
+                    }
+                }
+            }
+        })
+    else:
+        return jsonify("Failed to classify image ")
 
 def get_label_from_position(_position):
     # Load labels from a JSON file and retrieve the label associated with a given position.

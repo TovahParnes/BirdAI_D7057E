@@ -54,8 +54,8 @@ func (c *Controller) AiListToResponse(aiList models.AIList) []models.AnalyzeResp
 				Name:     ai.Name,
 				Accuracy: ai.Accuracy,
 			},
-			BirdId:    bird.Data.(*models.BirdOutput).Id,
-			UserMedia: bird.Data.(*models.BirdOutput).Image,
+			BirdId:      bird.Data.(*models.BirdOutput).Id,
+			Description: bird.Data.(*models.BirdOutput).Description,
 		})
 	}
 	return response

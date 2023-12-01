@@ -2732,9 +2732,6 @@ const docTemplate = `{
                 "description": {
                     "type": "string"
                 },
-                "imageId": {
-                    "type": "string"
-                },
                 "name": {
                     "type": "string"
                 },
@@ -2752,14 +2749,14 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
-                "image": {
-                    "$ref": "#/definitions/models.MediaOutput"
-                },
                 "name": {
                     "type": "string"
                 },
                 "sound": {
-                    "$ref": "#/definitions/models.MediaOutput"
+                    "type": "string"
+                },
+                "species": {
+                    "type": "boolean"
                 }
             }
         },
@@ -2818,6 +2815,35 @@ const docTemplate = `{
                 },
                 "media": {
                     "$ref": "#/definitions/models.MediaInput"
+                }
+            }
+        },
+        "models.PostDB": {
+            "type": "object",
+            "properties": {
+                "accuracy": {
+                    "type": "number"
+                },
+                "birdId": {
+                    "type": "string"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "mediaId": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
                 }
             }
         },

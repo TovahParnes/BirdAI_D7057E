@@ -64,7 +64,7 @@
         <div *ngIf="analyzed.data.length > 0">
           <div class="imageContainer">
             <img class="imagePreview" src="{{getLatestBird().image}}" width="100%">
-            <mat-progress-spinner class="accuracySpinner" [value]="convertAccuracy(analyzed.data[0].aiBird.accuracy)" style="width: 100px; height: 100px;"></mat-progress-spinner>
+            <mat-progress-spinner class="accuracySpinner" [value]="convertAccuracy(analyzed.data[0].aiBird.accuracy).toString()" style="width: 100px; height: 100px;"></mat-progress-spinner>
             <p class="accuracyText" color="primary">{{convertAccuracyToString(analyzed.data[0].aiBird.accuracy)}}</p>
           </div>
           <h2 class="textAlignment">{{analyzed.data[0].aiBird.name}}</h2>

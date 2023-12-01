@@ -33,7 +33,7 @@ services:
     image: sound_classification-image
     container_name: sound_classification
     depends_on:
-      - shared-requirements-image
+      - shared-requirements
     networks:
       ai_network:
         ipv4_address: 172.20.0.5

@@ -41,8 +41,6 @@ definitions:
     properties:
       description:
         type: string
-      imageId:
-        type: string
       name:
         type: string
       soundId:
@@ -54,12 +52,12 @@ definitions:
         type: string
       id:
         type: string
-      image:
-        $ref: '#/definitions/models.MediaOutput'
       name:
         type: string
       sound:
-        $ref: '#/definitions/models.MediaOutput'
+        type: string
+      species:
+        type: boolean
     type: object
   models.Err:
     properties:
@@ -98,6 +96,25 @@ definitions:
         type: string
       media:
         $ref: '#/definitions/models.MediaInput'
+    type: object
+  models.PostDB:
+    properties:
+      accuracy:
+        type: number
+      birdId:
+        type: string
+      comment:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      location:
+        type: string
+      mediaId:
+        type: string
+      userId:
+        type: string
     type: object
   models.PostInput:
     properties:

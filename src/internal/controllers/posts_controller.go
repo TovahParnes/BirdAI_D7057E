@@ -98,7 +98,7 @@ func (c *Controller) CCreatePost(userId string, post *models.PostCreation) model
 	}
 
 	media := &models.MediaDB{
-		Data:     post.Media.Data,
+		Data: post.Media.Data,
 	}
 	response := c.db.Media.CreateMedia(*media)
 	if utils.IsTypeError(response) {

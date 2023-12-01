@@ -39,14 +39,13 @@ func TestAccessController(t *testing.T) {
 	postColl.SetCollection(mi.GetCollection(repositories.PostColl))
 
 	db := repositories.RepositoryEndpoints{
-		User: userColl,
+		User:  userColl,
 		Admin: adminColl,
-		Bird: birdColl,
+		Bird:  birdColl,
 		Media: mediaColl,
-		Post: postColl,
+		Post:  postColl,
 	}
 	contr := controllers.NewController(db)
-
 
 	testUser1 := &models.UserDB{
 		Username: "test User 1",
@@ -112,15 +111,15 @@ func TestAccessController(t *testing.T) {
 	})
 
 	testImage := &models.MediaDB{
-		Data:     "testImage",
+		Data: "testImage",
 	}
 
 	testSound := &models.MediaDB{
-		Data:     "testSound",
+		Data: "testSound",
 	}
 
 	testMediaInput := &models.MediaInput{
-		Data:     "testSound",
+		Data: "testSound",
 	}
 
 	t.Run("Test CreateMedia", func(t *testing.T) {
@@ -135,13 +134,10 @@ func TestAccessController(t *testing.T) {
 		testSound.Id = response.Data.(string)
 	})
 
-
 	testBird1 := &models.BirdDB{
-		Name: "test Bird 1",
+		Name:        "test Bird 1",
 		Description: "Cool test bird",
-		ImageId: testImage.Id,
-		SoundId: testSound.Id,
-
+		SoundId:     testSound.Id,
 	}
 
 	t.Run("Test CreateBirds", func(t *testing.T) {
@@ -152,20 +148,20 @@ func TestAccessController(t *testing.T) {
 	})
 
 	testPost1 := &models.PostDB{
-		BirdId: testBird1.Id,
+		BirdId:   testBird1.Id,
 		Location: "place 1",
 	}
 
 	testPost2 := &models.PostDB{
-		BirdId: testBird1.Id,
+		BirdId:   testBird1.Id,
 		Location: "place 2",
 	}
 
 	t.Run("Test CreatePost", func(t *testing.T) {
 		postCreation := &models.PostCreation{
-			BirdId: testBird1.Id,
+			BirdId:   testBird1.Id,
 			Location: testPost1.Location,
-			Media: *testMediaInput,
+			Media:    *testMediaInput,
 		}
 
 		response := contr.CCreatePost(testUser1.Id, postCreation)
@@ -175,9 +171,9 @@ func TestAccessController(t *testing.T) {
 		testPost1.MediaId = response.Data.(*models.PostOutput).UserMedia.Id
 
 		postCreation = &models.PostCreation{
-			BirdId: testPost2.BirdId,
+			BirdId:   testPost2.BirdId,
 			Location: testPost2.Location,
-			Media: *testMediaInput,
+			Media:    *testMediaInput,
 		}
 
 		response = contr.CCreatePost(testUser3.Id, postCreation)
@@ -198,7 +194,7 @@ func TestAccessController(t *testing.T) {
 		response = contr.CIsAdmin(testUser3.Id)
 		require.True(t, utils.IsTypeError(response))
 		require.Equal(t, http.StatusForbidden, response.Data.(models.Err).StatusCode)
-		
+
 		response = contr.CIsAdmin("IncorrectID")
 		require.True(t, utils.IsTypeError(response))
 		require.Equal(t, http.StatusForbidden, response.Data.(models.Err).StatusCode)
@@ -216,7 +212,7 @@ func TestAccessController(t *testing.T) {
 		response = contr.CIsSuperAdmin(testUser3.Id)
 		require.True(t, utils.IsTypeError(response))
 		require.Equal(t, http.StatusForbidden, response.Data.(models.Err).StatusCode)
-		
+
 		response = contr.CIsSuperAdmin("IncorrectID")
 		require.True(t, utils.IsTypeError(response))
 		require.Equal(t, http.StatusForbidden, response.Data.(models.Err).StatusCode)
@@ -234,7 +230,7 @@ func TestAccessController(t *testing.T) {
 		response = contr.CIsPostsUser(testUser3.Id, testPost1.Id)
 		require.True(t, utils.IsTypeError(response))
 		require.Equal(t, http.StatusForbidden, response.Data.(models.Err).StatusCode)
-		
+
 		response = contr.CIsPostsUser("IncorrectID", testPost1.Id)
 		require.True(t, utils.IsTypeError(response))
 		require.Equal(t, http.StatusForbidden, response.Data.(models.Err).StatusCode)

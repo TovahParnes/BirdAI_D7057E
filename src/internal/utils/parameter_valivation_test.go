@@ -10,7 +10,7 @@ import (
 )
 
 func TestParameterValidation(t *testing.T) {
-	
+
 	t.Run("Test IsValidId", func(t *testing.T) {
 		response := utils.IsValidId("5f9d3b3b9d3b3b9d3b3b9d3b")
 		require.False(t, utils.IsTypeError(response))
@@ -29,7 +29,7 @@ func TestParameterValidation(t *testing.T) {
 		response = utils.IsValidSet(&str)
 		require.True(t, utils.IsTypeError(response))
 		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
-		
+
 		str = ""
 		response = utils.IsValidSet(&str)
 		require.False(t, utils.IsTypeError(response))
@@ -94,7 +94,6 @@ func TestParameterValidation(t *testing.T) {
 		bird := &models.BirdInput{
 			Name:        "bird",
 			Description: "bird",
-			ImageId:     "5f9d3b3b9d3b3b9d3b3b9d3b",
 			SoundId:     "5f9d3b3b9d3b3b9d3b3b9d3b",
 		}
 		response := utils.IsValidBirdInput(bird)
@@ -111,33 +110,21 @@ func TestParameterValidation(t *testing.T) {
 		require.True(t, utils.IsTypeError(response))
 		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
 
-		bird.Description = "bird"
-		bird.ImageId = "1234"
-		response = utils.IsValidBirdInput(bird)
-		require.True(t, utils.IsTypeError(response))
-		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
-
-		bird.ImageId = "5f9d3b3b9d3b3b9d3b3b9d3b"
-		bird.SoundId = "1234"
-		response = utils.IsValidBirdInput(bird)
-		require.True(t, utils.IsTypeError(response))
-		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
-
 		bird.SoundId = "5f9d3b3b9d3b3b9d3b3b9d3b"
 		bird.Name = "bird!"
 		response = utils.IsValidBirdInput(bird)
 		require.True(t, utils.IsTypeError(response))
-		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)	
+		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
 	})
 
 	t.Run("Test IsValidMediaInput", func(t *testing.T) {
-		})
+	})
 
 	t.Run("Test IsValidPostCreation", func(t *testing.T) {
 		post := &models.PostCreation{
-			BirdId: "5f9d3b3b9d3b3b9d3b3b9d3b",
+			BirdId:   "5f9d3b3b9d3b3b9d3b3b9d3b",
 			Location: "location",
-			Comment: "comment",
+			Comment:  "comment",
 			Accuracy: 0.5,
 		}
 		response := utils.IsValidPostCreation(post)
@@ -174,7 +161,7 @@ func TestParameterValidation(t *testing.T) {
 	t.Run("Test IsValidPostInput", func(t *testing.T) {
 		post := &models.PostInput{
 			Location: "location",
-			Comment: "comment",
+			Comment:  "comment",
 		}
 		response := utils.IsValidPostInput(post)
 		require.False(t, utils.IsTypeError(response))
@@ -183,19 +170,19 @@ func TestParameterValidation(t *testing.T) {
 		response = utils.IsValidPostInput(post)
 		require.True(t, utils.IsTypeError(response))
 		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
-	
+
 		post.Location = "location"
 		post.Comment = ""
 		response = utils.IsValidPostInput(post)
 		require.True(t, utils.IsTypeError(response))
 		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
-	
+
 	})
 
 	t.Run("Test IsValidUserInput", func(t *testing.T) {
 		user := &models.UserInput{
 			Username: "username",
-			Active: true,
+			Active:   true,
 		}
 		response := utils.IsValidUserInput(user)
 		require.False(t, utils.IsTypeError(response))
