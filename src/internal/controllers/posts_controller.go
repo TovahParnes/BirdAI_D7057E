@@ -3,7 +3,6 @@ package controllers
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
-	"fmt"
 	"net/http"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -22,36 +21,17 @@ func (c *Controller) CGetPostById(id string) models.Response {
 }
 
 func (c *Controller) CListPosts(set int, search string) models.Response {
-	filter := bson.M{}
-	
-	if search != "" {
-		filter = bson.M{
-			 "$or": [
-				bson.M{"name": { "$regex": "^Da"}}
-		]}
+	filter := bson.M{
+		"$or": []bson.M{
+			{"location": bson.M{"$regex": "(?i)"+search}}, 
+			{"comment": bson.M{"$regex": "(?i)"+search}},
+	}}
 
-			"$or": [
-				{"location": {"$regex": "(?i)"+search}},
-				bson.M{"comment": bson.M{"$regex": "(?i)"+search}},
-			]
-			
-			bson.M{
-				"location": bson.M{"$regex": "(?i)"+search},
-				"comment": bson.M{"$regex": "(?i)"+search},
-			},
-		}
-	}
 	response := c.db.Post.ListPosts(filter, set)
 	posts := []*models.PostOutput{}
-
+	
 	if utils.IsTypeError(response) {
 		return response
-	}
-
-	//TEMPORATY - restarting fiber changes the bird id, meaning listing posts will
-	//always from error that bird does not exisits
-	for _, postsObject := range response.Data.([]models.PostDB) {
-		fmt.Println(postsObject.Id)
 	}
 
 	for _, postsObject := range response.Data.([]models.PostDB) {
@@ -67,6 +47,10 @@ func (c *Controller) CListPosts(set int, search string) models.Response {
 
 func (c *Controller) CListUsersPosts(userId string, set int) models.Response {
 	filter := bson.M{"user_id": userId}
+
+
+
+
 	//birdColl := c.db.GetCollection(repositories.BirdColl)
 	response := c.db.Post.ListPosts(filter, set)
 	output := []*models.PostOutput{}
