@@ -9,7 +9,7 @@ interface BirdData {
         "accuracy": Number;
     };
     "birdId": string;
-    "userMedia": Media;
+    "description":string;
 }
 
 interface Media {
@@ -26,7 +26,7 @@ export interface UserResponse {
 export interface LoginUser {
     "_id": string,
     "active": boolean
-    "authId": string,
+    "token": string,
     "createdAt": string,
     "username": string,
 }
@@ -58,8 +58,9 @@ interface Bird {
     "Id": string,
     "Name": string,
     "Description": string,
-    "Image": Media,
-    "Sound": Media,
+    "Sound": string,
+    "species": Boolean,
+    "Image": string
 }
 
 export interface PostData {

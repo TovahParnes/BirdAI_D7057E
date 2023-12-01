@@ -9,7 +9,7 @@
 
 <div *ngFor="let item of userList.data.slice().reverse(); let i = index">
   <p></p>
-    <mat-card class="resultCard" (click)="navigateToSpecies(item.userMedia.data, item.bird.Name, parseDate(item.createdAt), item.bird.Description)">
+    <mat-card class="resultCard" (click)="navigateToSpecies(item.userMedia.data, item.bird.Name, item.bird.Sound , item.bird.Description, item.bird.species)">
       <div class="imageContainer">
         <img class="imagePreview" [src]=item.userMedia.data alt="Duck" width="100%">
         <button class="more-button" (click)="toggleSubMenu(i, $event)" tabindex="0">

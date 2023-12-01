@@ -33,13 +33,13 @@ export class LoginComponent {
   }
 
   login(): void {
-    // this.router.navigate(['mainpage']);
+    //this.router.navigate(['mainpage']);
     this.postLoggedInUser()
     .subscribe(
       (userResponse: UserResponse) => {
         console.log("logged in");
         console.log(userResponse);
-        localStorage.setItem("auth",userResponse.data.authId);
+        localStorage.setItem("auth",userResponse.data.token);
         console.log(localStorage.getItem("auth"));
         this.router.navigate(['mainpage']);
       },

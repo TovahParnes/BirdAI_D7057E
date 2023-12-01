@@ -24,3 +24,9 @@ button {
 button:hover {
     filter: brightness(70%);
 }
+
+@media (max-width: 600px){
+    .card{
+        max-width: 95%;
+    }
+}

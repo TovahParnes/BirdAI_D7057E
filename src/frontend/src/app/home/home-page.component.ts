@@ -6,7 +6,8 @@ import {AppComponent} from '../app.component';
 import {FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {environment} from 'src/environments/environment';
-import {Observable} from 'rxjs';
+import {Observable, catchError} from 'rxjs';
+import { WikiPageSegment, WikiSummary, WikirestService } from '../services/wiki.service';
 
 @Component({
   selector: 'app-home-page',
@@ -38,7 +39,8 @@ export class MainPageComponent implements OnInit {
     public mainApp: AppComponent,
     public socialAuthService: SocialAuthService,
     private formBuilder: FormBuilder,
-    private http: HttpClient,) {
+    private http: HttpClient,
+    private wikiRest: WikirestService) {
   }
 
   ngOnInit() {
@@ -117,9 +119,9 @@ export class MainPageComponent implements OnInit {
           this.isLoading = false;
           this.addNewBird(
             this.analyzed.data[0].aiBird.name,
-            this.analyzed.data[0].userMedia.data,
+            this.analyzed.data[0].description,
             this.analyzed.data[0].aiBird.accuracy
-          );
+              );
         }
       },
       err => {
@@ -135,6 +137,9 @@ export class MainPageComponent implements OnInit {
   addNewBird(name: string, imageUrl: string, accuracy: Number){
     const newitem = {"title": name, "image": imageUrl, "accuracy": accuracy}
     this.analyzedBirdList.birds.push(newitem);
+    const len = this.analyzedBirdList.birds.length - 1;
+    const wikiLink = this.getWikiLinkTitle(len);
+    this.setDataImageToWikiImage(wikiLink,len);
   }
 
   getLatestBird(){
@@ -223,19 +228,25 @@ export class MainPageComponent implements OnInit {
     document.body.style.overflow = 'auto';
   }
 
-  async getCurrentAdmin(){
+  getCurrentAdmin(){
+    try{
     const authKey = localStorage.getItem("auth");
     if(authKey){
-      (await this.sendGetCurrentAdmin(authKey)).subscribe(
+      this.sendGetCurrentAdmin(authKey).pipe(
+        catchError((error: any) => {
+          return [];
+        })
+      ).subscribe(
         (response: AdminResponse) => {
-          console.log(response)
           localStorage.setItem("currentAdmin",response.data.user._id);
         }
       )
     }
+  }catch(error){
+  }
   }
 
-  async sendGetCurrentAdmin(token:string){
+  sendGetCurrentAdmin(token:string){
     const header = {
       'Authorization': `Bearer ${token}`
     };
@@ -256,6 +267,26 @@ getCurrentUser(token: string){
     'Authorization': `Bearer ${token}`
   };
   return this.http.get<UserResponse>(environment.identifyRequestURL+"/users/me",{ headers: header });
+}
+
+getWikiLinkTitle(index:number){
+  let cutOffIndex = this.analyzedBirdList.birds[index].image.indexOf('wiki/');
+  let cutString = this.analyzedBirdList.birds[index].image.substring(cutOffIndex + 'wiki/'.length)
+  return cutString;
+}
+
+async setDataImageToWikiImage(wikiTitle:string,index:number){
+  this.wikiRest.getWiki(wikiTitle).subscribe(data => {
+    if(data.extract){
+    //this.wikiData = data;
+    if(data.originalimage?.source){
+      this.analyzedBirdList.birds[index].image = data.originalimage?.source;
+      this.analyzedBirdList.birds[index].image = data.originalimage?.source;
+    }
+    }
+  }, err => { console.log('something went wrong' + err)
+}); 
+
 }
   
 }

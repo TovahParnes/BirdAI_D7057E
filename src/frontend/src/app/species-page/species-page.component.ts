@@ -4,6 +4,7 @@ import {Router, ActivatedRoute} from '@angular/router';
 import { AppComponent } from '../app.component';
 import { HttpClient } from '@angular/common/http';
 import { Location } from '@angular/common';
+import { WikiImages, WikiPageSegment, WikiSummary, WikirestService } from '../services/wiki.service';
 
 interface ApiResponse {
   data: {  
@@ -27,8 +28,13 @@ export class SpeciesPageComponent implements AfterViewInit{
   imageName!: string;
   imageDate!: string;
   imageDesc!: string;
+  imageSound!: string;
+  imageGenus!: Boolean;
   responseData: ApiResponse | null = null;
   images: string[] = [];
+  wikiData: WikiSummary = new WikiSummary;
+  wikiContent: WikiPageSegment = new WikiPageSegment;
+  wikiImages: string = "";
 
   constructor(
     private router: Router,
@@ -38,6 +44,7 @@ export class SpeciesPageComponent implements AfterViewInit{
     private http: HttpClient,
     private route: ActivatedRoute,
     private location: Location,
+    private wikiRest: WikirestService,
     ) {
 
   }
@@ -45,9 +52,10 @@ export class SpeciesPageComponent implements AfterViewInit{
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.imageId = decodeURIComponent(params['imageId']);
-      this.imageName = decodeURIComponent(params['imageName'])
-      this.imageDate = decodeURIComponent(params['imageDate'])
-      this.imageDesc = decodeURIComponent(params['imageDesc'])
+      this.imageName = decodeURIComponent(params['imageName']);
+      this.imageSound = decodeURIComponent(params['imageSound']);
+      this.imageDesc = decodeURIComponent(params['imageDesc']);
+      this.imageGenus = params['imageGenus'];
         if (this.imageDate == "undefined"){
           this.imageDate = "Not Found Yet"
         }
@@ -57,6 +65,8 @@ export class SpeciesPageComponent implements AfterViewInit{
         this.imageId,
       ];
     });
+    this.getWikiData(this.getWikiLinkTitle());
+    this.getWikiImage(this.getWikiLinkTitle());
   }
 
   currentImageIndex = 0;
@@ -90,6 +100,32 @@ export class SpeciesPageComponent implements AfterViewInit{
 
   goBack(): void {
     this.location.back();
+  }
+
+  getWikiLinkTitle(){
+    let cutOffIndex = this.imageDesc.indexOf('wiki/');
+    let cutString = this.imageDesc.substring(cutOffIndex + 'wiki/'.length)
+    return cutString;
+  }
+
+  getWikiData(wikiTitle:string){
+    this.wikiRest.getWiki(wikiTitle).subscribe(data => {
+      if(data.extract){
+      this.wikiData = data;
+      }
+    }, err => { console.log('something went wrong' + err)
+  }); 
+  
+  }
+
+  getWikiImage(wikiTitle:string){
+    this.wikiRest.getWikiImages(wikiTitle).subscribe((data: WikiImages) => {
+      for(let i=0;i<= data.items.length;i++){
+        if(data.items[i].title.includes('map')){
+          this.wikiImages = data.items[i].srcset[0].src;
+        }
+      }
+    })
   }
 
 }

@@ -1,4 +1,4 @@
-<div class="navbar" *ngIf="socialAuthService.authState | async as socialUser">
+<div class="navbar">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
   
     <div class="nav-logo">
@@ -32,7 +32,7 @@
 
     </div>
   
-    <div class="profile">
+    <div class="profile" *ngIf="socialAuthService.authState | async as socialUser">
       <button class="profile-button" tabindex="0">
         <img src="{{socialUser.photoUrl}}" width="40px" height="40px" style="border-radius: 50%;">
       </button> 

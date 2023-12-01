@@ -1,7 +1,7 @@
 <div class="container2">
 
-    
-        <div class="logo-container2">
+    <div class="phoneScaling">
+        <div class="logo-container2" style="height: 100%;">
             <img src="assets/birdAI-logo.svg" class="logo">  
 
             
@@ -38,6 +38,7 @@
             </div>
 
         </div>
+    </div>
 
         <div class="items-container">
 
@@ -49,7 +50,7 @@
 
             <p style="height: 30px;"></p>
 
-            <p>Login to your google account</p>
+            <p>Login with your google account</p>
 
             <div class="content-element" style="font-family: sans-serif;"> 
                 <div *ngIf="!triedLogIn && mainApp.user">
@@ -57,49 +58,9 @@
                 </div>
             
                 <div class="login-button">
-                    <asl-google-signin-button *ngIf="!mainApp.user" type='standard' size='medium' theme="filled_black"></asl-google-signin-button>
-                </div>           
-                <!-- <button class="sign-up-with-google-button" (click)="navigateToLogin()" style="background-image: url('assets/loginbutton.png');"></button> -->
+                    <asl-google-signin-button *ngIf="!mainApp.user" type='standard' size='medium' theme="filled_black" locale="en"></asl-google-signin-button>
+                </div>         
             </div>
-
-            
-            <!-- <p style="height: 30px;"></p>
-            <hr class="solid-line"> -->
-            
-
-            <!-- <div class="image-row">
-                <div class="image">
-                    <img src="assets/promo.png" [style.width.px]="imgsize" [style.height.px]="imgsize">
-                    <div class="text-container">
-                        Take a picture of any bird
-                    </div>
-                    
-
-                </div>
-
-                <mat-icon style="margin-top: -10%;">navigate_next</mat-icon>
-
-                <div class="image">
-
-                    <img src="assets/upload.png" [style.width.px]="imgsize" [style.height.px]="imgsize">
-                    <div class="text-container"> 
-                        Upload it to the BirdAI
-                    </div>
-                   
-
-                </div>
-
-                <mat-icon style="margin-top: -10%;">navigate_next</mat-icon>
-
-                <div class="image">
-
-                    <img src="assets/chartbird.png" [style.width.px]="imgsize" [style.height.px]="imgsize">
-                    <div class="text-container">
-                        Get back an identification and many other interesting facts
-                    </div>
-                </div>
-                
-            </div> -->
 
         </div>
         
