@@ -16,9 +16,9 @@ def load_images_paths(path):
 def predict_image(image, rotations):
     all_bird_data = []
     rotated_images = rotate_image(image, rotations, _multiple_images=False)
-    for img in rotated_images:
+    for img in rotated_images:      # If rotation == 0 it won't loop
         results = model.predict(source=img, name="prediction")
-
+        print(results[0].boxes.data)
         for index in range(0, len(results[0].boxes.data)):
             # IS IT A BIRD?
             if (results[0].boxes.data[index][5] == 14):
@@ -29,11 +29,10 @@ def predict_image(image, rotations):
                 th = torch.ceil(results[0].boxes.data[index][3]).item()
                 score = results[0].boxes.data[index][4].item()
 
+                # Extracts the bird box and makes it a separate image
                 boxes = results[0].boxes.cpu().numpy()
-                for box in boxes:  # iterate boxes
-                    edges = box.xyxy[0].astype(int)  # get corner points as int
-                    box_image = image.crop(edges)
-                    #box_image.show()
+                edges = boxes[index].xyxy[0].astype(int)  # get corner points as int
+                box_image = image.crop(edges)
 
                 bird_data = [box_image, tx, ty, tw, th, score]
 
@@ -126,8 +125,11 @@ def delete_images(path):
             shutil.rmtree(item_path)
 
 def run_classification(_image):
-    prediction_results = predict_image(_image, rotations=0)     #prediction_results[Bird index][0 = image, 5 = accuracy]
-    _res_image = crop_images(prediction_results[0][0], target_size=(224, 224)) # We send the first bird box image
+    # prediction_results[Bird index][0 = image, 5 = accuracy]
+    prediction_results = predict_image(_image, rotations=0)
+
+    # The bird with the highest accuracy is always first in the array, so we use that as input
+    _res_image = crop_images(prediction_results[0][0], target_size=(224, 224))
     if _res_image:
         return _res_image
     else:

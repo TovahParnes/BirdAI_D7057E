@@ -1,23 +1,93 @@
-div.gallery {
-  margin: 5px;
-  width: 180px;
-  text-align: center;
-  margin: 0 auto;
-  width: 100%;
-  
-}
-
-div.gallery:hover {
-  border: 1px solid #777;
-}
-
-div.gallery img {
-  width: 100%;
-  height: auto;
-}
-
-div.desc {
-  padding: 15px;
+.alignment {
   text-align: left;
-  color: white;
+  display: flex;
+  justify-content: space-between;
+}
+
+.resultCard {
+  margin: 0 auto;
+  max-width: 50%;
+  border-radius: 7px;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.16);
+  cursor: pointer;
+}
+
+.imageContainer {
+  position: relative;
+}
+
+.imagePreview {
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+}
+
+.textAlignment {
+  margin-top: 3px;
+  margin-left: 3px;
+  margin-right: 3px;
+  margin-bottom: 5px;
+}
+
+.more-button{
+  position: absolute;
+  border: none;
+  color: rgb(255, 255, 255);
+  background-color: #00000000;
+  height: 50px;
+  width: 80px;
+  cursor: pointer;
+  top: 0px;
+  right: 0px;
+  font-variation-settings:'FILL' 0,'wght' 700,'GRAD' 0,'opsz' 24;
+}
+
+.sub-menu {
+  display: none;
+  position: absolute;
+  top: 6%;
+  right: 1%;
+  background-color: #424242;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25); 
+  z-index: 2;
+  border-radius: 7px;
+  list-style: none;
+  padding: 0;
+  flex-direction: column;
+}
+
+.sub-menu-button {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 2px;
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.16);
+}
+
+.sub-menu.visible {
+  display: block;
+}
+
+.textarea {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 30%;
+  resize: none;
+  font-family: "Arial", sans-serif;
+}
+
+.form-container {
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
+.form-group {
+  width: 100%;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.form-group-double {
+  grid-column: span 2;
 }

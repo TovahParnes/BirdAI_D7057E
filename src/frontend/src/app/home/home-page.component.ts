@@ -1,12 +1,12 @@
-import {Component, OnInit } from '@angular/core';
-import {SocialAuthService } from '@abacritt/angularx-social-login';
+import {Component, OnInit} from '@angular/core';
+import {SocialAuthService} from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
-import {AnalyzeResponse, PostData, AnalyzedBird, UserBirdList} from 'src/assets/components/components';
+import {AnalyzeResponse, PostData, AnalyzedBird, UserBirdList, AdminResponse, UserResponse} from 'src/assets/components/components';
 import {AppComponent} from '../app.component';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
-import { Observable } from 'rxjs';
+import {FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
+import {HttpClient} from '@angular/common/http';
+import {environment} from 'src/environments/environment';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-home-page',
@@ -14,12 +14,14 @@ import { Observable } from 'rxjs';
   styleUrls: ['./home-page.component.css'],
 })
 
+
 export class MainPageComponent implements OnInit {
 
-  isLinear = false;
   form!: FormGroup;
+  postDetailsForm!: FormGroup;
   selectedImage: any;
   isLoading: boolean = false;
+  createPostForm: boolean = false;
   latestAnalyzedBird!: AnalyzedBird
   analyzedBirdList: UserBirdList = {
     birds: []
@@ -27,7 +29,7 @@ export class MainPageComponent implements OnInit {
   data: any;
   dataImg: any;
   analyzed: AnalyzeResponse | null = null;
-  togglePostView = true;
+  togglePostView = false;
   toggleConfirmView = false;
   fileFormat = "";
 
@@ -36,18 +38,35 @@ export class MainPageComponent implements OnInit {
     public mainApp: AppComponent,
     public socialAuthService: SocialAuthService,
     private formBuilder: FormBuilder,
-    private http: HttpClient) {
-  }
-
-  convertAccuracy(accuracy: string){
-    return (Number(accuracy) * 100).toString()+"%";
+    private http: HttpClient,) {
   }
 
   ngOnInit() {
+    this.getUserMe();
+    this.getCurrentAdmin();
     this.form = this.formBuilder.group({
       option: new FormControl(),
     });
-    console.log(localStorage.getItem("auth"));
+    this.postDetailsForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      accuracy: ['', Validators.required],
+      location: ['', Validators.required],
+      comment: ['', Validators.required],
+    });
+  }
+
+  round(value: Number, precision: Number) {
+    var multiplier = Math.pow(10, precision.valueOf() || 0);
+    return Math.round(value.valueOf() * multiplier) / multiplier;
+}
+  
+  convertAccuracy(accuracy: Number): Number {
+    const newAccuracy = (accuracy.valueOf() * 100);
+    return this.round(newAccuracy, 1);
+  }
+
+  convertAccuracyToString(accuracy: Number): string {
+    return this.convertAccuracy(accuracy).toString()+"%";
   }
 
   onFileSelected(event: any) {
@@ -58,7 +77,6 @@ export class MainPageComponent implements OnInit {
       reader.onload = (e) => {
         this.selectedImage = reader.result;
         const dataUrl = this.selectedImage as string;
-        console.log(dataUrl)
         const fileFormat = dataUrl.substring(dataUrl.indexOf('/') + 1, dataUrl.indexOf(';'));
         this.fileFormat = fileFormat
       };
@@ -69,11 +87,14 @@ export class MainPageComponent implements OnInit {
     this.selectedImage = null;
   }
 
-  postImage(token: string): Observable<AnalyzeResponse> {
+  postImageForAnalysing(token: string): Observable<AnalyzeResponse> {
     const header = {
       'Authorization': `Bearer ${token}`
     };
-    const body = {'data': `${this.selectedImage}`, 'fileType': this.fileFormat};
+    const body = {
+      'data': `${this.selectedImage}`,
+      'fileType': this.fileFormat
+    };
     return this.http.post<AnalyzeResponse>(environment.identifyRequestURL+"/ai/inputimage", body, { headers: header });
   }
 
@@ -81,32 +102,37 @@ export class MainPageComponent implements OnInit {
     this.isLoading = true;
     const authKey = localStorage.getItem("auth");
     if(authKey){
-    this.postImage(authKey).subscribe(
+    this.postImageForAnalysing(authKey).subscribe(
       (response: AnalyzeResponse) => {
-        console.log("Succesfully sent data");
-        console.log(response.data);
-        this.form.reset();
-        this.dataImg = this.selectedImage;
-        this.selectedImage = null;
-        el.scrollIntoView();
+        this.dataImg = this.selectedImage; //TABORT???????
         this.analyzed = response;
+
+        // No birds found
         if (this.analyzed.data.length == 0) {
-          console.log("No birds found");
+          this.isLoading = false;
         }
+
+        // Bird found
         else {
-          this.addNewBird(this.analyzed.data[0].aiBird.name, this.analyzed.data[0].userMedia.data, this.analyzed.data[0].aiBird.accuracy);
+          this.isLoading = false;
+          this.addNewBird(
+            this.analyzed.data[0].aiBird.name,
+            this.analyzed.data[0].userMedia.data,
+            this.analyzed.data[0].aiBird.accuracy
+          );
         }
       },
       err => {
+        this.isLoading = false;
         console.error("Failed at sending data:" + err);
       }
     );
-    this.isLoading = false;
     this.togglePostView = true;
+    el.scrollIntoView();
     }
   }
 
-  addNewBird(name: string, imageUrl:string, accuracy:string){
+  addNewBird(name: string, imageUrl: string, accuracy: Number){
     const newitem = {"title": name, "image": imageUrl, "accuracy": accuracy}
     this.analyzedBirdList.birds.push(newitem);
   }
@@ -116,23 +142,64 @@ export class MainPageComponent implements OnInit {
     return(this.analyzedBirdList.birds[len]);
   }
 
-  togglePreview(){
-    if(this.togglePostView){
-      this.togglePostView = false;
-    }else{
-      this.togglePostView = true;
+  getCurrentDateAndTime() {
+    const dateTime = new Date();
+    return dateTime.toLocaleString();
+  }
+
+  resetForm(){
+    this.form.reset();
+    this.postDetailsForm.reset();
+    this.analyzed = null;
+    this.togglePostView = false;
+    this.selectedImage = null;
+    setTimeout(function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
+  }
+  
+  openPostForm(){
+    if (this.analyzed){
+      document.body.style.overflow = 'hidden';
+      this.postDetailsForm = this.formBuilder.group({
+        name: [{ value: this.analyzed.data[0].aiBird.name, disabled: true }, Validators.required],
+        accuracy: [{ value: this.convertAccuracyToString(this.analyzed.data[0].aiBird.accuracy), disabled: true }, Validators.required],
+        date: [{ value: this.getCurrentDateAndTime(), disabled: true }, Validators.required],
+        location: [ '' , Validators.required],
+        comment: [ '' , Validators.required],
+      });
+      this.createPostForm = true;
     }
+  }
+
+  closePostForm(){
+    document.body.style.overflow = 'auto';
+    this.createPostForm = false;
+    this.postDetailsForm.reset();
   }
 
   sendPost(token:string) {
       if (this.analyzed){
-      const header = {
-        'Authorization': `Bearer ${token}`
-      };
-      const postData = {'_id': "no", 'birdId': this.analyzed.data[0].birdId,'location': "no", "media":{'data':this.dataImg, 'filetype': this.fileFormat }};
-      console.log(postData);
-      return this.http.post<PostData>(environment.identifyRequestURL+"/posts",postData,{ headers: header });
-      }else{
+        const header = {
+          'Authorization': `Bearer ${token}`
+        };
+
+        let location = this.postDetailsForm.get('location')?.value;
+        let comment = this.postDetailsForm.get('comment')?.value;
+
+        const postData = {
+          'accuracy': this.convertAccuracy(this.analyzed.data[0].aiBird.accuracy),
+          'birdId': this.analyzed.data[0].birdId,
+          'comment': comment,
+          'location': location,
+          "media":{
+            'data': this.selectedImage,
+            'filetype': this.fileFormat
+          }
+        };
+
+        return this.http.post<PostData>(environment.identifyRequestURL+"/posts",postData,{ headers: header });
+      } else {
         return null
       }
   }
@@ -140,20 +207,55 @@ export class MainPageComponent implements OnInit {
   createPost(){
     const authKey = localStorage.getItem("auth");
     if(authKey){
-    this.sendPost(authKey)?.subscribe(
-      (response: PostData) => {
-        console.log("Succesfully sent data");
-        console.log(response);
-        this.form.reset();
-        this.dataImg = this.selectedImage;
-        this.selectedImage = null;
-        this.togglePreview();
-        this.toggleConfirmView = true;
-      },
-      err => {
-        console.error("Failed at sending data:" + err);
-      }
-    );
+      this.sendPost(authKey)?.subscribe(
+        (response: PostData) => {
+          this.dataImg = this.selectedImage;
+        },
+        err => {
+          console.error("Failed at sending data:" + err);
+        }
+        );
+      setTimeout(() => {
+        document.body.style.overflow = 'auto';
+        this.router.navigate(['takenImages']);
+      }, 100);
+    }
+    document.body.style.overflow = 'auto';
+  }
+
+  async getCurrentAdmin(){
+    const authKey = localStorage.getItem("auth");
+    if(authKey){
+      (await this.sendGetCurrentAdmin(authKey)).subscribe(
+        (response: AdminResponse) => {
+          console.log(response)
+          localStorage.setItem("currentAdmin",response.data.user._id);
+        }
+      )
     }
   }
+
+  async sendGetCurrentAdmin(token:string){
+    const header = {
+      'Authorization': `Bearer ${token}`
+    };
+    return this.http.get<AdminResponse>(environment.identifyRequestURL+"/admins/me",{ headers: header });
+  }
+
+  getUserMe(){
+    const authKey = localStorage.getItem("auth");
+    if(authKey){
+      this.getCurrentUser(authKey).subscribe(
+        (response: UserResponse) => {
+          localStorage.setItem("userId",response.data._id);
+    }
+  )}
+}
+getCurrentUser(token: string){
+  const header = {
+    'Authorization': `Bearer ${token}`
+  };
+  return this.http.get<UserResponse>(environment.identifyRequestURL+"/users/me",{ headers: header });
+}
+  
 }

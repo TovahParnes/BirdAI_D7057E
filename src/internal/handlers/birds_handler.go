@@ -114,9 +114,6 @@ func (h *Handler) UpdateBird(c *fiber.Ctx) error {
 		return utils.ResponseToStatus(c, response)
 	}
 
-	//	@Failure		403	{object}	models.Response{}
-	// if user is not admin
-
 	response = h.controller.CUpdateBird(id, bird)
 	return utils.ResponseToStatus(c, response)
 }

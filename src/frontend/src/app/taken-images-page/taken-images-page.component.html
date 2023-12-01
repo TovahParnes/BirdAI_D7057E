@@ -1,49 +1,54 @@
 <app-navbar firstSelected="false" secondSelected="true" thirdSelected="false"></app-navbar>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 
-<!-- For some reason when the card elements are created using the imported card2 the way I want to make them they make the entire horizontal section clickable when adding the <a> element around it.
-     I changed it for now so it has the code from card2 element here instead removing the bug -->
-  <!-- <div *ngFor="let item of list1">
-      <p></p>
-        <mat-card class="card" (click)="navigateToSpecies(item.image, item.title, item.date)">
-          <div class="desc" style="display: flex;justify-content: space-between;">
-          <p style="flex: 1;">{{item.title}}</p>
-          <p style="flex: 1; text-align: right;">{{item.date}}</p>
-          </div>
-          <div class="gallery">
-              <img mat-card-image [src]=item.image alt="Duck" style="width: 50%;">
-          </div>
-      </mat-card>
-    </div> -->
+<div *ngIf="userList.data.length === 0">
+  <mat-card class="card">
+    <p>Use our tool to upload your images and they will appear here</p>
+  </mat-card>
+</div>
 
-  <!-- <a target="_blank" (click)="navigateToSpecies('item.image', 'item.title', 'item.date');" >
-    <app-card2 title=item.title imageSrc=item.image date=item.date ></app-card2>
-  </a> -->
-
-  <div *ngFor="let item of userList.data">
-    <p></p>
-    <!-- <a target="_blank" (click)="navigateToSpecies(item.userMedia.data, item.bird.Name, parseDate(item.createdAt))">
-        <app-card2 title={{item.bird.Name}} imageSrc={{item.userMedia.data}} date={{parseDate(item.createdAt)}}></app-card2>
-      </a> -->
-      <mat-card class="card" (click)="navigateToSpecies(item.userMedia.data, item.bird.Name, parseDate(item.createdAt), item.bird.Description)">
-        <div class="desc" style="display: flex;justify-content: space-between;">
-        <p style="flex: 1;">{{item.bird.Name}}</p>
-        <p style="flex: 1; text-align: right;">{{parseDate(item.createdAt)}}</p>
-        </div>
-        <div class="gallery">
-            <img mat-card-image [src]=item.userMedia.data alt="Duck" style="width: 50%;">
-        </div>
+<div *ngFor="let item of userList.data.slice().reverse(); let i = index">
+  <p></p>
+    <mat-card class="resultCard" (click)="navigateToSpecies(item.userMedia.data, item.bird.Name, parseDate(item.createdAt), item.bird.Description)">
+      <div class="imageContainer">
+        <img class="imagePreview" [src]=item.userMedia.data alt="Duck" width="100%">
+        <button class="more-button" (click)="toggleSubMenu(i, $event)" tabindex="0">
+          <span class="material-symbols-outlined">more_horiz</span>
+        </button>
+        <ul class="sub-menu" [class.visible]="activeSubMenuIndex === i" (click)="$event.stopPropagation()">
+          <button mat-raised-button (click)="getPostIdToDelete(item._id)">Delete this post</button><br>
+          <button mat-raised-button (click)="updateForm(item._id, item.location, item.comment, item.bird.Id)">Update this post</button>
+        </ul>
+      </div>
+      <div class="alignment">
+        <h2 class="textAlignment" style="flex: 1;">{{item.bird.Name}}</h2>
+        <p class="textAlignment"  style="flex: 1; text-align: right;">{{item.location}} <span class="material-symbols-outlined">location_on</span></p>
+      </div>
+      <div class="alignment">
+        <p class="textAlignment" style="flex: 1;">{{item.accuracy}}</p>
+        <p class="textAlignment" style="flex: 1; text-align: right;">{{parseDate(item.createdAt)}}</p>
+      </div>
+      <p class="textAlignment" style="flex: 1;">{{item.comment}}</p>
     </mat-card>
+</div>
 
-  </div>
 
-  <div style="justify-content: center; text-align: center;">
-    <button mat-button (click)="getCurrentUserListData()"> getListData</button>
-    <input type="text" id="postIdTextField" placeholder="Enter text">
-    <button (click)="getPostIdToDelete()">DeletePost</button>
-    <input type="text" id="updateTextField" placeholder='update the location'>
-    <input type="text" id="birdIdTextField" placeholder='insert birdId'>
-    <button (click)="getDataToUpdate()">UpdatePost</button>
-  </div>
+<div *ngIf="openForm" style="height: 100%; z-index: 1000; position: fixed; top: 0px; width: 100%; background-color: #4242425b;">
+  <mat-card class="card" style="top: 20%; background-color: rgb(31, 32, 32); max-width: 500px;">
+    <form [formGroup]="updateDetailsForm" (ngSubmit)="updatePost()" class="form-container">
 
+      <div><label for="location">Location: </label></div>
+      <div><input class="form-group" type="text" id="location" formControlName="location" required></div>
+    
+      <div><label for="comment">Comment: </label></div>
+      <div></div>
+      
+      <div class="form-group-double"><textarea id="comment" rows="6" cols="55" class="textarea" formControlName="comment"></textarea></div>
+    
+      <button mat-raised-button color="warn" (click)="closePostForm()" class="form-group">Abort</button>
+      <button mat-raised-button color="primary" type="submit" class="form-group">Update post</button>
+    </form>
+  </mat-card>
+</div>
 
 <app-bottominfo></app-bottominfo>

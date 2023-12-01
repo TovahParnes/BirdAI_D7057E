@@ -3,6 +3,7 @@ package repositories
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -32,7 +33,7 @@ func (p *PostRepository) CreatePost(post models.PostDB) models.Response {
 
 // UpdatePost updates the post with the specified changes and returns a response
 // containing the updated post.
-func (p *PostRepository) UpdatePost(post models.PostInput) models.Response {
+func (p *PostRepository) UpdatePost(id string, post models.PostInput) models.Response {
 	data, err := bson.Marshal(post)
 	if err != nil {
 		return utils.ErrorToResponse(400, "Could not update object", err.Error())
@@ -42,6 +43,7 @@ func (p *PostRepository) UpdatePost(post models.PostInput) models.Response {
 	if err != nil {
 		return utils.ErrorToResponse(400, "Could not update object", err.Error())
 	}
+	bsonPost["_id"] = id
 	return p.collection.UpdateOne(bsonPost)
 }
 

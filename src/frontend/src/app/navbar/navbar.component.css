@@ -99,9 +99,9 @@
 .tooltip {
     position: relative;
     display: inline-block;
-  }
-  
-  .tooltip .tooltiptext {
+}
+
+.tooltip .tooltiptext {
     visibility: hidden;
     font-size: small;
     background-color: rgba(255, 255, 255, 0.7);
@@ -118,9 +118,9 @@
     /* Position the tooltip */
     position: absolute;
     z-index: 1;
-  }
-  
-  .tooltip:hover .tooltiptext {
+}
+
+.tooltip:hover .tooltiptext {
     visibility: visible;
     transition-delay: 0.2s;
-  }
+}

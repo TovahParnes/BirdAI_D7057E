@@ -47,7 +47,7 @@ func (a *AdminRepository) CreateAdmin(admin models.AdminDB) models.Response {
 
 // UpdateAdmin updates the admin with the specified changes and returns a response
 // containing the updated admin.
-func (a *AdminRepository) UpdateAdmin(admin models.AdminInput) models.Response {
+func (a *AdminRepository) UpdateAdmin(id string, admin models.AdminInput) models.Response {
 	data, err := bson.Marshal(admin)
 	if err != nil {
 		return utils.ErrorToResponse(400, "Could not update object", err.Error())
@@ -57,6 +57,7 @@ func (a *AdminRepository) UpdateAdmin(admin models.AdminInput) models.Response {
 	if err != nil {
 		return utils.ErrorToResponse(400, "Could not update object", err.Error())
 	}
+	bsonAdmin["_id"] = id
 	return a.collection.UpdateOne(bsonAdmin)
 }
 

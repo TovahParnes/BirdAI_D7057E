@@ -1,14 +1,10 @@
 <app-navbar firstSelected="false" secondSelected="false" thirdSelected="false"></app-navbar>
 
-<div style="text-align: center; font-size: 32px">
-  Profile
-</div>
-
 <p></p>
 
-<div class="container" *ngIf="socialAuthService.authState | async as socialUser">
+<mat-card class="card" style="align-items: center;" *ngIf="socialAuthService.authState | async as socialUser">
     <img src="{{socialUser.photoUrl}}" width="120px" height="120px" style="border-radius: 50%;">
     <h2 style="color: white;">{{socialUser.name}}</h2>
-</div>
+</mat-card>
 
 <app-bottominfo></app-bottominfo>

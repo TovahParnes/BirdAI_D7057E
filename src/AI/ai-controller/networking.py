@@ -21,6 +21,8 @@ detection_model_ip = os.getenv('DETECTION_MODEL_IP')
 detection_model_port = os.getenv('DETECTION_MODEL_PORT')
 classification_model_ip = os.getenv('CLASSIFICATION_MODEL_IP')
 classification_model_port = os.getenv('CLASSIFICATION_MODEL_PORT')
+sound_classification_model_ip = os.getenv('SOUND_CLASSIFICATION_MODEL_IP')
+sound_classification_model_port = os.getenv('SOUND_CLASSIFICATION_MODEL_PORT')
 
 
 app = Flask(__name__)
@@ -32,6 +34,28 @@ def listen():
      Starts the listening service, the service will now listen for outbound requests.
     """
     app.run(host='0.0.0.0', port=_receiver_port)
+
+
+@app.route('/evaluate_sound', methods=['POST'])
+def evaluate_sound():
+    data = request.get_json()
+
+    _result = send_data_to_sound_classification(data, sound_classification_model_ip, sound_classification_model_port)
+
+    if _result is not None:
+        json_data = _result.json()
+
+        if 'label' in json_data:
+            _name = json_data['label']
+
+        if 'accuracy' in json_data:
+            _accuracy = json_data['accuracy']
+
+        birds = [{"name": _name, "accuracy": _accuracy}]
+        return json.dumps({"birds": birds}, indent=4)
+
+    return jsonify({"error": "Something was wrong with the request or something went wrong during receiving data from "
+                             "sound classification model"}, 400)
 
 
 @app.route('/evaluate_image', methods=['POST'])
@@ -57,10 +81,24 @@ def evaluate_image():
     if _result_image is not None:
         _result = send_image_to_classification(_result_image, classification_model_ip, classification_model_port)
     else:
+        return jsonify({"error": "Failure while sending image to detection module"}, 400)
+
+    if _result is None:
         return jsonify({"error": "Failure while sending image to classification module"}, 400)
 
-    birds = [{"name": _result.json()['label'], "accuracy": _result.json()['accuracy']}]
+    birds_data = _result.json().get('birds', {}).get('bird1', {})
 
+    # Extracting data for each guess
+    guess1_data = birds_data.get('guess1', {})
+    guess2_data = birds_data.get('guess2', {})
+    guess3_data = birds_data.get('guess3', {})
+
+    # Creating a list of predictions
+    birds = [
+        {"name": guess1_data.get('label'), "accuracy": guess1_data.get('accuracy')},
+        {"name": guess2_data.get('label'), "accuracy": guess2_data.get('accuracy')},
+        {"name": guess3_data.get('label'), "accuracy": guess3_data.get('accuracy')}
+    ]
     json_structure = json.dumps({"birds": birds}, indent=4)
 
     return json_structure
@@ -127,6 +165,23 @@ def send_image_to_detection(_img, _ip, _port):
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
         # Handle any other unexpected errors
+        return None
+
+
+def send_data_to_sound_classification(_data, _ip, _port):
+    url = f'http://{_ip}:{_port}/process_sound'
+
+    try:
+        response = requests.post(url, json=_data)
+        return response
+    except RequestException as e:
+        print(f"Request error: {e}")
+        return None
+    except (ValueError, KeyError) as e:
+        print(f"JSON parsing error: {e}")
+        return None
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
         return None
 
 

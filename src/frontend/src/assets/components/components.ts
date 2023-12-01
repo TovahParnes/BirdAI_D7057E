@@ -1,5 +1,3 @@
-
-
 export interface AnalyzeResponse {
     "timestamp": string;
     "data": BirdData[];
@@ -8,7 +6,7 @@ export interface AnalyzeResponse {
 interface BirdData {
     "aiBird": { 
         "name": string; 
-        "accuracy": string;
+        "accuracy": Number;
     };
     "birdId": string;
     "userMedia": Media;
@@ -47,10 +45,12 @@ export interface listOutput {
 
 export interface listOutputData {
     "_id": string,
-    "user": ListUser,
+    "accuracy": Number,
     "bird": Bird,
+    "comment": string,
     "createdAt": string,
     "location": string,
+    "user": ListUser,
     "userMedia": Media
 }
 
@@ -63,9 +63,11 @@ interface Bird {
 }
 
 export interface PostData {
+    "accuracy": Number,
     "birdId": string,
-    "imageId": string,
+    "comment": string,
     "location": string,
+    "imageId": string,
     "soundId": string
 }
 
@@ -78,19 +80,19 @@ export interface UserBirdList {
     birds:{   
       "title": string;
       "image": string;
-      "accuracy": string;
+      "accuracy": Number;
     }[]
   }
   
  export interface AnalyzedBird {
     "title": string;
     "image": string;
-    "accuracy": string;
+    "accuracy": Number;
   }
 
 export interface DeleteResponse {
-    "timestamp": string,
-    "data": Media
+    "timestamp": string;
+    "data": string;
 }
 
 export interface UpdateResponse {
@@ -107,4 +109,20 @@ export interface UpdateResponse {
 export interface getAllBirdsResponse {
     "timestamp": string;
     "data": Bird[];
+}
+
+export interface AdminResponse {
+    "timestamp": string;
+    "data": AdminData;
+}
+
+interface AdminData {
+    "_id": string;
+    "user": ListUser;
+    "access": string;
+}
+
+export interface getFoundBirds {
+    "data": PostData[],
+    "timestamp": string
 }

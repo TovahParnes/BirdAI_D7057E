@@ -1,6 +1,9 @@
 # ---Backend---
 .idea
 .DS_Store
+fullchain.pem
+privkey.pem
+/secret
 # ---Frontend---
 .vscode/*
 
@@ -23,3 +26,11 @@ src/AI/classification_model/__pycache__/
 src/AI/classification_model/_tests/__pycache__
 src/AI/classification_model/images/
 src/AI/classification_model/labels.json
+
+# -- Sound Classification
+src/AI/sound_classification/mobilenet_model.keras
+src/AI/sound_classification/__pycache__
+src/AI/sound_classification/__pycache__/
+src/AI/sound_classification/tests/__pycache__
+src/AI/sound_classification/images/
+src/AI/sound_classification/labels.json

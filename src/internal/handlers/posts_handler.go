@@ -3,6 +3,7 @@ package handlers
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
+
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -101,6 +102,45 @@ func (h *Handler) ListUsersPosts(c *fiber.Ctx) error {
 	return utils.ResponseToStatus(c, response)
 }
 
+// ListUsersFoundBirds is a function to get a set of all posts from a given user from database
+//
+// @Summary		List all posts of a specified set
+// @Description	List all posts of a specified set
+// @Tags		Posts
+// @Accept		json
+// @Produce		json
+// @Param		id	path	string	true	"User ID"
+// @Param		set	query		int	false	"Set of posts"
+// @Param		search	query	string	false	"Search parameter for post"
+// @Success		200	{object}	models.Response{data=[]models.PostDB}
+// @Failure		401	{object}	models.Response{data=models.Err}
+// @Failure		503	{object}	models.Response{data=models.Err}
+// @Router		/api/v1/users/{id}/birds/list [get]
+func (h *Handler) ListUsersFoundBirds(c *fiber.Ctx) error {
+	userId := c.Params("id")
+	response := utils.IsValidId(userId)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
+	queries := c.Queries()
+	set := queries["set"]
+	response = utils.IsValidSet(&set)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+	setInt := response.Data.(int)
+
+	search := queries["search"]
+	response = utils.IsValidSearch(search)
+	if utils.IsTypeError(response) {
+		return utils.ResponseToStatus(c, response)
+	}
+
+	response = h.controller.CListUsersFoundBirds(userId, setInt)
+	return utils.ResponseToStatus(c, response)
+}
+
 // CreatePost is a function to create a new post
 //
 // @Summary		Create a new post
@@ -109,8 +149,8 @@ func (h *Handler) ListUsersPosts(c *fiber.Ctx) error {
 // @Accept		json
 // @Produce		json
 // @Security 	Bearer
-// @Param		post	body		models.PostInput	true	"post"
-// @Success		201	{object}	models.Response{data=models.PostDB}
+// @Param		post	body	models.PostCreation	true	"post"
+// @Success		201	{object}	models.Response{data=models.PostOutput}
 // @Failure		400	{object}	models.Response{data=models.Err}
 // @Failure		401	{object}	models.Response{data=models.Err}
 // @Failure		503	{object}	models.Response{data=models.Err}
@@ -122,12 +162,12 @@ func (h *Handler) CreatePost(c *fiber.Ctx) error {
 	}
 	curUserId := response.Data.(models.UserDB).Id
 
-	var post *models.PostInput
+	var post *models.PostCreation
 	if err := c.BodyParser(&post); err != nil {
 		//	@Failure	400	{object}	models.Response{}
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
-	response = utils.IsValidPostInput(post)
+	response = utils.IsValidPostCreation(post)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)
 	}
@@ -140,7 +180,7 @@ func (h *Handler) CreatePost(c *fiber.Ctx) error {
 	return utils.CreationResponseToStatus(c, response)
 }
 
-// UpdatePost is a function to update the given post from the databse
+// UpdatePost is a function to update the given post from the database
 //
 // @Summary		Update given post
 // @Description	Update given post
@@ -200,7 +240,7 @@ func (h *Handler) UpdatePost(c *fiber.Ctx) error {
 // @Produce		json
 // @Security 	Bearer
 // @Param		id	path	string	true	"Post ID"
-// @Success		200	{object}	models.Response{}
+// @Success		200	{object}	models.Response{data=string}
 // @Failure		401	{object}	models.Response{data=models.Err}
 // @Failure		403	{object}	models.Response{data=models.Err}
 // @Failure		404	{object}	models.Response{data=models.Err}

@@ -1,12 +1,12 @@
-import {Component, ViewChildren, QueryList} from '@angular/core';
-import {SocialAuthService, GoogleLoginProvider} from '@abacritt/angularx-social-login';
+import {Component, OnInit} from '@angular/core';
+import {SocialAuthService} from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
-import { AppComponent } from '../app.component';
-import { CardComponent } from '../card/card.component';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {AppComponent} from '../app.component';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 import {getAllBirdsResponse} from 'src/assets/components/components';
-import { environment } from 'src/environments/environment';
+import {environment} from 'src/environments/environment';
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-library',
@@ -14,40 +14,35 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./library.component.css'],
 })
 
-export class LibraryComponent {
+export class LibraryComponent implements OnInit {
 
-  private jsonUrl = 'assets/data.json';
+  jsonUrl = 'assets/data.json';
+  alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  searchInput: FormControl = new FormControl();
+  selectedOption: FormControl = new FormControl('');
   cardlist: any[] = [];
   foundlist: any[] = [];
-  color = "#2196f3"
-  private lastLetter = ""
-  private found = false
-  alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-  @ViewChildren(CardComponent)
-  cards!: QueryList<CardComponent>;
-
-  // cardlist = [
-  //   {title: 'Duck',imageSrc: 'assets/duck.jpg'},
-  //   {title: 'Kangaroo',imageSrc: 'assets/duck.jpg'},
-  //   {title: 'Elephant',imageSrc: 'assets/undulat.jpg'},
-  //   {title: 'Duck',imageSrc: 'assets/duck.jpg'},
-  //   {title: 'Kangaroo',imageSrc: 'assets/duck.jpg'},
-  //   {title: 'Elephant',imageSrc: 'assets/undulat.jpg'},
-  // ]
-
-  // foundlist = [
-  //   {title: 'Duck',imageSrc: 'assets/duck.jpg'},
-  //   {title: 'Kangaroo',imageSrc: 'assets/duck.jpg'},
-  // ]
-
-  private backupCards: any[] = []
-
+  
   constructor(
     private router: Router,
     public mainApp: AppComponent,
     public socialAuthService: SocialAuthService,
     private http: HttpClient,
     ) {
+  }
+
+  ngOnInit() {
+    this.getAllBirds();
+    this.cardlist = this.allBirds.data;
+    this.foundlist = this.allBirds.data;
+
+    this.selectedOption.valueChanges.subscribe(value => {
+      this.filterByLetter(value);
+    });
+
+    this.searchInput.valueChanges.subscribe(value => {
+      this.filterBySearch(value.toUpperCase());
+    });
   }
 
   navigateToSpecies(imageId: string, imageName: string, imageDesc: string): void {
@@ -57,7 +52,7 @@ export class LibraryComponent {
         imageName: encodeURIComponent(imageName),
         imageDesc: encodeURI(imageDesc)
       }
-      });
+    });
   }
 
   allBirds: getAllBirdsResponse = {
@@ -70,65 +65,27 @@ export class LibraryComponent {
     timestamp: ""
   }
 
-  //sorts by name but should prob not be visible as a button but rather done autmatically in the background
   sortCards() {
     this.cardlist.sort((a, b) => a.title.localeCompare(b.title));
     this.allBirds.data.sort((a, b) => a.Name.localeCompare(b.Name));
   }
 
-  // filterCards(letter: string): void {
-  //   if(this.found == true){
-  //     this.allBirds.data = this.foundlist
-  //   }else{
-  //     this.allBirds.data = this.backupCards
-  //   }
-  //   this.allBirds.data = this.allBirds.data.filter(card => card.Name.startsWith(letter));
-  //   this.lastLetter = letter
-  // }
-
-  filterCards(letter: string): void {
+  filterByLetter(selectedValue: any) {
     this.allBirds.data = this.allBirdsBackup.data;
-    this.allBirds.data = this.allBirds.data.filter(card => card.Name.startsWith(letter));
-    this.lastLetter = letter;
+    this.allBirds.data = this.allBirds.data.filter(card => card.Name.startsWith(selectedValue));
   }
 
-  resetbirds(){
+  filterBySearch(searchValue: string) {
     this.allBirds.data = this.allBirdsBackup.data;
-    console.log(this.allBirdsBackup.data)
-  }
-
-  toggleFound(){
-    if (this.found == true){
-      this.found = false
-      this.cardlist = this.backupCards
-      this.filterCards(this.lastLetter)
-      this.color = "#2196f3"
-    }else{
-      this.found = true
-      this.cardlist = this.foundlist
-      this.filterCards(this.lastLetter)
-      this.color = "#1971B8"
-    }
+    this.allBirds.data = this.allBirds.data.filter(card => card.Name.match(searchValue));
   }
 
   getData(): Observable<any[]> {
     return this.http.get<any[]>(this.jsonUrl);
   }
 
-  ngOnInit(): void {
-    this.getData().subscribe((response) => {
-      const data = response;
-      //this.cardlist = data.find((item) => 'list2' in item)?.list2 || [];
-      //this.foundlist = data.find((item) => 'list1' in item)?.list1 || [];
-      //this.backupCards = this.cardlist
-    });
-    this.getAllBirds();
-    this.cardlist = this.allBirds.data
-    this.foundlist =this.allBirds.data;
-  }
-
   getAllBirds(){
-    this.sendGetBirds().subscribe(
+    this.sendRequestGetBirds().subscribe(
       (response: getAllBirdsResponse) => {
         this.allBirds = response;
         this.allBirdsBackup.data = response.data;
@@ -138,7 +95,8 @@ export class LibraryComponent {
       }
     );
   }
-  sendGetBirds() {
+
+  sendRequestGetBirds() {
     return this.http.get<getAllBirdsResponse>(environment.identifyRequestURL+"/birds/list?set=0");
   }
 }

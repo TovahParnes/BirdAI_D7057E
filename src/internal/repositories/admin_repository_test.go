@@ -5,12 +5,13 @@ import (
 	"birdai/src/internal/repositories"
 	"birdai/src/internal/utils"
 	"context"
+	"testing"
+
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"testing"
 )
 
 // TestAdminRepository tests the basic functionality of the AdminRepository struct
@@ -63,14 +64,13 @@ func TestAdminRepository(t *testing.T) {
 
 	t.Run("Test UpdateAdmin", func(t *testing.T) {
 		updateAdmin := models.AdminInput{
-			Id:     testAdmin1.Id,
 			Access: "SuperAdmin",
 		}
-		response := adminColl.UpdateAdmin(updateAdmin)
+		response := adminColl.UpdateAdmin(testAdmin1.Id, updateAdmin)
 		require.False(t, utils.IsTypeError(response))
 		require.Equal(t, updateAdmin.Access, response.Data.(*models.AdminDB).Access)
 
-		response = adminColl.UpdateAdmin(updateAdmin)
+		response = adminColl.UpdateAdmin(testAdmin1.Id, updateAdmin)
 		require.True(t, utils.IsTypeError(response))
 	})
 

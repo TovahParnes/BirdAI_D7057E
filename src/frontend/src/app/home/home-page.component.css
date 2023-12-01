@@ -1,40 +1,85 @@
-.upload-buttons {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 1px;
-    margin-right: 1px;
+body {
+    overflow: hidden;
 }
 
-.drop-container {
-    border: 2px dashed #ccc;
-    padding: 20px;
-    text-align: center;
-    cursor: pointer;
-    background-color: #f3f3f3;
-    margin: 0;
+.resultCard {
+    margin: 0 auto;
+    max-width: 50%;
+    border-radius: 7px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.16);
 }
 
-#imagePreview {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 20px;
-}
-
-#imagePreview img {
-    max-width: 150px;
-    max-height: 150px;
-    margin: 10px;
-}
-
-.input[type=file]::file-selector-button {
+.imageContainer {
     position: relative;
-    top: 150px;
-    width: 150px;
-    padding: 10px;
-    border: 1px dashed #BBB;
-    text-align: center;
-    background-color: #DDD;
+}
+
+.imagePreview {
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+}
+
+.textAlignment {
+    margin-top: 3px;
+    margin-left: 3px;
+    margin-bottom: 5px;
+}
+
+.accuracySpinner {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+
+.accuracyText {
+    position: absolute;
+    font-size: x-large;
+    color: #2196f3;
+    bottom: 17px;
+    right: 30px;
+}
+
+.imageInput {
+    padding-top: 6px;
+    padding-bottom: 2px;
     cursor: pointer;
-  }
+}
+
+.deleteButton {
+    position: absolute;
+    left: 22px;
+    top: 22px;
+}
+
+.popup {
+    position: fixed;
+    height: 100%;
+    top: 0px;
+    width: 100%;
+    background-color: #4242425b;
+    z-index: 1000;
+}
+
+.textarea {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 30%;
+    resize: none;
+    font-family: "Arial", sans-serif;
+}
+
+.form-container {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+  
+.form-group {
+    width: 100%;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.form-group-double {
+    grid-column: span 2;
+}
+  

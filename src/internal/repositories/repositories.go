@@ -143,7 +143,7 @@ func (m *MongoCollection) DeleteOne(query bson.M) models.Response {
 		if one.DeletedCount != 1 || err != nil {
 			return utils.ErrorToResponse(400, "Could not delete object", "")
 		}
-		return utils.Response("Deleted successfully ")
+		return utils.Response("Deleted successfully")
 	}
 }
 

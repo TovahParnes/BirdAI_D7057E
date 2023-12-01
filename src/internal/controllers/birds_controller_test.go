@@ -22,24 +22,22 @@ func TestBirdController(t *testing.T) {
 	mi.AddCollection(repositories.BirdColl)
 	birdColl := repositories.BirdRepository{}
 	birdColl.SetCollection(mi.GetCollection(repositories.BirdColl))
-	
+
 	mi.AddCollection(repositories.MediaColl)
 	mediaColl := repositories.MediaRepository{}
 	mediaColl.SetCollection(mi.GetCollection(repositories.MediaColl))
 
 	db := repositories.RepositoryEndpoints{
-		Bird: birdColl,
-		Media: mediaColl,}
+		Bird:  birdColl,
+		Media: mediaColl}
 	birdContr := controllers.NewController(db)
 
 	testImage := &models.MediaDB{
-		Data:     "testImage",
-		FileType: "audio/mpeg",
+		Data: "testImage",
 	}
 
 	testSound := &models.MediaDB{
-		Data:     "testSound",
-		FileType: "audio/mpeg",
+		Data: "testSound",
 	}
 
 	t.Run("Test CreateMedia", func(t *testing.T) {
@@ -54,19 +52,15 @@ func TestBirdController(t *testing.T) {
 		testSound.Id = response.Data.(string)
 	})
 
-
 	testBird1 := &models.BirdDB{
-		Name: "test Bird 1",
+		Name:        "test Bird 1",
 		Description: "Cool test bird",
-		ImageId: testImage.Id,
-		SoundId: testSound.Id,
-
+		SoundId:     testSound.Id,
 	}
 	testBird2 := &models.BirdDB{
-		Name: "test Bird 2",
+		Name:        "test Bird 2",
 		Description: "Rad test bird",
-		ImageId: testImage.Id,
-		SoundId: testSound.Id,
+		SoundId:     testSound.Id,
 	}
 
 	t.Run("Test CreateBirds", func(t *testing.T) {
@@ -105,10 +99,9 @@ func TestBirdController(t *testing.T) {
 
 	t.Run("Test UpdateBird", func(t *testing.T) {
 		updateBird := &models.BirdInput{
-			Name: "Updated bird",
+			Name:        "Updated bird",
 			Description: "Cool test bird",
-			ImageId: testImage.Id,
-			SoundId: testSound.Id,
+			SoundId:     testSound.Id,
 		}
 
 		response := birdContr.CUpdateBird(testBird1.Id, updateBird)
@@ -124,32 +117,7 @@ func TestBirdController(t *testing.T) {
 		require.True(t, utils.IsTypeError(response))
 		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
 		require.Equal(t, "No change compared to current document", response.Data.(models.Err).Description)
-
-		updateBird = &models.BirdInput{
-			Name: "test Bird 2",
-			Description: "Rad test bird",
-			ImageId: "invalid id",
-			SoundId: testSound.Id,
-		}
-		response = birdContr.CUpdateBird(testBird2.Id, updateBird)
-		require.True(t, utils.IsTypeError(response))
-		require.Equal(t, http.StatusNotFound, response.Data.(models.Err).StatusCode)
-		require.Equal(t, "Image with given id does not exist", response.Data.(models.Err).Description)
-	
-		updateBird = &models.BirdInput{
-			Name: "test Bird 2",
-			Description: "Rad test bird",
-			ImageId: testImage.Id,
-			SoundId: "invalid id",
-		}
-		response = birdContr.CUpdateBird(testBird2.Id, updateBird)
-		require.True(t, utils.IsTypeError(response))
-		require.Equal(t, http.StatusNotFound, response.Data.(models.Err).StatusCode)
-		require.Equal(t, "Sound with given id does not exist", response.Data.(models.Err).Description)
 	})
-
-
-
 
 	// Need to delete everything from testDB
 	t.Cleanup(func() {
