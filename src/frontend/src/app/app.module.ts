@@ -9,7 +9,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 // page components imports
 import {AppComponent} from './app.component';
-import {LoginComponent} from './login/login.component';
 import {MainPageComponent} from './home/home-page.component';
 import {LibraryComponent} from './library/library.component';
 import {TakenImagesPageComponent} from './taken-images-page/taken-images-page.component';
@@ -48,7 +47,6 @@ import {MatInputModule} from '@angular/material/input';
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
     MainPageComponent,
     LibraryComponent,
     SpeciesPageComponent,
@@ -64,11 +62,10 @@ import {MatInputModule} from '@angular/material/input';
     BrowserModule,
     HttpClientModule,
     RouterModule.forRoot([
-      //{path: 'login', component: LoginComponent},
       {path: 'mainpage', component: MainPageComponent,canActivate: [AuthGuardService]},
-      {path: 'library', component: LibraryComponent,canActivate: [AuthGuardService]},
+      {path: 'library', component: LibraryComponent},
       {path: 'takenImages', component: TakenImagesPageComponent,canActivate: [AuthGuardService]},
-      {path: 'profile', component: ProfilePageComponent,canActivate: [AuthGuardService]}, //canActivate: [AuthGuardService]
+      {path: 'profile', component: ProfilePageComponent,canActivate: [AuthGuardService]},
       {path: 'species-page', component: SpeciesPageComponent,canActivate: [AuthGuardService]},
       {path: 'first-page', component: FirstPageComponent},
       {path: 'admin',component: AdminComponent, canActivate: [AuthGuardAdminService]},
