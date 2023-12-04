@@ -95,6 +95,25 @@ func TestBirdController(t *testing.T) {
 		response = birdContr.CListBirds(1, "")
 		require.False(t, utils.IsTypeError(response))
 		require.Equal(t, 0, len(response.Data.([]*models.BirdOutput)))
+
+		response = birdContr.CListBirds(0, "2")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 1, len(response.Data.([]*models.BirdOutput)))
+		require.IsType(t, &models.BirdOutput{}, response.Data.([]*models.BirdOutput)[0])
+		require.Equal(t, testBird2.Id, response.Data.([]*models.BirdOutput)[0].Id)
+
+		response = birdContr.CListBirds(0, "BIRD")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 2, len(response.Data.([]*models.BirdOutput)))
+		require.IsType(t, &models.BirdOutput{}, response.Data.([]*models.BirdOutput)[0])
+
+		response = birdContr.CListBirds(0, "hello")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 0, len(response.Data.([]*models.BirdOutput)))
+
+		response = birdContr.CListBirds(0, "i")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 2, len(response.Data.([]*models.BirdOutput)))
 	})
 
 	t.Run("Test UpdateBird", func(t *testing.T) {

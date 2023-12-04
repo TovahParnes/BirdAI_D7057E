@@ -3,7 +3,6 @@ package controllers
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
-	"fmt"
 	"net/http"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -22,17 +21,17 @@ func (c *Controller) CGetPostById(id string) models.Response {
 }
 
 func (c *Controller) CListPosts(set int, search string) models.Response {
-	response := c.db.Post.ListPosts(bson.M{}, set)
-	posts := []*models.PostOutput{}
+	filter := bson.M{
+		"$or": []bson.M{
+			{"location": bson.M{"$regex": "(?i)"+search}}, 
+			{"comment": bson.M{"$regex": "(?i)"+search}},
+	}}
 
+	response := c.db.Post.ListPosts(filter, set)
+	posts := []*models.PostOutput{}
+	
 	if utils.IsTypeError(response) {
 		return response
-	}
-
-	//TEMPORARY - restarting fiber changes the bird id, meaning listing posts will
-	//always from error that bird does not exist
-	for _, postsObject := range response.Data.([]models.PostDB) {
-		fmt.Println(postsObject.Id)
 	}
 
 	for _, postsObject := range response.Data.([]models.PostDB) {
@@ -46,8 +45,17 @@ func (c *Controller) CListPosts(set int, search string) models.Response {
 	return utils.Response(posts)
 }
 
-func (c *Controller) CListUsersPosts(userId string, set int) models.Response {
-	filter := bson.M{"user_id": userId}
+func (c *Controller) CListUsersPosts(userId string, set int, search string) models.Response {
+	filter := bson.M{
+		"$and": []bson.M{
+			{"user_id": userId},
+			{"$or": []bson.M{
+				{"location": bson.M{"$regex": "(?i)"+search}}, 
+				{"comment": bson.M{"$regex": "(?i)"+search}},
+			}},
+		},
+	}
+
 	//birdColl := c.db.GetCollection(repositories.BirdColl)
 	response := c.db.Post.ListPosts(filter, set)
 	output := []*models.PostOutput{}
@@ -61,8 +69,17 @@ func (c *Controller) CListUsersPosts(userId string, set int) models.Response {
 	return utils.Response(output)
 }
 
-func (c *Controller) CListUsersFoundBirds(userId string, set int) models.Response {
-	filter := bson.M{"user_id": userId}
+func (c *Controller) CListUsersFoundBirds(userId string, set int, search string) models.Response {
+	filter := bson.M{
+		"$and": []bson.M{
+			{"user_id": userId},
+			{"$or": []bson.M{
+				{"location": bson.M{"$regex": "(?i)"+search}}, 
+				{"comment": bson.M{"$regex": "(?i)"+search}},
+			}},
+		},
+	}
+
 	response := c.db.Post.ListPosts(filter, set)
 	output := []*models.PostDB{}
 	for _, post := range response.Data.([]models.PostDB) {

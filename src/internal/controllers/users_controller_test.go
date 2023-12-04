@@ -88,12 +88,27 @@ func TestUserController(t *testing.T) {
 	})
 
 	t.Run("Test ListUsers", func(t *testing.T) {
-		response := userContr.CListUsers(0)
+		response := userContr.CListUsers(0, "")
 		require.False(t, utils.IsTypeError(response))
 		require.Equal(t, 3, len(response.Data.([]*models.UserOutput)))
 		require.IsType(t, &models.UserOutput{}, response.Data.([]*models.UserOutput)[0])
 
-		response = userContr.CListUsers(1)
+		response = userContr.CListUsers(1, "")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 0, len(response.Data.([]*models.UserOutput)))
+		
+		response = userContr.CListUsers(0, "2")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 1, len(response.Data.([]*models.UserOutput)))
+		require.IsType(t, &models.UserOutput{}, response.Data.([]*models.UserOutput)[0])
+		require.Equal(t, testUser2.Id, response.Data.([]*models.UserOutput)[0].Id)
+
+		response = userContr.CListUsers(0, "USER")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 3, len(response.Data.([]*models.UserOutput)))
+		require.IsType(t, &models.UserOutput{}, response.Data.([]*models.UserOutput)[0])
+
+		response = userContr.CListUsers(0, "hello")
 		require.False(t, utils.IsTypeError(response))
 		require.Equal(t, 0, len(response.Data.([]*models.UserOutput)))
 	})

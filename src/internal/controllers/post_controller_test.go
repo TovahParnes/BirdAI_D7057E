@@ -116,19 +116,29 @@ func TestPostController(t *testing.T) {
 	testPost1 := &models.PostDB{
 		BirdId:   testBird1.Id,
 		Location: "place 1",
+		Comment: "one comment and notes",
 		Accuracy: 0.5,
 	}
 
 	testPost2 := &models.PostDB{
 		BirdId:   testBird2.Id,
 		Location: "place 2",
+		Comment: "two comment, aaa",
 		Accuracy: 0.9,
+	}
+
+	testPost3 := &models.PostDB{
+		BirdId: testBird1.Id,
+		Location: "post 3 location",
+		Comment: "post 3 notes",
+		Accuracy: 0.5,
 	}
 
 	t.Run("Test CreatePost", func(t *testing.T) {
 		postCreation := &models.PostCreation{
 			BirdId:   testPost1.BirdId,
 			Location: testPost1.Location,
+			Comment: testPost1.Comment,
 			Accuracy: testPost1.Accuracy,
 			Media:    *testMediaInput,
 		}
@@ -141,6 +151,7 @@ func TestPostController(t *testing.T) {
 		postCreation = &models.PostCreation{
 			BirdId:   testPost2.BirdId,
 			Location: testPost2.Location,
+			Comment: testPost2.Comment,
 			Accuracy: testPost2.Accuracy,
 			Media:    *testMediaInput,
 		}
@@ -154,6 +165,18 @@ func TestPostController(t *testing.T) {
 		response = contr.CCreatePost(testUser1.Id, postCreation)
 		require.True(t, utils.IsTypeError(response))
 		require.Equal(t, http.StatusBadRequest, response.Data.(models.Err).StatusCode)
+
+		postCreation = &models.PostCreation{
+			BirdId: testPost3.BirdId,
+			Location: testPost3.Location,
+			Comment: testPost3.Comment,
+			Accuracy: testPost3.Accuracy,
+			Media: *testMediaInput,
+		}
+		response = contr.CCreatePost(testUser1.Id, postCreation)
+		require.False(t, utils.IsTypeError(response))
+		require.IsType(t, &models.PostOutput{}, response.Data.(*models.PostOutput))
+		testPost3.Id = response.Data.(*models.PostOutput).Id
 	})
 
 	t.Run("Test GetPostById", func(t *testing.T) {
@@ -175,23 +198,80 @@ func TestPostController(t *testing.T) {
 	t.Run("Test ListPosts", func(t *testing.T) {
 		response := contr.CListPosts(0, "")
 		require.False(t, utils.IsTypeError(response))
-		require.Equal(t, 2, len(response.Data.([]*models.PostOutput)))
+		require.Equal(t, 3, len(response.Data.([]*models.PostOutput)))
 		require.IsType(t, &models.PostOutput{}, response.Data.([]*models.PostOutput)[0])
 
 		response = contr.CListPosts(1, "")
 		require.False(t, utils.IsTypeError(response))
 		require.Equal(t, 0, len(response.Data.([]*models.PostOutput)))
-	})
+	
+		response = contr.CListPosts(0, "1")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 1, len(response.Data.([]*models.PostOutput)))
+		require.IsType(t, &models.PostOutput{}, response.Data.([]*models.PostOutput)[0])
+		
+		response = contr.CListPosts(0, "two")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 1, len(response.Data.([]*models.PostOutput)))
+		require.IsType(t, &models.PostOutput{}, response.Data.([]*models.PostOutput)[0])
+		require.Equal(t, testPost2.Id, response.Data.([]*models.PostOutput)[0].Id)
+
+		response = contr.CListPosts(0, "AAA")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 2, len(response.Data.([]*models.PostOutput)))
+		require.IsType(t, &models.PostOutput{}, response.Data.([]*models.PostOutput)[0])
+
+		response = contr.CListPosts(0, "hello")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 0, len(response.Data.([]*models.PostOutput)))
+
+})
 
 	t.Run("Test ListUsersPosts", func(t *testing.T) {
-		response := contr.CListUsersPosts(testUser1.Id, 0)
+		response := contr.CListUsersPosts(testUser1.Id, 0, "")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 2, len(response.Data.([]*models.PostOutput)))
+		require.IsType(t, &models.PostOutput{}, response.Data.([]*models.PostOutput)[0])
+
+		response = contr.CListUsersPosts(testUser1.Id, 1, "")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 0, len(response.Data.([]*models.PostOutput)))
+
+		response = contr.CListUsersPosts(testUser1.Id, 0, "POST 3")
 		require.False(t, utils.IsTypeError(response))
 		require.Equal(t, 1, len(response.Data.([]*models.PostOutput)))
 		require.IsType(t, &models.PostOutput{}, response.Data.([]*models.PostOutput)[0])
 
-		response = contr.CListPosts(1, "")
+		response = contr.CListUsersPosts(testUser1.Id, 0, "location")
 		require.False(t, utils.IsTypeError(response))
-		require.Equal(t, 0, len(response.Data.([]*models.PostOutput)))
+		require.Equal(t, 1, len(response.Data.([]*models.PostOutput)))
+		require.IsType(t, &models.PostOutput{}, response.Data.([]*models.PostOutput)[0])
+
+		response = contr.CListUsersPosts(testUser1.Id, 0, "note")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 2, len(response.Data.([]*models.PostOutput)))
+		require.IsType(t, &models.PostOutput{}, response.Data.([]*models.PostOutput)[0])
+	})
+
+	t.Run("Test ListUsersFoundBirds", func(t *testing.T) {
+		response := contr.CListUsersFoundBirds(testUser1.Id, 0, "")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 2, len(response.Data.([]*models.PostDB)))
+		require.IsType(t, &models.PostDB{}, response.Data.([]*models.PostDB)[0])
+
+		response = contr.CListUsersFoundBirds(testUser1.Id, 1, "")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 0, len(response.Data.([]*models.PostDB)))
+		
+		response = contr.CListUsersFoundBirds(testUser1.Id, 0, "aAa")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 1, len(response.Data.([]*models.PostDB)))
+		require.IsType(t, &models.PostDB{}, response.Data.([]*models.PostDB)[0])
+
+		response = contr.CListUsersFoundBirds(testUser1.Id, 0, "bird")
+		require.False(t, utils.IsTypeError(response))
+		require.Equal(t, 0, len(response.Data.([]*models.PostDB)))
+
 	})
 
 	t.Run("Test UpdatePost", func(t *testing.T) {

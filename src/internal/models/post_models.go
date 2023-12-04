@@ -1,14 +1,14 @@
 package models
 
 type PostDB struct {
-	Id        string  `bson:"_id"`
-	UserId    string  `bson:"user_id"`
-	BirdId    string  `bson:"bird_id"`
-	CreatedAt string  `bson:"created_at"`
-	Location  string  `bson:"location"`
-	Comment   string  `bson:"comment"`
-	Accuracy  float32 `bson:"accuracy"`
-	MediaId   string  `bson:"media_id"`
+	Id        string  `bson:"_id" json:"_id" form:"_id"`
+	UserId    string  `bson:"user_id" json:"userId" form:"userId"`
+	BirdId    string  `bson:"bird_id" json:"birdId" form:"birdId"`
+	CreatedAt string  `bson:"created_at" json:"createdAt" form:"createdAt"`
+	Location  string  `bson:"location" json:"location" form:"location"`
+	Comment   string  `bson:"comment" json:"comment" form:"comment"`
+	Accuracy  float32 `bson:"accuracy" json:"accuracy" form:"accuracy"`
+	MediaId   string  `bson:"media_id" json:"mediaId" form:"mediaId"`
 }
 
 type PostCreation struct {

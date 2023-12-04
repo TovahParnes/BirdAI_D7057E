@@ -39,8 +39,9 @@ func (c *Controller) CGetUserByAuthId(authId string) models.Response {
 	return utils.Response(output)
 }
 
-func (c *Controller) CListUsers(set int) models.Response {
-	response := c.db.User.ListUsers(bson.M{}, set)
+func (c *Controller) CListUsers(set int, search string) models.Response {
+	filter := bson.M{"username": bson.M{"$regex": "(?i)"+search}}
+	response := c.db.User.ListUsers(filter, set)
 	users := []*models.UserOutput{}
 
 	if utils.IsTypeError(response) {

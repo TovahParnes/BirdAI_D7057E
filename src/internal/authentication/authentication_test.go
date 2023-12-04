@@ -37,14 +37,14 @@ func TestAccessController(t *testing.T) {
 		require.False(t, utils.IsTypeError(response))
 		require.IsType(t, &models.UserLoginOutput{}, response.Data.(*models.UserLoginOutput))
 		require.True(t, response.Data.(*models.UserLoginOutput).CreatedNew)
-		response = contr.CListUsers(0)
+		response = contr.CListUsers(0, "")
 		require.Equal(t, 1, len(response.Data.([]*models.UserOutput)))
 
 		response = auth.LoginUser(user)
 		require.False(t, utils.IsTypeError(response))
 		require.IsType(t, &models.UserLoginOutput{}, response.Data.(*models.UserLoginOutput))
 		require.False(t, response.Data.(*models.UserLoginOutput).CreatedNew)
-		response = contr.CListUsers(0)
+		response = contr.CListUsers(0, "")
 		require.Equal(t, 1, len(response.Data.([]*models.UserOutput)))
 
 		user.Username = "test2"
@@ -53,7 +53,7 @@ func TestAccessController(t *testing.T) {
 		require.IsType(t, &models.UserLoginOutput{}, response.Data.(*models.UserLoginOutput))
 		require.Equal(t, "test", response.Data.(*models.UserLoginOutput).Username)
 		require.False(t, response.Data.(*models.UserLoginOutput).CreatedNew)
-		response = contr.CListUsers(0)
+		response = contr.CListUsers(0, "")
 		require.Equal(t, 1, len(response.Data.([]*models.UserOutput)))
 
 		user.AuthId = "5f9d3b3b9d3b3b9d3b3b9d3c"
@@ -61,7 +61,7 @@ func TestAccessController(t *testing.T) {
 		require.False(t, utils.IsTypeError(response))
 		require.IsType(t, &models.UserLoginOutput{}, response.Data.(*models.UserLoginOutput))
 		require.True(t, response.Data.(*models.UserLoginOutput).CreatedNew)
-		response = contr.CListUsers(0)
+		response = contr.CListUsers(0, "")
 		require.Equal(t, 2, len(response.Data.([]*models.UserOutput)))
 
 		response = auth.LoginUser(user)
