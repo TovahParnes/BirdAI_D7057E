@@ -196,4 +196,15 @@ export class TakenImagesPageComponent {
     }
     return this.http.patch<UpdateResponse>(environment.identifyRequestURL+"/posts/"+postId, body, { headers: header });
   }
+
+  convertAccuracy(accuracy: Number): Number {
+    const newAccuracy = (accuracy.valueOf() * 100);
+    return this.round(newAccuracy, 1);
+  }
+
+  round(value: Number, precision: Number) {
+    var multiplier = Math.pow(10, precision.valueOf() || 0);
+    return Math.round(value.valueOf() * multiplier) / multiplier;
+}
+
 }

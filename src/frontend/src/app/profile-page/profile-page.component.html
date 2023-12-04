@@ -2,9 +2,9 @@
 
 <p></p>
 
-<mat-card class="card" style="align-items: center;" *ngIf="socialAuthService.authState | async as socialUser">
-    <img src="{{socialUser.photoUrl}}" width="120px" height="120px" style="border-radius: 50%;">
-    <h2 style="color: white;">{{socialUser.name}}</h2>
+<mat-card class="card" style="align-items: center;">
+    <img src="{{userPhoto}}" width="120px" height="120px" style="border-radius: 50%;">
+    <h2 style="color: white;">{{username}}</h2>
 </mat-card>
 
 <app-bottominfo></app-bottominfo>

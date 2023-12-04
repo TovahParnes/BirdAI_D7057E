@@ -1,5 +1,5 @@
-import {Component, OnInit, SimpleChanges} from '@angular/core';
-import {Router} from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {Router, ActivatedRoute} from '@angular/router';
 import {AppComponent} from '../app.component';
 import {HttpClient} from '@angular/common/http';
 import {getAllBirdsResponse, getFoundBirds} from 'src/assets/components/components';
@@ -24,19 +24,30 @@ export class LibraryComponent implements OnInit {
   showNavButtons = true;
   disableShowFoundFilter = false;
   showNothingFoundError: Boolean = false;
+  isLoading: boolean = false;
   
   constructor(
     private router: Router,
     public mainApp: AppComponent,
     private http: HttpClient,
     private wikiRest: WikirestService,
+    private route: ActivatedRoute
     ) {
-  } 
-  
+  }
+
+  //It is hardcoded in this that the upperlimit of pages is 59, change when total amount of birds api is available or when total
+  //amount of birds loaded per call / total amount of birds available changes
   ngOnInit() {
     this.getAllBirds();
     this.getSetOfBirds(0);
     this.getYourFoundBirds();
+
+    this.route.queryParams.subscribe(params => {
+      if(params['imagePage']){
+        const numericValue = parseInt(params['imagePage'], 10);
+        this.currentPageNumber = numericValue;
+      }
+    });
 
     this.selectedOption.valueChanges.subscribe(value => {
       this.filterByLetter(value);
@@ -55,12 +66,15 @@ export class LibraryComponent implements OnInit {
 
     this.pageSearch.valueChanges.subscribe(value => {
       const numericValue = parseInt(value, 10);
-      this.currentPageNumber = numericValue;
-      if (Number.isNaN(this.currentPageNumber.valueOf())) {
+      this.currentPageNumber = numericValue - 1;
+      if (Number.isNaN(this.currentPageNumber.valueOf())){
         this.currentPageNumber = 0;
+      }else if(this.currentPageNumber.valueOf()>=60){
+        this.currentPageNumber = 58;
       }
       this.changePage(0);
     });
+    this.changePage(0);
   }
 
   navigateToSpecies(imageId: string, imageName: string,imageSound:string, imageDesc: string, imageGenus:Boolean): void {
@@ -70,7 +84,8 @@ export class LibraryComponent implements OnInit {
         imageName: encodeURIComponent(imageName),
         imageSound: encodeURIComponent(imageSound),
         imageDesc: encodeURI(imageDesc),
-        imageGenus: imageGenus
+        imageGenus: imageGenus,
+        imagePage: this.currentPageNumber
       }
     });
   }
@@ -123,7 +138,9 @@ export class LibraryComponent implements OnInit {
     }
   }
 
+
   getSetOfBirds(pageNumber:Number) {
+    this.isLoading = true;
     this.sendGetSetOfBirdsRequest(pageNumber).subscribe(
       (response: getAllBirdsResponse) => {
         this.setOfBirds = response;
@@ -131,11 +148,16 @@ export class LibraryComponent implements OnInit {
         for (let i = 0; i <= this.setOfBirds.data.length; i++) {
           this.setDataImageToWikiImage(this.getWikiLinkTitle(i),i);
         }
+        this.isLoading = false;
       },
-      err => { 
+      err => {
+        this.isLoading = false;
         console.error("Failed at sending data:" + err); 
       }
     );
+    setTimeout(()=>{
+      this.isLoading = false;
+    },300)
   }
 
   sendGetSetOfBirdsRequest(pageNumber:Number) {
@@ -223,5 +245,8 @@ export class LibraryComponent implements OnInit {
     err => { 
       console.error('something went wrong' + err) 
     }); 
+  }
+  getCurrentPage(){
+    return this.currentPageNumber.valueOf() + 1;
   }
 }

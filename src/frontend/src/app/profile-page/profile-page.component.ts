@@ -10,6 +10,9 @@ import {AppComponent} from '../app.component';
 })
 export class ProfilePageComponent {
 
+  userPhoto = localStorage.getItem("userPhoto");
+  username = localStorage.getItem("username");
+
   constructor(
     private router: Router, 
     public mainApp: AppComponent,
