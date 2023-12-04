@@ -81,6 +81,20 @@ services:
         ipv4_address: 172.20.0.4
     ports:
       - "3502:3500"    # Map container port 3500 to host port 3502
+
+  sound_classification:
+    build:
+      context: ./src/AI/sound_classification/deploy
+      dockerfile: Dockerfile
+    image: sound_classification-image
+    container_name: sound_classification
+    depends_on:
+      - bird_ai
+    networks:
+      ai_network:
+        ipv4_address: 172.20.0.8
+    ports:
+      - "3503:3500"  # Map container port 3500 to host port 3501
   shared-requirements:
     build:
       context: ./src/AI

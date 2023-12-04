@@ -59,6 +59,7 @@ func New(app *fiber.App, db repositories.RepositoryEndpoints) {
 
 	aiRoute := api.Group("/ai")
 	aiRoute.Post("/inputimage", JWTProtected(), handler.ImagePrediction)
+	aiRoute.Post("/inputsound", JWTProtected(), handler.SoundPrediction)
 
 	// Serve the Angular app for all other routes
 	app.Get("*", func(c *fiber.Ctx) error {

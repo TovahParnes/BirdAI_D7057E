@@ -14,3 +14,7 @@ type AIBird struct {
 	Name     string  `json:"name" form:"name"`
 	Accuracy float32 `json:"accuracy" form:"accuracy"`
 }
+
+type AIError struct {
+	Error string `json:"error"`
+}
