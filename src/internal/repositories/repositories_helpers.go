@@ -17,9 +17,9 @@ var (
 	MediaColl = "media"
 )
 
-// SetSize TODO: Should probably be moved to some general file instead of repository specific
+// SetSize amount of documents returned per query.
 var (
-	SetSize = 10
+	SetSize = 30
 )
 
 // MongoInstance Instance of Mongo

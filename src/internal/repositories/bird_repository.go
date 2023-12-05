@@ -55,11 +55,17 @@ func (b *BirdRepository) UpdateBird(id string, bird models.BirdInput) models.Res
 
 // ListBirds returns a response with a list for set n of size SetSize that matches the given filter
 func (b *BirdRepository) ListBirds(filter bson.M, set int) models.Response {
+	if set == -1 {
+		return b.collection.FindAll(filter, 0, 0)
+	}
 	return b.collection.FindAll(filter, SetSize, SetSize*set)
 }
 
 // ListAllBirds returns a response with a list for set n of size SetSize
 func (b *BirdRepository) ListAllBirds(set int) models.Response {
+	if set == -1 {
+		return b.collection.FindAll(bson.M{}, 0, 0)
+	}
 	return b.collection.FindAll(bson.M{}, SetSize, SetSize*set)
 }
 
