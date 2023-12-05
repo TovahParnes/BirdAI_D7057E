@@ -68,9 +68,7 @@ export class SoundEditorComponent {
       this.wsRegions.on('region-clicked', (region, e) : void => {
         e.stopPropagation() // prevent triggering a click on the waveform
         this.activeRegion = region
-        this.isPaused = false
-        region.play()
-        region.setOptions({ color: this.randomColor() })
+        this.togglePauseTrack()
       });
 
       // Reset the active region when the user clicks anywhere in the waveform
