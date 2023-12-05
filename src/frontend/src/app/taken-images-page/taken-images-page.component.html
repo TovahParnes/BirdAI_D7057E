@@ -11,7 +11,7 @@
   <p></p>
     <mat-card class="resultCard" (click)="navigateToSpecies(item.userMedia.data, item.bird.Name, item.bird.Sound , item.bird.Description, item.bird.species)">
       <div class="imageContainer">
-        <img class="imagePreview" [src]=item.userMedia.data alt="Duck" width="100%">
+        <img class="imagePreview" [src]=item.userMedia.data width="100%">
         <button class="more-button" (click)="toggleSubMenu(i, $event)" tabindex="0">
           <span class="material-symbols-outlined">more_horiz</span>
         </button>
@@ -25,7 +25,7 @@
         <p class="textAlignment"  style="flex: 1; text-align: right;">{{item.location}} <span class="material-symbols-outlined">location_on</span></p>
       </div>
       <div class="alignment">
-        <p class="textAlignment" style="flex: 1;">{{item.accuracy}}</p>
+        <p class="textAlignment" style="flex: 1;">{{convertAccuracy(item.accuracy)+"%"}}</p>
         <p class="textAlignment" style="flex: 1; text-align: right;">{{parseDate(item.createdAt)}}</p>
       </div>
       <p class="textAlignment" style="flex: 1;">{{item.comment}}</p>

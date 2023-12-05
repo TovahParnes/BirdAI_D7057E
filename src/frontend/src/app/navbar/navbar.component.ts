@@ -19,6 +19,7 @@ export class NavbarComponent {
         public mainApp: AppComponent) {
     }
 
+    userPhoto = localStorage.getItem("userPhoto");
         
     @Input({ transform: booleanAttribute }) firstSelected!: boolean;
     @Input({ transform: booleanAttribute }) secondSelected!: boolean;
@@ -26,7 +27,11 @@ export class NavbarComponent {
 
 
     logout(): void {
-        this.mainApp.authService.signOut().then(() => this.router.navigate(['first-page']));
+        this.mainApp.authService.signOut();
+        localStorage.setItem("auth","-1");
+        localStorage.setItem("username","");
+        localStorage.setItem("userPhoto","");
+        this.router.navigate(["first-page"]);
     }
     
     navigateToHome(): void {

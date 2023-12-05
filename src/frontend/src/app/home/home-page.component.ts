@@ -193,7 +193,7 @@ export class MainPageComponent implements OnInit {
         let comment = this.postDetailsForm.get('comment')?.value;
 
         const postData = {
-          'accuracy': this.convertAccuracy(this.analyzed.data[0].aiBird.accuracy),
+          'accuracy': this.analyzed.data[0].aiBird.accuracy,
           'birdId': this.analyzed.data[0].birdId,
           'comment': comment,
           'location': location,

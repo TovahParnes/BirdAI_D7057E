@@ -30,6 +30,7 @@ export class SpeciesPageComponent implements AfterViewInit{
   imageDesc!: string;
   imageSound!: string;
   imageGenus!: Boolean;
+  imagePage!: number;
   responseData: ApiResponse | null = null;
   images: string[] = [];
   wikiData: WikiSummary = new WikiSummary;
@@ -56,6 +57,7 @@ export class SpeciesPageComponent implements AfterViewInit{
       this.imageSound = decodeURIComponent(params['imageSound']);
       this.imageDesc = decodeURIComponent(params['imageDesc']);
       this.imageGenus = params['imageGenus'];
+      this.imagePage = params['imagePage'];
         if (this.imageDate == "undefined"){
           this.imageDate = "Not Found Yet"
         }
@@ -99,8 +101,16 @@ export class SpeciesPageComponent implements AfterViewInit{
   }
 
   goBack(): void {
+    if(this.imagePage!= null){
+      this.router.navigate(['library'], {
+        queryParams: {
+          imagePage: this.imagePage
+        }
+    });
+  }else{
     this.location.back();
   }
+}
 
   getWikiLinkTitle(){
     let cutOffIndex = this.imageDesc.indexOf('wiki/');

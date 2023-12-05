@@ -30,19 +30,24 @@
         <button mat-fab color="primary" (click)="changePage(-1)" [disabled]="!showNavButtons"><mat-icon>keyboard_arrow_left</mat-icon></button>
         <div *ngIf="showNavButtons">
             <mat-form-field class="formField">
-                <mat-label>Current Page: {{currentPageNumber}}</mat-label>
+                <mat-label>Current Page: {{getCurrentPage()}}/59</mat-label>
                 <input matInput [formControl]="pageSearch">
             </mat-form-field>
         </div>
         <button mat-fab color="primary" (click)="changePage(1)" [disabled]="!showNavButtons"><mat-icon>keyboard_arrow_right</mat-icon></button>
     </div>
-    <div class="cardContainer">
+    <p></p>
+    <div *ngIf="isLoading" class="popup">
+        <mat-spinner style="margin: auto;"></mat-spinner>
+    </div>
+    <div class="cardContainer" *ngIf="isLoading!=true">
         <div *ngFor="let item of setOfBirds.data">
             <a target="_blank" (click)="navigateToSpecies(item.Image, item.Name, item.Sound, item.Description, item.species)">
                 <app-card title={{item.Name}} imageSrc={{item.Image}}></app-card>
             </a>
         </div>
     </div>
+    
 </mat-card>
 
 <mat-card class="card" *ngIf="showNothingFoundError">
