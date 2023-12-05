@@ -28,6 +28,7 @@ export class NavbarComponent {
 
     logout(): void {
         this.mainApp.authService.signOut();
+        localStorage.setItem("currentAdmin","")
         localStorage.setItem("auth","-1");
         localStorage.setItem("username","");
         localStorage.setItem("userPhoto","");
