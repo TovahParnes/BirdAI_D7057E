@@ -77,18 +77,18 @@ func IsValidPostCreation(post *models.PostCreation) models.Response {
 	if IsTypeError(response) {
 		return ErrorParams("Given bird id is not a valid id")
 	}
-	if post.Accuracy < 0 || post.Accuracy > 1 {
-		return ErrorParams("Accuracy must be between 0 and 1")
+	if post.Accuracy < 0 || post.Accuracy > 100 {
+		return ErrorParams("Accuracy must be between 0 and 100")
 	}
 	return Response(nil)
 }
 
 func IsValidPostInput(post *models.PostInput) models.Response {
-	if post.Location == "" {
-		return ErrorParams("Location is empty")
+	if containsSpecialCharacters(post.Location) {
+		return ErrorParams("Location has invalid characters")
 	}
-	if post.Comment == "" {
-		return ErrorParams("Comment is empty")
+	if containsSpecialCharacters(post.Comment) {
+		return ErrorParams("Comment has invalid characters")
 	}
 	return Response(nil)
 }

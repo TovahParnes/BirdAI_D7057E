@@ -1,7 +1,6 @@
 <app-navbar firstSelected="false" secondSelected="false" thirdSelected="true"></app-navbar>
 
 <mat-card class="card">
-    <h3 style="text-align: center;">You have found !TODO! birds, check out below whats avalible.</h3>
     <section>
         <div class="filterContainer">
             <mat-form-field class="formField">
@@ -11,40 +10,43 @@
 
             <mat-form-field class="formField">
                 <mat-label>Filter by Letter</mat-label>
-                <mat-select [formControl]="selectedOption">
+                <mat-select [formControl]="selectedOption" [disabled]="!showNavButtons">
                     <mat-option value="">All</mat-option>
                     <ng-container *ngFor="let letter of alphabet">
                         <mat-option [value]="letter">{{letter}}</mat-option>
                     </ng-container>
                 </mat-select>
             </mat-form-field>
-            <mat-checkbox [labelPosition]="'before'" style="min-width: 150px; margin-left: 8px;">Show only found</mat-checkbox>
+            
+            <mat-checkbox [labelPosition]="'before'" style="min-width: 150px; padding: 10px;" (change)="filterByFound($event.checked)" [disabled]="disableShowFoundFilter">Show only found</mat-checkbox>
         </div>
     </section>
 </mat-card>
 
 <p></p>
 
-<mat-card class="card">
+<mat-card class="card" *ngIf="!showNothingFoundError">
     <div style="justify-content: space-between; display: flex;">
-    <button mat-fab color="primary" (click)="changePage(-1)"><mat-icon>keyboard_arrow_left</mat-icon></button>
-    <mat-form-field class="formField">
-        <mat-label>Current Page: {{currentPageNumber}}</mat-label>
-        <input matInput [formControl]="pageSearch">
-    </mat-form-field>
-    <button mat-fab color="primary" (click)="changePage(1)"><mat-icon>keyboard_arrow_right</mat-icon></button>
+        <button mat-fab color="primary" (click)="changePage(-1)" [disabled]="!showNavButtons"><mat-icon>keyboard_arrow_left</mat-icon></button>
+        <div *ngIf="showNavButtons">
+            <mat-form-field class="formField">
+                <mat-label>Current Page: {{currentPageNumber}}</mat-label>
+                <input matInput [formControl]="pageSearch">
+            </mat-form-field>
+        </div>
+        <button mat-fab color="primary" (click)="changePage(1)" [disabled]="!showNavButtons"><mat-icon>keyboard_arrow_right</mat-icon></button>
     </div>
-    <p></p>
     <div class="cardContainer">
-        <div *ngFor="let item of allBirds.data; let last = last">
+        <div *ngFor="let item of setOfBirds.data">
             <a target="_blank" (click)="navigateToSpecies(item.Image, item.Name, item.Sound, item.Description, item.species)">
                 <app-card title={{item.Name}} imageSrc={{item.Image}}></app-card>
             </a>
-            <ng-container *ngIf="last">
-                {{ sortCards() }}
-            </ng-container>
         </div>
     </div>
+</mat-card>
+
+<mat-card class="card" *ngIf="showNothingFoundError">
+    <p>Use our tool to see your findings here</p>
 </mat-card>
 
 <app-bottominfo></app-bottominfo>
