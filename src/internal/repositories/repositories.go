@@ -4,6 +4,8 @@ import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
 	"context"
+	"fmt"
+	"log"
 	"os"
 	"time"
 
@@ -12,20 +14,10 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// TODO: Create a login for Db
-//const DBName = "birdai"
-//const MongoURI = "mongodb://localhost:27017"
-
-// Connect Connects to the db
-//
-// TODO: Check if connection needs any configurations
-//
-// TODO: Might be moved to other file
-
+// Connect Connects to the db and starts the health check routine
 func Connect(dbName, mongoURI string) (IMongoInstance, error) {
 	opts := options.Client()
 	opts.ApplyURI(mongoURI)
-	opts.SetConnectTimeout(10 * time.Second)
 	client, err := mongo.Connect(context.TODO(), opts)
 	if err != nil {
 		return nil, err
@@ -49,7 +41,34 @@ func Connect(dbName, mongoURI string) (IMongoInstance, error) {
 		Db:          db,
 		Collections: map[string]IMongoCollection{},
 	}
+
+	go func(db *mongo.Database) {
+		ticker := time.NewTicker(time.Minute)
+		defer ticker.Stop()
+
+		for {
+			select {
+			case <-ticker.C:
+				err := HealthCheck(db)
+				if err != nil {
+					log.Printf("MongoDB Health check failed: %v", err)
+				} else {
+					log.Printf("MongoDB Health check OK")
+				}
+
+			}
+		}
+	}(client.Database(dbName))
 	return m, nil
+}
+
+// HealthCheck pings the database and returns error if it fails
+func HealthCheck(db *mongo.Database) error {
+	err := db.Client().Ping(context.TODO(), nil)
+	if err != nil {
+		return fmt.Errorf("MongoDB ping failed: %v", err)
+	}
+	return nil
 }
 
 // SetupRepositories return a RepositoryEndpoints struct that allows access to the different repositories and functions
