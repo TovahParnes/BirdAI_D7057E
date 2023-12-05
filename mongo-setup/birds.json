@@ -542,7 +542,7 @@
     "_id": "65688720d066f604281509de",
     "name": "STRELITZIA",
     "species": false,
-    "description": "https://en.wikipedia.org/wiki/Strelitzia",
+    "description": "https://en.wikipedia.org/wiki/Bird-of-paradise",
     "sound_id": "No audio found"
   },
   {
@@ -1088,7 +1088,7 @@
     "_id": "65688720d066f60428150a2c",
     "name": "RUPICOLA",
     "species": false,
-    "description": "https://en.wikipedia.org/wiki/Rupicola",
+    "description": "https://en.wikipedia.org/wiki/Cock-of-the-rock",
     "sound_id": "https://xeno-canto.org/844504/download"
   },
   {
@@ -3398,7 +3398,7 @@
     "_id": "65688720d066f60428150b77",
     "name": "ICTERUS ICTERUS",
     "species": false,
-    "description": "https://en.wikipedia.org/wiki/Jaundice",
+    "description": "https://en.wikipedia.org/wiki/Venezuelan_troupial",
     "sound_id": "https://xeno-canto.org/838683/download"
   },
   {
@@ -3867,7 +3867,7 @@
     "_id": "6568979cd066f63260835bc4",
     "name": "APUS",
     "species": true,
-    "description": "https://en.wikipedia.org/wiki/Apus",
+    "description": "https://en.wikipedia.org/wiki/Apus_(bird)",
     "sound_id": "https://xeno-canto.org/712090/download"
   },
   {
@@ -3888,7 +3888,7 @@
     "_id": "6568979cd066f63260835bc7",
     "name": "FULICA",
     "species": true,
-    "description": "https://en.wikipedia.org/wiki/Lissachatina_fulica",
+    "description": "https://en.wikipedia.org/wiki/Coot",
     "sound_id": "https://xeno-canto.org/790481/download"
   },
   {
@@ -3965,7 +3965,7 @@
     "_id": "6568979cd066f63260835bd2",
     "name": "CIRCUS",
     "species": true,
-    "description": "https://en.wikipedia.org/wiki/Circus",
+    "description": "https://en.wikipedia.org/wiki/Harrier_(bird)",
     "sound_id": "https://xeno-canto.org/822174/download"
   },
   {

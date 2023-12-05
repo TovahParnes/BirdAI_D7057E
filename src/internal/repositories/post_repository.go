@@ -49,11 +49,17 @@ func (p *PostRepository) UpdatePost(id string, post models.PostInput) models.Res
 
 // ListPosts returns a response with a list for set n of size SetSize that matches the given filter
 func (p *PostRepository) ListPosts(filter bson.M, set int) models.Response {
+	if set == -1 {
+		return p.collection.FindAll(filter, 0, 0)
+	}
 	return p.collection.FindAll(filter, SetSize, SetSize*set)
 }
 
 // ListAllPosts returns a response with a list for set n of size SetSize
 func (p *PostRepository) ListAllPosts(set int) models.Response {
+	if set == -1 {
+		return p.collection.FindAll(bson.M{}, 0, 0)
+	}
 	return p.collection.FindAll(bson.M{}, SetSize, SetSize*set)
 }
 
