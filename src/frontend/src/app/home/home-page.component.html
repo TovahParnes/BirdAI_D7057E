@@ -32,6 +32,9 @@
     <mat-step *ngIf="form.value.option === 'option1'">
         <ng-template matStepLabel>Select the Image</ng-template>
         <input [disabled]="togglePostView" type="file" class="imageInput" id="imageInput" (change)="onFileSelected($event)" accept="image/*"/>
+        <div id="analyzeError" style="display: none;">
+          <p>Image size cannot exceed 15mb, please try again with a smaller image.</p>
+        </div>
 
         <img *ngIf="selectedImage" [src]="selectedImage" alt="Selected Image" width="92%" />
         <button *ngIf="selectedImage && !togglePostView" mat-icon-button class="deleteButton" onclick="document.getElementById('imageInput').value = ''" (click)="onClear()" color="primary"><mat-icon>delete</mat-icon></button>

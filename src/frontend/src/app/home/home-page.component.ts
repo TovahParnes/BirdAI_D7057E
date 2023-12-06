@@ -8,6 +8,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from 'src/environments/environment';
 import {Observable, catchError} from 'rxjs';
 import { WikiPageSegment, WikiSummary, WikirestService } from '../services/wiki.service';
+import {Ng2ImgMaxService} from 'ng2-img-max'
 
 @Component({
   selector: 'app-home-page',
@@ -33,6 +34,7 @@ export class MainPageComponent implements OnInit {
   togglePostView = false;
   toggleConfirmView = false;
   fileFormat = "";
+  compressed_img: string = "";
 
   constructor(
     private router: Router,
@@ -40,7 +42,8 @@ export class MainPageComponent implements OnInit {
     public socialAuthService: SocialAuthService,
     private formBuilder: FormBuilder,
     private http: HttpClient,
-    private wikiRest: WikirestService) {
+    private wikiRest: WikirestService,
+    private ng2ImgMax: Ng2ImgMaxService) {
   }
 
   ngOnInit() {
@@ -74,13 +77,29 @@ export class MainPageComponent implements OnInit {
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
+      const analyzeError = document.getElementById('analyzeError');
+      if(analyzeError){
+      analyzeError.style.display = 'none';
+      }
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = (e) => {
         this.selectedImage = reader.result;
-        const dataUrl = this.selectedImage as string;
-        const fileFormat = dataUrl.substring(dataUrl.indexOf('/') + 1, dataUrl.indexOf(';'));
-        this.fileFormat = fileFormat
+        if(this.selectedImage.length>15*1024*1024){
+          if (analyzeError){
+            analyzeError.style.display = 'block';
+            this.selectedImage = false;
+          }
+        }else{
+          const dataUrl = this.selectedImage as string;
+          const fileFormat = dataUrl.substring(dataUrl.indexOf('/') + 1, dataUrl.indexOf(';'));
+          this.fileFormat = fileFormat;
+  
+          const percentageReduction = 0.7;
+          const targetFileSize = file.size * (1 - percentageReduction);
+          const maxSizeInMB = targetFileSize * 0.000001;
+          this.compressImage(file,maxSizeInMB);
+        }
       };
     }
   }
@@ -198,7 +217,7 @@ export class MainPageComponent implements OnInit {
           'comment': comment,
           'location': location,
           "media":{
-            'data': this.selectedImage,
+            'data': this.compressed_img,
             'filetype': this.fileFormat
           }
         };
@@ -288,5 +307,25 @@ async setDataImageToWikiImage(wikiTitle:string,index:number){
 }); 
 
 }
-  
+
+compressImage(file: File, maxSizeInMB: number)  {
+  this.ng2ImgMax.compressImage(file, maxSizeInMB)
+    .subscribe(compressedImage => {
+      this.blobToBase64(compressedImage).then((result:string)=>{
+        this.compressed_img = result;
+      }
+      );
+    }, error => {
+      console.log(error.reason);
+   });
+}
+
+blobToBase64(blob:Blob) {
+  return new Promise<string>((resolve, _) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result as string);
+    reader.readAsDataURL(blob);
+  });
+}
+
 }
