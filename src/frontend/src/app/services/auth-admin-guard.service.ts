@@ -47,9 +47,7 @@ export class AuthGuardAdminService {
     const currentUser = localStorage.getItem('userId');
     await this.getCurrentAdmin();
     if (this.currentAdmin == currentUser){
-        console.log("ok")
     }else {
-        console.log("notok")
         this.router.navigate(['login'], { queryParams: { returnUrl: state.url }});
     }
   }

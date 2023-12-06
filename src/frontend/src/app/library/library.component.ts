@@ -25,6 +25,10 @@ export class LibraryComponent implements OnInit {
   disableShowFoundFilter = false;
   showNothingFoundError: Boolean = false;
   isLoading: boolean = false;
+  nrOfPages = 1;
+  //lengthOfSet is hardcoded to be static 30
+  lenghtOfSet = 30;
+  lengthOfBirds = 0;
   
   constructor(
     private router: Router,
@@ -35,8 +39,6 @@ export class LibraryComponent implements OnInit {
     ) {
   }
 
-  //It is hardcoded in this that the upperlimit of pages is 59, change when total amount of birds api is available or when total
-  //amount of birds loaded per call / total amount of birds available changes
   ngOnInit() {
     this.getAllBirds();
     this.getSetOfBirds(0);
@@ -69,8 +71,8 @@ export class LibraryComponent implements OnInit {
       this.currentPageNumber = numericValue - 1;
       if (Number.isNaN(this.currentPageNumber.valueOf())){
         this.currentPageNumber = 0;
-      }else if(this.currentPageNumber.valueOf()>=60){
-        this.currentPageNumber = 58;
+      }else if(this.currentPageNumber.valueOf()>=this.nrOfPages.valueOf()){
+        this.currentPageNumber = this.nrOfPages.valueOf()-1;
       }
       this.changePage(0);
     });
@@ -139,12 +141,13 @@ export class LibraryComponent implements OnInit {
   }
 
 
-  getSetOfBirds(pageNumber:Number) {
+  async getSetOfBirds(pageNumber:Number){
     this.isLoading = true;
     this.sendGetSetOfBirdsRequest(pageNumber).subscribe(
       (response: getAllBirdsResponse) => {
         this.setOfBirds = response;
         this.setOfBirdsBackup.data = response.data;
+        this.lenghtOfSet = response.data.length;
         for (let i = 0; i <= this.setOfBirds.data.length; i++) {
           this.setDataImageToWikiImage(this.getWikiLinkTitle(i),i);
         }
@@ -165,18 +168,16 @@ export class LibraryComponent implements OnInit {
   }
 
   getAllBirds() {
-    this.sendGetAllBirdsRequest().subscribe(
+    this.sendGetSetOfBirdsRequest(-1).subscribe(
       (response: getAllBirdsResponse) => {
         this.allBirds = response;
+        this.lengthOfBirds=response.data.length;
+        this.nrOfPages = Math.ceil(this.lengthOfBirds.valueOf()/this.lenghtOfSet.valueOf());
       },
       err => { 
         console.error("Failed at sending data:" + err); 
       }
     );
-  }
-
-  sendGetAllBirdsRequest() {
-    return this.http.get<getAllBirdsResponse>(environment.identifyRequestURL+"/birds/list");
   }
 
   getYourFoundBirds() {
@@ -222,6 +223,8 @@ export class LibraryComponent implements OnInit {
 
     if (this.currentPageNumber.valueOf() < 0) {
       this.currentPageNumber = 0;
+    } else if(this.currentPageNumber.valueOf()>=this.nrOfPages.valueOf()){
+      this.currentPageNumber = this.nrOfPages.valueOf()-1;
     } else {
       this.getSetOfBirds(this.currentPageNumber);
     }

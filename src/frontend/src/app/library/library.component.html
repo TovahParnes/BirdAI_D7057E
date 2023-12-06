@@ -30,7 +30,7 @@
         <button mat-fab color="primary" (click)="changePage(-1)" [disabled]="!showNavButtons"><mat-icon>keyboard_arrow_left</mat-icon></button>
         <div *ngIf="showNavButtons">
             <mat-form-field class="formField">
-                <mat-label>Current Page: {{getCurrentPage()}}/59</mat-label>
+                <mat-label>Current Page: {{getCurrentPage()}}/{{nrOfPages}}</mat-label>
                 <input matInput [formControl]="pageSearch">
             </mat-form-field>
         </div>
