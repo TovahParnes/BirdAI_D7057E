@@ -1,0 +1,6 @@
+<div>
+  <input type="file" (change)="onFileChange($event)" accept=".wav, .mp3">
+  <div id="waveform" #waveform></div>
+  <button (click)="saveSection()" *ngIf="soundLoaded">Confirm Selection</button>
+<!--  <button (click)="togglePauseTrack()" *ngIf="soundLoaded">{{isPaused ? "Play" : "Pause"}}</button>-->
+</div>

@@ -48,7 +48,8 @@
 
     <mat-step *ngIf="form.value.option === 'option2'">
       <ng-template matStepLabel>Select the Sound</ng-template>
-      <p>Not implemented</p>
+
+      <app-sound-editor></app-sound-editor>
 
       <div>
         <button mat-button matStepperPrevious style="margin-right: 6px;">Back</button>
@@ -104,12 +105,12 @@
 
       <div><label for="location">Location: </label></div>
       <div><input class="form-group" type="text" placeholder="Enter a location" id="location" formControlName="location" required></div>
-    
+
       <div><label for="comment">Comment: </label></div>
       <div></div>
-      
+
       <div class="form-group-double"><textarea id="comment" rows="6" cols="55" class="textarea" formControlName="comment" required></textarea></div>
-    
+
       <button mat-raised-button color="warn" (click)="closePostForm()" class="form-group">Abort</button>
       <button mat-raised-button color="primary" type="submit" class="form-group">Create post</button>
     </form>

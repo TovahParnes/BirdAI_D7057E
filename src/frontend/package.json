@@ -25,6 +25,7 @@
     "ng2-img-max": "^2.2.9",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "wavesurfer.js": "^7.4.12",
     "zone.js": "~0.13.0"
   },
   "devDependencies": {
