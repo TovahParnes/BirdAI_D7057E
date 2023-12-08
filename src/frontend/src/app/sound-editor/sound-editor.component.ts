@@ -1,6 +1,7 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import WaveSurfer from "wavesurfer.js";
 import RegionsPlugin from "wavesurfer.js/dist/plugins/regions";
+import {SoundSegment} from "../../assets/components/components";
 
 @Component({
   selector: 'app-sound-editor',
@@ -8,6 +9,8 @@ import RegionsPlugin from "wavesurfer.js/dist/plugins/regions";
   styleUrls: ['./sound-editor.component.css']
 })
 export class SoundEditorComponent {
+
+  @Output() responseEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @ViewChild('waveform', { static: false }) waveform!: ElementRef
 
@@ -29,6 +32,8 @@ export class SoundEditorComponent {
 
   // Allowed audio types
   private allowedTypes: string[] = ['audio/wav', 'audio/mpeg']
+
+  private soundData: string | null = null;
 
   /**
    * Initializes the Wavesurfer instance with the provided configuration.
@@ -108,11 +113,20 @@ export class SoundEditorComponent {
       if (this.isFileTypeAllowed(file)) {
         this.readSoundFile(file)
         this.checkFileDuration(file)
+        this.sendChangeIsFileLoaded(true)
+        return
       } else {
         console.error('Invalid file type. Please upload a .wav or .mp3 file.')
       }
     }
+    this.sendChangeIsFileLoaded(false)
   }
+
+  /**
+   * Helper function to emit to the parent component if a file is loaded or not.
+   * @param isLoaded
+   */
+  sendChangeIsFileLoaded(isLoaded: boolean) : void { this.responseEvent.emit(isLoaded) }
 
   /**
    * Checks the duration of the provided sound file and logs an error if it exceeds the maximum allowed duration.
@@ -155,9 +169,9 @@ export class SoundEditorComponent {
     const reader : FileReader = new FileReader()
 
     reader.onloadend = () : void => {
-      const soundData : string = reader.result as string
-      this.displaySound(soundData)
-    };
+      this.soundData = reader.result as string
+      this.displaySound(this.soundData)
+    }
 
     reader.readAsDataURL(file)
   }
@@ -225,8 +239,11 @@ export class SoundEditorComponent {
     this.wsRegions = null
   }
 
-  public saveSection() : void {
-    console.log("This should be the audio data we use for saving: ", this.wsRegions.regions[0])
-    /* TODO: Implement service call to backend, pass start time and data. */
+  public requestSoundData(): SoundSegment | null {
+    if (this.soundData) {
+      this.wavesurfer.pause()
+      return { startTime: Math.floor(this.wsRegions.regions[0].start * 1000), data: this.soundData }
+    }
+    return null
   }
 }

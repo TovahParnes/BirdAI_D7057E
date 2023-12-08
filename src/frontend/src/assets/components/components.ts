@@ -4,8 +4,8 @@ export interface AnalyzeResponse {
 }
 
 interface BirdData {
-    "aiBird": { 
-        "name": string; 
+    "aiBird": {
+        "name": string;
         "accuracy": Number;
     };
     "birdId": string;
@@ -78,13 +78,13 @@ export interface Post {
 }
 
 export interface UserBirdList {
-    birds:{   
+    birds:{
       "title": string;
       "image": string;
       "accuracy": Number;
     }[]
   }
-  
+
  export interface AnalyzedBird {
     "title": string;
     "image": string;
@@ -126,4 +126,9 @@ interface AdminData {
 export interface getFoundBirds {
     "data": PostData[],
     "timestamp": string
+}
+
+export interface SoundSegment {
+  "startTime": number,
+  "data": string
 }

@@ -49,11 +49,11 @@
     <mat-step *ngIf="form.value.option === 'option2'">
       <ng-template matStepLabel>Select the Sound</ng-template>
 
-      <app-sound-editor></app-sound-editor>
+      <app-sound-editor (responseEvent)="handleResponse($event)" #soundEditorRef></app-sound-editor>
 
       <div>
         <button mat-button matStepperPrevious style="margin-right: 6px;">Back</button>
-        <button mat-button matStepperNext disabled>Submit</button>
+        <button mat-button matStepperNext [disabled]="!isSoundFileLoaded" (click)="submitSound(loading)">Submit</button>
       </div>
     </mat-step>
 
