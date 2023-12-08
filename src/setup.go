@@ -6,14 +6,17 @@ import (
 	"birdai/src/internal/mock"
 	"birdai/src/internal/repositories"
 	"context"
-	swagger "github.com/arsmn/fiber-swagger/v2"
 	"os"
+
+	swagger "github.com/arsmn/fiber-swagger/v2"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func Setup(ctx context.Context) (*fiber.App, error) {
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		BodyLimit: 15 * 1024 * 1024,
+	})
 	db, err := repositories.SetupRepositories()
 	if err != nil {
 		return nil, err
