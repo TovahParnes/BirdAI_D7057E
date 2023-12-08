@@ -1,7 +1,15 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {SocialAuthService} from '@abacritt/angularx-social-login';
 import {Router} from '@angular/router';
-import {AnalyzeResponse, PostData, AnalyzedBird, UserBirdList, AdminResponse, UserResponse} from 'src/assets/components/components';
+import {
+  AnalyzeResponse,
+  PostData,
+  AnalyzedBird,
+  UserBirdList,
+  AdminResponse,
+  UserResponse,
+  SoundSegment
+} from 'src/assets/components/components';
 import {AppComponent} from '../app.component';
 import {FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
@@ -9,6 +17,7 @@ import {environment} from 'src/environments/environment';
 import {Observable, catchError} from 'rxjs';
 import { WikiPageSegment, WikiSummary, WikirestService } from '../services/wiki.service';
 import {Ng2ImgMaxService} from 'ng2-img-max'
+import {SoundEditorComponent} from "../sound-editor/sound-editor.component";
 
 @Component({
   selector: 'app-home-page',
@@ -19,9 +28,13 @@ import {Ng2ImgMaxService} from 'ng2-img-max'
 
 export class MainPageComponent implements OnInit {
 
+  isSoundFileLoaded: boolean = false
+  @ViewChild('soundEditorRef') soundEditorComponent: SoundEditorComponent | undefined
+
   form!: FormGroup;
   postDetailsForm!: FormGroup;
   selectedImage: any;
+  selectedSound: any;
   isLoading: boolean = false;
   createPostForm: boolean = false;
   latestAnalyzedBird!: AnalyzedBird
@@ -64,7 +77,7 @@ export class MainPageComponent implements OnInit {
     var multiplier = Math.pow(10, precision.valueOf() || 0);
     return Math.round(value.valueOf() * multiplier) / multiplier;
 }
-  
+
   convertAccuracy(accuracy: Number): Number {
     const newAccuracy = (accuracy.valueOf() * 100);
     return this.round(newAccuracy, 1);
@@ -94,7 +107,7 @@ export class MainPageComponent implements OnInit {
           const dataUrl = this.selectedImage as string;
           const fileFormat = dataUrl.substring(dataUrl.indexOf('/') + 1, dataUrl.indexOf(';'));
           this.fileFormat = fileFormat;
-  
+
           const percentageReduction = 0.7;
           const targetFileSize = file.size * (1 - percentageReduction);
           const maxSizeInMB = targetFileSize * 0.000001;
@@ -153,6 +166,38 @@ export class MainPageComponent implements OnInit {
     }
   }
 
+  postSoundForAnalysing(token: string, response: SoundSegment): Observable<AnalyzeResponse> {
+    const header: {Authorization: string} = { 'Authorization': `Bearer ${token}` }
+    return this.http.post<AnalyzeResponse>(environment.identifyRequestURL+"/ai/inputsound", response, { headers: header });
+  }
+
+  public submitSound(_element: HTMLElement) : void {   // Function to submit a sound to the backend for analyzing.
+    const response: SoundSegment | null | undefined = this.soundEditorComponent?.requestSoundData()
+
+    if (response) {
+      this.isLoading = true
+      const authKey: string | null = localStorage.getItem("auth")
+
+      if(authKey) {
+        this.postSoundForAnalysing(authKey, response).subscribe(
+          (response: AnalyzeResponse) : void => {
+            this.analyzed = response
+            if (this.analyzed.data.length != 0) { // Bird found
+              this.addNewBird(this.analyzed.data[0].aiBird.name, this.analyzed.data[0].description, this.analyzed.data[0].aiBird.accuracy)
+            }
+            this.isLoading = false
+          }, error => { this.isLoading = false }
+        )
+        this.togglePostView = true
+        _element.scrollIntoView()
+      }
+      return
+    }
+    alert("Something went wrong during the file upload process.")
+  }
+
+  handleResponse(response: boolean) : void { this.isSoundFileLoaded = response }
+
   addNewBird(name: string, imageUrl: string, accuracy: Number){
     const newitem = {"title": name, "image": imageUrl, "accuracy": accuracy}
     this.analyzedBirdList.birds.push(newitem);
@@ -181,7 +226,7 @@ export class MainPageComponent implements OnInit {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 100);
   }
-  
+
   openPostForm(){
     if (this.analyzed){
       document.body.style.overflow = 'hidden';
@@ -304,7 +349,7 @@ async setDataImageToWikiImage(wikiTitle:string,index:number){
     }
     }
   }, err => { console.log('something went wrong' + err)
-}); 
+});
 
 }
 
