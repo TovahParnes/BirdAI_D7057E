@@ -17,7 +17,7 @@ func Setup(ctx context.Context) (*fiber.App, error) {
 	app := fiber.New(fiber.Config{
 		BodyLimit: 15 * 1024 * 1024,
 	})
-	db, err := repositories.SetupRepositories()
+	db, err := repositories.SetupRepositories(ctx)
 	if err != nil {
 		return nil, err
 	}

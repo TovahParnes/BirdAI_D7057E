@@ -25,7 +25,7 @@ export class TakenImagesPageComponent {
   }
 
   constructor(
-    private router: Router, 
+    private router: Router,
     public mainApp: AppComponent,
     public socialAuthService: SocialAuthService,
     private formBuilder: FormBuilder,
@@ -48,13 +48,14 @@ export class TakenImagesPageComponent {
           this.userMe = response.data;
           this.getCurrentUserList().subscribe(
             (response: listOutput) => {
+              console.log(response.data);
               this.userList.data = response.data;
-            },err => { 
-              console.error("Failed at getting user list:" + err); 
+            },err => {
+              console.error("Failed at getting user list:" + err);
             }
           )
-        },err => { 
-          console.error("Failed at getting userMe:" + err); 
+        },err => {
+          console.error("Failed at getting userMe:" + err);
         }
       )
     }
@@ -64,6 +65,10 @@ export class TakenImagesPageComponent {
     const temp = date.split("T");
     const newDate = temp[0];
     return(newDate);
+  }
+
+  isSound(data: string): boolean {
+    return data.startsWith("data:audio/wav;base64,") || data.startsWith("data:audio/mpeg;base64,");
   }
 
   toggleSubMenu(index: number, event: Event) {
@@ -127,8 +132,8 @@ export class TakenImagesPageComponent {
               this.userList.data = response.data;
             },err => {}
           )
-        },err => { 
-          console.error("Failed at deleting post with id: "+ postId + " " + err); 
+        },err => {
+          console.error("Failed at deleting post with id: "+ postId + " " + err);
         }
       )
     }
@@ -149,7 +154,7 @@ export class TakenImagesPageComponent {
       let locat = this.updateDetailsForm.get('location')?.value ?? "unknown";
       let comment = this.updateDetailsForm.get('comment')?.value ?? "unknown";
 
-      
+
       this.sendUpdate(authKey, postId, locat, comment, birdId).subscribe(
         (response: UpdateResponse) => {
           this.openForm = false;
@@ -161,7 +166,7 @@ export class TakenImagesPageComponent {
             },err => {}
           )
         },err => {
-          console.error("Failed at updating post with id: "+ postId + " " + err); 
+          console.error("Failed at updating post with id: "+ postId + " " + err);
         }
       )
     }

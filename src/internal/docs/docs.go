@@ -981,7 +981,7 @@ const docTemplate = `{
         },
         "/api/v1/birds/list": {
             "get": {
-                "description": "List all birds of a specified set and seach parameters",
+                "description": "List all birds of a specified set and search parameters",
                 "consumes": [
                     "application/json"
                 ],
@@ -991,7 +991,7 @@ const docTemplate = `{
                 "tags": [
                     "Birds"
                 ],
-                "summary": "List all birds of a specified set and seach parameters",
+                "summary": "List all birds of a specified set and search parameters",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1329,8 +1329,8 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created",
                         "schema": {
                             "allOf": [
                                 {
@@ -1868,6 +1868,24 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.UserDB"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
                     "201": {
                         "description": "Created",
                         "schema": {
@@ -1879,7 +1897,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/models.UserLoginOutput"
+                                            "$ref": "#/definitions/models.UserDB"
                                         }
                                     }
                                 }
@@ -1992,8 +2010,8 @@ const docTemplate = `{
                             ]
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "allOf": [
                                 {
@@ -2739,8 +2757,8 @@ const docTemplate = `{
                 "birdId": {
                     "type": "string"
                 },
-                "userMedia": {
-                    "$ref": "#/definitions/models.MediaOutput"
+                "description": {
+                    "type": "string"
                 }
             }
         },
@@ -2798,12 +2816,7 @@ const docTemplate = `{
             }
         },
         "models.MediaInput": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "type": "string"
-                }
-            }
+            "type": "object"
         },
         "models.MediaOutput": {
             "type": "object",
@@ -2839,6 +2852,9 @@ const docTemplate = `{
         "models.PostDB": {
             "type": "object",
             "properties": {
+                "_id": {
+                    "type": "string"
+                },
                 "accuracy": {
                     "type": "number"
                 },
@@ -2849,9 +2865,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "createdAt": {
-                    "type": "string"
-                },
-                "id": {
                     "type": "string"
                 },
                 "location": {
@@ -2914,6 +2927,26 @@ const docTemplate = `{
                 }
             }
         },
+        "models.UserDB": {
+            "type": "object",
+            "properties": {
+                "_id": {
+                    "type": "string"
+                },
+                "active": {
+                    "type": "boolean"
+                },
+                "authId": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "models.UserInput": {
             "type": "object",
             "properties": {
@@ -2929,29 +2962,6 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "authId": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.UserLoginOutput": {
-            "type": "object",
-            "properties": {
-                "_id": {
-                    "type": "string"
-                },
-                "active": {
-                    "type": "boolean"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "createdNew": {
-                    "type": "boolean"
-                },
-                "token": {
                     "type": "string"
                 },
                 "username": {

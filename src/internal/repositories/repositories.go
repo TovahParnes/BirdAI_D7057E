@@ -15,15 +15,13 @@ import (
 )
 
 // Connect Connects to the db and starts the health check routine
-func Connect(dbName, mongoURI string) (IMongoInstance, error) {
+func Connect(dbName, mongoURI string, ctx context.Context) (IMongoInstance, error) {
 	opts := options.Client()
 	opts.ApplyURI(mongoURI)
-	client, err := mongo.Connect(context.TODO(), opts)
+	client, err := mongo.Connect(ctx, opts)
 	if err != nil {
 		return nil, err
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), 11*time.Second)
-	defer cancel()
 	// Ping to check the connection
 	err = client.Ping(ctx, nil)
 	if err != nil {
@@ -42,14 +40,14 @@ func Connect(dbName, mongoURI string) (IMongoInstance, error) {
 		Collections: map[string]IMongoCollection{},
 	}
 
-	go func(db *mongo.Database) {
+	go func(db *mongo.Database, ctx context.Context) {
 		ticker := time.NewTicker(time.Minute)
 		defer ticker.Stop()
 
 		for {
 			select {
 			case <-ticker.C:
-				err := HealthCheck(db)
+				err := HealthCheck(db, ctx)
 				if err != nil {
 					log.Printf("MongoDB Health check failed: %v", err)
 				} else {
@@ -58,13 +56,13 @@ func Connect(dbName, mongoURI string) (IMongoInstance, error) {
 
 			}
 		}
-	}(client.Database(dbName))
+	}(client.Database(dbName), ctx)
 	return m, nil
 }
 
 // HealthCheck pings the database and returns error if it fails
-func HealthCheck(db *mongo.Database) error {
-	err := db.Client().Ping(context.TODO(), nil)
+func HealthCheck(db *mongo.Database, ctx context.Context) error {
+	err := db.Client().Ping(ctx, nil)
 	if err != nil {
 		return fmt.Errorf("MongoDB ping failed: %v", err)
 	}
@@ -73,8 +71,8 @@ func HealthCheck(db *mongo.Database) error {
 
 // SetupRepositories return a RepositoryEndpoints struct that allows access to the different repositories and functions
 // Needs to swap out, so it uses env variables instead of set names
-func SetupRepositories() (RepositoryEndpoints, error) {
-	mongoInstance, err := Connect(os.Getenv("DB_NAME"), os.Getenv("MONGO_URI"))
+func SetupRepositories(ctx context.Context) (RepositoryEndpoints, error) {
+	mongoInstance, err := Connect(os.Getenv("DB_NAME"), os.Getenv("MONGO_URI"), ctx)
 	if err != nil {
 		return RepositoryEndpoints{}, err
 	}

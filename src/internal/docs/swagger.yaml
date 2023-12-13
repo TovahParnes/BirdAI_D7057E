@@ -34,8 +34,8 @@ definitions:
         $ref: '#/definitions/models.AIBird'
       birdId:
         type: string
-      userMedia:
-        $ref: '#/definitions/models.MediaOutput'
+      description:
+        type: string
     type: object
   models.BirdInput:
     properties:
@@ -73,9 +73,6 @@ definitions:
         type: integer
     type: object
   models.MediaInput:
-    properties:
-      data:
-        type: string
     type: object
   models.MediaOutput:
     properties:
@@ -99,6 +96,8 @@ definitions:
     type: object
   models.PostDB:
     properties:
+      _id:
+        type: string
       accuracy:
         type: number
       birdId:
@@ -106,8 +105,6 @@ definitions:
       comment:
         type: string
       createdAt:
-        type: string
-      id:
         type: string
       location:
         type: string
@@ -148,6 +145,19 @@ definitions:
       timestamp:
         type: string
     type: object
+  models.UserDB:
+    properties:
+      _id:
+        type: string
+      active:
+        type: boolean
+      authId:
+        type: string
+      createdAt:
+        type: string
+      username:
+        type: string
+    type: object
   models.UserInput:
     properties:
       active:
@@ -158,21 +168,6 @@ definitions:
   models.UserLogin:
     properties:
       authId:
-        type: string
-      username:
-        type: string
-    type: object
-  models.UserLoginOutput:
-    properties:
-      _id:
-        type: string
-      active:
-        type: boolean
-      createdAt:
-        type: string
-      createdNew:
-        type: boolean
-      token:
         type: string
       username:
         type: string
@@ -850,7 +845,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: List all birds of a specified set and seach parameters
+      description: List all birds of a specified set and search parameters
       parameters:
       - description: Set of birds
         in: query
@@ -892,7 +887,7 @@ paths:
                 data:
                   $ref: '#/definitions/models.Err'
               type: object
-      summary: List all birds of a specified set and seach parameters
+      summary: List all birds of a specified set and search parameters
       tags:
       - Birds
   /api/v1/posts:
@@ -910,8 +905,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             allOf:
             - $ref: '#/definitions/models.Response'
@@ -1204,6 +1199,15 @@ paths:
       produces:
       - application/json
       responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.UserDB'
+              type: object
         "201":
           description: Created
           schema:
@@ -1211,7 +1215,7 @@ paths:
             - $ref: '#/definitions/models.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/models.UserLoginOutput'
+                  $ref: '#/definitions/models.UserDB'
               type: object
         "400":
           description: Bad Request
@@ -1568,8 +1572,8 @@ paths:
                     $ref: '#/definitions/models.UserOutput'
                   type: array
               type: object
-        "401":
-          description: Unauthorized
+        "400":
+          description: Bad Request
           schema:
             allOf:
             - $ref: '#/definitions/models.Response'

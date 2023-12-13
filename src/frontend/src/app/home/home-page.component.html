@@ -49,7 +49,7 @@
     <mat-step *ngIf="form.value.option === 'option2'">
       <ng-template matStepLabel>Select the Sound</ng-template>
 
-      <app-sound-editor (responseEvent)="handleResponse($event)" #soundEditorRef></app-sound-editor>
+      <app-sound-editor (responseEvent)="onSoundSelected($event)" #soundEditorRef></app-sound-editor>
 
       <div>
         <button mat-button matStepperPrevious style="margin-right: 6px;">Back</button>
@@ -69,23 +69,38 @@
   </div>
   <div *ngIf="togglePostView">
     <div *ngIf="analyzed">
-      <mat-card class="resultCard">
         <div *ngIf="analyzed.data.length > 0">
-          <div class="imageContainer">
-            <img class="imagePreview" src="{{getLatestBird().image}}" width="100%">
-            <mat-progress-spinner class="accuracySpinner" [value]="convertAccuracy(analyzed.data[0].aiBird.accuracy).toString()" style="width: 100px; height: 100px;"></mat-progress-spinner>
-            <p class="accuracyText" color="primary">{{convertAccuracyToString(analyzed.data[0].aiBird.accuracy)}}</p>
+          <div *ngFor="let item of analyzed.data; index as i;">
+            <mat-card class="resultCard" style="margin-top: 20px">
+              <div *ngIf="i === 0">
+                <div class="imageContainer">
+                  <img class="imagePreview" src="{{getBirdByIndex(i).image}}" width="100%">
+                  <mat-progress-spinner class="accuracySpinner" [value]="convertAccuracy(item.aiBird.accuracy).toString()"></mat-progress-spinner>
+                  <p class="accuracyText" color="primary">{{convertAccuracyToString(item.aiBird.accuracy)}}</p>
+                </div>
+                <h2 class="textAlignment">{{item.aiBird.name}}</h2>
+                <p class="textAlignment">We belive this is a: {{item.aiBird.name}} with {{convertAccuracyToString(item.aiBird.accuracy)}} accuracy</p>
+              </div>
+              <div *ngIf="i > 0">
+                <div class="imageContainer">
+                  <img class="imagePreview" src="{{getBirdByIndex(i).image}}" width="100%">
+                </div>
+                <h2 class="textAlignment">{{item.aiBird.name}}</h2>
+                <p class="textAlignment">But it could also be a: {{item.aiBird.name}} with {{convertAccuracyToString(item.aiBird.accuracy)}} accuracy</p>
+              </div>
+            </mat-card>
           </div>
-          <h2 class="textAlignment">{{analyzed.data[0].aiBird.name}}</h2>
-          <p class="textAlignment">We belive this is a: {{analyzed.data[0].aiBird.name}} with {{convertAccuracyToString(analyzed.data[0].aiBird.accuracy)}} accuracy</p>
         </div>
         <div *ngIf="analyzed.data.length === 0">
           <p class="textAlignment">Sorry, but we could not recognize what this is</p>
         </div>
-      </mat-card>
-      <div *ngIf="analyzed.data.length > 0" style="display: flex; flex-direction: row; justify-content: center; padding-top: 6px;">
+    </div>
+    <div *ngIf="triedToAnalyze">
+      <div style="display: flex; flex-direction: row; justify-content: center; padding-top: 6px;">
         <button mat-raised-button color="warn" (click)="resetForm()" style="margin-right: 6px;">Reset</button>
-        <button mat-raised-button color="primary" (click)="openPostForm()">Create post</button>
+        <div *ngIf="analyzed && analyzed.data.length > 0">
+          <button mat-raised-button color="primary" (click)="openPostForm()">Create post</button>
+        </div>
       </div>
     </div>
   </div>

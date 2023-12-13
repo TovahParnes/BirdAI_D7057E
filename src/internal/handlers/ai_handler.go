@@ -58,7 +58,7 @@ func (h *Handler) ImagePrediction(c *fiber.Ctx) error {
 		return err
 	}
 
-	aiResponse := h.controller.AiListToResponse(aiBirds)
+	aiResponse := h.controller.AiListToResponse(aiBirds, false)
 
 	response = utils.Response(aiResponse)
 
@@ -114,6 +114,10 @@ func (h *Handler) SoundPrediction(c *fiber.Ctx) error {
 	if strings.HasPrefix(dat, startBaseUrl) {
 		dat = dat[len(startBaseUrl):]
 	}
+	startBaseUrl = "data:audio/mpeg;base64,"
+	if strings.HasPrefix(dat, startBaseUrl) {
+		dat = dat[len(startBaseUrl):]
+	}
 	audioBytes, err := base64.StdEncoding.DecodeString(dat)
 	if err != nil {
 		return err
@@ -160,7 +164,7 @@ func (h *Handler) SoundPrediction(c *fiber.Ctx) error {
 		return err
 	}
 
-	aiResponse := h.controller.AiListToResponse(aiBirds)
+	aiResponse := h.controller.AiListToResponse(aiBirds, true)
 
 	response = utils.Response(aiResponse)
 

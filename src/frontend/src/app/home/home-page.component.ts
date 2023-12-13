@@ -44,10 +44,12 @@ export class MainPageComponent implements OnInit {
   data: any;
   dataImg: any;
   analyzed: AnalyzeResponse | null = null;
+  triedToAnalyze: boolean = false;
   togglePostView = false;
   toggleConfirmView = false;
   fileFormat = "";
   compressed_img: string = "";
+  error: string | null = null;
 
   constructor(
     private router: Router,
@@ -121,6 +123,10 @@ export class MainPageComponent implements OnInit {
     }
   }
 
+  onSoundSelected(event: any) {
+    this.isSoundFileLoaded = true;
+  }
+
   onClear() {
     this.selectedImage = null;
   }
@@ -154,18 +160,22 @@ export class MainPageComponent implements OnInit {
         // Bird found
         else {
           this.isLoading = false;
-          this.addNewBird(
-            this.analyzed.data[0].aiBird.name,
-            this.analyzed.data[0].description,
-            this.analyzed.data[0].aiBird.accuracy
-              );
+          for (let i = 0; i < this.analyzed.data.length; i++) {
+            this.addNewBird(
+              this.analyzed.data[i].aiBird.name,
+              this.analyzed.data[i].description,
+              this.analyzed.data[i].aiBird.accuracy
+            );
+          }
         }
       },
       err => {
+        this.error = err;
         this.isLoading = false;
         console.error("Failed at sending data:" + err);
       }
     );
+    this.triedToAnalyze = true;
     this.togglePostView = true;
     el.scrollIntoView();
     }
@@ -193,15 +203,15 @@ export class MainPageComponent implements OnInit {
             this.isLoading = false
           }, error => { this.isLoading = false }
         )
+        this.triedToAnalyze = true;
         this.togglePostView = true
         _element.scrollIntoView()
       }
+      this.compressed_img = response.data;
       return
     }
     alert("Something went wrong during the file upload process.")
   }
-
-  handleResponse(response: boolean) : void { this.isSoundFileLoaded = response }
 
   addNewBird(name: string, imageUrl: string, accuracy: Number){
     const newitem = {"title": name, "image": imageUrl, "accuracy": accuracy}
@@ -216,6 +226,10 @@ export class MainPageComponent implements OnInit {
     return(this.analyzedBirdList.birds[len]);
   }
 
+  getBirdByIndex(i: number){
+    return(this.analyzedBirdList.birds[i]);
+  }
+
   getCurrentDateAndTime() {
     const dateTime = new Date();
     return dateTime.toLocaleString();
@@ -225,8 +239,13 @@ export class MainPageComponent implements OnInit {
     this.form.reset();
     this.postDetailsForm.reset();
     this.analyzed = null;
+    this.analyzedBirdList = {
+      birds: []
+    };
+    this.triedToAnalyze = false;
     this.togglePostView = false;
     this.selectedImage = null;
+    this.isSoundFileLoaded = false;
     setTimeout(function() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 100);

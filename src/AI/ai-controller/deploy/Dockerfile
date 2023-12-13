@@ -1,5 +1,5 @@
 
-FROM github.com/tovahparnes/birdai_d7057e:1.0.2
+FROM github.com/tovahparnes/birdai_d7057e:1.0.3
 #FROM bird_ai
 WORKDIR /app/ai-controller
 
