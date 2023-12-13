@@ -97,28 +97,33 @@ def save_json_file(file_path, json_data):
         print(f"Error writing to birds.json: {e}")
 
 
-def process_text_file(directory, filename, all_birds, json_data, species):
+def process_json_file(directory, filename, all_birds, json_data, species):
     file_path = os.path.join(directory, filename)
     try:
         with open(file_path, "r") as file:
-            for line in file:
-                name = line.strip()
+            data = json.load(file)
+            for key in data:
+                name = data[key]
                 if name not in all_birds:
                     new_id = str(ObjectId())
                     bird_dict = {"_id": new_id, "name": name, "species": species}
                     all_birds[name] = bird_dict
                     json_data.append(bird_dict)
     except Exception as e:
-        print(f"Error loading from text file '{filename}': {e}")
+        print(f"Error loading from json file '{filename}': {e}")
 
 
 def main():
     current_directory = os.getcwd()
-    json_data = load_json_file(os.path.join(current_directory, "birds.json"))
+    try:
+        json_data = load_json_file(os.path.join(current_directory, "birds.json"))
+    except Exception as e:
+        json_data = []
+        print(f"Error loading from json: {e}")
     all_birds = {entry["name"]: entry for entry in json_data}
 
-    process_text_file(current_directory, "birds.txt", all_birds, json_data, False)
-    process_text_file(current_directory, "genus.txt", all_birds, json_data, True)
+    process_json_file(current_directory, "birdsAI.json", all_birds, json_data, False)
+    process_json_file(current_directory, "genusAI.json", all_birds, json_data, True)
 
     errors = []
 
@@ -134,26 +139,22 @@ def main():
             if entry.get("description") is None and wikipedia_url:
                 entry["description"] = wikipedia_url
                 print(f"{wikipedia_url:55} was added to {bird_name}")
-            elif entry.get("description") and wikipedia_url:
-                continue
             elif entry.get("description") is None and wikipedia_url is None:
                 errors.append(f"Couldn't find wikipeida url for {bird_name}")
-
             # Xeno-canto audio url checks
             if entry.get("sound_id") is None and audio_url:
                 entry["sound_id"] = audio_url
                 print(f"{audio_url:55} was added to {bird_name}")
-            elif entry.get("sound_id") and audio_url:
-                continue
             elif entry.get("sound_id") is None and audio_url is None:
                 if wikipedia_url:
-                    get_audio(get_wikipedia_url(bird_name))
+                    audio_url = get_audio(get_bird_name(wikipedia_url))
                     if audio_url:
                         entry["sound_id"] = audio_url
                         print(f"{audio_url:55} was added to {bird_name}")
                     else:
                         errors.append(f"Couldn't find audio url for {bird_name}")
-
+                else:
+                    errors.append(f"Couldn't find audio url for {bird_name}")
     print_progress(len(json_data), len(json_data), 40)
     # Save the json_data after processing
     file_path = os.path.join(current_directory, "birds.json")
