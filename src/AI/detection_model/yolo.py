@@ -127,10 +127,15 @@ def delete_images(path):
 def run_classification(_image):
     # prediction_results[Bird index][0 = image, 5 = accuracy]
     prediction_results = predict_image(_image, rotations=0)
+    # Check if prediction_results is not empty and contains at least one result
+    if prediction_results and prediction_results[0][0]:
+        # The bird with the highest accuracy is always first in the array, so we use that as input
+        _res_image = crop_images(prediction_results[0][0], target_size=(224, 224))
 
-    # The bird with the highest accuracy is always first in the array, so we use that as input
-    _res_image = crop_images(prediction_results[0][0], target_size=(224, 224))
-    if _res_image:
-        return _res_image
+        # Check if _res_image is not empty
+        if _res_image:
+            return _res_image
+        else:
+            return None
     else:
         return None
