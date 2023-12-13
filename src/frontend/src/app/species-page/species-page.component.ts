@@ -51,12 +51,13 @@ export class SpeciesPageComponent implements AfterViewInit{
   }
 
   ngOnInit() {
+    window.scrollTo(0, 0);
     this.route.queryParams.subscribe(params => {
       this.imageId = decodeURIComponent(params['imageId']);
       this.imageName = decodeURIComponent(params['imageName']);
       this.imageSound = decodeURIComponent(params['imageSound']);
       this.imageDesc = decodeURIComponent(params['imageDesc']);
-      this.imageGenus = params['imageGenus'];
+      this.imageGenus = params['imageGenus'] === 'true';
       this.imagePage = params['imagePage'];
         if (this.imageDate == "undefined"){
           this.imageDate = "Not Found Yet"

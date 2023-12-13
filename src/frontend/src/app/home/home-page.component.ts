@@ -103,7 +103,10 @@ export class MainPageComponent implements OnInit {
             analyzeError.style.display = 'block';
             this.selectedImage = false;
           }
-        }else{
+        }else if(this.selectedImage.length < 1024*1024){
+          this.compressed_img = this.selectedImage;
+        }
+        else{
           const dataUrl = this.selectedImage as string;
           const fileFormat = dataUrl.substring(dataUrl.indexOf('/') + 1, dataUrl.indexOf(';'));
           this.fileFormat = fileFormat;
@@ -354,7 +357,7 @@ async setDataImageToWikiImage(wikiTitle:string,index:number){
 }
 
 compressImage(file: File, maxSizeInMB: number)  {
-  this.ng2ImgMax.compressImage(file, maxSizeInMB)
+    this.ng2ImgMax.compressImage(file, maxSizeInMB)
     .subscribe(compressedImage => {
       this.blobToBase64(compressedImage).then((result:string)=>{
         this.compressed_img = result;

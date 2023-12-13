@@ -59,7 +59,7 @@ interface Bird {
     "Name": string,
     "Description": string,
     "Sound": string,
-    "species": Boolean,
+    "Species": boolean,
     "Image": string
 }
 
