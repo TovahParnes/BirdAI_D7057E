@@ -30,6 +30,9 @@ def process_image():
 
     _result_image = yolo.run_classification(_image)
 
+    if not _result_image:
+        return jsonify({'message': 'Result empty no bird/Birds found'})
+
     pixel_data = list(_result_image.getdata())
 
     # Create a dictionary with image data
