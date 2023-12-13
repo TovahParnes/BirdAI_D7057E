@@ -29,7 +29,6 @@
             </ng-template>
             <span class="tooltiptext">Library</span>
         </div>
-
     </div>
   
     <div class="profile">
@@ -37,11 +36,8 @@
         <img src="{{userPhoto}}" width="40px" height="40px" style="border-radius: 50%;">
       </button> 
       <ul class="sub-menu">
-  
-        <!-- <mat-slide-toggle [(ngModel)]="mainApp.isDark">Darkmode</mat-slide-toggle><br> -->
-        <button mat-raised-button (click)="navigateToProfilePage()">Profile</button><br> <!-- {{socialUser.name}}<span class="material-symbols-outlined">chevron_right</span> -->
+        <button mat-raised-button (click)="navigateToProfilePage()">Profile</button><br>
         <button mat-raised-button (click)="logout()">Logout</button>
-  
       </ul>
     </div>
 </div>
