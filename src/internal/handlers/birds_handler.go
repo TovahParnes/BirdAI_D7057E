@@ -3,6 +3,7 @@ package handlers
 import (
 	"birdai/src/internal/models"
 	"birdai/src/internal/utils"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -61,6 +62,7 @@ func (h *Handler) ListBirds(c *fiber.Ctx) error {
 	setInt := response.Data.(int)
 
 	search := queries["search"]
+	search = strings.ReplaceAll(search, "%20", " ")
 	response = utils.IsValidSearch(search)
 	if utils.IsTypeError(response) {
 		return utils.ResponseToStatus(c, response)

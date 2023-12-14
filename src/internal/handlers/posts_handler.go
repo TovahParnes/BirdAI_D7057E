@@ -219,11 +219,6 @@ func (h *Handler) UpdatePost(c *fiber.Ctx) error {
 	if err := c.BodyParser(&post); err != nil {
 		return utils.ResponseToStatus(c, utils.ErrorParams(err.Error()))
 	}
-	response = utils.IsValidPostInput(post)
-	if utils.IsTypeError(response) {
-		return utils.ResponseToStatus(c, response)
-	}
-
 	//	@Failure		403	{object}	models.Response{}
 	// if user is not admin or post is not the same as the one being updated
 

@@ -23,13 +23,13 @@ func (c *Controller) CGetPostById(id string) models.Response {
 func (c *Controller) CListPosts(set int, search string) models.Response {
 	filter := bson.M{
 		"$or": []bson.M{
-			{"location": bson.M{"$regex": "(?i)"+search}}, 
-			{"comment": bson.M{"$regex": "(?i)"+search}},
-	}}
+			{"location": bson.M{"$regex": "(?i)" + search}},
+			{"comment": bson.M{"$regex": "(?i)" + search}},
+		}}
 
 	response := c.db.Post.ListPosts(filter, set)
 	posts := []*models.PostOutput{}
-	
+
 	if utils.IsTypeError(response) {
 		return response
 	}
@@ -50,8 +50,8 @@ func (c *Controller) CListUsersPosts(userId string, set int, search string) mode
 		"$and": []bson.M{
 			{"user_id": userId},
 			{"$or": []bson.M{
-				{"location": bson.M{"$regex": "(?i)"+search}}, 
-				{"comment": bson.M{"$regex": "(?i)"+search}},
+				{"location": bson.M{"$regex": "(?i)" + search}},
+				{"comment": bson.M{"$regex": "(?i)" + search}},
 			}},
 		},
 	}
@@ -74,8 +74,8 @@ func (c *Controller) CListUsersFoundBirds(userId string, set int, search string)
 		"$and": []bson.M{
 			{"user_id": userId},
 			{"$or": []bson.M{
-				{"location": bson.M{"$regex": "(?i)"+search}}, 
-				{"comment": bson.M{"$regex": "(?i)"+search}},
+				{"location": bson.M{"$regex": "(?i)" + search}},
+				{"comment": bson.M{"$regex": "(?i)" + search}},
 			}},
 		},
 	}
@@ -83,7 +83,8 @@ func (c *Controller) CListUsersFoundBirds(userId string, set int, search string)
 	response := c.db.Post.ListPosts(filter, set)
 	output := []*models.PostDB{}
 	for _, post := range response.Data.([]models.PostDB) {
-		output = append(output, &post)
+		tempPost := post
+		output = append(output, &tempPost)
 	}
 	return utils.Response(output)
 }

@@ -124,7 +124,7 @@ func isValidName(name string) models.Response {
 
 func containsSpecialCharacters(str string) bool {
 	f := func(r rune) bool {
-		return (r < 'A' || r > 'Z') && (r < 'a' || r > 'z') && (r < 'À' || r > 'Ö') && (r < 'Ø' || r > 'ß') && (r < 'à' || r > 'ö') && (r < 'ø' || r > 'ƿ')
+		return (r != ' ') && (r < 'A' || r > 'Z') && (r < 'a' || r > 'z') && (r < 'À' || r > 'Ö') && (r < 'Ø' || r > 'ß') && (r < 'à' || r > 'ö') && (r < 'ø' || r > 'ƿ')
 	}
 	if strings.IndexFunc(str, f) != -1 {
 		return true
