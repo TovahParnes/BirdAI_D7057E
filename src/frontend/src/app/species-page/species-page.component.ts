@@ -52,7 +52,7 @@ export class SpeciesPageComponent{
         if (this.imageDate == "undefined"){
           this.imageDate = "Not Found Yet"
         }
-      
+
 
       this.images = [
         this.imageId,
@@ -64,6 +64,10 @@ export class SpeciesPageComponent{
 
   get currentImage(): string {
     return this.images[0];
+  }
+
+  isSound(data: string): boolean {
+    return data.startsWith("data:audio/wav;base64,") || data.startsWith("data:audio/mpeg;base64,");
   }
 
   goBack(): void {
@@ -90,7 +94,7 @@ export class SpeciesPageComponent{
       this.wikiData = data;
       }
     }, err => { console.log('something went wrong' + err)
-  }); 
+  });
   }
 
   getWikiImage(wikiTitle:string){

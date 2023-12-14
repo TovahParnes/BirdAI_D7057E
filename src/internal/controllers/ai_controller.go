@@ -56,7 +56,7 @@ func (c *Controller) RequestAnalyze(mediaData, endpoint string) (models.AIList, 
 			return models.AIList{}, models.Err{
 				StatusCode:  http.StatusInternalServerError,
 				StatusName:  http.StatusText(http.StatusInternalServerError),
-				Message:     "Internal AI error",
+				Message:     e.Error,
 				Description: e.Error,
 			}
 		}
@@ -70,10 +70,15 @@ func (c *Controller) RequestAnalyze(mediaData, endpoint string) (models.AIList, 
 	}}, nil
 }
 
-func (c *Controller) AiListToResponse(aiList models.AIList) []models.AnalyzeResponse {
+func (c *Controller) AiListToResponse(aiList models.AIList, isSound bool) []models.AnalyzeResponse {
 	response := []models.AnalyzeResponse{}
 	for _, ai := range aiList.Birds {
-		bird := c.CGetBirdByName(strings.ToUpper(ai.Name))
+		var bird models.Response
+		if isSound {
+			bird = c.CGetBirdByName(ai.Name)
+		} else {
+			bird = c.CGetBirdByName(strings.ToUpper(ai.Name))
+		}
 		if utils.IsTypeError(bird) {
 			continue
 		}

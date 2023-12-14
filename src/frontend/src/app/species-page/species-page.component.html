@@ -3,8 +3,19 @@
 <div class="group">
   <mat-card class="resultCard" id="info">
       <button mat-fab class="goBackButton" color="primary" (click)="goBack()"><mat-icon>keyboard_arrow_left</mat-icon></button>
-      <img [src]="currentImage" alt="Slideshow Image" class="fit-image" id="Slideshow-image" style="width: 100%; border-top-left-radius: 7px; border-top-right-radius: 7px;">
-          <div *ngIf="imageGenus" style="text-align: center; text-transform: lowercase;"><i>Bird shown in image is part of the family {{imageName}}</i></div>
+      <div *ngIf="isSound(currentImage)" style="text-align: center; justify-content: center;">
+        <h2 style="text-align: center;">
+          Your recorded sound
+        </h2>
+        <audio controls>
+          <source src={{currentImage}}/>
+        </audio>
+      </div>
+      <div *ngIf="!isSound(currentImage)">
+        <img [src]="currentImage" alt="Slideshow Image" class="fit-image" id="Slideshow-image" style="width: 100%; border-top-left-radius: 7px; border-top-right-radius: 7px;">
+        <div *ngIf="imageGenus" style="text-align: center; text-transform: lowercase;"><i>Bird shown in image is part of the family {{imageName}}</i></div>
+      </div>
+
       <h2 style="text-align: center;">
         {{imageName}}
         <div *ngIf="imageGenus" style="display: inline;">(Genus)</div>
@@ -15,7 +26,7 @@
           <source src={{imageSound}}/>
         </audio>
       </div>
-        
+
       <div style="padding-left: 2.5%;padding-right: 2.5%;">
         <h2>Info</h2>
         {{wikiData.extract}}
@@ -23,7 +34,7 @@
       <br><br>
       <div class="container" *ngIf="wikiImages">
         <div style="padding-left: 2.5%;padding-right: 2.5%;">
-          <h2>Common Regions</h2> 
+          <h2>Common Regions</h2>
         </div>
 
         <img src="{{wikiImages}}" style="width: 100%; border-bottom-left-radius: 7px; border-bottom-right-radius: 7px;">

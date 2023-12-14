@@ -11,16 +11,23 @@
   <p></p>
     <mat-card class="resultCard" (click)="navigateToSpecies(item.userMedia.data, item.bird.Name, item.bird.Sound , item.bird.Description, item.bird.Species)">
       <div class="imageContainer">
-        <img class="imagePreview" [src]=item.userMedia.data width="100%">
+        <div *ngIf="isSound(item.userMedia.data)" style="text-align: center; justify-content: center;">
+          <audio controls>
+            <source src={{item.userMedia.data}}/>
+          </audio>
+        </div>
+        <div *ngIf="!isSound(item.userMedia.data)">
+          <img class="imagePreview" [src]=item.userMedia.data width="100%">
+        </div>
         <div class="dropDownMenu">
           <button class="more-button" (click)="toggleSubMenu(i, $event)" tabindex="0">
-            <span class="material-symbols-outlined" style="font-size: 50px;">more_horiz</span>
+            <span class="material-symbols-outlined">more_horiz</span>
           </button>
           <ul class="sub-menu" [class.visible]="activeSubMenuIndex === i" (click)="$event.stopPropagation()">
             <button mat-raised-button (click)="getPostIdToDelete(item._id)">Delete this post</button><br>
             <button mat-raised-button (click)="updateForm(item._id, item.location, item.comment, item.bird.Id)">Update this post</button>
           </ul>
-      </div>
+        </div>
       </div>
       <div class="alignment">
         <h2 class="textAlignment" style="flex: 1;">{{item.bird.Name}}</h2>
@@ -41,12 +48,12 @@
 
       <div><label for="location">Location: </label></div>
       <div><input class="form-group" type="text" id="location" formControlName="location" required></div>
-    
+
       <div><label for="comment">Comment: </label></div>
       <div></div>
-      
+
       <div class="form-group-double"><textarea id="comment" rows="6" cols="55" class="textarea" formControlName="comment"></textarea></div>
-    
+
       <button mat-raised-button color="warn" (click)="closePostForm()" class="form-group">Abort</button>
       <button mat-raised-button color="primary" type="submit" class="form-group">Update post</button>
     </form>
