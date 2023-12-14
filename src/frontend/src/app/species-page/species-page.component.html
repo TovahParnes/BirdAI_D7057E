@@ -1,11 +1,5 @@
 <app-navbar firstSelected="false" secondSelected="false" thirdSelected="false"></app-navbar>
 
-<!-- 
-    The images, name of species, description and map (map might not be implemented as it is alot of work for minor feature)
-    needs to be fetched from backend dynamically.
--->
-
-
 <div class="group">
   <mat-card class="resultCard" id="info">
       <button mat-fab class="goBackButton" color="primary" (click)="goBack()"><mat-icon>keyboard_arrow_left</mat-icon></button>
@@ -16,24 +10,17 @@
         <div *ngIf="imageGenus" style="display: inline;">(Genus)</div>
       </h2>
       <br>
-      <div style="text-align: center; justify-content: center;">
+      <div *ngIf="this.imageSound != null" style="text-align: center; justify-content: center;">
         <audio controls>
-          <!-- <source src="https://xeno-canto.org/842389/download"/> -->
           <source src={{imageSound}}/>
         </audio>
       </div>
         
-          <!-- <div class="buttonContainer">        
-              <a class="prev" (click)="prevImage()">❮</a>
-              <a class="next" (click)="nextImage()">❯</a>
-          </div> -->
       <div style="padding-left: 2.5%;padding-right: 2.5%;">
         <h2>Info</h2>
         {{wikiData.extract}}
       </div>
       <br><br>
-      <!-- <img src="{{wikiData.originalimage?.source}}" alt="{{wikiData.title}}"> -->
-      <!-- <div class="container" style="text-align: center;"> Common regions: <img src="assets/map.png" style="width: 100%;"></div> -->
       <div class="container" *ngIf="wikiImages">
         <div style="padding-left: 2.5%;padding-right: 2.5%;">
           <h2>Common Regions</h2> 

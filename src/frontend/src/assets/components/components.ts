@@ -132,3 +132,14 @@ export interface SoundSegment {
   "startTime": number,
   "data": string
 }
+
+export interface ApiResponse {
+    data: {  
+        id : string;
+        authId: string;
+        createdAt: string;
+        username: string;
+      }[];
+      message: string;
+      success: boolean;
+}

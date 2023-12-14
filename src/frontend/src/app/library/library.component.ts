@@ -124,6 +124,7 @@ export class LibraryComponent implements OnInit {
     timestamp: ""
   }
 
+  //filters displayed birds by the chosen first letter
   filterByLetter(selectedValue: any) {
     if (selectedValue == ""){
       this.showNavButtonsLetterFilter = true;
@@ -137,6 +138,7 @@ export class LibraryComponent implements OnInit {
     }
   }
 
+  //filters displayed birds by current users found birds list
   filterByFound(shouldFilter: boolean): void {
     this.showNavButtonsFoundFilter = !shouldFilter;
     this.setOfBirds.data = this.allBirds.data;
@@ -165,7 +167,6 @@ export class LibraryComponent implements OnInit {
     this.sendGetSetOfBirdsRequest(pageNumber).subscribe(
       (response: getAllBirdsResponse) => {
         this.setOfBirds = response;
-        //this.setOfBirdsBackup.data = response.data;
         this.lenghtOfSet = response.data.length;
         for (let i = 0; i <= this.setOfBirds.data.length; i++) {
           this.setDataImageToWikiImage(this.getWikiLinkTitle(i),i);
@@ -186,6 +187,7 @@ export class LibraryComponent implements OnInit {
     return this.http.get<getAllBirdsResponse>(environment.identifyRequestURL+"/birds/list?set="+pageNumber);
   }
 
+  //gets all birds stored in backend
   getAllBirds() {
     this.sendGetSetOfBirdsRequest(-1).subscribe(
       (response: getAllBirdsResponse) => {
@@ -199,6 +201,7 @@ export class LibraryComponent implements OnInit {
     );
   }
 
+  //gets the users found birds list
   getYourFoundBirds() {
     this.sendGetYourFoundBirdsRequest().subscribe(
       (response: getFoundBirds) => {
@@ -215,6 +218,7 @@ export class LibraryComponent implements OnInit {
     return this.http.get<getFoundBirds>(environment.identifyRequestURL+"/users/"+userId+"/birds/list");
   }
 
+  //sends request to backend to search through birdlist
   getSearchSet(searchQuery : string) {
     this.sendGetSearchSetRequest(searchQuery).subscribe(
       (response: getAllBirdsResponse) => {
@@ -233,6 +237,7 @@ export class LibraryComponent implements OnInit {
     return this.http.get<getAllBirdsResponse>(environment.identifyRequestURL+"/birds/list?search="+searchQuery);
   }
 
+  //increments displayed page by +/- one
   changePage(increment:Number) {
     if (increment.valueOf() < 0) {
       this.currentPageNumber = this.currentPageNumber.valueOf() - 1;
@@ -260,7 +265,6 @@ export class LibraryComponent implements OnInit {
       if(data.extract) {
         if(data.originalimage?.source) {
           this.setOfBirds.data[index].Image = data.originalimage?.source;
-          //this.setOfBirdsBackup.data[index].Image = data.originalimage?.source;
         }
       }
     },
@@ -268,6 +272,7 @@ export class LibraryComponent implements OnInit {
       console.error('something went wrong' + err) 
     }); 
   }
+  
   getCurrentPage(){
     return this.currentPageNumber.valueOf() + 1;
   }
