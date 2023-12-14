@@ -2,10 +2,11 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
 
 <div class="phoneScaling">
-<mat-card class="card">
-  <h1 style="margin-top: 0px;">Welcome to Bird AI</h1>
-  <p>Utilize AI to identify the bird species you've encountered. Our model has been trained on a diverse dataset comprising over 500 bird species</p>
-</mat-card>
+  <mat-card class="card">
+    <h1 style="margin-top: 0px;">Welcome to Bird AI</h1>
+    <p>Utilize AI to identify the bird species you've encountered. Our model has been trained on a diverse dataset
+      comprising over 500 bird species</p>
+  </mat-card>
 </div>
 
 <p></p>
@@ -14,48 +15,56 @@
   <mat-vertical-stepper>
     <form [formGroup]="form">
 
-    <mat-step [editable]="!togglePostView">
-      <div class="phoneScaling">
-      <ng-template matStepLabel>Select type of media</ng-template>
-    </div>
-      <mat-radio-group formControlName="option">
-        <mat-radio-button value="option1">Image</mat-radio-button><br>
-        <mat-radio-button value="option2">Sound</mat-radio-button>
-      </mat-radio-group>
-      <br/>
+      <mat-step [editable]="!togglePostView">
+        <div class="phoneScaling">
+          <ng-template matStepLabel>Select type of media</ng-template>
+        </div>
+        <mat-radio-group formControlName="option">
+          <mat-radio-button value="option1">Image</mat-radio-button>
+          <br>
+          <mat-radio-button value="option2">Sound</mat-radio-button>
+        </mat-radio-group>
+        <br/>
 
-      <div>
-        <button mat-button matStepperNext>Next</button>
-      </div>
-    </mat-step>
+        <div>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </mat-step>
 
-    <mat-step *ngIf="form.value.option === 'option1'">
+      <mat-step *ngIf="form.value.option === 'option1'">
         <ng-template matStepLabel>Select the Image</ng-template>
-        <input [disabled]="togglePostView" type="file" class="imageInput" id="imageInput" (change)="onFileSelected($event)" accept="image/*"/>
+        <input [disabled]="togglePostView" type="file" class="imageInput" id="imageInput"
+               (change)="onFileSelected($event)" accept="image/*"/>
         <div id="analyzeError" style="display: none;">
           <p>Image size cannot exceed 15mb, please try again with a smaller image.</p>
         </div>
 
-        <img *ngIf="selectedImage" [src]="selectedImage" alt="Selected Image" width="92%" />
-        <button *ngIf="selectedImage && !togglePostView" mat-icon-button class="deleteButton" onclick="document.getElementById('imageInput').value = ''" (click)="onClear()" color="primary"><mat-icon>delete</mat-icon></button>
+        <img *ngIf="selectedImage" [src]="selectedImage" alt="Selected Image" width="92%"/>
+        <button *ngIf="selectedImage && !togglePostView" mat-icon-button class="deleteButton"
+                onclick="document.getElementById('imageInput').value = ''" (click)="onClear()" color="primary">
+          <mat-icon>delete</mat-icon>
+        </button>
 
         <div style="padding-top: 4px">
           <button mat-button matStepperPrevious style="margin-right: 6px;" [disabled]="togglePostView">Back</button>
-          <button mat-raised-button color="primary" type="button" (click)="onSubmit(loading)" [disabled]="!selectedImage || togglePostView">Submit</button>
+          <button mat-raised-button color="primary" type="button" (click)="onSubmit(loading)"
+                  [disabled]="!selectedImage || togglePostView">Submit
+          </button>
         </div>
 
-    </mat-step>
+      </mat-step>
 
-    <mat-step *ngIf="form.value.option === 'option2'">
-      <ng-template matStepLabel>Select the Sound</ng-template>
+      <mat-step *ngIf="form.value.option === 'option2'">
+        <ng-template matStepLabel>Select the Sound</ng-template>
 
-      <app-sound-editor (responseEvent)="onSoundSelected($event)" #soundEditorRef></app-sound-editor>
+        <app-sound-editor (responseEvent)="onSoundSelected($event)" #soundEditorRef></app-sound-editor>
 
-      <div>
-        <button mat-button matStepperPrevious style="margin-right: 6px;">Back</button>
-        <button mat-button matStepperNext [disabled]="!isSoundFileLoaded" (click)="submitSound(loading)">Submit</button>
-      </div>
-    </mat-step>
+        <div>
+          <button mat-button matStepperPrevious style="margin-right: 6px;">Back</button>
+          <button mat-button matStepperNext [disabled]="!isSoundFileLoaded" (click)="submitSound(loading)">Submit
+          </button>
+        </div>
+      </mat-step>
 
     </form>
   </mat-vertical-stepper>
@@ -69,31 +78,37 @@
   </div>
   <div *ngIf="togglePostView">
     <div *ngIf="analyzed">
-        <div *ngIf="analyzed.data.length > 0">
-          <div *ngFor="let item of analyzed.data; index as i;">
-            <mat-card class="resultCard" style="margin-top: 20px">
-              <div *ngIf="i === 0">
-                <div class="imageContainer">
-                  <img class="imagePreview" src="{{getBirdByIndex(i).image}}" width="100%">
-                  <mat-progress-spinner class="accuracySpinner" [value]="convertAccuracy(item.aiBird.accuracy).toString()"></mat-progress-spinner>
-                  <p class="accuracyText" color="primary">{{convertAccuracyToString(item.aiBird.accuracy)}}</p>
-                </div>
-                <h2 class="textAlignment">{{item.aiBird.name}}</h2>
-                <p class="textAlignment">We belive this is a: {{item.aiBird.name}} with {{convertAccuracyToString(item.aiBird.accuracy)}} accuracy</p>
+      <div *ngIf="analyzed.data.length > 0">
+        <div *ngFor="let item of analyzed.data; index as i;">
+          <mat-card class="resultCard" style="margin-top: 20px">
+            <div *ngIf="i === 0">
+              <div class="imageContainer">
+                <img class="imagePreview" src="{{getBirdByIndex(i).image}}" width="100%">
+                <mat-progress-spinner class="accuracySpinner"
+                                      [value]="convertAccuracy(item.aiBird.accuracy).toString()"></mat-progress-spinner>
+                <p class="accuracyText" color="primary">{{convertAccuracyToString(item.aiBird.accuracy)}}</p>
               </div>
-              <div *ngIf="i > 0">
-                <div class="imageContainer">
-                  <img class="imagePreview" src="{{getBirdByIndex(i).image}}" width="100%">
-                </div>
-                <h2 class="textAlignment">{{item.aiBird.name}}</h2>
-                <p class="textAlignment">But it could also be a: {{item.aiBird.name}} with {{convertAccuracyToString(item.aiBird.accuracy)}} accuracy</p>
+              <h2 class="textAlignment">{{item.aiBird.name}}</h2>
+              <p class="textAlignment">We belive this is a: {{item.aiBird.name}} with
+                {{convertAccuracyToString(item.aiBird.accuracy)}} accuracy</p>
+            </div>
+            <div *ngIf="i > 0 && convertAccuracy(item.aiBird.accuracy) > accuracyLimit">
+              <div class="imageContainer">
+                <img class="imagePreview" src="{{getBirdByIndex(i).image}}" width="100%">
+                <mat-progress-spinner class="accuracySpinner"
+                                      [value]="convertAccuracy(item.aiBird.accuracy).toString()"></mat-progress-spinner>
+                <p class="accuracyText" color="primary">{{convertAccuracyToString(item.aiBird.accuracy)}}</p>
               </div>
-            </mat-card>
-          </div>
+              <h2 class="textAlignment">{{item.aiBird.name}}</h2>
+              <p class="textAlignment">But it could also be a: {{item.aiBird.name}} with
+                {{convertAccuracyToString(item.aiBird.accuracy)}} accuracy</p>
+            </div>
+          </mat-card>
         </div>
-        <div *ngIf="analyzed.data.length === 0">
-          <p class="textAlignment">Sorry, but we could not recognize what this is</p>
-        </div>
+      </div>
+      <div *ngIf="analyzed.data.length === 0">
+        <p class="textAlignment">Sorry, but we could not recognize what this is</p>
+      </div>
     </div>
     <div *ngIf="triedToAnalyze">
       <div style="display: flex; flex-direction: row; justify-content: center; padding-top: 6px;">
@@ -110,21 +125,26 @@
   <mat-card class="card" style="top: 20%; background-color: rgb(31, 32, 32); max-width: 500px;">
     <form [formGroup]="postDetailsForm" (ngSubmit)="createPost()" class="form-container">
       <div><label for="name">Name: </label></div>
-      <div><input class="form-group" type="text" id="name" formControlName="name" [readonly]="postDetailsForm.get('name')?.disabled"></div>
+      <div><input class="form-group" type="text" id="name" formControlName="name"
+                  [readonly]="postDetailsForm.get('name')?.disabled"></div>
 
       <div><label for="accuracy">Accuracy: </label></div>
-      <div><input class="form-group" type="text" id="accuracy" formControlName="accuracy" [readonly]="postDetailsForm.get('accuracy')?.disabled"></div>
+      <div><input class="form-group" type="text" id="accuracy" formControlName="accuracy"
+                  [readonly]="postDetailsForm.get('accuracy')?.disabled"></div>
 
       <div><label for="date">Date: </label></div>
-      <div><input class="form-group" type="text" id="date" formControlName="date" [readonly]="postDetailsForm.get('date')?.disabled"></div>
+      <div><input class="form-group" type="text" id="date" formControlName="date"
+                  [readonly]="postDetailsForm.get('date')?.disabled"></div>
 
       <div><label for="location">Location: </label></div>
-      <div><input class="form-group" type="text" placeholder="Enter a location" id="location" formControlName="location" required></div>
+      <div><input class="form-group" type="text" placeholder="Enter a location" id="location" formControlName="location"
+                  required></div>
 
       <div><label for="comment">Comment: </label></div>
       <div></div>
 
-      <div class="form-group-double"><textarea id="comment" rows="6" cols="55" class="textarea" formControlName="comment" required></textarea></div>
+      <div class="form-group-double"><textarea id="comment" rows="6" cols="55" class="textarea"
+                                               formControlName="comment" required></textarea></div>
 
       <button mat-raised-button color="warn" (click)="closePostForm()" class="form-group">Abort</button>
       <button mat-raised-button color="primary" type="submit" class="form-group">Create post</button>

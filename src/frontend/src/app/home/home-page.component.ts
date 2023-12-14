@@ -50,6 +50,7 @@ export class MainPageComponent implements OnInit {
   fileFormat = "";
   compressed_img: string = "";
   error: string | null = null;
+  accuracyLimit: Number = 30;
 
   constructor(
     private router: Router,
