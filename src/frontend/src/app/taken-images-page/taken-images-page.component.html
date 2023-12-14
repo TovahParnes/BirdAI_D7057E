@@ -9,23 +9,25 @@
 
 <div *ngFor="let item of userList.data.slice().reverse(); let i = index">
   <p></p>
-    <mat-card class="resultCard" (click)="navigateToSpecies(item.userMedia.data, item.bird.Name, item.bird.Sound , item.bird.Description, item.bird.species)">
+    <mat-card class="resultCard" (click)="navigateToSpecies(item.userMedia.data, item.bird.Name, item.bird.Sound , item.bird.Description, item.bird.Species)">
       <div class="imageContainer">
         <img class="imagePreview" [src]=item.userMedia.data width="100%">
-        <button class="more-button" (click)="toggleSubMenu(i, $event)" tabindex="0">
-          <span class="material-symbols-outlined">more_horiz</span>
-        </button>
-        <ul class="sub-menu" [class.visible]="activeSubMenuIndex === i" (click)="$event.stopPropagation()">
-          <button mat-raised-button (click)="getPostIdToDelete(item._id)">Delete this post</button><br>
-          <button mat-raised-button (click)="updateForm(item._id, item.location, item.comment, item.bird.Id)">Update this post</button>
-        </ul>
+        <div class="dropDownMenu">
+          <button class="more-button" (click)="toggleSubMenu(i, $event)" tabindex="0">
+            <span class="material-symbols-outlined" style="font-size: 50px;">more_horiz</span>
+          </button>
+          <ul class="sub-menu" [class.visible]="activeSubMenuIndex === i" (click)="$event.stopPropagation()">
+            <button mat-raised-button (click)="getPostIdToDelete(item._id)">Delete this post</button><br>
+            <button mat-raised-button (click)="updateForm(item._id, item.location, item.comment, item.bird.Id)">Update this post</button>
+          </ul>
+      </div>
       </div>
       <div class="alignment">
         <h2 class="textAlignment" style="flex: 1;">{{item.bird.Name}}</h2>
         <p class="textAlignment"  style="flex: 1; text-align: right;">{{item.location}} <span class="material-symbols-outlined">location_on</span></p>
       </div>
       <div class="alignment">
-        <p class="textAlignment" style="flex: 1;">{{convertAccuracy(item.accuracy)+"%"}}</p>
+        <p class="textAlignment" style="flex: 1;">Accuracy: {{convertAccuracy(item.accuracy)+"%"}}</p>
         <p class="textAlignment" style="flex: 1; text-align: right;">{{parseDate(item.createdAt)}}</p>
       </div>
       <p class="textAlignment" style="flex: 1;">{{item.comment}}</p>

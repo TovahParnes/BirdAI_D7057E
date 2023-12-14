@@ -87,6 +87,7 @@ export class MainPageComponent implements OnInit {
     return this.convertAccuracy(accuracy).toString()+"%";
   }
 
+  //handles the input image
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -103,7 +104,10 @@ export class MainPageComponent implements OnInit {
             analyzeError.style.display = 'block';
             this.selectedImage = false;
           }
-        }else{
+        }else if(this.selectedImage.length < 1024*1024){
+          this.compressed_img = this.selectedImage;
+        }
+        else{
           const dataUrl = this.selectedImage as string;
           const fileFormat = dataUrl.substring(dataUrl.indexOf('/') + 1, dataUrl.indexOf(';'));
           this.fileFormat = fileFormat;
@@ -132,13 +136,14 @@ export class MainPageComponent implements OnInit {
     return this.http.post<AnalyzeResponse>(environment.identifyRequestURL+"/ai/inputimage", body, { headers: header });
   }
 
+  //sends request through backend to AI to analyze image and recieves analyzed images as list
   onSubmit(el: HTMLElement) {
     this.isLoading = true;
     const authKey = localStorage.getItem("auth");
     if(authKey){
     this.postImageForAnalysing(authKey).subscribe(
       (response: AnalyzeResponse) => {
-        this.dataImg = this.selectedImage; //TABORT???????
+        this.dataImg = this.selectedImage;
         this.analyzed = response;
 
         // No birds found
@@ -273,6 +278,7 @@ export class MainPageComponent implements OnInit {
       }
   }
 
+  //sends request to backend to create a post using the user image after having it analyzed
   createPost(){
     const authKey = localStorage.getItem("auth");
     if(authKey){
@@ -292,6 +298,7 @@ export class MainPageComponent implements OnInit {
     document.body.style.overflow = 'auto';
   }
 
+  //gets the current admin, maybe should be attached to the adminAuthguard making it more hidden
   getCurrentAdmin(){
     try{
     const authKey = localStorage.getItem("auth");
@@ -326,6 +333,7 @@ export class MainPageComponent implements OnInit {
     }
   )}
 }
+
 getCurrentUser(token: string){
   const header = {
     'Authorization': `Bearer ${token}`
@@ -342,19 +350,17 @@ getWikiLinkTitle(index:number){
 async setDataImageToWikiImage(wikiTitle:string,index:number){
   this.wikiRest.getWiki(wikiTitle).subscribe(data => {
     if(data.extract){
-    //this.wikiData = data;
-    if(data.originalimage?.source){
-      this.analyzedBirdList.birds[index].image = data.originalimage?.source;
-      this.analyzedBirdList.birds[index].image = data.originalimage?.source;
+      if(data.originalimage?.source){
+        this.analyzedBirdList.birds[index].image = data.originalimage?.source;
+        this.analyzedBirdList.birds[index].image = data.originalimage?.source;
+      }
     }
-    }
-  }, err => { console.log('something went wrong' + err)
-});
-
+  },err => { console.log('something went wrong' + err)
+  });
 }
 
 compressImage(file: File, maxSizeInMB: number)  {
-  this.ng2ImgMax.compressImage(file, maxSizeInMB)
+    this.ng2ImgMax.compressImage(file, maxSizeInMB)
     .subscribe(compressedImage => {
       this.blobToBase64(compressedImage).then((result:string)=>{
         this.compressed_img = result;
@@ -365,6 +371,7 @@ compressImage(file: File, maxSizeInMB: number)  {
    });
 }
 
+//used by compress image to convert format
 blobToBase64(blob:Blob) {
   return new Promise<string>((resolve, _) => {
     const reader = new FileReader();

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {AppComponent} from '../app.component';
 import {HttpClient} from '@angular/common/http';
@@ -6,6 +6,9 @@ import {getAllBirdsResponse, getFoundBirds} from 'src/assets/components/componen
 import {environment} from 'src/environments/environment';
 import {FormControl} from '@angular/forms';
 import {WikirestService} from '../services/wiki.service';
+import {fromEvent} from 'rxjs';
+import {filter} from 'rxjs/operators';
+import {MatInput} from '@angular/material/input';
 
 @Component({
   selector: 'app-library',
@@ -21,7 +24,8 @@ export class LibraryComponent implements OnInit {
   pageSearch: FormControl = new FormControl();
   selectedOption: FormControl = new FormControl('');
   currentPageNumber: Number = 0;
-  showNavButtons = true;
+  showNavButtonsFoundFilter = true;
+  showNavButtonsLetterFilter = true;
   disableShowFoundFilter = false;
   showNothingFoundError: Boolean = false;
   isLoading: boolean = false;
@@ -29,6 +33,7 @@ export class LibraryComponent implements OnInit {
   //lengthOfSet is hardcoded to be static 30
   lenghtOfSet = 30;
   lengthOfBirds = 0;
+  @ViewChild(MatInput) matInput!: MatInput;
   
   constructor(
     private router: Router,
@@ -43,6 +48,7 @@ export class LibraryComponent implements OnInit {
     this.getAllBirds();
     this.getSetOfBirds(0);
     this.getYourFoundBirds();
+    this.setOfBirdsBackup.data = this.setOfBirds.data;
 
     this.route.queryParams.subscribe(params => {
       if(params['imagePage']){
@@ -55,16 +61,22 @@ export class LibraryComponent implements OnInit {
       this.filterByLetter(value);
     });
 
-    this.searchInput.valueChanges.subscribe(value => {
-      if (value == "") {
-        this.showNavButtons = true;
-        this.disableShowFoundFilter = false;
-      } else {
-        this.showNavButtons = false;
-        this.disableShowFoundFilter = true;
-      }
-      this.getSearchSet(value);
-    });
+    fromEvent(document, 'keydown')
+      .pipe(
+        filter((event: Event): event is KeyboardEvent => event instanceof KeyboardEvent),
+        filter((event: KeyboardEvent) => event.key === 'Enter')
+      )
+      .subscribe(() => {
+        const value = this.searchInput.value;
+        if (value === "") {
+          this.showNavButtonsFoundFilter = true;
+          this.disableShowFoundFilter = false;
+        } else {
+          this.showNavButtonsFoundFilter = false;
+          this.disableShowFoundFilter = true;
+        }
+        this.getSearchSet(value);
+      });
 
     this.pageSearch.valueChanges.subscribe(value => {
       const numericValue = parseInt(value, 10);
@@ -79,7 +91,7 @@ export class LibraryComponent implements OnInit {
     this.changePage(0);
   }
 
-  navigateToSpecies(imageId: string, imageName: string,imageSound:string, imageDesc: string, imageGenus:Boolean): void {
+  navigateToSpecies(imageId: string, imageName: string,imageSound:string, imageDesc: string, imageGenus:boolean): void {
     this.router.navigate(['species-page'], {
       queryParams: {
         imageId: encodeURIComponent(imageId),
@@ -112,20 +124,29 @@ export class LibraryComponent implements OnInit {
     timestamp: ""
   }
 
+  //filters displayed birds by the chosen first letter
   filterByLetter(selectedValue: any) {
-    this.setOfBirds.data = this.setOfBirdsBackup.data;
-    this.setOfBirds.data = this.setOfBirds.data.filter(card => card.Name.startsWith(selectedValue));
+    if (selectedValue == ""){
+      this.showNavButtonsLetterFilter = true;
+      this.getSetOfBirds(this.currentPageNumber);
+    }else{
+      this.showNavButtonsLetterFilter = false;
+      this.setOfBirds.data = this.allBirds.data.filter(card => card.Name.startsWith(selectedValue));
+      for (let i = 0; i < this.setOfBirds.data.length; i++) {
+        this.setDataImageToWikiImage(this.getWikiLinkTitle(i),i);
+      }
+    }
   }
 
+  //filters displayed birds by current users found birds list
   filterByFound(shouldFilter: boolean): void {
-    this.showNavButtons = !shouldFilter;
+    this.showNavButtonsFoundFilter = !shouldFilter;
     this.setOfBirds.data = this.allBirds.data;
 
     if (shouldFilter) {
       if (this.yourFoundBirds.data.length == 0) {
         this.showNothingFoundError = true;
       } 
-      
       else {
         for (let i = 0; i < this.yourFoundBirds.data.length; i++) {
           this.setOfBirds.data = this.setOfBirds.data.filter(item => item.Id.includes(this.yourFoundBirds.data[i].birdId));
@@ -133,20 +154,19 @@ export class LibraryComponent implements OnInit {
         }
       }
     } 
-    
     else {
       this.showNothingFoundError = false;
-      this.setOfBirds.data = this.setOfBirdsBackup.data;
+      this.getSetOfBirds(this.currentPageNumber);
     }
   }
 
-
+  //The isLoading variable will toggle a spinner when loading images between clicks on the arrows,
+  //for proper functionality it ought to be covering the loading of images instead of preventing them in html
   async getSetOfBirds(pageNumber:Number){
-    this.isLoading = true;
+    //this.isLoading = true;
     this.sendGetSetOfBirdsRequest(pageNumber).subscribe(
       (response: getAllBirdsResponse) => {
         this.setOfBirds = response;
-        this.setOfBirdsBackup.data = response.data;
         this.lenghtOfSet = response.data.length;
         for (let i = 0; i <= this.setOfBirds.data.length; i++) {
           this.setDataImageToWikiImage(this.getWikiLinkTitle(i),i);
@@ -167,6 +187,7 @@ export class LibraryComponent implements OnInit {
     return this.http.get<getAllBirdsResponse>(environment.identifyRequestURL+"/birds/list?set="+pageNumber);
   }
 
+  //gets all birds stored in backend
   getAllBirds() {
     this.sendGetSetOfBirdsRequest(-1).subscribe(
       (response: getAllBirdsResponse) => {
@@ -180,6 +201,7 @@ export class LibraryComponent implements OnInit {
     );
   }
 
+  //gets the users found birds list
   getYourFoundBirds() {
     this.sendGetYourFoundBirdsRequest().subscribe(
       (response: getFoundBirds) => {
@@ -196,6 +218,7 @@ export class LibraryComponent implements OnInit {
     return this.http.get<getFoundBirds>(environment.identifyRequestURL+"/users/"+userId+"/birds/list");
   }
 
+  //sends request to backend to search through birdlist
   getSearchSet(searchQuery : string) {
     this.sendGetSearchSetRequest(searchQuery).subscribe(
       (response: getAllBirdsResponse) => {
@@ -214,6 +237,7 @@ export class LibraryComponent implements OnInit {
     return this.http.get<getAllBirdsResponse>(environment.identifyRequestURL+"/birds/list?search="+searchQuery);
   }
 
+  //increments displayed page by +/- one
   changePage(increment:Number) {
     if (increment.valueOf() < 0) {
       this.currentPageNumber = this.currentPageNumber.valueOf() - 1;
@@ -241,7 +265,6 @@ export class LibraryComponent implements OnInit {
       if(data.extract) {
         if(data.originalimage?.source) {
           this.setOfBirds.data[index].Image = data.originalimage?.source;
-          this.setOfBirdsBackup.data[index].Image = data.originalimage?.source;
         }
       }
     },
@@ -249,6 +272,7 @@ export class LibraryComponent implements OnInit {
       console.error('something went wrong' + err) 
     }); 
   }
+  
   getCurrentPage(){
     return this.currentPageNumber.valueOf() + 1;
   }

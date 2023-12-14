@@ -36,8 +36,6 @@ export class AuthGuardService {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
-    const logged = this.loggedIn;
-    const destination: string = state.url;
     const authKey = localStorage.getItem("auth");
 
     if(authKey){

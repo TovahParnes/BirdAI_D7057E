@@ -154,6 +154,7 @@ constructor(
     return this.http.delete<DeleteResponse>(environment.identifyRequestURL+"/admins/"+userId,{ headers: header });
   }
 
+  //all requests is sent here to parse and send the input to the correct function
   createInput(request:string){
     const createAdmin_id = document.getElementById("createAdmin_id") as HTMLInputElement;
     const createAdminAccess = document.getElementById("createAdminAccess") as HTMLInputElement;
@@ -162,33 +163,44 @@ constructor(
     const getAdminId = document.getElementById("getAdminByID") as HTMLInputElement;
     const getSetOfAdmins = document.getElementById("getSetOfAdmins") as HTMLInputElement;
     const getSearchParameterForAdmin = document.getElementById("getSearchParameterForAdmins") as HTMLInputElement;
-    if(request == "createAdmin"){
-      this.createAdmin(createAdmin_id.value,createAdminAccess.value,createAdminUserId.value)
-      this.clearModifyInputs(createAdmin_id,createAdminAccess,createAdminUserId);
-    }else if(request == "updateAdmin"){
-      this.updateAdmin(createAdmin_id.value,createAdminAccess.value,createAdminUserId.value)
-      this.clearModifyInputs(createAdmin_id,createAdminAccess,createAdminUserId);
-    }else if(request == "deleteAdmin"){
-      this.deleteAdmin(deleteAdminUserId.value)
-      deleteAdminUserId.value ='';
-    }else if(request == "getAdminByID"){
-      this.getAdminByID(getAdminId.value);
-      this.clearGetInputs(getAdminId,getSetOfAdmins,getSearchParameterForAdmin);
-    }else if(request == "getListSetOfAdmins"){
-      this.listSetOfAdmins(getSetOfAdmins.value,getSearchParameterForAdmin.value);
-      this.clearGetInputs(getAdminId,getSetOfAdmins,getSearchParameterForAdmin);
-    }else if(request == "getCurrentAdmin"){
-      this.getCurrentAdmin();
-      this.clearGetInputs(getAdminId,getSetOfAdmins,getSearchParameterForAdmin);
+    switch (request){
+      case("createAdmin"):
+        this.createAdmin(createAdmin_id.value,createAdminAccess.value,createAdminUserId.value)
+        this.clearModifyInputs(createAdmin_id,createAdminAccess,createAdminUserId);
+        break;
+      case("updateAdmin"):
+        this.updateAdmin(createAdmin_id.value,createAdminAccess.value,createAdminUserId.value)
+        this.clearModifyInputs(createAdmin_id,createAdminAccess,createAdminUserId);
+        break;
+      case("deleteAdmin"):
+        this.deleteAdmin(deleteAdminUserId.value)
+        deleteAdminUserId.value ='';
+        break;
+      case("getAdminByID"):
+        this.getAdminByID(getAdminId.value);
+        this.clearGetInputs(getAdminId,getSetOfAdmins,getSearchParameterForAdmin);
+        break;
+      case("getListSetOfAdmins"):
+        this.listSetOfAdmins(getSetOfAdmins.value,getSearchParameterForAdmin.value);
+        this.clearGetInputs(getAdminId,getSetOfAdmins,getSearchParameterForAdmin);
+        break;
+      case("getCurrentAdmin"):
+        this.getCurrentAdmin();
+        this.clearGetInputs(getAdminId,getSetOfAdmins,getSearchParameterForAdmin);
+        break;
+      default:
+        console.log("erroneus input")
     }
   }
 
+  //clears the inputfields of modify
   clearModifyInputs(createAdmin_id:HTMLInputElement,createAdminAccess:HTMLInputElement,createAdminUserId:HTMLInputElement){
     createAdmin_id.value = '';
     createAdminAccess.value = '';
     createAdminUserId.value = '';
   }
 
+  //clears the inputfields of get
   clearGetInputs(getAdminId:HTMLInputElement,getSetOfAdmins:HTMLInputElement,getSearchParameterForAdmin:HTMLInputElement){
     getSetOfAdmins.value = '';
     getSearchParameterForAdmin.value = '';

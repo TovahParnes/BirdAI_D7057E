@@ -15,9 +15,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 })
 
 export class TakenImagesPageComponent {
-
-  private jsonUrl = 'assets/data.json';
-  dataList: any[] = [];
   activeSubMenuIndex: number | null = null;
   openForm: boolean = false;
   updateDetailsForm!: FormGroup;
@@ -37,11 +34,6 @@ export class TakenImagesPageComponent {
   }
 
   ngOnInit(): void {
-    this.getData().subscribe((response) => {
-      const data = response;
-      this.dataList = data.find((item) => 'dataList' in item)?.dataList || [];
-    });
-
     this.updateDetailsForm = this.formBuilder.group({
       postId: ['', Validators.required],
       birdId: ['', Validators.required],
@@ -54,8 +46,6 @@ export class TakenImagesPageComponent {
       this.getCurrentUser(authKey).subscribe(
         (response: UserResponse) => {
           this.userMe = response.data;
-          //after getting currentuser I have to immediatly run the getCurrentUserList or else the nginit will run this part before for some reason, 
-          //the value of this.userMe is set properly outside nginit but not inside if it is not nestled like this
           this.getCurrentUserList().subscribe(
             (response: listOutput) => {
               this.userList.data = response.data;
@@ -102,10 +92,6 @@ export class TakenImagesPageComponent {
     this.deletePost(id);
     window.location.reload();
   }
-  
-  getCurrentUserListData(){
-    console.log(this.userList.data)
-  }
 
   navigateToSpecies(imageId: string, imageName: string, imageSound: string, imageDesc: string,imageGenus:Boolean): void {
     this.router.navigate(['species-page'], {
@@ -117,10 +103,6 @@ export class TakenImagesPageComponent {
         imageGenus: imageGenus
       }
       });
-  }
-
-  getData(): Observable<any[]> {
-    return this.http.get<any[]>(this.jsonUrl);
   }
 
   getCurrentUser(token: string){
