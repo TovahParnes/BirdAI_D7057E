@@ -7,4 +7,4 @@ def load_model():
 
 
 def predict(_model, _image):
-    return _model.predict(_image)
+    return _model(_image)
