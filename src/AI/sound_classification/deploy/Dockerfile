@@ -1,5 +1,5 @@
 
-FROM github.com/tovahparnes/birdai_d7057e:1.0.3
+FROM github.com/tovahparnes/birdai_d7057e:1.0.4
 #FROM bird_ai
 WORKDIR /app/sound_classification
 EXPOSE 3502
