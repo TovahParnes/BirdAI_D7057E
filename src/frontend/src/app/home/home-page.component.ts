@@ -280,6 +280,9 @@ export class MainPageComponent implements OnInit {
 
         let location = this.postDetailsForm.get('location')?.value;
         let comment = this.postDetailsForm.get('comment')?.value;
+        if (comment.length >200){
+          comment = comment.slice(0,200);
+        }
 
         const postData = {
           'accuracy': this.analyzed.data[0].aiBird.accuracy,

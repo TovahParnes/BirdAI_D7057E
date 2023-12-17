@@ -153,8 +153,6 @@ export class LibraryComponent implements OnInit{
         this.showNothingFoundError = true;
       } 
       else {
-        console.log(this.yourFoundBirds);
-        console.log(this.yourFoundBirds.data.length);
         const templist: Bird[] = [];
         const uniqueBirdIdsSet = new Set<string>();
         for (let i = 0; i < this.yourFoundBirds.data.length; i++){
@@ -167,18 +165,10 @@ export class LibraryComponent implements OnInit{
             }
           }
         }
-        console.log(templist)
         this.setOfBirds.data = templist;
         for(let i = 0; i<this.setOfBirds.data.length;i++){
           this.setDataImageToWikiImage(this.getWikiLinkTitle(i),i);
         }
-
-        // for (let i = 0; i < this.yourFoundBirds.data.length; i++) {
-        //   templist.push(this.setOfBirds.data.filter(item => item.Id.includes(this.yourFoundBirds.data[i].birdId)));
-        //   //this.setDataImageToWikiImage(this.getWikiLinkTitle(i),i);
-        //   console.log(templist);
-        // }
-        //this.setOfBirds.data = templist;
       }
     } 
     else {
@@ -232,7 +222,6 @@ export class LibraryComponent implements OnInit{
   getYourFoundBirds() {
     this.sendGetYourFoundBirdsRequest().subscribe(
       (response: getFoundBirds) => {
-        console.log(response)
         this.yourFoundBirds = response
       },
       err => {
