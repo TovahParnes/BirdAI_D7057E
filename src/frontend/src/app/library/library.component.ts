@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {AppComponent} from '../app.component';
 import {HttpClient} from '@angular/common/http';
-import {getAllBirdsResponse, getFoundBirds} from 'src/assets/components/components';
+import {getAllBirdsResponse, getFoundBirds,Bird, PostData} from 'src/assets/components/components';
 import {environment} from 'src/environments/environment';
 import {FormControl} from '@angular/forms';
 import {WikirestService} from '../services/wiki.service';
@@ -153,10 +153,32 @@ export class LibraryComponent implements OnInit{
         this.showNothingFoundError = true;
       } 
       else {
-        for (let i = 0; i < this.yourFoundBirds.data.length; i++) {
-          this.setOfBirds.data = this.setOfBirds.data.filter(item => item.Id.includes(this.yourFoundBirds.data[i].birdId));
+        console.log(this.yourFoundBirds);
+        console.log(this.yourFoundBirds.data.length);
+        const templist: Bird[] = [];
+        const uniqueBirdIdsSet = new Set<string>();
+        for (let i = 0; i < this.yourFoundBirds.data.length; i++){
+          if (!uniqueBirdIdsSet.has(this.yourFoundBirds.data[i].birdId)){
+            uniqueBirdIdsSet.add(this.yourFoundBirds.data[i].birdId);
+            const foundBird = this.allBirds.data.find(bird => bird.Id === this.yourFoundBirds.data[i].birdId);
+            if(foundBird){
+              templist.push(foundBird);
+              
+            }
+          }
+        }
+        console.log(templist)
+        this.setOfBirds.data = templist;
+        for(let i = 0; i<this.setOfBirds.data.length;i++){
           this.setDataImageToWikiImage(this.getWikiLinkTitle(i),i);
         }
+
+        // for (let i = 0; i < this.yourFoundBirds.data.length; i++) {
+        //   templist.push(this.setOfBirds.data.filter(item => item.Id.includes(this.yourFoundBirds.data[i].birdId)));
+        //   //this.setDataImageToWikiImage(this.getWikiLinkTitle(i),i);
+        //   console.log(templist);
+        // }
+        //this.setOfBirds.data = templist;
       }
     } 
     else {
@@ -210,6 +232,7 @@ export class LibraryComponent implements OnInit{
   getYourFoundBirds() {
     this.sendGetYourFoundBirdsRequest().subscribe(
       (response: getFoundBirds) => {
+        console.log(response)
         this.yourFoundBirds = response
       },
       err => {

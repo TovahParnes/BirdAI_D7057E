@@ -48,7 +48,6 @@ export class TakenImagesPageComponent {
           this.userMe = response.data;
           this.getCurrentUserList().subscribe(
             (response: listOutput) => {
-              console.log(response.data);
               this.userList.data = response.data;
             },err => {
               console.error("Failed at getting user list:" + err);
