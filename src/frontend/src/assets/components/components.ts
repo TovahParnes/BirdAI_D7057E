@@ -54,7 +54,7 @@ export interface listOutputData {
     "userMedia": Media
 }
 
-interface Bird {
+export interface Bird {
     "Id": string,
     "Name": string,
     "Description": string,

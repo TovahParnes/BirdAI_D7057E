@@ -1,12 +1,12 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {AppComponent} from '../app.component';
 import {HttpClient} from '@angular/common/http';
-import {getAllBirdsResponse, getFoundBirds} from 'src/assets/components/components';
+import {getAllBirdsResponse, getFoundBirds,Bird, PostData} from 'src/assets/components/components';
 import {environment} from 'src/environments/environment';
 import {FormControl} from '@angular/forms';
 import {WikirestService} from '../services/wiki.service';
-import {fromEvent} from 'rxjs';
+import {fromEvent,debounceTime, Subscription} from 'rxjs';
 import {filter} from 'rxjs/operators';
 import {MatInput} from '@angular/material/input';
 
@@ -16,7 +16,7 @@ import {MatInput} from '@angular/material/input';
   styleUrls: ['./library.component.css'],
 })
 
-export class LibraryComponent implements OnInit {
+export class LibraryComponent implements OnInit{
 
   jsonUrl = 'assets/data.json';
   alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
@@ -29,10 +29,12 @@ export class LibraryComponent implements OnInit {
   disableShowFoundFilter = false;
   showNothingFoundError: Boolean = false;
   isLoading: boolean = false;
-  nrOfPages = 1;
+  //nrOfPages is set dynamically but there is a bug when returning from species if initially set too small
+  nrOfPages = 100000;
   //lengthOfSet is hardcoded to be static 30
   lenghtOfSet = 30;
   lengthOfBirds = 0;
+  private pageSearchSubscription: Subscription | undefined;
   @ViewChild(MatInput) matInput!: MatInput;
   
   constructor(
@@ -53,7 +55,7 @@ export class LibraryComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       if(params['imagePage']){
         const numericValue = parseInt(params['imagePage'], 10);
-        this.currentPageNumber = numericValue;
+        this.currentPageNumber = numericValue.valueOf();
       }
     });
 
@@ -61,10 +63,9 @@ export class LibraryComponent implements OnInit {
       this.filterByLetter(value);
     });
 
-    fromEvent(document, 'keydown')
-      .pipe(
-        filter((event: Event): event is KeyboardEvent => event instanceof KeyboardEvent),
-        filter((event: KeyboardEvent) => event.key === 'Enter')
+    this.searchInput.valueChanges
+    .pipe(
+      debounceTime(300)
       )
       .subscribe(() => {
         const value = this.searchInput.value;
@@ -78,18 +79,22 @@ export class LibraryComponent implements OnInit {
         this.getSearchSet(value);
       });
 
-    this.pageSearch.valueChanges.subscribe(value => {
-      const numericValue = parseInt(value, 10);
-      this.currentPageNumber = numericValue - 1;
-      if (Number.isNaN(this.currentPageNumber.valueOf())){
-        this.currentPageNumber = 0;
-      }else if(this.currentPageNumber.valueOf()>=this.nrOfPages.valueOf()){
-        this.currentPageNumber = this.nrOfPages.valueOf()-1;
-      }
-      this.changePage(0);
+      this.pageSearch.valueChanges.subscribe(value => {
+      if(value == ''){
+      }else{
+        const numericValue = parseInt(value, 10);
+        this.currentPageNumber = numericValue - 1;
+        if (Number.isNaN(this.currentPageNumber.valueOf())){
+          this.currentPageNumber = 0;
+        }else if(this.currentPageNumber.valueOf()>=this.nrOfPages.valueOf()){
+          this.currentPageNumber = this.nrOfPages.valueOf()-1;
+        }
+        
+        this.changePage(0);}
     });
     this.changePage(0);
   }
+
 
   navigateToSpecies(imageId: string, imageName: string,imageSound:string, imageDesc: string, imageGenus:boolean): void {
     this.router.navigate(['species-page'], {
@@ -148,8 +153,20 @@ export class LibraryComponent implements OnInit {
         this.showNothingFoundError = true;
       } 
       else {
-        for (let i = 0; i < this.yourFoundBirds.data.length; i++) {
-          this.setOfBirds.data = this.setOfBirds.data.filter(item => item.Id.includes(this.yourFoundBirds.data[i].birdId));
+        const templist: Bird[] = [];
+        const uniqueBirdIdsSet = new Set<string>();
+        for (let i = 0; i < this.yourFoundBirds.data.length; i++){
+          if (!uniqueBirdIdsSet.has(this.yourFoundBirds.data[i].birdId)){
+            uniqueBirdIdsSet.add(this.yourFoundBirds.data[i].birdId);
+            const foundBird = this.allBirds.data.find(bird => bird.Id === this.yourFoundBirds.data[i].birdId);
+            if(foundBird){
+              templist.push(foundBird);
+              
+            }
+          }
+        }
+        this.setOfBirds.data = templist;
+        for(let i = 0; i<this.setOfBirds.data.length;i++){
           this.setDataImageToWikiImage(this.getWikiLinkTitle(i),i);
         }
       }
@@ -240,8 +257,10 @@ export class LibraryComponent implements OnInit {
   //increments displayed page by +/- one
   changePage(increment:Number) {
     if (increment.valueOf() < 0) {
+      this.pageSearch.setValue('');
       this.currentPageNumber = this.currentPageNumber.valueOf() - 1;
     } else if (increment.valueOf() > 0) {
+      this.pageSearch.setValue('');
       this.currentPageNumber = this.currentPageNumber.valueOf() + 1;
     }
 
@@ -263,8 +282,10 @@ export class LibraryComponent implements OnInit {
   async setDataImageToWikiImage(wikiTitle:string, index:number) {
     this.wikiRest.getWiki(wikiTitle).subscribe(data => {
       if(data.extract) {
-        if(data.originalimage?.source) {
+        if(data.originalimage?.source && !data.originalimage.source.includes('map')) {
           this.setOfBirds.data[index].Image = data.originalimage?.source;
+        }else{
+          this.setOfBirds.data[index].Image = "assets/no_img_available.png"
         }
       }
     },
