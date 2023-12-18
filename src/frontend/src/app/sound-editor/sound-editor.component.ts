@@ -27,13 +27,12 @@ export class SoundEditorComponent {
   public isPaused: boolean = true
   public soundLoaded: boolean = false
 
-  // Maximum allowed audio length to be loaded into frontend for visualization
-  private maxAudioLength: number = 120
-
   // Allowed audio types
   private allowedTypes: string[] = ['audio/wav', 'audio/mpeg']
 
-  private soundData: string | null = null;
+  private soundData: string | null = null
+
+  private allowedFileSizeInMB: number = 500
 
   /**
    * Initializes the Wavesurfer instance with the provided configuration.
@@ -104,15 +103,14 @@ export class SoundEditorComponent {
   onFileChange(event: any): void {
     if (this.wavesurfer) this.resetComponent()  // If existing wavesurfer, reset it.
 
-    this.initWavesurfer()
-    this.initRegionsPlugin()
-
     if (event.target.files.length > 0) {
       const file: File = event.target.files[0]
 
       if (this.isFileTypeAllowed(file)) {
+        if (!this.isValidFileSize(file)) { alert("The filesize was too large"); return }
+        this.initWavesurfer()
+        this.initRegionsPlugin()
         this.readSoundFile(file)
-        this.checkFileDuration(file)
         this.sendChangeIsFileLoaded(true)
         return
       } else {
@@ -123,32 +121,17 @@ export class SoundEditorComponent {
   }
 
   /**
+   * Checks if the file size is valid based on the allowed maximum size.
+   * @param file - The File object to check.
+   * @returns True if the file size is within the allowed limit, false otherwise.
+   */
+  isValidFileSize(file: File): boolean { return file.size <= (this.allowedFileSizeInMB * 1024 * 1024) } // Convert MB to bytes
+
+  /**
    * Helper function to emit to the parent component if a file is loaded or not.
    * @param isLoaded
    */
   sendChangeIsFileLoaded(isLoaded: boolean) : void { this.responseEvent.emit(isLoaded) }
-
-  /**
-   * Checks the duration of the provided sound file and logs an error if it exceeds the maximum allowed duration.
-   *
-   * @param {File} file - The sound file to check for duration.
-   */
-  checkFileDuration(file: File): void {
-    const audio: HTMLAudioElement = new Audio()
-    const reader: FileReader = new FileReader()
-
-    reader.onload = (e: ProgressEvent<FileReader>) : void => {
-      if (typeof e.target?.result === 'string') {
-        audio.src = e.target?.result
-        audio.onloadedmetadata = () : void => {
-          const duration: number = audio.duration
-          if (duration > this.maxAudioLength) console.error('File duration is greater than', this.maxAudioLength, 'seconds. Please upload a shorter file.')
-        };
-      }
-    };
-
-    reader.readAsDataURL(file)
-  }
 
   /**
    * Checks if the file type is allowed for sound processing.
