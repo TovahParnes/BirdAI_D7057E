@@ -50,14 +50,24 @@ func (c *Controller) RequestAnalyze(mediaData, endpoint string) (models.AIList, 
 				errMsgMap := make(map[string]string)
 				err = json.Unmarshal(rawResponse[0], &errMsgMap)
 				if err != nil {
-					panic(err)
+					return models.AIList{}, models.Err{
+						StatusCode:  http.StatusInternalServerError,
+						StatusName:  http.StatusText(http.StatusInternalServerError),
+						Message:     "Unknown Internal AI error",
+						Description: err.Error(),
+					}
 				}
 				e.Error = errMsgMap["error"]
 
 				var statusCode json.Number
 				err = json.Unmarshal(rawResponse[1], &statusCode)
 				if err != nil {
-					panic(err)
+					return models.AIList{}, models.Err{
+						StatusCode:  http.StatusInternalServerError,
+						StatusName:  http.StatusText(http.StatusInternalServerError),
+						Message:     "Unknown Internal AI error",
+						Description: err.Error(),
+					}
 				}
 				status64, _ := statusCode.Int64()
 				e.Code = int(status64)

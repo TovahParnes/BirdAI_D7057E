@@ -151,7 +151,6 @@ export class MainPageComponent implements OnInit {
     this.postImageForAnalysing(authKey).subscribe(
       (response: AnalyzeResponse) => {
         this.dataImg = this.selectedImage;
-        console.log(response);
         this.analyzed = response;
 
         // No birds found
