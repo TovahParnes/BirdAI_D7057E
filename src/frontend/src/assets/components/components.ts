@@ -9,7 +9,8 @@ interface BirdData {
         "accuracy": Number;
     };
     "birdId": string;
-    "description":string;
+    "description": string;
+    "cutMedia": string;
 }
 
 interface Media {
@@ -134,7 +135,7 @@ export interface SoundSegment {
 }
 
 export interface ApiResponse {
-    data: {  
+    data: {
         id : string;
         authId: string;
         createdAt: string;

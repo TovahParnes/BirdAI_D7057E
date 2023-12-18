@@ -110,6 +110,9 @@
         <p class="textAlignment">Sorry, but we could not recognize what this is</p>
       </div>
     </div>
+    <div *ngIf="error" style="display: flex; flex-direction: row; justify-content: center; padding-top: 6px;">
+      <p class="textAlignment">{{error}}</p>
+    </div>
     <div *ngIf="triedToAnalyze">
       <div style="display: flex; flex-direction: row; justify-content: center; padding-top: 6px;">
         <button mat-raised-button color="warn" (click)="resetForm()" style="margin-right: 6px;">Reset</button>

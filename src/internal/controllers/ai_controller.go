@@ -43,9 +43,25 @@ func (c *Controller) RequestAnalyze(mediaData, endpoint string) (models.AIList, 
 		var aiBird models.AIList
 		err = json.Unmarshal(body, &aiBird)
 		if err != nil {
+			var rawResponse []json.RawMessage
+			json.Unmarshal(body, &rawResponse)
 			var e models.AIError
-			err = json.Unmarshal(body, &e)
-			if err != nil {
+			if len(rawResponse) == 2 {
+				errMsgMap := make(map[string]string)
+				err = json.Unmarshal(rawResponse[0], &errMsgMap)
+				if err != nil {
+					panic(err)
+				}
+				e.Error = errMsgMap["error"]
+
+				var statusCode json.Number
+				err = json.Unmarshal(rawResponse[1], &statusCode)
+				if err != nil {
+					panic(err)
+				}
+				status64, _ := statusCode.Int64()
+				e.Code = int(status64)
+			} else {
 				return models.AIList{}, models.Err{
 					StatusCode:  http.StatusInternalServerError,
 					StatusName:  http.StatusText(http.StatusInternalServerError),
@@ -54,7 +70,7 @@ func (c *Controller) RequestAnalyze(mediaData, endpoint string) (models.AIList, 
 				}
 			}
 			return models.AIList{}, models.Err{
-				StatusCode:  http.StatusInternalServerError,
+				StatusCode:  e.Code,
 				StatusName:  http.StatusText(http.StatusInternalServerError),
 				Message:     e.Error,
 				Description: e.Error,
@@ -62,7 +78,7 @@ func (c *Controller) RequestAnalyze(mediaData, endpoint string) (models.AIList, 
 		}
 		return aiBird, nil
 	}
-	return models.AIList{Birds: []models.AIBird{
+	return models.AIList{Birds: []*models.AIBird{
 		{
 			Name:     "EURASIAN MAGPIE",
 			Accuracy: 1,
