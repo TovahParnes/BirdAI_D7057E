@@ -171,9 +171,9 @@ export class MainPageComponent implements OnInit {
         }
       },
       err => {
-        this.error = err;
         this.isLoading = false;
-        console.error("Failed at sending data:" + err);
+        this.error = err.error;
+        console.error("Failed at sending data:" + err.error);
       }
     );
     this.triedToAnalyze = true;
@@ -197,18 +197,21 @@ export class MainPageComponent implements OnInit {
       if(authKey) {
         this.postSoundForAnalysing(authKey, response).subscribe(
           (response: AnalyzeResponse) : void => {
-            this.analyzed = response
+            this.analyzed = response;
             if (this.analyzed.data.length != 0) { // Bird found
-              this.addNewBird(this.analyzed.data[0].aiBird.name, this.analyzed.data[0].description, this.analyzed.data[0].aiBird.accuracy)
+              this.addNewBird(this.analyzed.data[0].aiBird.name, this.analyzed.data[0].description, this.analyzed.data[0].aiBird.accuracy);
             }
-            this.isLoading = false
-          }, error => { this.isLoading = false }
+            this.isLoading = false;
+            this.compressed_img = response.data[0].cutMedia;
+          }, error => {
+            this.isLoading = false;
+            this.error = error.error;
+          }
         )
         this.triedToAnalyze = true;
         this.togglePostView = true
         _element.scrollIntoView()
       }
-      this.compressed_img = response.data;
       return
     }
     alert("Something went wrong during the file upload process.")
@@ -247,6 +250,7 @@ export class MainPageComponent implements OnInit {
     this.togglePostView = false;
     this.selectedImage = null;
     this.isSoundFileLoaded = false;
+    this.error = null;
     setTimeout(function() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 100);

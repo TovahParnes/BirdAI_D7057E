@@ -166,6 +166,8 @@ func (h *Handler) SoundPrediction(c *fiber.Ctx) error {
 
 	aiResponse := h.controller.AiListToResponse(aiBirds, true)
 
+	aiResponse[0].CutMedia = dat
+
 	response = utils.Response(aiResponse)
 
 	return utils.CreationResponseToStatus(c, response)
